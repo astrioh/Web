@@ -10,10 +10,19 @@ import * as EMPLOYEE from '../actions/employees'
 const state = {
   employees: {},
   employeesByEmail: {},
+  delegatedEmployees: {},
   selectedEmployee: null
 }
 
-const getters = {}
+const getters = {
+  employeesSortedByDelegation (state) {
+    const filteredEmployees = Object.values(state.employees).sort((a, b) => {
+      return state.delegatedEmployees[a.uid] ? -1 : 0
+    })
+
+    return filteredEmployees
+  }
+}
 
 const actions = {
   [EMPLOYEE.CREATE_EMPLOYEE_REQUEST]: ({ commit, dispatch }, data) => {
@@ -126,6 +135,9 @@ const mutations = {
   },
   [EMPLOYEE.PUSH_EMPLOYEE_BY_EMAIL]: (state, employee) => {
     state.employeesByEmail[employee.email.toLowerCase()] = employee
+  },
+  [EMPLOYEE.PUSH_DELEGATED_EMPLOYEE]: (state, delegateIam) => {
+    state.delegatedEmployees[delegateIam.uid] = delegateIam
   },
   [EMPLOYEE.SELECT_EMPLOYEE]: (state, employee) => {
     state.selectedEmployee = employee
