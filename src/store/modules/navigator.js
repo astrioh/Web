@@ -572,11 +572,13 @@ const mutations = {
     if (indexDeps !== -1) state.navigator.deps.items.splice(indexDeps, 1)
   },
   [NAVIGATOR_UPDATE_DEPARTMENT]: (state, department) => {
+    // Возможная проблема: заточено только под редактирование конкретного отдела. А мы хотим переносить сотрудника из одного отдела, в другой => нужно менять 2 отдела вместо одного
+    // Ищем прошлую версию отдела, меняем на новую, которая пришла
     const indexEmps = state.navigator.new_emps.findIndex(
       (emps) => emps.dep.uid === department.uid
     )
     if (indexEmps !== -1) {
-      state.navigator.new_emps[indexEmps].dep = department
+      state.navigator.new_emps[indexEmps].dep = department // Проблема: меняем только свойство dep, а items везде остаются прежними
     }
 
     const indexDeps = state.navigator.deps.items.findIndex(
