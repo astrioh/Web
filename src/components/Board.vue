@@ -479,6 +479,9 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
+  },
   unmounted () {
     this.$store.commit(BOARD.SHOW_SEARCH_CARDS, undefined)
   },
