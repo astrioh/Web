@@ -35,7 +35,6 @@ import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login'
 
-import ClientProperties from '@/components/Clients/ClientProperties.vue'
 import Clients from '@/components/Clients/Clients'
 
 const ifNotAuthenticated = (to, from, next) => {
@@ -361,15 +360,6 @@ const routes = [
     path: '/clients',
     name: 'clients',
     component: Clients,
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {
-      layout: Home
-    },
-    path: '/clients/:client_id',
-    name: 'contact',
-    component: ClientProperties,
     beforeEnter: shouldRedirectToLogin
   },
   {
