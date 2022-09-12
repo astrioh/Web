@@ -9,6 +9,7 @@
     <tr
       v-for="client in clients"
       :key="client.uid"
+      @click.stop="showClientProperties(client)"
     >
       <td>
         <div class="content">
@@ -34,10 +35,39 @@
   </table>
 </template>
 <script>
+import * as CLIENTS from '@/store/actions/clients'
+
 export default {
+  data () {
+    return {
+      selectedClient: ''
+    }
+  },
   computed: {
     clients () {
       return this.$store.state.clients.clients
+    }
+  },
+  watch: {
+    isPropertiesMobileExpanded: {
+      immediate: true,
+      handler: function (val) {
+        if (!val) {
+          this.selectedClient = ''
+        }
+      }
+    }
+  },
+  methods: {
+    showClientProperties (client) {
+      if (!this.isPropertiesMobileExpanded) {
+        this.$store.dispatch('asidePropertiesToggle', true)
+      }
+
+      this.selectedClient = client.email
+
+      this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
+      this.$store.commit(CLIENTS.SELECT_CLIENT, this.$store.state.clients.clientsObj[client.uid])
     }
   }
 }
