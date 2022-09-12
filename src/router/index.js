@@ -1,4 +1,5 @@
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+import BoardWithForm from '@/components/Board/BoardWithForm.vue'
 import BoardStats from '@/components/BoardStats.vue'
 import Colors from '@/components/Colors.vue'
 import Doitnow from '@/components/Doitnow.vue'
@@ -291,6 +292,15 @@ const routes = [
     path: '/board/:board_id',
     name: 'boardWithChildren',
     component: BoardWithChildren,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_id/form',
+    name: 'boardWithForm',
+    component: BoardWithForm,
     beforeEnter: shouldRedirectToLogin
   },
   {

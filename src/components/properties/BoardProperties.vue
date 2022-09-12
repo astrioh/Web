@@ -34,6 +34,11 @@
           </PopMenuItem>
           <PopMenuItem
             icon="delete"
+          >
+            <router-link :to="goToFormBoard">Форма сбора заявок</router-link>
+          </PopMenuItem>
+          <PopMenuItem
+            icon="delete"
             @click="gotoBoardStats"
           >
             Статистика доски
