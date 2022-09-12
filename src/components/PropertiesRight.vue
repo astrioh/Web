@@ -8,6 +8,7 @@ import BoardProperties from '@/components/properties/BoardProperties.vue'
 import ColorProperties from '@/components/properties/ColorProperties.vue'
 import TagProperties from '@/components/properties/TagProperties.vue'
 import EmployeeProperties from '@/components/properties/EmployeeProperties.vue'
+import ClientProperties from './Clients/ClientProperties.vue'
 
 export default {
   components: {
@@ -17,7 +18,8 @@ export default {
     BoardProperties,
     ColorProperties,
     TagProperties,
-    EmployeeProperties
+    EmployeeProperties,
+    ClientProperties
   },
   data: () => {
     const store = useStore()
@@ -63,6 +65,9 @@ export default {
       />
       <EmployeeProperties
         v-if="propertiesState == 'employee'"
+      />
+      <ClientProperties
+        v-if="propertiesState == 'client'"
       />
     </div>
   </aside>

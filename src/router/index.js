@@ -36,6 +36,8 @@ import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login'
 
+import Clients from '@/components/Clients/Clients'
+
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
     next()
@@ -359,6 +361,15 @@ const routes = [
     path: '/project/:project_id',
     name: 'project',
     component: ProjectWithChildren,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/clients',
+    name: 'clients',
+    component: Clients,
     beforeEnter: shouldRedirectToLogin
   },
   {
