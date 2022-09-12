@@ -36,6 +36,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login'
 
 import ClientProperties from '@/components/Clients/ClientProperties.vue'
+import Clients from '@/components/Clients/Clients'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -351,6 +352,15 @@ const routes = [
     path: '/project/:project_id',
     name: 'project',
     component: ProjectWithChildren,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/clients',
+    name: 'clients',
+    component: Clients,
     beforeEnter: shouldRedirectToLogin
   },
   {
