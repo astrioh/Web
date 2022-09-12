@@ -1,4 +1,5 @@
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+import BoardStats from '@/components/BoardStats.vue'
 import Colors from '@/components/Colors.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import Employees from '@/components/Employees.vue'
@@ -270,6 +271,15 @@ const routes = [
     path: '/board',
     name: 'board',
     component: Boards,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_uid/stats',
+    name: 'boardStats',
+    component: BoardStats,
     beforeEnter: shouldRedirectToLogin
   },
   {
