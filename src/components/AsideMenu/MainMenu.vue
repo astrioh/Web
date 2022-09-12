@@ -218,7 +218,6 @@ export default {
       return this.$store.state.isAsideMobileExpanded
     },
     activeTab () {
-      console.log('activeTab', this.$store.state.navigator.submenu.activeTab)
       return this.$store.state.navigator.submenu.activeTab
     }
   },
