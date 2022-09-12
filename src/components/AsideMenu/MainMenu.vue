@@ -133,12 +133,12 @@
         </svg>
       </AsideMenuListItem>
       <router-link
-        to="/contacts"
+        to="/clients"
       >
         <AsideMenuListItem
-          :selected="isPathSelected('contacts')"
+          :selected="isPathSelected('clients')"
           title="Контакты"
-          @click="selectTab('contacts')"
+          @click="selectTab('clients')"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -218,6 +218,7 @@ export default {
       return this.$store.state.isAsideMobileExpanded
     },
     activeTab () {
+      console.log('activeTab', this.$store.state.navigator.submenu.activeTab)
       return this.$store.state.navigator.submenu.activeTab
     }
   },
