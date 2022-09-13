@@ -99,13 +99,8 @@ import ClientChat from '@/components/Clients/ClientChat.vue'
 import ClientMessageQuoteUnderInput from '@/components/Clients/ClientMessageQuoteUnderInput.vue'
 import ClientMessageInput from '@/components/Clients/ClientMessageInput.vue'
 import * as CLIENTS from '@/store/actions/clients'
+import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
 import { uuidv4 } from '@/helpers/functions'
-import {
-  CREATE_MESSAGE_REQUEST,
-  DELETE_FILE_REQUEST,
-  DELETE_MESSAGE_REQUEST,
-  CREATE_FILES_REQUEST
-} from '@/store/actions/clientfilesandmessages'
 
 export default {
   components: {
@@ -152,6 +147,9 @@ export default {
     selectedClientName () {
       return this.selectedClient?.name || ''
     },
+    selectedClientUid () {
+      return this.selectedClient?.uid || ''
+    },
     selectedClientEmail () {
       return this.selectedClient?.email || ''
     },
@@ -170,6 +168,10 @@ export default {
       handler: function (val) {
         this.currClientName = val
       }
+    },
+    selectedClientUid (oldValue, newValue) {
+      this.currentQuote = false
+      this.clientMessageInputValue = ''
     }
   },
   methods: {
@@ -213,12 +215,16 @@ export default {
         order: 0,
         deleted: 0
       }
-      this.$store.dispatch(CREATE_MESSAGE_REQUEST, data).then(() => {
-        if (this.selectedCard) this.selectedCard.has_msgs = true
-        this.cardMessageInputValue = ''
+      this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data).then(() => {
+        if (this.selectedClient) this.selectedClient.has_msgs = true
+        this.clientMessageInputValue = ''
         this.currentQuote = false
         this.scrollDown()
       })
+    },
+    scrollDown () {
+      const asideRight = document.getElementById('aside-right')
+      asideRight.scroll({ top: asideRight.scrollHeight + 100000 })
     },
     createClientFile (event) {
       if (event === false) {
@@ -259,12 +265,12 @@ export default {
         }
       }
       const data = {
-        uid_card: this.selectedCard?.uid,
+        uid_client: this.selectedClient?.uid,
         name: formData
       }
       this.$store.commit('addClientMessages', uploadingFiles)
-      this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
-        if (this.selectedCard) this.selectedCard.has_files = true
+      this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data).then(() => {
+        if (this.selectedClient) this.selectedClient.has_files = true
         this.scrollDown()
       })
     },
@@ -277,11 +283,11 @@ export default {
           const formData = new FormData()
           formData.append('files', blob)
           const data = {
-            uid_card: this.selectedCard?.uid,
+            uid_client: this.selectedClient?.uid,
             name: formData
           }
-          this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
-            this.selectedCard.has_files = true
+          this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data).then(() => {
+            this.selectedClient.has_files = true
             this.scrollDown()
           })
         }
@@ -292,10 +298,10 @@ export default {
       this.focusMessageInput()
     },
     deleteClientMessage (uid) {
-      this.$store.dispatch(DELETE_MESSAGE_REQUEST, uid)
+      this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST, uid)
     },
     deleteClientFileMessage (uid) {
-      this.$store.dispatch(DELETE_FILE_REQUEST, uid)
+      this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.DELETE_FILE_REQUEST, uid)
     }
   }
 }
