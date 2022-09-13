@@ -24,6 +24,7 @@
 <script>
 import BoardStatsItem from '@/components/Board/BoardStatsItem.vue'
 import NavBar from '@/components/Navbar/NavBar'
+import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
@@ -53,6 +54,12 @@ export default {
     }
   },
   mounted () {
+    if (!this.boardCards?.length) {
+      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.boardUid).then(() => {
+        this.calculateMembersCost()
+      })
+      return
+    }
     this.calculateMembersCost()
   },
   methods: {
