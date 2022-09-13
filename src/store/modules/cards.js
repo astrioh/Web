@@ -16,8 +16,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(CARD.BOARD_CARDS_REQUEST)
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/cards/byboard?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'cards?uid=' +
         boardUid
       axios({ url: url, method: 'GET' })
         .then((resp) => {
