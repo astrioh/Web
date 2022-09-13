@@ -6,15 +6,18 @@
   <div class="h-screen overflow-auto">
     <form class="px-5 bg-white py-2 pb-[200px] rounded-xl">
       <control
-        class="mb-6"
         v-model="form.titleForm"
+        class="mb-6"
         name="titleForm"
         placeholder="Заголовок формы"
         icon-class="cursor-pointer"
         type="text"
       />
       <div class="flex items-center mb-6">
-        <input class="mr-2 leading-tight" type="checkbox">
+        <input
+          class="mr-2 leading-tight"
+          type="checkbox"
+        >
         <control
           v-model="form.name"
           name="name"
@@ -24,7 +27,10 @@
         />
       </div>
       <div class="md:flex md:items-center mb-6">
-        <input class="mr-2 leading-tight" type="checkbox">
+        <input
+          class="mr-2 leading-tight"
+          type="checkbox"
+        >
         <control
           v-model="form.email"
           name="email"
@@ -34,7 +40,10 @@
         />
       </div>
       <div class="md:flex md:items-center mb-6">
-        <input class="mr-2 leading-tight" type="checkbox">
+        <input
+          class="mr-2 leading-tight"
+          type="checkbox"
+        >
         <control
           v-model="form.phone"
           name="phone"
@@ -44,7 +53,10 @@
         />
       </div>
       <div class="md:flex md:items-center mb-6">
-        <input class="mr-2 leading-tight" type="checkbox">
+        <input
+          class="mr-2 leading-tight"
+          type="checkbox"
+        >
         <control
           v-model="form.comment"
           name="comment"
@@ -54,23 +66,22 @@
         />
       </div>
       <control
-        class="mb-6"
         v-model="form.button_text"
+        class="mb-6"
         name="button_text"
         placeholder="Надпись на кнопке"
         icon-class="cursor-pointer"
         type="text"
       />
       <control
-        class="mb-6"
         v-model="form.notify_text"
+        class="mb-6"
         name="notify_text"
         placeholder="Уведомление после отправки или ссылка для редиректа"
         icon-class="cursor-pointer"
         type="text"
       />
       <jb-button
-        type="submit"
         color="login"
         class="w-full rounded-lg text-sm"
         label="Создать форму"
@@ -99,7 +110,8 @@ export default {
         phone: '',
         comment: '',
         button_text: '',
-        notify_text: ''
+        notify_text: '',
+        showParams: false
       }
     }
   }
