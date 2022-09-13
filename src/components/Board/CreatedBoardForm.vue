@@ -43,6 +43,8 @@
 </template>
 
 <script>
+import * as BOARD from '@/store/actions/boards'
+
 export default {
   data () {
     return {
@@ -68,7 +70,13 @@ export default {
   },
   methods: {
     submitForm () {
-      alert('Типа отправка формы')
+      const data = {
+        board_uid: this.$route.params.board_id,
+        title: this.modelInput1 + ' ' + this.modelInput2,
+        comment: 'Email: ' + this.modelInput3 + ',' + ' ' + 'Город: ' + this.modelInput4
+      }
+      this.$store.dispatch(BOARD.SEND_BOARD_FORM_REQUEST, data)
+      console.log(data)
     }
   }
 }
