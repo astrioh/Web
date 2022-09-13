@@ -53,21 +53,31 @@
       </button>
     </div>
   </div>
+  <Pagination
+    v-model="currentPage"
+    class="mt-3 flex justify-center"
+    total="210"
+    :max-visible-buttons="3"
+    @update:modelValue="changePage"
+  />
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
 import NavBar from '@/components/Navbar/NavBar'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
+import Pagination from '../Pagination.vue'
 
 export default {
   components: {
     NavBar,
-    ModalBoxAddClient
+    ModalBoxAddClient,
+    Pagination
   },
   data () {
     return {
       selectedClient: '',
-      showAddClient: false
+      showAddClient: false,
+      currentPage: 1
     }
   },
   computed: {
@@ -100,6 +110,9 @@ export default {
     onAddNewClient (client) {
       this.$store.commit(CLIENTS.ADD_NEW_CLIENT, client)
       this.showAddClient = false
+    },
+    changePage () {
+      console.log(this.currentPage)
     }
   }
 }
