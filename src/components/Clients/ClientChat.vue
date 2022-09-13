@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col pb-[100px]">
     <div
-      v-for="(message, index) in cardMessages"
+      v-for="(message, index) in clientMessages"
       :key="message"
     >
       <div
@@ -99,7 +99,7 @@ export default {
   },
   emits: ['onQuote', 'onDeleteMessage', 'onDeleteFile'],
   computed: {
-    cardMessages () {
+    clientMessages () {
       return this.messages.map((message) => ({
         ...message,
         isFile: !!message.uid_file,
@@ -161,7 +161,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
