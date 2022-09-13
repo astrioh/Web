@@ -2,12 +2,22 @@
   <tr>
     <td>
       <div class="content">
-        {{ member.user_name }}
+        {{ member.username }}
       </div>
     </td>
     <td>
       <div class="content">
-        {{ cost }}
+        {{ member.allCards.quantity + ' / ' + formatCostValue(member.allCards.cost) }}
+      </div>
+    </td>
+    <td>
+      <div class="content">
+        {{ member.successfulCards.quantity + ' / ' + formatCostValue(member.successfulCards.cost) }}
+      </div>
+    </td>
+    <td>
+      <div class="content">
+        {{ member.rejectedCards.quantity + ' / ' + formatCostValue(member.rejectedCards.cost) }}
       </div>
     </td>
   </tr>
@@ -21,11 +31,11 @@ export default {
       default: () => {}
     }
   },
-  computed: {
-    cost () {
-      if (this.member.cost > 0) {
-        const fractional = this.member.cost % 100
-        const value = Math.floor(this.member.cost / 100)
+  methods: {
+    formatCostValue (cost) {
+      if (cost > 0) {
+        const fractional = cost % 100
+        const value = Math.floor(cost / 100)
         let valString = ''
         let valueString = value.toString()
         while (valueString) {

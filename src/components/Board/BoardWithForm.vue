@@ -95,9 +95,18 @@
         <jb-button
           color="login"
           class="w-full rounded-lg text-sm"
-          label="Создать форму"
+          label="Сохранить форму"
           @click="clickCreateForm"
         />
+        <router-link
+          :to="'/form/' + $route.params.board_id"
+        >
+          <jb-button
+            class="w-full mt-3 rounded-lg text-sm"
+            label="Перейти к форме"
+            @click="clickCreateForm"
+          />
+        </router-link>
       </form>
     </div>
   </div>

@@ -7,7 +7,9 @@
     <table>
       <tr>
         <th>Сотрудник</th>
-        <th>кол-во/деньги</th>
+        <th>Всего заявок</th>
+        <th>Заявок в успехе</th>
+        <th>Заявок в отказе</th>
       </tr>
       <template
         v-for="(member, index) in membersByCost"
@@ -25,6 +27,7 @@
 import BoardStatsItem from '@/components/Board/BoardStatsItem.vue'
 import NavBar from '@/components/Navbar/NavBar'
 import * as CARD from '@/store/actions/cards'
+import { CARD_STAGE } from '@/constants'
 
 export default {
   components: {
@@ -68,15 +71,54 @@ export default {
         if (cardGroup.cards) {
           cardGroup.cards.forEach((card) => {
             if (this.membersByCost[card.user]) {
-              this.membersByCost[card.user].cost += card.cost
+              this.membersByCost[card.user].allCards = {
+                quantity: ++this.membersByCost[card.user].allCards.quantity,
+                cost: this.membersByCost[card.user].allCards.cost + card.cost
+              }
+
+              if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
+                this.membersByCost[card.user].successfulCards = {
+                  quantity: ++this.membersByCost[card.user].successfulCards.quantity,
+                  cost: this.membersByCost[card.user].successfulCards.cost + card.cost
+                }
+              } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT) {
+                this.membersByCost[card.user].rejectedCards = {
+                  quantity: ++this.membersByCost[card.user].rejectedCards.quantity,
+                  cost: this.membersByCost[card.user].rejectedCards.cost + card.cost
+                }
+              }
             } else {
               if (card.user !== '' && this.employeesByEmail[card.user]?.name) {
-                this.membersByCost[card.user] =
-                  {
-                    user_email: card.user,
-                    user_name: this.employeesByEmail[card.user].name,
+                const userData = {
+                  email: card.user,
+                  username: this.employeesByEmail[card.user].name,
+                  allCards: {
+                    quantity: 1,
                     cost: card.cost
+                  },
+                  successfulCards: {
+                    quantity: 0,
+                    cost: 0
+                  },
+                  rejectedCards: {
+                    quantity: 0,
+                    cost: 0
                   }
+                }
+
+                if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
+                  userData.successfulCards = {
+                    quantity: ++userData.successfulCards.quantity,
+                    cost: userData.successfulCards.cost + card.cost
+                  }
+                } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT) {
+                  userData.rejectedCards = {
+                    quantity: ++userData.rejectedCards.quantity,
+                    cost: userData.rejectedCards.cost + card.cost
+                  }
+                }
+
+                this.membersByCost[card.user] = userData
               }
             }
           })
