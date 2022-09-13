@@ -1,4 +1,10 @@
 <template>
+  <ModalBoxAddClient
+    v-if="showAddClient"
+    title="Добавить клиента"
+    @cancel="showAddClient = false"
+    @save="onAddNewClient"
+  />
   <table>
     <tr>
       <th>Имя</th>
@@ -33,14 +39,25 @@
       </td>
     </tr>
   </table>
+  <div class="flex justify-center">
+    <button
+      class="flex items-center justify-center rounded-[8px] mt-5 w-auto mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
+      @click="clickAddClient"
+    >
+      Добавить нового клиента
+    </button>
+  </div>
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
+import ModalBoxAddClient from './ModalBoxAddClient.vue'
 
 export default {
+  components: { ModalBoxAddClient },
   data () {
     return {
-      selectedClient: ''
+      selectedClient: '',
+      showAddClient: false
     }
   },
   computed: {
@@ -63,11 +80,16 @@ export default {
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
-
       this.selectedClient = client.email
-
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
       this.$store.commit(CLIENTS.SELECT_CLIENT, this.$store.state.clients.clientsObj[client.uid])
+    },
+    clickAddClient () {
+      this.showAddClient = true
+    },
+    onAddNewClient (client) {
+      this.$store.commit(CLIENTS.ADD_NEW_CLIENT, client)
+      this.showAddClient = false
     }
   }
 }
