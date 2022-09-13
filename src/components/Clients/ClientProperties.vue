@@ -60,6 +60,25 @@
   >
     {{ selectedClientPhone }}
   </div>
+
+  <ClientChat />
+
+  <div class="flex flex-col fixed bottom-[0px] w-[340px] bg-white pt-2 pb-5">
+    <ClientMessageQuoteUnderInput
+      v-if="currentQuote"
+      class="quote-request border-l-2 border-[#7E7E80] h-[40px]"
+      :quote-message="currentQuote"
+      :employee="employees[currentQuote.uid_creator]"
+      @onClearQuote="currentQuote = false"
+    />
+    <ClientMessageInput
+      v-model="cardMessageInputValue"
+      :can-add-files="canAddFiles"
+      @createCardMessage="createCardMessage"
+      @createCardFile="createCardFile"
+      @onPaste="onPasteEvent"
+    />
+  </div>
 </template>
 <script>
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
@@ -67,6 +86,9 @@ import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
+import ClientChat from '@/components/Clients/ClientChat.vue'
+import ClientMessageQuoteUnderInput from '@/components/Clients/ClientMessageQuoteUnderInput.vue'
+import ClientMessageInput from '@/components/Clients/ClientMessageInput.vue'
 import * as CLIENTS from '@/store/actions/clients'
 
 export default {
@@ -75,12 +97,16 @@ export default {
     PopMenuItem,
     PropsButtonMenu,
     ModalBoxDelete,
-    PopMenu
+    PopMenu,
+    ClientChat,
+    ClientMessageQuoteUnderInput,
+    ClientMessageInput
   },
   data () {
     return {
       currClientName: '',
-      showConfirm: false
+      showConfirm: false,
+      cardMessageInputValue: ''
     }
   },
   computed: {
