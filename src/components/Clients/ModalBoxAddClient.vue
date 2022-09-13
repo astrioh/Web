@@ -37,6 +37,7 @@
 
 <script>
 import ModalBox from '@/components/modals/ModalBox.vue'
+import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -69,6 +70,7 @@ export default {
     },
     onSave () {
       const data = {
+        uid: uuidv4(),
         name: this.name,
         phone: this.phone,
         email: this.email,

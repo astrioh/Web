@@ -17,21 +17,7 @@ const state = {
       email: 'kakeparake@mail.ru',
       comment: 'это какеоф?'
     }
-  ],
-  clientsObj: {
-    'c7b8e7cb-7c88-4840-be5d-40cb4f0500cd': {
-      name: 'Максим Бухарин',
-      phone: '88005553535',
-      email: 'jojojopa@icloud.com',
-      comment: 'Торчит мне шаурму'
-    },
-    '59aa5531-853f-40cd-a6db-fd07d9713d8b': {
-      name: 'Егор Пантелеев',
-      phone: '88005553535',
-      email: 'kakeparake@mail.ru',
-      comment: 'это какеоф?'
-    }
-  }
+  ]
 }
 
 const actions = {
