@@ -1,29 +1,32 @@
 import * as CLIENTS from '@/store/actions/clients.js'
+import axios from 'axios'
 
 const state = {
   selectedClient: null,
-  clients: [
-    {
-      uid: 'c7b8e7cb-7c88-4840-be5d-40cb4f0500cd',
-      name: 'Максим Бухарин',
-      phone: '88005553535',
-      email: 'jojojopa@icloud.com',
-      comment: 'Торчит мне шаурму'
-    },
-    {
-      uid: '59aa5531-853f-40cd-a6db-fd07d9713d8b',
-      name: 'Егор Пантелеев',
-      phone: '88005553535',
-      email: 'kakeparake@mail.ru',
-      comment: 'это какеоф?'
-    }
-  ]
+  clients: []
 }
 
 const actions = {
+  [CLIENTS.GET_CLIENTS]: ({ commit, dispatch }, organization) => {
+    return new Promise((resolve, reject) => {
+      const url =
+        process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + organization
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          commit(CLIENTS.SET_CLIENTS, resp.data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  }
 }
 
 const mutations = {
+  [CLIENTS.SET_CLIENTS]: (state, clients) => {
+    state.clients = clients
+  },
   [CLIENTS.ADD_NEW_CLIENT]: (state, client) => {
     state.clients.push(client)
     console.log(client)

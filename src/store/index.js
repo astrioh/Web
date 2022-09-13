@@ -25,6 +25,7 @@ import localization from './modules/localization'
 import inspector from './modules/inspector'
 import notificationtasks from './modules/notification_tasks'
 import tabs from './modules/tabs'
+import clientfilesandmessages from './modules/clientfilesandmessages'
 
 export default createStore({
   state: {
@@ -161,6 +162,7 @@ export default createStore({
     localization,
     inspector,
     notificationtasks,
-    tabs
+    tabs,
+    clientfilesandmessages
   }
 })
