@@ -92,7 +92,7 @@ export default {
       }
       this.selectedClient = client.email
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
-      this.$store.commit(CLIENTS.SELECT_CLIENT, this.$store.state.clients.clientsObj[client.uid])
+      this.$store.commit(CLIENTS.SELECT_CLIENT, client.uid)
     },
     clickAddClient () {
       this.showAddClient = true
