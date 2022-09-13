@@ -35,8 +35,8 @@ const mutations = {
       }
     }
   },
-  [CLIENTS.SELECT_CLIENT]: (state, client) => {
-    state.selectedClient = client
+  [CLIENTS.SELECT_CLIENT]: (state, clientUid) => {
+    state.selectedClient = state.clients.filter(cl => cl.uid === clientUid)[0]
   }
 }
 
