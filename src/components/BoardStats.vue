@@ -1,6 +1,9 @@
 <template>
-  <div class="mt-5">
-    <p>Статистика доски {{ boardName }}</p>
+  <NavBar
+    class="pt-[8px]"
+    :title="`Статистика доски ${boardName}`"
+  />
+  <div class="bg-white rounded-xl min-h-[75%] p-[20px]">
     <table>
       <tr>
         <th>Сотрудник</th>
@@ -20,10 +23,12 @@
 
 <script>
 import BoardStatsItem from '@/components/Board/BoardStatsItem.vue'
+import NavBar from '@/components/Navbar/NavBar'
 import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
+    NavBar,
     BoardStatsItem
   },
   data () {
@@ -49,9 +54,13 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.boardUid).then(() => {
-      this.calculateMembersCost()
-    })
+    if (!this.boardCards?.length) {
+      this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.boardUid).then(() => {
+        this.calculateMembersCost()
+      })
+      return
+    }
+    this.calculateMembersCost()
   },
   methods: {
     calculateMembersCost () {
@@ -79,7 +88,7 @@ export default {
 </script>
 
 <style scoped>
-    table {
+table {
   @apply w-[calc(100%-40px)] mx-[20px] mt-[20px] border-separate border-spacing-0
 }
 
