@@ -83,6 +83,9 @@ export default {
   computed: {
     clients () {
       return this.$store.state.clients.clients
+    },
+    user () {
+      return this.$store.state.user.user
     }
   },
   watch: {
@@ -94,6 +97,9 @@ export default {
         }
       }
     }
+  },
+  mounted () {
+    this.$store.dispatch(CLIENTS.GET_CLIENTS, this.user?.owner_email)
   },
   methods: {
     showClientProperties (client) {
