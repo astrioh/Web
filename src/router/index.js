@@ -1,4 +1,5 @@
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
+import BoardStats from '@/components/BoardStats.vue'
 import Colors from '@/components/Colors.vue'
 import Doitnow from '@/components/Doitnow.vue'
 import Employees from '@/components/Employees.vue'
@@ -34,6 +35,8 @@ import TasksInWork from '@/components/TasksList/TasksInWork'
 import TaskUnsorted from '@/components/TasksList/TaskUnsorted.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '@/views/Login'
+
+import Clients from '@/components/Clients/Clients'
 
 const ifNotAuthenticated = (to, from, next) => {
   if (!store.getters.isAuthenticated) {
@@ -276,6 +279,15 @@ const routes = [
     meta: {
       layout: Home
     },
+    path: '/board/:board_uid/stats',
+    name: 'boardStats',
+    component: BoardStats,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
     path: '/board/:board_id',
     name: 'boardWithChildren',
     component: BoardWithChildren,
@@ -349,6 +361,15 @@ const routes = [
     path: '/project/:project_id',
     name: 'project',
     component: ProjectWithChildren,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/clients',
+    name: 'clients',
+    component: Clients,
     beforeEnter: shouldRedirectToLogin
   },
   {

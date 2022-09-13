@@ -32,6 +32,12 @@
           >
             Покинуть доску
           </PopMenuItem>
+          <PopMenuItem
+            icon="delete"
+            @click="gotoBoardStats"
+          >
+            Статистика доски
+          </PopMenuItem>
         </template>
       </PopMenu>
       <PropsButtonClose @click="closeProperties" />
@@ -389,6 +395,10 @@ export default {
             newBoardTitle: title
           })
       }
+    },
+    gotoBoardStats () {
+      this.$store.dispatch('asidePropertiesToggle', false)
+      this.$router.push(`/board/${this.selectedBoardUid}/stats`)
     },
     changeBoardColor (color) {
       if (this.isCanEdit && this.selectedBoardColor.toLowerCase() !== color) {
