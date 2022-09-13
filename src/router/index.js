@@ -305,7 +305,7 @@ const routes = [
     beforeEnter: shouldRedirectToLogin
   },
   {
-    path: '/board/:board_id/form',
+    path: '/form/:board_id',
     name: 'createdBoardForm',
     component: CreatedBoardForm
   },
