@@ -40,6 +40,7 @@ const actions = {
 const mutations = {
   [CLIENTS.ADD_NEW_CLIENT]: (state, client) => {
     state.clients.push(client)
+    console.log(client)
   },
   [CLIENTS.REMOVE_CLIENT]: (state, clientUid) => {
     for (let i = 0; i < state.clients.length; i++) {

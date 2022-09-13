@@ -5,55 +5,65 @@
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
-  <table>
-    <tr>
-      <th>Имя</th>
-      <th>Номер телефона</th>
-      <th>Email</th>
-      <th>Комментарий</th>
-    </tr>
-    <tr
-      v-for="client in clients"
-      :key="client.uid"
-      @click.stop="showClientProperties(client)"
-    >
-      <td>
-        <div class="content">
-          {{ client.name }}
-        </div>
-      </td>
-      <td>
-        <div class="content">
-          {{ client.phone }}
-        </div>
-      </td>
-      <td>
-        <div class="content">
-          {{ client.email }}
-        </div>
-      </td>
-      <td>
-        <div class="content">
-          {{ client.comment }}
-        </div>
-      </td>
-    </tr>
-  </table>
-  <div class="flex justify-center">
-    <button
-      class="flex items-center justify-center rounded-[8px] mt-5 w-auto mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
-      @click="clickAddClient"
-    >
-      Добавить нового клиента
-    </button>
+  <NavBar
+    title="Контакты"
+    class="pt-[8px]"
+  />
+  <div class="bg-white rounded-xl min-h-[75%] p-[20px]">
+    <table>
+      <tr>
+        <th>Имя</th>
+        <th>Номер телефона</th>
+        <th>Email</th>
+        <th>Комментарий</th>
+      </tr>
+      <tr
+        v-for="client in clients"
+        :key="client.uid"
+        @click.stop="showClientProperties(client)"
+      >
+        <td>
+          <div class="content">
+            {{ client.name }}
+          </div>
+        </td>
+        <td>
+          <div class="content">
+            {{ client.phone }}
+          </div>
+        </td>
+        <td>
+          <div class="content">
+            {{ client.email }}
+          </div>
+        </td>
+        <td>
+          <div class="content">
+            {{ client.comment }}
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="flex justify-center">
+      <button
+        class="flex items-center justify-center rounded-[8px] mt-5 w-auto mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
+        @click="clickAddClient"
+      >
+        Добавить нового клиента
+      </button>
+    </div>
   </div>
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
+import NavBar from '@/components/Navbar/NavBar'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
 
 export default {
-  components: { ModalBoxAddClient },
+  components: {
+    NavBar,
+    ModalBoxAddClient
+  },
   data () {
     return {
       selectedClient: '',
@@ -152,5 +162,10 @@ tr:nth-child(2) {
 
 tr:nth-child(2) .content {
   @apply mt-[16px]
+}
+
+/*Стили наведения курсора мыши*/
+tr:not(:first-child):hover {
+  @apply bg-[#f4f5f7] cursor-pointer
 }
 </style>
