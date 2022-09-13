@@ -35,7 +35,9 @@
           <PopMenuItem
             icon="delete"
           >
-            <router-link :to="goToFormBoard">Форма сбора заявок</router-link>
+            <router-link :to="`/board/${selectedBoardUid}/stats`">
+              Форма сбора заявок
+            </router-link>
           </PopMenuItem>
           <PopMenuItem
             icon="delete"
