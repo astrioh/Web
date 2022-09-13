@@ -9,7 +9,7 @@
     title="Контакты"
     class="pt-[8px]"
   />
-  <div class="bg-white rounded-xl min-h-[75%] p-[20px]">
+  <div class="bg-white rounded-xl min-h-[75%] px-[40px] py-[20px]">
     <table>
       <tr>
         <th>Имя</th>
@@ -44,12 +44,25 @@
         </td>
       </tr>
     </table>
-    <div class="flex justify-center">
+    <div
+      class="group flex justify-center border border-[#0000001F] rounded-[7px] p-[7px] mt-[15px] cursor-pointer"
+      @click="clickAddClient"
+    >
       <button
-        class="flex items-center justify-center rounded-[8px] mt-5 w-auto mb-5 bg-[#F2B679] px-[40px] py-[12px] hover:transition hover:opacity-[0.8]"
-        @click="clickAddClient"
+        class="w-[30px] h-[30px] flex items-center justify-center rounded-[8px] bg-[#E8EAED] group-hover:transition group-hover:opacity-[0.8]"
       >
-        Добавить нового клиента
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.93008 0.644792L5.99972 0.640625C6.14551 0.640644 6.28623 0.69417 6.39518 0.791051C6.50413 0.887931 6.57373 1.02143 6.59079 1.16622L6.59496 1.23586V5.40253H10.7616C10.9074 5.40255 11.0481 5.45607 11.1571 5.55296C11.266 5.64984 11.3356 5.78333 11.3527 5.92813L11.3569 5.99777C11.3568 6.14356 11.3033 6.28428 11.2064 6.39323C11.1096 6.50218 10.9761 6.57178 10.8313 6.58884L10.7616 6.59301H6.59496V10.7597C6.59494 10.9055 6.54141 11.0462 6.44453 11.1551C6.34765 11.2641 6.21416 11.3337 6.06936 11.3507L5.99972 11.3549C5.85393 11.3549 5.71321 11.3014 5.60426 11.2045C5.49531 11.1076 5.42571 10.9741 5.40865 10.8293L5.40448 10.7597V6.59301H1.23782C1.09202 6.59299 0.951306 6.53946 0.842357 6.44258C0.733407 6.3457 0.663803 6.2122 0.646745 6.06741L0.642578 5.99777C0.642597 5.85197 0.696123 5.71126 0.793004 5.60231C0.889884 5.49336 1.02338 5.42375 1.16817 5.4067L1.23782 5.40253H5.40448V1.23586C5.4045 1.09007 5.45803 0.949353 5.55491 0.840404C5.65179 0.731454 5.78529 0.66185 5.93008 0.644792L5.99972 0.640625L5.93008 0.644792Z"
+            fill="#4C4C4D"
+          />
+        </svg>
       </button>
     </div>
   </div>
@@ -136,7 +149,7 @@ export default {
 
 <style scoped>
 table {
-  @apply w-[calc(100%-40px)] mx-[20px] mt-[20px] border-separate
+  @apply w-full mt-[20px] border-separate
 }
 
 /*Стили для первой строки с заголовками*/
@@ -146,7 +159,7 @@ tr:first-child {
 }
 
 tr:first-child th {
-  @apply pl-[20px] border-[#e6e6e6] border-2 text-[14px] font-medium;
+  @apply pl-[20px] border-[#e6e6e6] border text-[14px] font-medium;
   border-spacing: 0 20px;
 }
 
