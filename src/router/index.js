@@ -305,13 +305,9 @@ const routes = [
     beforeEnter: shouldRedirectToLogin
   },
   {
-    meta: {
-      layout: Home
-    },
     path: '/board/:board_id/form',
     name: 'createdBoardForm',
-    component: CreatedBoardForm,
-    beforeEnter: shouldRedirectToLogin
+    component: CreatedBoardForm
   },
   {
     meta: {

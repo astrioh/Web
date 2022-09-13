@@ -16,6 +16,18 @@ const state = {
 const getters = {}
 
 const actions = {
+  [BOARD.SEND_BOARD_FORM_REQUEST]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_LEADERTASK_API + '/api/boardsforms/addboardleadbyjson?uid_board=' + data.board_uid
+      axios({ url: url, method: 'POST', data: data })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   [BOARD.CREATE_BOARD_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_LEADERTASK_API + '/api/v1/board'
