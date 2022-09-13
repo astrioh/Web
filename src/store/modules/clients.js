@@ -47,6 +47,19 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [CLIENTS.UPDATE_CLIENT]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clients'
+      axios({ url: url, method: 'PATCH', data: data })
+        .then((resp) => {
+          // commit(CLIENTS.UPDATE_CLIENT, resp.data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
@@ -59,6 +72,9 @@ const mutations = {
   },
   [CLIENTS.REMOVE_CLIENT]: (state, clientUid) => {
     state.clients = state.clients.filter(cl => cl.uid !== clientUid)
+  },
+  [CLIENTS.UPDATE_CLIENT]: (state, data) => {
+    console.log(data)
   },
   [CLIENTS.SELECT_CLIENT]: (state, clientUid) => {
     state.selectedClient = state.clients.filter(cl => cl.uid === clientUid)[0]

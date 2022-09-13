@@ -28,37 +28,54 @@
       'background-image': `url(${ClientStub})`
     }"
   />
-  <input
-    v-model="currClientName"
-    type="text"
-    maxlength="50"
-    placeholder="Имя сотрудника"
-    class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
-    @blur="renameClient"
-  >
-  <div
-    v-if="selectedClientEmail"
-    class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
-  >
-    Email
-  </div>
-  <div
-    v-if="selectedClientEmail"
-    class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
-  >
-    {{ selectedClientEmail }}
-  </div>
-  <div
-    v-if="selectedClientPhone"
-    class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
-  >
-    Телефон
-  </div>
-  <div
-    v-if="selectedClientPhone"
-    class="mt-[15px] w-full font-roboto text-[15px] leading-[18px] text-[#606061] overflow-hidden text-ellipsis whitespace-nowrap"
-  >
-    {{ selectedClientPhone }}
+  <div class="flex flex-col">
+    <input
+      v-model="currClient.name"
+      type="text"
+      maxlength="50"
+      placeholder="Имя"
+      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      @blur="updateClient"
+    >
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Email
+    </div>
+    <input
+      v-model="currClient.email"
+      type="text"
+      maxlength="50"
+      placeholder="Email"
+      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      @blur="updateClient"
+    >
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Телефон
+    </div>
+    <input
+      v-model="currClient.phone"
+      type="text"
+      maxlength="50"
+      placeholder="Телефон"
+      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      @blur="updateClient"
+    >
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Комментарий
+    </div>
+    <input
+      v-model="currClient.comment"
+      type="text"
+      maxlength="50"
+      placeholder="Телефон"
+      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      @blur="updateClient"
+    >
   </div>
 
   <ClientChat />
@@ -105,6 +122,7 @@ export default {
   data () {
     return {
       currClientName: '',
+      currClient: {},
       showConfirm: false,
       cardMessageInputValue: ''
     }
@@ -142,12 +160,12 @@ export default {
     }
   },
   watch: {
-    selectedClientName: {
-      immediate: true,
-      handler: function (val) {
-        this.currClientName = val
-      }
+    selectedClient (newval, oldval) {
+      this.currClient = newval
     }
+  },
+  mounted () {
+    this.currClient = this.selectedClient
   },
   methods: {
     closeProperties () {
@@ -158,11 +176,10 @@ export default {
       this.$store.dispatch(CLIENTS.REMOVE_CLIENT, this.selectedClient.uid)
       this.$store.dispatch('asidePropertiesToggle', false)
     },
-    renameClient () {
-      this.$store.commit(CLIENTS.CHANGE_CLIENT_NAME, {
-        uid: this.selectedClient.uid,
-        name: this.currClientName
-      })
+    updateClient () {
+      this.$store.dispatch(CLIENTS.UPDATE_CLIENT,
+        this.currClient
+      )
     }
   }
 }
