@@ -155,8 +155,7 @@ export default {
     },
     removeClient () {
       this.showConfirm = false
-      this.$store
-        .commit(CLIENTS.REMOVE_CLIENT, this.selectedClient.uid)
+      this.$store.dispatch(CLIENTS.REMOVE_CLIENT, this.selectedClient.uid)
       this.$store.dispatch('asidePropertiesToggle', false)
     },
     renameClient () {

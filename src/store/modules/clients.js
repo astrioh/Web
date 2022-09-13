@@ -34,6 +34,19 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [CLIENTS.REMOVE_CLIENT]: ({ commit, dispatch }, clientUid) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clients?uid=' + clientUid
+      axios({ url: url, method: 'DELETE' })
+        .then((resp) => {
+          commit(CLIENTS.REMOVE_CLIENT, clientUid)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
