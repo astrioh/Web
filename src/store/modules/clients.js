@@ -29,14 +29,13 @@ const mutations = {
     console.log(client)
   },
   [CLIENTS.REMOVE_CLIENT]: (state, clientUid) => {
-    for (let i = 0; i < state.clients.length; i++) {
-      if (state.clients[i].uid === clientUid) {
-        state.clients.splice(i, 1)
-      }
-    }
+    state.clients = state.clients.filter(cl => cl.uid !== clientUid)
   },
   [CLIENTS.SELECT_CLIENT]: (state, clientUid) => {
     state.selectedClient = state.clients.filter(cl => cl.uid === clientUid)[0]
+  },
+  [CLIENTS.CHANGE_CLIENT_NAME]: (state, client) => {
+    state.clients.find(cl => cl.uid === client.uid).name = client.name
   }
 }
 
