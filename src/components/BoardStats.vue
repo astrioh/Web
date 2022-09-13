@@ -131,7 +131,7 @@ export default {
 
 <style scoped>
 table {
-  @apply w-[calc(100%-40px)] mx-[20px] mt-[20px] border-separate
+  @apply w-[calc(100%-40px)] mx-[20px] mt-[20px] border-separate border-spacing-0
 }
 
 /*Стили для первой строки с заголовками*/
