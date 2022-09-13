@@ -61,7 +61,16 @@
     {{ selectedClientPhone }}
   </div>
 
-  <ClientChat />
+  <ClientChat
+    v-if="status=='success'"
+    :messages="clientMessages"
+    :current-user-uid="user.current_user_uid"
+    :employees="employees"
+    :show-files-only="showFilesOnly"
+    @onQuote="setCurrentQuote"
+    @onDeleteMessage="deleteClientMessage"
+    @onDeleteFile="deleteClientFileMessage"
+  />
 
   <div class="flex flex-col fixed bottom-[0px] w-[340px] bg-white pt-2 pb-5">
     <ClientMessageQuoteUnderInput
@@ -72,10 +81,10 @@
       @onClearQuote="currentQuote = false"
     />
     <ClientMessageInput
-      v-model="cardMessageInputValue"
+      v-model="clientMessageInputValue"
       :can-add-files="canAddFiles"
-      @createCardMessage="createCardMessage"
-      @createCardFile="createCardFile"
+      @createClientMessage="createClientMessage"
+      @createClientFile="createClientFile"
       @onPaste="onPasteEvent"
     />
   </div>
@@ -90,6 +99,13 @@ import ClientChat from '@/components/Clients/ClientChat.vue'
 import ClientMessageQuoteUnderInput from '@/components/Clients/ClientMessageQuoteUnderInput.vue'
 import ClientMessageInput from '@/components/Clients/ClientMessageInput.vue'
 import * as CLIENTS from '@/store/actions/clients'
+import { uuidv4 } from '@/helpers/functions'
+import {
+  CREATE_MESSAGE_REQUEST,
+  DELETE_FILE_REQUEST,
+  DELETE_MESSAGE_REQUEST,
+  CREATE_FILES_REQUEST
+} from '@/store/actions/clientfilesandmessages'
 
 export default {
   components: {
@@ -106,7 +122,9 @@ export default {
     return {
       currClientName: '',
       showConfirm: false,
-      cardMessageInputValue: ''
+      showFilesOnly: false,
+      currentQuote: false,
+      clientMessageInputValue: ''
     }
   },
   computed: {
@@ -139,7 +157,12 @@ export default {
     },
     selectedClientPhone () {
       return this.selectedClient?.phone || ''
-    }
+    },
+    status () { return this.$store.state.clientfilesandmessages.status },
+    user () { return this.$store.state.user.user },
+    employees () { return this.$store.state.employees.employees },
+    canAddFiles () { return !this.$store.getters.isLicenseExpired },
+    clientMessages () { return this.$store.state.clientfilesandmessages.messages }
   },
   watch: {
     selectedClientName: {
@@ -163,6 +186,116 @@ export default {
         uid: this.selectedClient.uid,
         name: this.currClientName
       })
+    },
+    createClientMessage () {
+      // если лицензия истекла
+      if (this.$store.getters.isLicenseExpired) {
+        this.showMessagesLimit = true
+        return
+      }
+      if (this.clientMessageInputValue <= 0) {
+        return
+      }
+      let msgcard = this.clientMessageInputValue
+      msgcard = msgcard.trim()
+      msgcard = msgcard.replaceAll('&', '&amp;')
+      msgcard = msgcard.replaceAll('>', '&gt;')
+      msgcard = msgcard.replaceAll('<', '&lt;')
+      const uid = uuidv4()
+      const data = {
+        uid: uid,
+        uid_msg: uid,
+        date_create: new Date().toISOString(),
+        uid_creator: this.user.current_user_uid,
+        uid_quote: this.currentQuote?.uid ?? '',
+        text: msgcard,
+        msg: msgcard,
+        order: 0,
+        deleted: 0
+      }
+      this.$store.dispatch(CREATE_MESSAGE_REQUEST, data).then(() => {
+        if (this.selectedCard) this.selectedCard.has_msgs = true
+        this.cardMessageInputValue = ''
+        this.currentQuote = false
+        this.scrollDown()
+      })
+    },
+    createClientFile (event) {
+      if (event === false) {
+        this.showMessagesLimit = true
+        return
+      }
+      const uploadingFiles = []
+
+      const files = event.target.files ? event.target.files : event.dataTransfer.files
+      const formData = new FormData()
+      for (let i = 0; i < files?.length; i++) {
+        const file = files[i]
+        const fileSizeInMB = file.size / 1024 / 1024
+
+        if (fileSizeInMB > 50) {
+          this.showFileSizeLimit = true
+          this.tooBigFiles.push(file)
+          continue
+        }
+
+        formData.append('files[' + i + ']', file)
+
+        // проверяем если файл не нуждается в прелоуде, тогда добавляем его псевдоданные
+        // чтобы отобразить, что файл / файлы загружаются
+        const fileExtension = file?.name?.split('.')?.pop()?.toLowerCase()
+        if (!this.isFilePreloadable(fileExtension)) {
+          uploadingFiles.push({
+            uid: uuidv4(),
+            uid_creator: this.user.current_user_uid,
+            uid_file: uuidv4(),
+            date_create: new Date().toISOString(),
+            order: 0,
+            file_name: file.name,
+            file_size: file.size,
+            file_version: 1,
+            is_uploading: true
+          })
+        }
+      }
+      const data = {
+        uid_card: this.selectedCard?.uid,
+        name: formData
+      }
+      this.$store.commit('addClientMessages', uploadingFiles)
+      this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
+        if (this.selectedCard) this.selectedCard.has_files = true
+        this.scrollDown()
+      })
+    },
+    onPasteEvent (e) {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items
+      for (const index in items) {
+        const item = items[index]
+        if (item.kind === 'file') {
+          const blob = item.getAsFile()
+          const formData = new FormData()
+          formData.append('files', blob)
+          const data = {
+            uid_card: this.selectedCard?.uid,
+            name: formData
+          }
+          this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
+            this.selectedCard.has_files = true
+            this.scrollDown()
+          })
+        }
+      }
+    },
+    setCurrentQuote (quote) {
+      this.currentQuote = quote
+      this.focusMessageInput()
+    },
+    deleteClientMessage (uid) {
+      this.$store.dispatch(DELETE_MESSAGE_REQUEST, uid)
+    },
+    deleteClientFileMessage (uid) {
+      this.$store.dispatch(DELETE_FILE_REQUEST, uid)
     }
   }
 }
