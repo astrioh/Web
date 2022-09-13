@@ -34,10 +34,18 @@
           </PopMenuItem>
           <PopMenuItem
             icon="delete"
-            @click="gotoBoardStats"
           >
-            Статистика доски
+            <router-link :to="`/board/${selectedBoardUid}/form_settings`">
+              Форма сбора заявок
+            </router-link>
           </PopMenuItem>
+          <router-link :to="`/board/${selectedBoardUid}/stats`">
+            <PopMenuItem
+              icon="delete"
+            >
+              Статистика доски
+            </PopMenuItem>
+          </router-link>
         </template>
       </PopMenu>
       <PropsButtonClose @click="closeProperties" />
@@ -395,10 +403,6 @@ export default {
             newBoardTitle: title
           })
       }
-    },
-    gotoBoardStats () {
-      this.$store.dispatch('asidePropertiesToggle', false)
-      this.$router.push(`/board/${this.selectedBoardUid}/stats`)
     },
     changeBoardColor (color) {
       if (this.isCanEdit && this.selectedBoardColor.toLowerCase() !== color) {
