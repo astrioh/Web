@@ -1,11 +1,5 @@
 <template>
   <div v-if="selectedBoard">
-    <ClientsFormModalBox
-      v-if="showClientsForm"
-      title="Настройка формы"
-      @cancel="showClientsForm = false"
-      @save="onSaveClientsForm"
-    />
     <ModalBoxDelete
       v-if="showConfirm"
       title="Удалить доску"
@@ -39,9 +33,11 @@
             Покинуть доску
           </PopMenuItem>
           <PopMenuItem
-            @click="clickShowClientsForm"
+            icon="delete"
           >
-            Форма сбора заявок
+            <router-link :to="`/board/${selectedBoardUid}/stats`">
+              Форма сбора заявок
+            </router-link>
           </PopMenuItem>
           <PopMenuItem
             icon="delete"
@@ -220,7 +216,6 @@ import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 import BoardPropsUserButton from '@/components/Board/BoardPropsUserButton.vue'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
-import ClientsFormModalBox from '@/components/Clients/ClientsFormModalBox.vue'
 
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
@@ -234,15 +229,13 @@ export default {
     PropsButtonMenu,
     PropsButtonClose,
     BoardPropsUserButton,
-    BoardPropsMenuItemUser,
-    ClientsFormModalBox
+    BoardPropsMenuItemUser
   },
   data () {
     return {
       showConfirm: false,
       showConfirmQuit: false,
-      currName: '',
-      showClientsForm: false
+      currName: ''
     }
   },
   computed: {
@@ -481,13 +474,6 @@ export default {
           console.log('changeBoardMembers', resp, users)
         })
       }
-    },
-    onSaveClientsForm () {
-      this.showClientsForm = false
-      // надо дергать запрос, api еще пока не подключили
-    },
-    clickShowClientsForm () {
-      this.showClientsForm = true
     }
   }
 }
