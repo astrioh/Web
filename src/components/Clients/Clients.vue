@@ -114,8 +114,18 @@ export default {
       this.showAddClient = true
     },
     onAddNewClient (client) {
-      this.$store.commit(CLIENTS.ADD_NEW_CLIENT, client)
-      this.showAddClient = false
+      const clientToSend = {
+        uid: client.uid,
+        organization: this.user?.owner_email,
+        name: client.name,
+        email: client.email,
+        phone: client.phone,
+        comment: client.comment
+      }
+      this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
+        .then(() => {
+          this.showAddClient = false
+        })
     },
     changePage () {
       console.log(this.currentPage)

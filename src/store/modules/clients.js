@@ -20,6 +20,20 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [CLIENTS.ADD_NEW_CLIENT]: ({ commit, dispatch }, client) => {
+    return new Promise((resolve, reject) => {
+      const url =
+        process.env.VUE_APP_INSPECTOR_API + 'clients'
+      axios({ url: url, method: 'POST', data: client })
+        .then((resp) => {
+          commit(CLIENTS.ADD_NEW_CLIENT, client)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
@@ -29,7 +43,6 @@ const mutations = {
   },
   [CLIENTS.ADD_NEW_CLIENT]: (state, client) => {
     state.clients.push(client)
-    console.log(client)
   },
   [CLIENTS.REMOVE_CLIENT]: (state, clientUid) => {
     state.clients = state.clients.filter(cl => cl.uid !== clientUid)
