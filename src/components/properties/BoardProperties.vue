@@ -124,7 +124,7 @@
         />
       </svg>
 
-      <div class="font-roboto text-[16px] leading-[20px] text-[#4c4c4d]">
+      <div class="font-roboto text-[16px] leading-[20px] text-[#4c4c4d] cursor-pointer">
         Избранная доска
       </div>
     </div>
