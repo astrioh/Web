@@ -1,5 +1,6 @@
 import BoardWithChildren from '@/components/Board/BoardWithChildren.vue'
 import BoardWithForm from '@/components/Board/BoardWithForm.vue'
+import CreatedBoardForm from '@/components/Board/CreatedBoardForm.vue'
 import BoardStats from '@/components/BoardStats.vue'
 import Colors from '@/components/Colors.vue'
 import Doitnow from '@/components/Doitnow.vue'
@@ -298,9 +299,18 @@ const routes = [
     meta: {
       layout: Home
     },
-    path: '/board/:board_id/form',
+    path: '/board/:board_id/form_settings',
     name: 'boardWithForm',
     component: BoardWithForm,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/board/:board_id/form',
+    name: 'createdBoardForm',
+    component: CreatedBoardForm,
     beforeEnter: shouldRedirectToLogin
   },
   {
