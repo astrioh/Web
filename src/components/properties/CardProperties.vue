@@ -110,7 +110,7 @@
       </PopMenu>
     </div>
 
-    <div class="flex justify-start mb-[25px] space-x-[4px]">
+    <div class="flex flex-wrap justify-start mb-[25px] space-x-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
         :org-employees="orgEmployees"
@@ -122,6 +122,12 @@
         :can-edit="canEdit"
         @click="clickCardBudget"
         @onWipeBudget="changeCardBudget"
+      />
+      <CardSetDate
+        v-if="selectedCard"
+        :date-time="selectedCard.date_create"
+        date-text=""
+        @changeDates="onChangeDates"
       />
     </div>
 
@@ -194,6 +200,7 @@ import CardName from '@/components/CardProperties/CardName.vue'
 import CardCover from '@/components/CardProperties/CardCover.vue'
 import CardChat from '@/components/CardProperties/CardChat.vue'
 import CardResponsibleUser from '@/components/CardProperties/CardResponsibleUser.vue'
+import CardSetDate from '@/components/CardProperties/CardSetDate.vue'
 import CardOptions from '@/components/CardProperties/CardOptions.vue'
 import CardBudget from '@/components/CardProperties/CardBudget.vue'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput.vue'
@@ -227,7 +234,8 @@ export default {
     CardMessagesModalBoxLimit,
     MessageSkeleton,
     PropsButtonClose,
-    TaskPropertiesModalBoxFileSizeLimit
+    TaskPropertiesModalBoxFileSizeLimit,
+    CardSetDate
   },
   data () {
     return {
@@ -551,6 +559,10 @@ export default {
         .then((resp) => {
           console.log('Card is moved')
         })
+    },
+    onChangeDates: function (dateTimeString) {
+      // функция заглушка, лог оставил, чтоб любой мог проверить, что дата выбирается
+      console.log(dateTimeString)
     }
   }
 }
