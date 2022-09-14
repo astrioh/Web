@@ -32,16 +32,16 @@
           >
             Покинуть доску
           </PopMenuItem>
-          <PopMenuItem
-            icon="delete"
-          >
-            <router-link :to="`/board/${selectedBoardUid}/form_settings`">
+          <router-link :to="`/board/${selectedBoardUid}/form_settings`">
+            <PopMenuItem
+              icon="add"
+            >
               Форма сбора заявок
-            </router-link>
-          </PopMenuItem>
+            </PopMenuItem>
+          </router-link>
           <router-link :to="`/board/${selectedBoardUid}/stats`">
             <PopMenuItem
-              icon="delete"
+              icon="check"
             >
               Статистика доски
             </PopMenuItem>
