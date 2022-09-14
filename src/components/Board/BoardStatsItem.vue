@@ -2,6 +2,11 @@
   <tr>
     <td>
       <div class="content">
+        <img
+          v-if="photo"
+          :src="photo"
+          class="flex-none border border-[#7e7e80] rounded-[4px] w-[20px] h-[20px] mr-[7px]"
+        >
         {{ member.username }}
       </div>
     </td>
@@ -104,6 +109,14 @@ export default {
     member: {
       type: Object,
       default: () => {}
+    }
+  },
+  computed: {
+    employeesByEmail () {
+      return this.$store.state.employees.employeesByEmail
+    },
+    photo () {
+      return this.employeesByEmail[this.member.email.toLowerCase()]?.fotolink || ''
     }
   },
   methods: {
