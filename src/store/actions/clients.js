@@ -6,3 +6,4 @@ export const GET_CLIENTS = 'GET_CLIENTS'
 export const GET_CLIENT = 'GET_CLIENT'
 
 export const SET_CLIENTS = 'SET_CLIENTS'
+export const UPDATE_CLIENT = 'UPDATE_CLIENT'
