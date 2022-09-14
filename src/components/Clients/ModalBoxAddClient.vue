@@ -11,12 +11,14 @@
         ref="inputValue"
         v-model="name"
         type="text"
+        :maxLength="maxLengthInput"
         class="bg-[#f4f5f7]/50 mb-3 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       >
       <span class="mb-1">Телефон</span>
       <input
         v-model="phone"
         type="text"
+        :maxLength="maxLengthInput"
         class="bg-[#f4f5f7]/50 mb-3 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       >
       <span class="mb-1">Email</span>
@@ -64,6 +66,11 @@ export default {
     email: '',
     comment: ''
   }),
+  computed: {
+    maxLengthInput () {
+      return '50'
+    }
+  },
   methods: {
     onCancel () {
       this.$emit('cancel')

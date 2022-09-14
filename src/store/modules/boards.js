@@ -96,6 +96,20 @@ const actions = {
         })
     })
   },
+  /* [BOARD.CHANGE_BOARD_DEPARTMENTS]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const board = state.boards[data.boardUid]
+      if (!board) return reject(new Error(`not find board ${data.boardUid}`))
+      board.deps = { ...board.deps, [data.dep.uid]: data.dep }
+      dispatch(BOARD.UPDATE_BOARD_REQUEST, board)
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  }, */
   [BOARD.CHANGE_BOARD_COLOR]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const board = state.boards[data.boardUid]
@@ -332,6 +346,9 @@ const mutations = {
     state.showOnlyCardsWithNoResponsible = false
     state.showOnlyMyCreatedCards = false
     state.searchText = undefined
+  },
+  [BOARD.ADD_BOARD_DEPARTMENTS]: (state, data) => {
+    state.boards[data.boardUid].deps = { ...state.boards[data.boardUid].deps, [data.dep.uid]: data.dep }
   }
 }
 
