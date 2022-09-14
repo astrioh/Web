@@ -145,6 +145,9 @@ const mutations = {
   [PROJECT.RESET_STATE_PROJECT]: (state) => {
     state.projects = {}
     state.selectedProject = undefined
+  },
+  [PROJECT.ADD_PROJECT_DEPARTMENTS]: (state, data) => {
+    state.projects[data.projectUid].deps = { ...state.projects[data.projectUid].deps, [data.dep.uid]: data.dep }
   }
 }
 export default {
