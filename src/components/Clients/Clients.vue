@@ -23,23 +23,31 @@
         @click.stop="showClientProperties(client)"
       >
         <td>
-          <div class="content">
-            {{ client.name }}
+          <div class="content max-w-[250px]">
+            <span class="truncate">
+              {{ client.name }}
+            </span>
           </div>
         </td>
         <td>
-          <div class="content">
-            {{ client.phone }}
+          <div class="content max-w-[250px]">
+            <span class="truncate">
+              {{ client.phone }}
+            </span>
           </div>
         </td>
         <td>
-          <div class="content">
-            {{ client.email }}
+          <div class="content max-w-[250px]">
+            <span class="truncate">
+              {{ client.email }}
+            </span>
           </div>
         </td>
         <td>
-          <div class="content">
-            {{ client.comment }}
+          <div class="content max-w-[250px]">
+            <span class="truncate">
+              {{ client.comment }}
+            </span>
           </div>
         </td>
       </tr>
