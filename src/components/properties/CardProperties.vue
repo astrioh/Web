@@ -110,7 +110,7 @@
       </PopMenu>
     </div>
 
-    <div class="flex justify-start mb-[25px] space-x-[4px]">
+    <div class="flex flex-wrap justify-start mb-[25px] space-x-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
         :org-employees="orgEmployees"
