@@ -85,7 +85,7 @@
           type="text"
         />
         <control
-          v-model="form.notify_text"
+          v-model="form.redirect_link"
           class="mb-6"
           name="notify_text"
           placeholder="Уведомление после отправки или ссылка для редиректа"
@@ -117,6 +117,8 @@ import NavBar from '@/components/Navbar/NavBar'
 import JbButton from '@/components/JbButton.vue'
 import Control from '@/components/Control.vue'
 
+import * as BOARD_FORMS from '@/store/actions/board_forms.js'
+
 export default {
   components: {
     NavBar,
@@ -132,15 +134,39 @@ export default {
         phone: '',
         comment: '',
         button_text: '',
-        notify_text: ''
+        redirect_link: ''
       },
       showParams: false
     }
   },
   methods: {
     clickCreateForm () {
-      console.log(this.showParams)
-      this.showParams = true
+      const data = {
+        uid_board: this.$route.params.board_id,
+        info: JSON.stringify({
+          title: this.form.titleForm,
+          name: {
+            text: this.form.name,
+            visible: true
+          },
+          email: {
+            text: this.form.email,
+            visible: true
+          },
+          phone: {
+            text: this.form.phone,
+            visible: true
+          },
+          comment: {
+            text: this.form.comment,
+            visible: true
+          },
+          button_text: this.form.button_text,
+          redirect_link: this.form.redirect_link
+        })
+      }
+      this.$store.dispatch(BOARD_FORMS.CREATE_BOARD_FORM_REQUEST, data)
+      // this.showParams = true
     }
   }
 }
