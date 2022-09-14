@@ -18,20 +18,6 @@
       <PopMenu>
         <PropsButtonMenu />
         <template #menu>
-          <PopMenuItem
-            v-if="isCanDelete"
-            icon="delete"
-            @click="showConfirm = true"
-          >
-            Удалить
-          </PopMenuItem>
-          <PopMenuItem
-            v-else
-            icon="delete"
-            @click="showConfirmQuit = true"
-          >
-            Покинуть доску
-          </PopMenuItem>
           <router-link :to="`/board/${selectedBoardUid}/form_settings`">
             <PopMenuItem
               icon="add"
@@ -46,6 +32,20 @@
               Статистика доски
             </PopMenuItem>
           </router-link>
+          <PopMenuItem
+            v-if="isCanDelete"
+            icon="delete"
+            @click="showConfirm = true"
+          >
+            Удалить
+          </PopMenuItem>
+          <PopMenuItem
+            v-else
+            icon="delete"
+            @click="showConfirmQuit = true"
+          >
+            Покинуть доску
+          </PopMenuItem>
         </template>
       </PopMenu>
       <PropsButtonClose @click="closeProperties" />
