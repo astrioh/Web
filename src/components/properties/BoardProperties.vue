@@ -195,7 +195,127 @@
       @reader="setMemberStatus(user.uid, 0)"
       @writer="setMemberStatus(user.uid, 2)"
     />
+    <div
+      class="mt-[30px] mb-[8px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Отдел
+    </div>
+    <PopMenu
+      v-if="isCanEdit && usersCanAddToAccess.length"
+      class="w-full"
+    >
+      <div
+        class="w-full h-[34px] gap-[5px] flex items-center text-[#4c4c4d] hover:text-[#4c4c4d]/75 cursor-pointer"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.66824 7.3379L8.67295 3.28854C8.67295 3.111 8.60243 2.94074 8.47689 2.8152C8.35135 2.68967 8.18109 2.61914 8.00356 2.61914C7.82602 2.61914 7.65576 2.68967 7.53022 2.8152C7.40469 2.94074 7.33416 3.111 7.33416 3.28853L7.33888 7.3379L3.28951 7.33319C3.11198 7.33319 2.94171 7.40371 2.81618 7.52925C2.69064 7.65478 2.62012 7.82505 2.62012 8.00258C2.62012 8.18011 2.69064 8.35038 2.81618 8.47591C2.94171 8.60145 3.11198 8.67197 3.28951 8.67197L7.33888 8.66726L7.33416 12.7166C7.3338 12.8046 7.35087 12.8918 7.38438 12.9732C7.41789 13.0546 7.46719 13.1285 7.52942 13.1908C7.59165 13.253 7.66559 13.3023 7.74696 13.3358C7.82834 13.3693 7.91555 13.3864 8.00356 13.386C8.09156 13.3864 8.17877 13.3693 8.26015 13.3358C8.34153 13.3023 8.41546 13.253 8.47769 13.1908C8.53993 13.1285 8.58922 13.0546 8.62273 12.9732C8.65624 12.8918 8.67331 12.8046 8.67295 12.7166L8.66824 8.66726L12.7176 8.67197C12.8056 8.67233 12.8928 8.65527 12.9742 8.62176C13.0556 8.58824 13.1295 8.53895 13.1917 8.47672C13.254 8.41449 13.3033 8.34055 13.3368 8.25917C13.3703 8.17779 13.3874 8.09059 13.387 8.00258C13.3874 7.91457 13.3703 7.82736 13.3368 7.74599C13.3033 7.66461 13.254 7.59067 13.1917 7.52844C13.1295 7.46621 13.0556 7.41692 12.9742 7.3834C12.8928 7.34989 12.8056 7.33283 12.7176 7.33319L8.66824 7.3379Z"
+            fill="currentColor"
+          />
+        </svg>
+
+        <div
+          class="font-roboto text-[13px] leading-[15px] font-medium"
+        >
+          Выбарть отдел
+        </div>
+      </div>
+      <template #menu>
+        <div class="max-h-[220px] overflow-y-auto overflow-x-hidden w-[220px] scroll-style">
+          <PopMenuItem
+            v-for="(dep,index) in allDepartments"
+            :key="dep.uid"
+            @click="setDepartment(index)"
+          >
+            <div class="flex justify-between w-full items-center">
+              <span
+                class="truncate"
+                :class="currDepTitle === dep.name ? 'font-bold' : ''"
+              >
+                {{ dep.name }}
+              </span>
+              <svg
+                v-if="currDepTitle === dep.name"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13.3346 4L6.0013 11.3333L2.66797 8"
+                  stroke="#1CA345"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </PopMenuItem>
+        </div>
+      </template>
+    </PopMenu>
+    <div
+      v-for="dep in depsBoard"
+      :key="dep.uid"
+    >
+      <div class="group w-full h-[34px] flex items-center">
+        <div class="grow w-6/12 font-roboto text-[13px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px] overflow-hidden text-ellipsis">
+          {{ dep.name }}
+        </div>
+        <div class="flex-none">
+          <PopMenu :disabled="disabled">
+            <div
+              class="flex items-center text-[#7e7e80]"
+              :class="{ 'cursor-pointer hover:text-[#4c4c4d]': !disabled }"
+            >
+              <div class="mr-[4px] font-roboto text-[12px] leading-[20px]">
+                {{ dep.status }}
+              </div>
+              <svg
+                class="invisible -mt-3"
+                :class="{ 'group-hover:visible': !disabled }"
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M10.7603 3.56099C11.0027 3.80668 11.0001 4.2024 10.7544 4.44486L6.7011 8.44486C6.47139 8.67154 6.10687 8.68606 5.85986 8.47836L1.46875 4.78606C1.20456 4.56391 1.17047 4.16965 1.39262 3.90546C1.61477 3.64126 2.00903 3.60718 2.27322 3.82933L6.22845 7.15512L9.87642 3.55514C10.1221 3.31269 10.5178 3.31531 10.7603 3.56099Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </div>
+            <template #menu>
+              <PopMenuItem @click="clickAdmin">
+                Администратор
+              </PopMenuItem>
+              <PopMenuItem @click="clickWriter">
+                Редактор
+              </PopMenuItem>
+              <PopMenuItem @click="clickReader">
+                Читатель
+              </PopMenuItem>
+              <PopMenuDivider />
+              <PopMenuItem @click="clickDelete">
+                Удалить
+              </PopMenuItem>
+            </template>
+          </PopMenu>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div v-else>
     <div class="flex justify-end items-center">
       <PropsButtonClose @click="closeProperties" />
@@ -337,6 +457,31 @@ export default {
         }
       }
       return users
+    },
+    depsBoard () {
+      const allDeps = []
+
+      for (const dep in this.selectedBoard.deps) {
+        allDeps.push(this.selectedBoard.deps[dep])
+      }
+      return allDeps
+    },
+    allDepartments () {
+      const deps = Object.values(this.$store.state.departments.deps)
+      deps.sort((item1, item2) => {
+        // сначала по порядку
+        if (item1.order > item2.order) return 1
+        if (item1.order < item2.order) return -1
+        // если одинаковый, то по имени
+        if (item1.name > item2.name) return 1
+        if (item1.name < item2.name) return -1
+        return 0
+      })
+      deps.unshift({
+        uid: '00000000-0000-0000-0000-000000000000',
+        name: 'Вне отдела'
+      })
+      return deps
     }
   },
   watch: {
@@ -362,6 +507,18 @@ export default {
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
           this.$router.push('/board')
         })
+    },
+    setDepartment (index) {
+      const dep = this.allDepartments[index]
+      /* this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+        boardUid: this.selectedBoard.uid,
+        dep: dep
+      }) */
+      // Временно отображение отдела
+      this.$store.commit(BOARD.ADD_BOARD_DEPARTMENTS, {
+        boardUid: this.selectedBoard.uid,
+        dep: dep
+      })
     },
     favoriteToggle () {
       if (!this.isFavorite) {
