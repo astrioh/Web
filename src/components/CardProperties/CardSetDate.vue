@@ -509,7 +509,7 @@ export default {
       return (n < 10 ? '0' : '') + n.toString()
     },
     getDateValue () {
-      if (this.dateTime !== '0001-01-01T00:00:00') {
+      if (this.dateTime && this.dateTime !== '0001-01-01T00:00:00') {
         return new Date(this.dateTime)
       }
       return null
