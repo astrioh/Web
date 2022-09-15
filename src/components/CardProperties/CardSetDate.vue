@@ -239,7 +239,7 @@
       </div>
     </template>
     <a
-      class="rounded-[6px] text-[12px] px-[8px] py-[5px] font-[500] text-[#575758] mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close"
+      class="rounded-[6px] text-[12px] px-[8px] py-[5px] font-[500] text-[#575758] flex bg-[#F4F5F7] mt-[2px] mr-[2px] mb-[2px] ml-[4px] cursor-pointer relative float-left dark:bg-gray-800 dark:text-gray-100 project-hover-close"
     >
       <span
         v-if="dateText !== ''"
@@ -462,7 +462,7 @@
             />
           </svg>
         </button>
-        <span>Выбрать дату</span>
+        <span class="ml-[7px]">Выбрать дату</span>
       </span>
     </a>
   </Popper>
