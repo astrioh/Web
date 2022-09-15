@@ -96,11 +96,11 @@ const actions = {
         })
     })
   },
-  /* [BOARD.CHANGE_BOARD_DEPARTMENTS]: ({ commit, dispatch }, data) => {
+  [BOARD.CHANGE_BOARD_DEPARTMENTS]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const board = state.boards[data.boardUid]
       if (!board) return reject(new Error(`not find board ${data.boardUid}`))
-      board.deps = { ...board.deps, [data.dep.uid]: data.dep }
+      board.deps = data.newDeps
       dispatch(BOARD.UPDATE_BOARD_REQUEST, board)
         .then((resp) => {
           resolve(resp)
@@ -109,7 +109,7 @@ const actions = {
           reject(err)
         })
     })
-  }, */
+  },
   [BOARD.CHANGE_BOARD_COLOR]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const board = state.boards[data.boardUid]

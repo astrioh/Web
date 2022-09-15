@@ -231,7 +231,7 @@
           <PopMenuItem
             v-for="(dep,index) in allDepartments"
             :key="dep.uid"
-            @click="setDepartment(index)"
+            @click="addDepartment(index)"
           >
             <div class="flex justify-between w-full items-center">
               <span
@@ -296,17 +296,17 @@
               </svg>
             </div>
             <template #menu>
-              <PopMenuItem @click="clickAdmin">
+              <PopMenuItem @click="clickAdminDep">
                 Администратор
               </PopMenuItem>
-              <PopMenuItem @click="clickWriter">
+              <PopMenuItem @click="clickWriterDep">
                 Редактор
               </PopMenuItem>
-              <PopMenuItem @click="clickReader">
+              <PopMenuItem @click="clickReaderDep">
                 Читатель
               </PopMenuItem>
               <PopMenuDivider />
-              <PopMenuItem @click="clickDelete">
+              <PopMenuItem @click="clickDeleteDep">
                 Удалить
               </PopMenuItem>
             </template>
@@ -396,6 +396,9 @@ export default {
       while (colors.length) arrColors.push(colors.splice(0, rowLength))
       return arrColors
     },
+    statuses () {
+      return ['Читатель', 'Администратор', 'Редактор']
+    },
     isFavorite () {
       return this.selectedBoard?.favorite
     },
@@ -428,7 +431,6 @@ export default {
       return this.selectedBoard?.type_access === 1
     },
     usersBoard () {
-      const statuses = ['Читатель', 'Администратор', 'Редактор']
       const users = []
       const employees = this.$store.state.employees.employees
       const members = this.selectedBoard?.members || {}
@@ -438,7 +440,7 @@ export default {
           users.push({
             uid: userUid,
             email: emp?.email,
-            status: statuses[members[userUid]]
+            status: this.statuses[members[userUid]]
           })
         }
       }
@@ -460,9 +462,15 @@ export default {
     },
     depsBoard () {
       const allDeps = []
-
-      for (const dep in this.selectedBoard.deps) {
-        allDeps.push(this.selectedBoard.deps[dep])
+      const deps = this.$store.state.departments.deps
+      const currentBoardDeps = this.selectedBoard.deps
+      for (const depUid in currentBoardDeps) {
+        const oneDep = deps[depUid]
+        allDeps.push({
+          uid: depUid,
+          name: oneDep.name,
+          status: this.statuses[currentBoardDeps[depUid]]
+        })
       }
       return allDeps
     },
@@ -508,17 +516,23 @@ export default {
           this.$router.push('/board')
         })
     },
-    setDepartment (index) {
+    addDepartment (index) {
       const dep = this.allDepartments[index]
-      /* this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
-        boardUid: this.selectedBoard.uid,
-        dep: dep
-      }) */
-      // Временно отображение отдела
-      this.$store.commit(BOARD.ADD_BOARD_DEPARTMENTS, {
-        boardUid: this.selectedBoard.uid,
-        dep: dep
-      })
+      if (
+        this.isCanEdit &&
+        this.selectedBoard?.deps &&
+        this.selectedBoard?.deps[dep.uid] === undefined
+      ) {
+        const deps = { ...this.selectedBoard.deps }
+        deps[dep.uid] = 0
+        this.selectedBoard.deps = deps
+        this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+          boardUid: this.selectedBoard.uid,
+          newDeps: deps
+        }).then((resp) => {
+          console.log('addBoardDepartment', resp, deps)
+        })
+      }
     },
     favoriteToggle () {
       if (!this.isFavorite) {
