@@ -110,23 +110,23 @@
       </PopMenu>
     </div>
 
-    <div class="flex flex-wrap justify-start items-center mb-[25px] space-x-[4px]">
+    <div class="flex flex-wrap justify-start items-center mb-[25px] gap-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
         :org-employees="orgEmployees"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
+      <CardSetDate
+        :date-time="selectedCard.date_reminder"
+        :date-text="cardDateReminderText"
+        @changeDates="onChangeDates"
+      />
       <CardBudget
         :budget="selectedCard?.cost"
         :can-edit="canEdit"
         @click="clickCardBudget"
         @onWipeBudget="changeCardBudget"
-      />
-      <CardSetDate
-        :date-time="selectedCard.date_reminder"
-        :date-text="cardDateReminderText"
-        @changeDates="onChangeDates"
       />
     </div>
 
