@@ -5,24 +5,28 @@
         {{ item.title }}
       </h1>
       <input
+        v-if="showInput1"
         v-model="modelInput1"
         :placeholder="item.inputs.input1"
         type="text"
         class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       >
       <input
+        v-if="showInput2"
         v-model="modelInput2"
         :placeholder="item.inputs.input2"
         type="text"
         class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       >
       <input
+        v-if="showInput3"
         v-model="modelInput3"
         :placeholder="item.inputs.input3"
         type="text"
         class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       >
       <input
+        v-if="showInput4"
         v-model="modelInput4"
         :placeholder="item.inputs.input4"
         type="text"

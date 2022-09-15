@@ -17,9 +17,9 @@
         class="px-5 bg-white py-2 pb-[200px] rounded-xl"
       >
         <control
-          v-model="form.titleForm"
+          v-model="form.title"
           class="mb-6"
-          name="titleForm"
+          name="title"
           placeholder="Заголовок формы"
           icon-class="cursor-pointer"
           type="text"
@@ -28,9 +28,10 @@
           <input
             class="mr-2 leading-tight"
             type="checkbox"
+            @change="changeNameVisible"
           >
           <control
-            v-model="form.name"
+            v-model="form.name.text"
             class="w-full"
             name="name"
             placeholder="Имя"
@@ -42,9 +43,10 @@
           <input
             class="mr-2 leading-tight"
             type="checkbox"
+            @change="changeEmailVisible"
           >
           <control
-            v-model="form.email"
+            v-model="form.email.text"
             class="w-full"
             name="email"
             placeholder="Емайл"
@@ -56,9 +58,10 @@
           <input
             class="mr-2 leading-tight"
             type="checkbox"
+            @change="changePhoneVisible"
           >
           <control
-            v-model="form.phone"
+            v-model="form.phone.text"
             class="w-full"
             name="phone"
             placeholder="Телефон"
@@ -70,9 +73,10 @@
           <input
             class="mr-2 leading-tight"
             type="checkbox"
+            @change="changeCommentVisible"
           >
           <control
-            v-model="form.comment"
+            v-model="form.comment.text"
             class="w-full"
             name="comment"
             placeholder="Комментарий"
@@ -91,7 +95,7 @@
         <control
           v-model="form.redirect_link"
           class="mb-6"
-          name="notify_text"
+          name="redirect_link"
           placeholder="Уведомление после отправки или ссылка для редиректа"
           icon-class="cursor-pointer"
           type="text"
@@ -132,11 +136,23 @@ export default {
   data () {
     return {
       form: {
-        titleForm: '',
-        name: '',
-        email: '',
-        phone: '',
-        comment: '',
+        title: '',
+        name: {
+          text: '',
+          visible: true
+        },
+        email: {
+          text: '',
+          visible: true
+        },
+        phone: {
+          text: '',
+          visible: true
+        },
+        comment: {
+          text: '',
+          visible: true
+        },
         button_text: '',
         redirect_link: ''
       },
@@ -147,27 +163,7 @@ export default {
     clickSaveForm () {
       const data = {
         uid_board: this.$route.params.board_id,
-        info: {
-          title: this.form.titleForm,
-          name: {
-            text: this.form.name,
-            visible: true
-          },
-          email: {
-            text: this.form.email,
-            visible: true
-          },
-          phone: {
-            text: this.form.phone,
-            visible: true
-          },
-          comment: {
-            text: this.form.comment,
-            visible: true
-          },
-          button_text: this.form.button_text,
-          redirect_link: this.form.redirect_link
-        }
+        info: this.form
       }
       this.$store.dispatch(BOARD_FORMS.CREATE_OR_UPDATE_BOARD_FORM_REQUEST, data)
       console.log(this.$store.state.boardforms.boardForm)
