@@ -31,6 +31,7 @@
           >
           <control
             v-model="form.name"
+            class="w-full"
             name="name"
             placeholder="Имя"
             icon-class="cursor-pointer"
@@ -44,6 +45,7 @@
           >
           <control
             v-model="form.email"
+            class="w-full"
             name="email"
             placeholder="Емайл"
             icon-class="cursor-pointer"
@@ -57,6 +59,7 @@
           >
           <control
             v-model="form.phone"
+            class="w-full"
             name="phone"
             placeholder="Телефон"
             icon-class="cursor-pointer"
@@ -70,6 +73,7 @@
           >
           <control
             v-model="form.comment"
+            class="w-full"
             name="comment"
             placeholder="Комментарий"
             icon-class="cursor-pointer"
