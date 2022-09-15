@@ -1,133 +1,110 @@
 <template>
-  <div class="h-screen overflow-auto">
-    <div v-if="showParams === true">
-      <jb-button
-        class="rounded-lg mt-3 ml-2 text-sm"
-        label="Вернуться к настройке формы"
-        @click="showParams = false"
-      />
-      <span>Здесь будут параметры формы</span>
-    </div>
-    <div v-if="showParams === false">
-      <NavBar
-        class="pt-[8px]"
-        title="Настройка формы"
-      />
-      <form
-        class="px-5 bg-white py-2 pb-[200px] rounded-xl"
+  <NavBar
+    class="pt-[8px]"
+    title="Настройка формы"
+  />
+  <div class="h-full w-full">
+    <form
+      class="px-5 bg-white py-2 rounded-xl"
+    >
+      <input
+        v-model="form.titleForm"
+        class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        name="titleForm"
+        placeholder="Заголовок формы"
+        icon-class="cursor-pointer"
+        type="text"
       >
-        <control
-          v-model="form.titleForm"
-          class="mb-6"
-          name="titleForm"
-          placeholder="Заголовок формы"
+      <div class="flex items-center mb-6 mt-[10px]">
+        <FormCheckbox class="mr-[4px]" />
+        <input
+          v-model="form.name"
+          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          name="name"
+          placeholder="Имя"
           icon-class="cursor-pointer"
           type="text"
-        />
-        <div class="flex items-center mb-6">
-          <input
-            class="mr-2 leading-tight"
-            type="checkbox"
-          >
-          <control
-            v-model="form.name"
-            class="w-full"
-            name="name"
-            placeholder="Имя"
-            icon-class="cursor-pointer"
-            type="text"
-          />
-        </div>
-        <div class="md:flex md:items-center mb-6">
-          <input
-            class="mr-2 leading-tight"
-            type="checkbox"
-          >
-          <control
-            v-model="form.email"
-            class="w-full"
-            name="email"
-            placeholder="Емайл"
-            icon-class="cursor-pointer"
-            type="text"
-          />
-        </div>
-        <div class="md:flex md:items-center mb-6">
-          <input
-            class="mr-2 leading-tight"
-            type="checkbox"
-          >
-          <control
-            v-model="form.phone"
-            class="w-full"
-            name="phone"
-            placeholder="Телефон"
-            icon-class="cursor-pointer"
-            type="text"
-          />
-        </div>
-        <div class="md:flex md:items-center mb-6">
-          <input
-            class="mr-2 leading-tight"
-            type="checkbox"
-          >
-          <control
-            v-model="form.comment"
-            class="w-full"
-            name="comment"
-            placeholder="Комментарий"
-            icon-class="cursor-pointer"
-            type="text"
-          />
-        </div>
-        <control
-          v-model="form.button_text"
-          class="mb-6"
-          name="button_text"
-          placeholder="Надпись на кнопке"
+        >
+      </div>
+      <div class="md:flex md:items-center mb-6">
+        <FormCheckbox class="mr-[4px]" />
+        <input
+          v-model="form.email"
+          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          name="email"
+          placeholder="Емайл"
           icon-class="cursor-pointer"
           type="text"
-        />
-        <control
-          v-model="form.redirect_link"
-          class="mb-6"
-          name="notify_text"
-          placeholder="Уведомление после отправки или ссылка для редиректа"
+        >
+      </div>
+      <div class="md:flex md:items-center mb-6">
+        <FormCheckbox class="mr-[4px]" />
+        <input
+          v-model="form.phone"
+          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          name="phone"
+          placeholder="Телефон"
           icon-class="cursor-pointer"
           type="text"
-        />
+        >
+      </div>
+      <div class="md:flex md:items-center mb-3">
+        <input
+          v-model="form.comment"
+          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          name="comment"
+          placeholder="Комментарий"
+          icon-class="cursor-pointer"
+          type="text"
+        >
+      </div>
+      <input
+        v-model="form.button_text"
+        class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        name="button_text"
+        placeholder="Надпись на кнопке"
+        icon-class="cursor-pointer"
+        type="text"
+      >
+      <input
+        v-model="form.redirect_link"
+        class="bg-[#f4f5f7]/50 mt-[10px] mb-[10px] rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        name="notify_text"
+        placeholder="Уведомление после отправки или ссылка для редиректа"
+        icon-class="cursor-pointer"
+        type="text"
+      >
+      <jb-button
+        color="login"
+        class="w-full rounded-lg text-sm"
+        label="Сохранить форму"
+        @click="clickCreateForm"
+      />
+      <router-link
+        :to="'/form/' + $route.params.board_id"
+      >
         <jb-button
-          color="login"
-          class="w-full rounded-lg text-sm"
-          label="Сохранить форму"
+          class="w-full mt-3 rounded-lg text-sm"
+          label="Перейти к форме"
           @click="clickCreateForm"
         />
-        <router-link
-          :to="'/form/' + $route.params.board_id"
-        >
-          <jb-button
-            class="w-full mt-3 rounded-lg text-sm"
-            label="Перейти к форме"
-            @click="clickCreateForm"
-          />
-        </router-link>
-      </form>
-    </div>
+      </router-link>
+    </form>
   </div>
 </template>
 
 <script>
 import NavBar from '@/components/Navbar/NavBar'
+import FormCheckbox from '@/components/Board/FormCheckbox.vue'
 import JbButton from '@/components/JbButton.vue'
-import Control from '@/components/Control.vue'
 
 import * as BOARD_FORMS from '@/store/actions/board_forms.js'
 
 export default {
   components: {
     NavBar,
-    Control,
-    JbButton
+    JbButton,
+    FormCheckbox
   },
   data () {
     return {
