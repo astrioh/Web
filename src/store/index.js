@@ -26,6 +26,7 @@ import inspector from './modules/inspector'
 import notificationtasks from './modules/notification_tasks'
 import tabs from './modules/tabs'
 import clientfilesandmessages from './modules/clientfilesandmessages'
+import boardforms from './modules/boardforms'
 
 export default createStore({
   state: {
@@ -163,6 +164,7 @@ export default createStore({
     inspector,
     notificationtasks,
     tabs,
-    clientfilesandmessages
+    clientfilesandmessages,
+    boardforms
   }
 })

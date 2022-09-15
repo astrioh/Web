@@ -4,7 +4,7 @@ import axios from 'axios'
 const state = {
   messages: [],
   files: [],
-  status: 'loading'
+  status: 'success'
 }
 
 const getters = {}

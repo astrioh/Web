@@ -19,7 +19,7 @@
         class="flex-initial"
       />
     </div>
-    <div class="flex-none flex gap-[10px] items-center px-[12px]">
+    <div class="flex-none flex gap-[10px] items-center pl-[12px]">
       <slot />
     </div>
   </nav>

@@ -238,14 +238,14 @@
         </div>
       </div>
     </template>
-    <a
-      class="rounded-[6px] text-[12px] px-[8px] py-[5px] font-[500] text-[#575758] mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close"
+    <div
+      class="rounded-[6px] text-[12px] px-[8px] py-[5px] font-[500] text-[#575758] flex bg-[#F4F5F7] cursor-pointer relative float-left dark:bg-gray-800 dark:text-gray-100 project-hover-close"
     >
       <span
         v-if="dateText !== ''"
         class="flex"
       >
-        <button class="btn-calendar">
+        <button class="btn-calendar mr-[6px]">
           <svg
             width="16"
             height="17"
@@ -462,9 +462,9 @@
             />
           </svg>
         </button>
-        <span>Выбрать дату</span>
+        <span class="ml-[7px]">Выбрать дату</span>
       </span>
-    </a>
+    </div>
   </Popper>
 </template>
 
@@ -509,7 +509,7 @@ export default {
       return (n < 10 ? '0' : '') + n.toString()
     },
     getDateValue () {
-      if (this.dateTime !== '0001-01-01T00:00:00') {
+      if (this.dateTime && this.dateTime !== '0001-01-01T00:00:00') {
         return new Date(this.dateTime)
       }
       return null

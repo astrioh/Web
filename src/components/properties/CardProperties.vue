@@ -110,24 +110,23 @@
       </PopMenu>
     </div>
 
-    <div class="flex flex-wrap justify-start mb-[25px] space-x-[4px]">
+    <div class="flex flex-wrap justify-start items-center mb-[25px] gap-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
         :org-employees="orgEmployees"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
+      <CardSetDate
+        :date-time="selectedCard.date_reminder"
+        :date-text="cardDateReminderText"
+        @changeDates="onChangeDates"
+      />
       <CardBudget
         :budget="selectedCard?.cost"
         :can-edit="canEdit"
         @click="clickCardBudget"
         @onWipeBudget="changeCardBudget"
-      />
-      <CardSetDate
-        v-if="selectedCard"
-        :date-time="selectedCard.date_create"
-        date-text=""
-        @changeDates="onChangeDates"
       />
     </div>
 
@@ -190,6 +189,7 @@ import {
   CHANGE_CARD_COLOR,
   CHANGE_CARD_COVER,
   CHANGE_CARD_CLEAR_COVER,
+  CHANGE_CARD_DATE_REMINDER,
   DELETE_CARD
 } from '@/store/actions/cards'
 
@@ -298,6 +298,13 @@ export default {
     },
     columns () {
       return [...this.columnsUser, ...this.columnsArchive]
+    },
+    cardDateReminderText () {
+      if (!this.selectedCard.date_reminder) {
+        return ''
+      } else {
+        return this.dateToLabelFormat(new Date(this.selectedCard.date_reminder))
+      }
     }
   },
   watch: {
@@ -307,6 +314,11 @@ export default {
     }
   },
   methods: {
+    dateToLabelFormat (calendarDate) {
+      const day = calendarDate.getDate()
+      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      return day + ' ' + month
+    },
     isFilePreloadable (fileExtension) {
       const preloadableFiles = ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'mov', 'mp4', 'mp3', 'wav']
       return preloadableFiles.includes(fileExtension)
@@ -561,8 +573,18 @@ export default {
         })
     },
     onChangeDates: function (dateTimeString) {
-      // функция заглушка, лог оставил, чтоб любой мог проверить, что дата выбирается
-      console.log(dateTimeString)
+      if (dateTimeString === '0001-01-01T00:00:00') {
+        this.selectedCard.date_reminder = null
+      } else {
+        this.selectedCard.date_reminder = dateTimeString
+      }
+      const data = {
+        uid: this.selectedCard.uid,
+        uid_board: this.selectedCard.uid_board,
+        date_reminder: this.selectedCard.date_reminder,
+        uid_client: this.selectedCard.uid_client
+      }
+      this.$store.dispatch(CHANGE_CARD_DATE_REMINDER, data)
     }
   }
 }
