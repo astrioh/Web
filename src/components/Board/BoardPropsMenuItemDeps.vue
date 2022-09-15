@@ -18,7 +18,7 @@ export default {
   props: {
     depName: {
       type: String,
-      default: '() => {}'
+      default: ''
     }
   }
 }

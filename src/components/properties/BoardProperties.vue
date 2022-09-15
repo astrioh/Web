@@ -200,6 +200,12 @@
     >
       Отдел
     </div>
+    <div
+      v-if="!depsBoard.length"
+      class="grow w-7/12 font-roboto text-[15px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px] overflow-hidden text-ellipsis"
+    >
+      Общий для всех отделов
+    </div>
     <PopMenu
       v-if="isCanEdit && usersCanAddToAccess.length"
       class="w-full"
@@ -219,7 +225,6 @@
             fill="currentColor"
           />
         </svg>
-
         <div
           class="font-roboto text-[13px] leading-[15px] font-medium"
         >
