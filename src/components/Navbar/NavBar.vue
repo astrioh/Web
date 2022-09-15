@@ -1,7 +1,7 @@
 <template>
   <nav class="flex items-center h-[56px]">
     <NavBarButtonToggleMenu class="flex-1 items-stretch" />
-    <div class="flex gap-[12px] items-center w-full overflow-hidden">
+    <div class="flex gap-[12px] items-center w-full overflow-hidden justify-between">
       <NavBarBreadcrumb
         v-if="title"
         :breadcrumb="{ name: title, to: route, showNext: !!breadcrumbs.length, selected: !breadcrumbs.length }"
@@ -19,7 +19,7 @@
         class="flex-initial"
       />
     </div>
-    <div class="flex-none flex gap-[10px] items-center px-[12px]">
+    <div class="flex-none flex gap-[10px] items-center pl-[12px]">
       <slot />
     </div>
   </nav>
