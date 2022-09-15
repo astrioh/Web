@@ -2,7 +2,21 @@
   <NavBar
     class="pt-[8px]"
     :title="`Статистика доски ${boardName}`"
-  />
+  >
+    <div class="flex-none flex gap-[10px] items-center">
+      <router-link
+        :to="`/board/${boardUid}`"
+      >
+        <BoardSmallButton
+          class="flex items-center px-[10px] py-[5px]"
+          :icon="'back'"
+        >
+          Назад
+        </BoardSmallButton>
+      </router-link>
+      <slot />
+    </div>
+  </NavBar>
   <div class="bg-white rounded-xl min-h-[75%] p-[20px]">
     <table>
       <tr>
@@ -26,13 +40,15 @@
 <script>
 import BoardStatsItem from '@/components/Board/BoardStatsItem.vue'
 import NavBar from '@/components/Navbar/NavBar'
+import BoardSmallButton from '@/components/Board/BoardSmallButton.vue'
 import * as CARD from '@/store/actions/cards'
 import { CARD_STAGE } from '@/constants'
 
 export default {
   components: {
     NavBar,
-    BoardStatsItem
+    BoardStatsItem,
+    BoardSmallButton
   },
   data () {
     return {
