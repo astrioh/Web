@@ -2,6 +2,7 @@
   <ModalBox
     :title="title"
     ok="Сохранить"
+    :disabled="buttonSaveDisabled"
     @ok="onSave"
     @cancel="onCancel"
   >
@@ -69,6 +70,9 @@ export default {
   computed: {
     maxLengthInput () {
       return '50'
+    },
+    buttonSaveDisabled () {
+      return !this.name || !this.phone || !this.email || !this.comment
     }
   },
   methods: {
@@ -84,6 +88,13 @@ export default {
         comment: this.comment
       }
       this.$emit('save', data)
+      this.onClear()
+    },
+    onClear () {
+      this.name = ''
+      this.phone = ''
+      this.email = ''
+      this.comment = ''
     }
   }
 }
