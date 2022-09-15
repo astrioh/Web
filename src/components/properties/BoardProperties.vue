@@ -223,7 +223,7 @@
         <div
           class="font-roboto text-[13px] leading-[15px] font-medium"
         >
-          Выбарть отдел
+          Добавить отдел
         </div>
       </div>
       <template #menu>
