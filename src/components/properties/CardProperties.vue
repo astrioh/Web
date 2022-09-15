@@ -360,8 +360,8 @@ export default {
           if (this.selectedCard) this.selectedCard.user = userEmail
         })
     },
-    changeName (arg) {
-      const data = { cardUid: this.selectedCard?.uid, name: arg.target.innerText.trim() }
+    changeName (newName) {
+      const data = { cardUid: this.selectedCard?.uid, name: newName.trim() }
       if (data.name === '') {
         data.name = 'Карточка без названия'
       }

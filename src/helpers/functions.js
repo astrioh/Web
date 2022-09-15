@@ -28,3 +28,15 @@ export function getNavstackPath (tree, uid) {
 
   return null
 }
+
+export function isStringALink (string) {
+  return /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/.test(string)
+}
+
+export function isStringAnEmail (string) {
+  return /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/.test(string)
+}
+
+export function isStringAPhoneNumber (string) {
+  return /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(string)
+}
