@@ -166,8 +166,8 @@ export default {
         info: this.form
       }
       this.$store.dispatch(BOARD_FORMS.CREATE_OR_UPDATE_BOARD_FORM_REQUEST, data)
-      console.log(this.$store.state.boardforms.boardForm)
       this.$store.state.boardforms.boardForm = data
+      console.log(this.$store.state.boardforms.boardForm)
       // this.showParams = true
     }
   }
