@@ -100,7 +100,7 @@
           color="login"
           class="w-full rounded-lg text-sm"
           label="Сохранить форму"
-          @click="clickCreateForm"
+          @click="clickSaveForm"
         />
         <router-link
           :to="'/form/' + $route.params.board_id"
@@ -108,7 +108,7 @@
           <jb-button
             class="w-full mt-3 rounded-lg text-sm"
             label="Перейти к форме"
-            @click="clickCreateForm"
+            @click="goToForm"
           />
         </router-link>
       </form>
@@ -121,7 +121,7 @@ import NavBar from '@/components/Navbar/NavBar'
 import JbButton from '@/components/JbButton.vue'
 import Control from '@/components/Control.vue'
 
-import * as BOARD_FORMS from '@/store/actions/board_forms.js'
+import * as BOARD_FORMS from '@/store/actions/boardforms.js'
 
 export default {
   components: {
@@ -144,10 +144,10 @@ export default {
     }
   },
   methods: {
-    clickCreateForm () {
+    clickSaveForm () {
       const data = {
         uid_board: this.$route.params.board_id,
-        info: JSON.stringify({
+        info: {
           title: this.form.titleForm,
           name: {
             text: this.form.name,
@@ -167,9 +167,11 @@ export default {
           },
           button_text: this.form.button_text,
           redirect_link: this.form.redirect_link
-        })
+        }
       }
-      this.$store.dispatch(BOARD_FORMS.CREATE_BOARD_FORM_REQUEST, data)
+      this.$store.dispatch(BOARD_FORMS.CREATE_OR_UPDATE_BOARD_FORM_REQUEST, data)
+      console.log(this.$store.state.boardforms.boardForm)
+      this.$store.state.boardforms.boardForm = data
       // this.showParams = true
     }
   }
