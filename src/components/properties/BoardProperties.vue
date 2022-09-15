@@ -228,36 +228,12 @@
       </div>
       <template #menu>
         <div class="max-h-[220px] overflow-y-auto overflow-x-hidden w-[220px] scroll-style">
-          <PopMenuItem
+          <BoardPropsMenuItemDeps
             v-for="(dep,index) in allDepartments"
             :key="dep.uid"
+            :dep-name="dep.name"
             @click="addDepartment(index)"
-          >
-            <div class="flex justify-between w-full items-center">
-              <span
-                class="truncate"
-                :class="currDepTitle === dep.name ? 'font-bold' : ''"
-              >
-                {{ dep.name }}
-              </span>
-              <svg
-                v-if="currDepTitle === dep.name"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.3346 4L6.0013 11.3333L2.66797 8"
-                  stroke="#1CA345"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </PopMenuItem>
+          />
         </div>
       </template>
     </PopMenu>
@@ -265,54 +241,14 @@
       v-for="dep in depsBoard"
       :key="dep.uid"
     >
-      <div class="group w-full h-[34px] flex items-center">
-        <div class="grow w-6/12 font-roboto text-[13px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px] overflow-hidden text-ellipsis">
-          {{ dep.name }}
-        </div>
-        <div class="flex-none">
-          <PopMenu :disabled="disabled">
-            <div
-              class="flex items-center text-[#7e7e80]"
-              :class="{ 'cursor-pointer hover:text-[#4c4c4d]': !disabled }"
-            >
-              <div class="mr-[4px] font-roboto text-[12px] leading-[20px]">
-                {{ dep.status }}
-              </div>
-              <svg
-                class="invisible"
-                :class="{ 'group-hover:visible': !disabled }"
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M10.7603 3.56099C11.0027 3.80668 11.0001 4.2024 10.7544 4.44486L6.7011 8.44486C6.47139 8.67154 6.10687 8.68606 5.85986 8.47836L1.46875 4.78606C1.20456 4.56391 1.17047 4.16965 1.39262 3.90546C1.61477 3.64126 2.00903 3.60718 2.27322 3.82933L6.22845 7.15512L9.87642 3.55514C10.1221 3.31269 10.5178 3.31531 10.7603 3.56099Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-            <template #menu>
-              <PopMenuItem @click="setDepartmentStatus(dep.uid, 1)">
-                Администратор
-              </PopMenuItem>
-              <PopMenuItem @click="setDepartmentStatus(dep.uid, 2)">
-                Редактор
-              </PopMenuItem>
-              <PopMenuItem @click="setDepartmentStatus(dep.uid, 0)">
-                Читатель
-              </PopMenuItem>
-              <PopMenuDivider />
-              <PopMenuItem @click="deleteDepartment(dep.uid)">
-                Удалить
-              </PopMenuItem>
-            </template>
-          </PopMenu>
-        </div>
-      </div>
+      <BoardPropsMenuDepButton
+        :dep-name="dep.name"
+        :dep-status="dep.status"
+        @delete="deleteDepartment(dep.uid)"
+        @setAdmin="setDepartmentStatus(dep.uid,1)"
+        @setReader="setDepartmentStatus(dep.uid,0)"
+        @setWriter="setDepartmentStatus(dep.uid,2)"
+      />
     </div>
   </div>
 
@@ -340,6 +276,8 @@ import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vu
 
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
+import BoardPropsMenuItemDeps from '../Board/BoardPropsMenuItemDeps.vue'
+import BoardPropsMenuDepButton from '../Board/BoardPropsMenuDepButton.vue'
 
 export default {
   components: {
@@ -350,7 +288,9 @@ export default {
     PropsButtonMenu,
     PropsButtonClose,
     BoardPropsUserButton,
-    BoardPropsMenuItemUser
+    BoardPropsMenuItemUser,
+    BoardPropsMenuItemDeps,
+    BoardPropsMenuDepButton
   },
   data () {
     return {
