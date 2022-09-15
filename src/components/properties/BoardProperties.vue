@@ -279,7 +279,7 @@
                 {{ dep.status }}
               </div>
               <svg
-                class="invisible -mt-3"
+                class="invisible"
                 :class="{ 'group-hover:visible': !disabled }"
                 width="12"
                 height="12"
@@ -296,17 +296,17 @@
               </svg>
             </div>
             <template #menu>
-              <PopMenuItem @click="clickAdminDep">
+              <PopMenuItem @click="setDepartmentStatus(dep.uid, 1)">
                 Администратор
               </PopMenuItem>
-              <PopMenuItem @click="clickWriterDep">
+              <PopMenuItem @click="setDepartmentStatus(dep.uid, 2)">
                 Редактор
               </PopMenuItem>
-              <PopMenuItem @click="clickReaderDep">
+              <PopMenuItem @click="setDepartmentStatus(dep.uid, 0)">
                 Читатель
               </PopMenuItem>
               <PopMenuDivider />
-              <PopMenuItem @click="clickDeleteDep">
+              <PopMenuItem @click="deleteDepartment(dep.uid)">
                 Удалить
               </PopMenuItem>
             </template>
@@ -531,6 +531,41 @@ export default {
           newDeps: deps
         }).then((resp) => {
           console.log('addBoardDepartment', resp, deps)
+        })
+      }
+    },
+    deleteDepartment (depUid) {
+      if (
+        this.isCanEdit &&
+        this.selectedBoard?.deps &&
+        this.selectedBoard?.deps[depUid] !== undefined
+      ) {
+        const deps = { ...this.selectedBoard.deps }
+        delete deps[depUid]
+        this.selectedBoard.deps = deps
+        this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+          boardUid: this.selectedBoard.uid,
+          newDeps: deps
+        }).then((resp) => {
+          console.log('deleteBoardDepartment', resp, deps)
+        })
+      }
+    },
+    setDepartmentStatus (depUid, status) {
+      if (
+        this.isCanEdit &&
+        this.selectedBoard?.deps &&
+        this.selectedBoard?.deps[depUid] !== undefined &&
+        this.selectedBoard?.deps[depUid] !== status
+      ) {
+        const deps = { ...this.selectedBoard.deps }
+        deps[depUid] = status
+        this.selectedBoard.deps = deps
+        this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+          boardUid: this.selectedBoard.uid,
+          newDeps: deps
+        }).then((resp) => {
+          console.log('setStatusForDep', resp, deps)
         })
       }
     },
