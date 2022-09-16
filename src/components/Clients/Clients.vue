@@ -76,8 +76,8 @@
   </div>
   <Pagination
     v-model="currentPage"
-    class="mt-3 flex justify-center"
-    total="210"
+    class="my-3 flex justify-center"
+    :total="paging.pages"
     :max-visible-buttons="3"
     @update:modelValue="changePage"
   />
@@ -105,8 +105,14 @@ export default {
     clients () {
       return this.$store.state.clients.clients
     },
+    paging () {
+      return this.$store.state.clients.paging
+    },
     user () {
       return this.$store.state.user.user
+    },
+    currentPageRouter () {
+      return this.$route.query.page
     }
   },
   watch: {
@@ -117,10 +123,13 @@ export default {
           this.selectedClient = ''
         }
       }
+    },
+    currentPageRouter () {
+      this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
     }
   },
   mounted () {
-    this.$store.dispatch(CLIENTS.GET_CLIENTS, this.user?.owner_email)
+    this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
   },
   methods: {
     showClientProperties (client) {
@@ -149,7 +158,7 @@ export default {
         })
     },
     changePage () {
-      console.log(this.currentPage)
+      this.$router.push({ path: '/clients', query: { page: (this.currentPage - 1) } })
     }
   }
 }

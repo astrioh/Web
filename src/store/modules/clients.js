@@ -3,17 +3,19 @@ import axios from 'axios'
 
 const state = {
   selectedClient: null,
+  paging: {},
   clients: []
 }
 
 const actions = {
-  [CLIENTS.GET_CLIENTS]: ({ commit, dispatch }, organization) => {
+  [CLIENTS.GET_CLIENTS]: ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + organization
+        process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + data.organization + '&page=' + data.page
       axios({ url: url, method: 'GET' })
         .then((resp) => {
-          commit(CLIENTS.SET_CLIENTS, resp.data)
+          commit(CLIENTS.SET_CLIENTS, resp.data.clients)
+          commit('UPDATE_PAGING', resp.data.paging)
           resolve(resp)
         })
         .catch((err) => {
@@ -81,6 +83,9 @@ const mutations = {
   },
   [CLIENTS.CHANGE_CLIENT_NAME]: (state, client) => {
     state.clients.find(cl => cl.uid === client.uid).name = client.name
+  },
+  UPDATE_PAGING: (state, paging) => {
+    state.paging = paging
   }
 }
 
