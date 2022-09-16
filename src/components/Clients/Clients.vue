@@ -10,7 +10,7 @@
     class="pt-[8px]"
   />
   <div
-    class="bg-white rounded-xl min-h-[75%] px-[40px] py-[20px]"
+    class="bg-white rounded-xl h-[80%] px-[40px] py-[20px]"
   >
     <table>
       <tr>
@@ -146,27 +146,6 @@
           </div>
           <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
         </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
         <span class="sr-only">Loading...</span>
       </div>
     </template>
@@ -195,8 +174,9 @@
   <Pagination
     v-model="currentPage"
     class="my-3 flex justify-center"
+    :disabled="status === 'loading'"
     :total="paging.pages"
-    :max-visible-buttons="3"
+    :max-visible-buttons="6"
     @update:modelValue="changePage"
   />
 </template>
@@ -216,7 +196,7 @@ export default {
     return {
       selectedClient: '',
       showAddClient: false,
-      currentPage: 1
+      currentPage: 0
     }
   },
   computed: {
@@ -250,6 +230,7 @@ export default {
     }
   },
   mounted () {
+    this.currentPage = this.$route.query.page && 0
     this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
   },
   methods: {
@@ -279,7 +260,7 @@ export default {
         })
     },
     changePage () {
-      this.$router.push({ path: '/clients', query: { page: (this.currentPage - 1) } })
+      this.$router.push({ path: '/clients', query: { page: this.currentPage } })
     }
   }
 }
