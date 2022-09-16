@@ -278,7 +278,7 @@
     <CardMessageInput
       v-model="taskMsg"
       class="mt-[16px]"
-      :can-add-files="isLicenseExpired"
+      :can-add-files="!isLicenseExpired"
       @cantWriteMessages="showFreeModalChat = true"
       @createCardMessage="sendTaskMsg"
       @createCardFile="createTaskFile"
