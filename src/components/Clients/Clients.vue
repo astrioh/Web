@@ -5,7 +5,7 @@
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
-  <NavBar
+  <NavBarClients
     title="Контакты"
     class="pt-[8px]"
   />
@@ -84,13 +84,13 @@
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
-import NavBar from '@/components/Navbar/NavBar'
+import NavBarClients from '@/components/Clients/NavBarClients.vue'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
 import Pagination from '../Pagination.vue'
 
 export default {
   components: {
-    NavBar,
+    NavBarClients,
     ModalBoxAddClient,
     Pagination
   },
