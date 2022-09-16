@@ -145,7 +145,7 @@ export default {
   methods: {
     clickSaveForm () {
       const data = {
-        board_uid: this.$route.params.board_id,
+        uid_board: this.$route.params.board_id,
         info: this.form
       }
       this.$store.dispatch(BOARD_FORMS.CREATE_OR_UPDATE_BOARD_FORM_REQUEST, data)
