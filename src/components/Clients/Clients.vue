@@ -236,10 +236,7 @@ export default {
   },
   methods: {
     showClientProperties (client) {
-      this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, '33')
-        .then((resp) => {
-          console.log('resp from clii', resp)
-        })
+      this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }

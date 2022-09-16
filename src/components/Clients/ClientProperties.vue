@@ -211,22 +211,18 @@ export default {
       if (this.clientMessageInputValue <= 0) {
         return
       }
-      let msgcard = this.clientMessageInputValue
-      msgcard = msgcard.trim()
-      msgcard = msgcard.replaceAll('&', '&amp;')
-      msgcard = msgcard.replaceAll('>', '&gt;')
-      msgcard = msgcard.replaceAll('<', '&lt;')
+      let msgclient = this.clientMessageInputValue
+      msgclient = msgclient.trim()
+      msgclient = msgclient.replaceAll('&', '&amp;')
+      msgclient = msgclient.replaceAll('>', '&gt;')
+      msgclient = msgclient.replaceAll('<', '&lt;')
       const uid = uuidv4()
       const data = {
-        uid: uid,
-        uid_msg: uid,
+        uid_message: uid,
         date_create: new Date().toISOString(),
         uid_creator: this.user.current_user_uid,
-        uid_quote: this.currentQuote?.uid ?? '',
-        text: msgcard,
-        msg: msgcard,
-        order: 0,
-        deleted: 0
+        uid_client: this.selectedClient.uid,
+        msg: msgclient
       }
       this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data).then(() => {
         if (this.selectedClient) this.selectedClient.has_msgs = true

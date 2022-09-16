@@ -15,65 +15,34 @@
       <div
         v-if="isChangedCreator(index) && employees[message.uid_creator]"
         class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
-        :class="{ 'text-left': !message.isMyMessage, 'text-right': message.isMyMessage }"
+        :class="{ 'text-left': !isMyMessage(message), 'text-right': isMyMessage(message) }"
       >
         <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">
           {{ employees[message.uid_creator].name }}
         </span>
       </div>
-
-      <CardChatQuoteMessage
-        v-if="message.hasQuote"
-        class="mb-[14px] mt-[19px]"
-        :quote-message="message.quoteMessage"
-        :employee="employees[message.quoteMessage.uid_creator]"
-      />
-
-      <CardChatInterlocutorMessage
-        v-if="!message.isMyMessage && message.isMessage && !showFilesOnly"
+      <ClientChatInterlocutorMessage
+        v-if="!isMyMessage(message)"
         :message="message"
         :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
       />
-      <CardChatInterlocutorFileMessage
-        v-if="!message.isMyMessage && message.isFile"
+      <ClientChatSelfMessage
+        v-if="isMyMessage(message)"
         :message="message"
         :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
-      />
-
-      <CardChatSelfMessage
-        v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
-        :message="message"
-        :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
-        @onDeleteMessage="deleteMessage"
-      />
-      <CardChatSelfFileMessage
-        v-if="message.isMyMessage && message.isFile"
-        :message="message"
-        :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
-        @onDeleteFile="deleteFile"
       />
     </div>
   </div>
 </template>
 
 <script>
-import CardChatInterlocutorMessage from '@/components/CardProperties/CardChatInterlocutorMessage.vue'
-import CardChatInterlocutorFileMessage from '@/components/CardProperties/CardChatInterlocutorFileMessage.vue'
-import CardChatSelfMessage from '@/components/CardProperties/CardChatSelfMessage.vue'
-import CardChatSelfFileMessage from '@/components/CardProperties/CardChatSelfFileMessage.vue'
-import CardChatQuoteMessage from '@/components/CardProperties/CardChatQuoteMessage.vue'
+import ClientChatInterlocutorMessage from '@/components/Clients/ClientChatInterlocutorMessage.vue'
+import ClientChatSelfMessage from '@/components/Clients/ClientChatSelfMessage.vue'
 
 export default {
   components: {
-    CardChatInterlocutorMessage,
-    CardChatInterlocutorFileMessage,
-    CardChatSelfMessage,
-    CardChatSelfFileMessage,
-    CardChatQuoteMessage
+    ClientChatInterlocutorMessage,
+    ClientChatSelfMessage
   },
   props: {
     key: {
@@ -101,14 +70,11 @@ export default {
   computed: {
     clientMessages () {
       return this.messages.map((message) => ({
-        ...message,
-        isFile: !!message.uid_file,
-        isMessage: !message.uid_file && message.uid_creator !== 'inspector',
-        hasQuote: message.uid_quote && message.uid_quote !== '00000000-0000-0000-0000-000000000000' && message.deleted !== 1,
-        quoteMessage: this.getMessageByUid(message?.uid_quote),
-        isInspectorMessage: message.uid_creator === 'inspector',
-        isMyMessage: message.uid_creator === this.currentUserUid
+        ...message
       }))
+    },
+    user () {
+      return this.$store.state.user.user
     }
   },
   methods: {
@@ -117,6 +83,9 @@ export default {
         if (message.uid === uid) return message
       }
       return false
+    },
+    isMyMessage (msg) {
+      return msg.uid_creator === this.currentUserUid
     },
     isChangedDate (index) {
       if (index === 0) return true

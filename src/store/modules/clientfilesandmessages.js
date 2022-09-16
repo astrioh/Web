@@ -16,6 +16,7 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then(resp => {
           console.log('msgs', resp)
+          commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
           resolve(resp)
         }).catch(err => {
           reject(err)
@@ -23,7 +24,17 @@ const actions = {
     })
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: ({ commit, dispatch }, data) => {
-    commit(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data)
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clients_chat'
+      axios({ url: url, method: 'POST', data: data })
+        .then((resp) => {
+          commit(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   },
   [CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST]: ({ commit, dispatch }, messageUid) => {
     const data = { uid: messageUid, key: 'deleted', value: 1 }
@@ -68,16 +79,14 @@ const mutations = {
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST]: state => {
     state.status = 'loading'
   },
+  [CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES]: (state, data) => {
+    state.messages = [...data]
+  },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {
     state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {
     state.status = 'loading'
-  },
-  [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: (state, resp) => {
-    // удаляем псевдо файлы, которые отображались как загружаемые, мутируем сам массив
-    state.messages = state.messages.filter((message) => !message.is_uploading)
-    state.messages = state.messages.concat(resp.data.success)
   },
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_SUCCESS]: (state, resp) => {
     state.messages = resp.data.msgs
