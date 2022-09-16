@@ -84,7 +84,7 @@
             :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
-              class="w-full"
+              class="w-11/12"
             >
               <BoardInputValue
                 v-if="showRenameColumn && column.UID === selectedColumn.UID"
@@ -95,7 +95,7 @@
               />
               <p
                 v-else
-                class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-11/12 break-words"
+                class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-full break-words"
                 :class="{ 'cursor-default': !column.CanEditStage }"
               >
                 {{ column.Name }}
@@ -324,7 +324,7 @@
           <BoardInputValue
             v-if="showAddColumn"
             :show="showAddColumn"
-            :maxlength="50"
+            :maxlength="'50'"
             class="mt-[4px] h-[40px]"
             @cancel="showAddColumn = false"
             @save="onAddNewColumn"
