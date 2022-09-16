@@ -4,6 +4,7 @@
       class="pt-[8px]"
       title="Настройка формы"
     />
+    <pre>{{ $store.state.boardforms.boardForm }}</pre>
     <div class="flex flex-row">
       <form
         class="p-5 bg-white rounded-xl w-[30%]"
@@ -154,7 +155,7 @@ export default {
   data () {
     return {
       form: {
-        title: '',
+        title: this.boardForm?.info?.title,
         name: {
           text: '',
           visible: true
@@ -179,6 +180,11 @@ export default {
       hideEmailChecked: true,
       hidePhoneChecked: true,
       hideCommentChecked: true
+    }
+  },
+  computed: {
+    boardForm () {
+      return this.$store.state.boardforms.boardForm
     }
   },
   methods: {
