@@ -376,6 +376,9 @@ const mutations = {
     state.cards.forEach((stage) => {
       const index = stage.cards.findIndex((crd) => crd.uid === card.uid)
       if (index !== -1) {
+        // Не бейтет это костыль
+        card.date_reminder = state.cards[index].date_reminder
+        card.uid_client = state.cards[index].uid_client
         // удаляем
         stage.cards.splice(index, 1)
       }
@@ -456,6 +459,15 @@ const mutations = {
       if (stage1.Name > stage2.Name) return 1
       if (stage1.Name < stage2.Name) return -1
       return 0
+    })
+  },
+  CardSaveReminder: (state, data) => {
+    state.cards.forEach((stage) => {
+      const index = stage.cards.findIndex((card) => card.uid === data.uid)
+      console.log('Index: ', index)
+      if (index !== -1) {
+        stage.cards[index] = { ...stage.cards[index], ...data }
+      }
     })
   }
 }
