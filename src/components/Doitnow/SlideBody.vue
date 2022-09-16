@@ -13,11 +13,7 @@
       v-if="name === 'welcome'"
       class="flex flex-col items-center w-8/12"
     >
-      <div
-        class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-      >
-        Добро пожаловать в ЛидерТаск Web!
-      </div>
+      <SlideBodyTitle title="Добро пожаловать в ЛидерТаск Web!" />
       <div class="flex justify-center">
         <article class="font-[400] text-[18px] text-left leading-[29px] w-full text-[#4C4C4D] mb-[35px] pl-0">
           <p class="mb-3">
@@ -55,11 +51,7 @@
       class="w-8/12"
     >
       <div class="flex flex-col items-center">
-        <div
-          class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-        >
-          Установите фото профиля (аватар) в ЛидерТаск
-        </div>
+        <SlideBodyTitle title="Установите фото профиля (аватар) в ЛидерТаск" />
         <div>
           <article class="font-[400] text-[18px] leading-[29px] text-left w-full text-[#4C4C4D] mb-[35px] pl-0">
             <p>
@@ -81,11 +73,7 @@
       v-if="name === 'addEmployees'"
       class="flex flex-col items-center"
     >
-      <div
-        class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-      >
-        Добавьте сотрудников
-      </div>
+      <SlideBodyTitle title="Добавьте сотрудников" />
       <div class="max-w-[550px] mb-[28px]">
         <article class="font-normal text-[18px] text-center leading-[29px] w-full pl-0">
           <p class="mb-[28px] font-bold text-[#424242]">
@@ -122,11 +110,7 @@
       class="w-8/12"
     >
       <div class="flex flex-col items-center">
-        <div
-          class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-        >
-          Добавьте ваши правила и регламенты
-        </div>
+        <SlideBodyTitle title="Добавьте ваши правила и регламенты" />
         <div>
           <article class="font-[400] text-[18px] text-left leading-[29px] w-full text-[#4C4C4D] mb-[35px] pl-0">
             <p class="mt-1 mb-3">
@@ -152,11 +136,7 @@
       class="w-8/12"
     >
       <div class="flex flex-col items-center">
-        <div
-          class="taskName text-[#424242] leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-        >
-          Поручите задачи
-        </div>
+        <SlideBodyTitle title="Поручите задачи" />
         <div>
           <article class="font-[400] text-[18px] leading-[29px] text-left w-full text-[#4C4C4D] mb-[35px] pl-0">
             Поручите задачи вашим сотрудникам. Это можно сделать так:
@@ -187,12 +167,14 @@
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
 import SlideBodyButton from './SlideBodyButton.vue'
+import SlideBodyTitle from './SlideBodyTitle.vue'
 import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
 import * as SLIDES from '@/store/actions/slides.js'
 export default {
   components: {
     InspectorModalBox,
-    SlideBodyButton
+    SlideBodyButton,
+    SlideBodyTitle
   },
   props: {
     name: {
