@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     iconCheck () {
-      if (this.reglament.is_passed) return 'check'
+      if (this.reglament.is_passed) return 'reglamentDone'
       return ''
     },
     employeesByEmail () {
