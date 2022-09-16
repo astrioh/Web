@@ -9,7 +9,9 @@
     title="Контакты"
     class="pt-[8px]"
   />
-  <div class="bg-white rounded-xl min-h-[75%] px-[40px] py-[20px]">
+  <div
+    class="bg-white rounded-xl h-[80%] px-[40px] py-[20px]"
+  >
     <table>
       <tr>
         <th>Имя</th>
@@ -17,41 +19,136 @@
         <th>Email</th>
         <th>Комментарий</th>
       </tr>
-      <tr
-        v-for="client in clients"
-        :key="client.uid"
-        @click.stop="showClientProperties(client)"
-      >
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.name }}
-            </span>
-          </div>
-        </td>
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.phone }}
-            </span>
-          </div>
-        </td>
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.email }}
-            </span>
-          </div>
-        </td>
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.comment }}
-            </span>
-          </div>
-        </td>
-      </tr>
+      <template v-if="status === 'success'">
+        <tr
+          v-for="client in clients"
+          :key="client.uid"
+          @click.stop="showClientProperties(client)"
+        >
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.name }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.phone }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.email }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.comment }}
+              </span>
+            </div>
+          </td>
+        </tr>
+      </template>
     </table>
+
+    <template v-if="status === 'loading'">
+      <div
+        role="status"
+        class="p-4 animate-pulse dark:divide-gray-700 md:p-6"
+      >
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <div class="flex justify-between items-center pt-4">
+          <div>
+            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
+            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
+          </div>
+          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
+        </div>
+        <span class="sr-only">Loading...</span>
+      </div>
+    </template>
     <div
       class="group flex justify-center border border-[#0000001F] rounded-[7px] p-[7px] mt-[15px] cursor-pointer"
       @click="clickAddClient"
@@ -76,9 +173,10 @@
   </div>
   <Pagination
     v-model="currentPage"
-    class="mt-3 flex justify-center"
-    total="210"
-    :max-visible-buttons="3"
+    class="my-3 flex justify-center"
+    :disabled="status === 'loading'"
+    :total="paging.pages"
+    :max-visible-buttons="6"
     @update:modelValue="changePage"
   />
 </template>
@@ -99,15 +197,24 @@ export default {
     return {
       selectedClient: '',
       showAddClient: false,
-      currentPage: 1
+      currentPage: 0
     }
   },
   computed: {
     clients () {
       return this.$store.state.clients.clients
     },
+    paging () {
+      return this.$store.state.clients.paging
+    },
+    status () {
+      return this.$store.state.clients.status
+    },
     user () {
       return this.$store.state.user.user
+    },
+    currentPageRouter () {
+      return this.$route.query.page
     }
   },
   watch: {
@@ -118,10 +225,14 @@ export default {
           this.selectedClient = ''
         }
       }
+    },
+    currentPageRouter () {
+      this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
     }
   },
   mounted () {
-    this.$store.dispatch(CLIENTS.GET_CLIENTS, this.user?.owner_email)
+    this.currentPage = this.$route.query.page && 0
+    this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
   },
   methods: {
     showClientProperties (client) {
@@ -154,7 +265,7 @@ export default {
         })
     },
     changePage () {
-      console.log(this.currentPage)
+      this.$router.push({ path: '/clients', query: { page: this.currentPage } })
     }
   }
 }
@@ -214,10 +325,6 @@ tr:not(:first-child) td:last-child {
 /*Стили для первого контентного элемента (отступ сверху)*/
 tr:nth-child(2) {
   @apply min-h-[74px]
-}
-
-tr:nth-child(2) .content {
-  @apply mt-[16px]
 }
 
 /*Стили наведения курсора мыши*/

@@ -4,7 +4,27 @@ import axios from 'axios'
 const state = {
   boardForm: {
     uid_board: '',
-    info: ''
+    info: {
+      title: '',
+      name: {
+        text: '',
+        visible: true
+      },
+      email: {
+        text: '',
+        visible: true
+      },
+      phone: {
+        text: '',
+        visible: true
+      },
+      comment: {
+        text: '',
+        visible: true
+      },
+      button_text: '',
+      redirect_link: ''
+    }
   }
 }
 const actions = {

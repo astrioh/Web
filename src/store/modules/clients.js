@@ -3,17 +3,21 @@ import axios from 'axios'
 
 const state = {
   selectedClient: null,
-  clients: []
+  paging: {},
+  clients: [],
+  status: 'loading'
 }
 
 const actions = {
-  [CLIENTS.GET_CLIENTS]: ({ commit, dispatch }, organization) => {
+  [CLIENTS.GET_CLIENTS]: ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + organization
+        process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + data.organization + '&page=' + data.page
+      commit(CLIENTS.GET_CLIENTS)
       axios({ url: url, method: 'GET' })
         .then((resp) => {
-          commit(CLIENTS.SET_CLIENTS, resp.data)
+          commit(CLIENTS.SET_CLIENTS, resp.data.clients)
+          commit('UPDATE_PAGING', resp.data.paging)
           resolve(resp)
         })
         .catch((err) => {
@@ -64,8 +68,12 @@ const actions = {
 }
 
 const mutations = {
+  [CLIENTS.GET_CLIENTS]: (state) => {
+    state.status = 'loading'
+  },
   [CLIENTS.SET_CLIENTS]: (state, clients) => {
     state.clients = clients
+    state.status = 'success'
   },
   [CLIENTS.ADD_NEW_CLIENT]: (state, client) => {
     state.clients.push(client)
@@ -81,6 +89,9 @@ const mutations = {
   },
   [CLIENTS.CHANGE_CLIENT_NAME]: (state, client) => {
     state.clients.find(cl => cl.uid === client.uid).name = client.name
+  },
+  UPDATE_PAGING: (state, paging) => {
+    state.paging = paging
   }
 }
 
