@@ -12,7 +12,7 @@ const getters = {}
 const actions = {
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST]: ({ commit, dispatch }, clientUid) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_LEADERTASK_API + 'clients_chat?uid_client=' + clientUid
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clients_chat?uid_client=' + clientUid
       axios({ url: url, method: 'GET' })
         .then(resp => {
           console.log('msgs', resp)
