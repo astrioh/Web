@@ -11,7 +11,16 @@ const getters = {}
 
 const actions = {
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST]: ({ commit, dispatch }, clientUid) => {
-    commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST)
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_LEADERTASK_API + 'clients_chat?uid_client=' + clientUid
+      axios({ url: url, method: 'GET' })
+        .then(resp => {
+          console.log('msgs', resp)
+          resolve(resp)
+        }).catch(err => {
+          reject(err)
+        })
+    })
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: ({ commit, dispatch }, data) => {
     commit(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data)

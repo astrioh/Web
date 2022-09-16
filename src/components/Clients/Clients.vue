@@ -84,6 +84,7 @@
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
+import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
 import Pagination from '../Pagination.vue'
@@ -124,6 +125,10 @@ export default {
   },
   methods: {
     showClientProperties (client) {
+      this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, '33')
+        .then((resp) => {
+          console.log('resp from clii', resp)
+        })
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
