@@ -124,7 +124,7 @@
         class="flex justify-center"
       >
         <button
-          class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+          class="flex font-[400] items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
           @click="startTheReglament"
         >
           Пройти тест
