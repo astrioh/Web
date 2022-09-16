@@ -4,7 +4,6 @@
       class="pt-[8px]"
       title="Настройка формы"
     />
-    <pre>{{ $store.state.boardforms.boardForm }}</pre>
     <div class="flex flex-row">
       <form
         class="p-5 bg-white rounded-xl w-[30%]"
@@ -155,7 +154,7 @@ export default {
   data () {
     return {
       form: {
-        title: this.boardForm?.info?.title,
+        title: '',
         name: {
           text: '',
           visible: true
