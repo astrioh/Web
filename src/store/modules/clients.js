@@ -4,7 +4,8 @@ import axios from 'axios'
 const state = {
   selectedClient: null,
   paging: {},
-  clients: []
+  clients: [],
+  status: 'loading'
 }
 
 const actions = {
@@ -12,6 +13,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       const url =
         process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + data.organization + '&page=' + data.page
+      commit(CLIENTS.GET_CLIENTS)
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           commit(CLIENTS.SET_CLIENTS, resp.data.clients)
@@ -66,8 +68,12 @@ const actions = {
 }
 
 const mutations = {
+  [CLIENTS.GET_CLIENTS]: (state) => {
+    state.status = 'loading'
+  },
   [CLIENTS.SET_CLIENTS]: (state, clients) => {
     state.clients = clients
+    state.status = 'success'
   },
   [CLIENTS.ADD_NEW_CLIENT]: (state, client) => {
     state.clients.push(client)

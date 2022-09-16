@@ -9,7 +9,9 @@
     title="Контакты"
     class="pt-[8px]"
   />
-  <div class="bg-white rounded-xl min-h-[75%] px-[40px] py-[20px]">
+  <div
+    class="bg-white rounded-xl min-h-[75%] px-[40px] py-[20px]"
+  >
     <table>
       <tr>
         <th>Имя</th>
@@ -17,40 +19,45 @@
         <th>Email</th>
         <th>Комментарий</th>
       </tr>
-      <tr
-        v-for="client in clients"
-        :key="client.uid"
-        @click.stop="showClientProperties(client)"
-      >
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.name }}
-            </span>
-          </div>
-        </td>
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.phone }}
-            </span>
-          </div>
-        </td>
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.email }}
-            </span>
-          </div>
-        </td>
-        <td>
-          <div class="content max-w-[250px]">
-            <span class="truncate">
-              {{ client.comment }}
-            </span>
-          </div>
-        </td>
-      </tr>
+      <template v-if="status === 'loading'">
+        We are loading clients for you...
+      </template>
+      <template v-if="status === 'success'">
+        <tr
+          v-for="client in clients"
+          :key="client.uid"
+          @click.stop="showClientProperties(client)"
+        >
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.name }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.phone }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.email }}
+              </span>
+            </div>
+          </td>
+          <td>
+            <div class="content max-w-[250px]">
+              <span class="truncate">
+                {{ client.comment }}
+              </span>
+            </div>
+          </td>
+        </tr>
+      </template>
     </table>
     <div
       class="group flex justify-center border border-[#0000001F] rounded-[7px] p-[7px] mt-[15px] cursor-pointer"
@@ -107,6 +114,9 @@ export default {
     },
     paging () {
       return this.$store.state.clients.paging
+    },
+    status () {
+      return this.$store.state.clients.status
     },
     user () {
       return this.$store.state.user.user
