@@ -459,6 +459,10 @@ export default {
         })
     },
     createTaskFile (event) {
+      if (event === false) {
+        this.showFreeModalChat = true
+        return
+      }
       this.tooBigFiles = []
       this.files = event.target.files ? event.target.files : event.dataTransfer.files
       const formData = new FormData()
