@@ -15,6 +15,7 @@ import { createInvite } from '@/websync/invite.js'
 import * as TYPES from '@/websync/types.js'
 import { createDepartment } from '@/websync/departments'
 import { addBoard } from '@/websync/board'
+import { addClient } from '@/websync/clients'
 
 function currentUserUid () {
   return store?.state?.user?.user?.current_user_uid
@@ -136,6 +137,7 @@ export default function processCreate (obj) {
       createCardMessage(obj)
       break
     case TYPES.TYPE_OBJECT_CLIENT:
+      addClient(obj)
       break
     case TYPES.TYPE_OBJECT_CLIENT_FILE:
       break
