@@ -1,5 +1,5 @@
 <template>
-  <div @click="isChecked = !isChecked">
+  <div @click="checked = !checked">
     <svg
       v-if="isChecked"
       width="20"
@@ -45,10 +45,19 @@
 </template>
 <script>
 export default {
+  props: {
+    isChecked: {
+      type: Boolean,
+      default: true
+    }
+  },
   data () {
     return {
-      isChecked: true
+      checked: null
     }
+  },
+  mounted () {
+    this.checked = this.isChecked
   }
 }
 </script>

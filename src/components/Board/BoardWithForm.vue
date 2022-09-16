@@ -18,6 +18,7 @@
         >
         <div class="flex items-center my-[10px]">
           <FormCheckbox
+            :is-checked="form.name.visible"
             class="mr-[10px]"
             @click="hideName"
           />
@@ -33,6 +34,7 @@
         </div>
         <div class="md:flex md:items-center my-[10px]">
           <FormCheckbox
+            :is-checked="form.email.visible"
             class="mr-[10px]"
             @click="hideEmail"
           />
@@ -47,6 +49,7 @@
         </div>
         <div class="md:flex md:items-center my-[10px]">
           <FormCheckbox
+            :is-checked="form.phone.visible"
             class="mr-[10px]"
             @click="hidePhone"
           />
@@ -61,6 +64,7 @@
         </div>
         <div class="md:flex md:items-center my-[10px]">
           <FormCheckbox
+            :is-checked="form.comment.visible"
             class="mr-[10px]"
             @click="hideComment"
           />
@@ -95,15 +99,6 @@
           label="Сохранить форму"
           @click="clickSaveForm"
         />
-        <router-link
-          :to="'/form/' + $route.params.board_id"
-        >
-          <jb-button
-            class="w-full mt-[5px] rounded-lg text-sm"
-            label="Перейти к форме"
-            @click="goToForm"
-          />
-        </router-link>
       </form>
       <div
         v-if="showParams === true"
@@ -111,7 +106,10 @@
       >
         <div class="mb-10">
           <span>Ссылка на форму: </span>
-          <router-link :to="'/form/' + $route.params.board_id">
+          <router-link
+            target="_blank"
+            :to="'/form/' + $route.params.board_id"
+          >
             <span class="underline text-blue-500 hover:text-blue-800">http://localhost:8080/form/{{ $route.params.board_id }}</span>
           </router-link>
         </div>
@@ -174,11 +172,7 @@ export default {
         button_text: '',
         redirect_link: ''
       },
-      showParams: false,
-      hideNameChecked: true,
-      hideEmailChecked: true,
-      hidePhoneChecked: true,
-      hideCommentChecked: true
+      showParams: false
     }
   },
   computed: {
@@ -186,42 +180,45 @@ export default {
       return this.$store.state.boardforms.boardForm
     }
   },
+  mounted () {
+    this.$store.dispatch(BOARD_FORMS.GET_BOARD_FORM_REQUEST, this.$route.params.board_id).then((res) => {
+      const data = {
+        uid_board: this.$route.params.board_id,
+        info: res.data[0].info
+      }
+      this.$store.state.boardforms.boardForm = data
+      this.form = data.info
+      console.log(this.form)
+    })
+  },
   methods: {
     hideName () {
-      if (this.hideNameChecked === false) {
+      if (this.form.name.visible === false) {
         this.form.name.visible = true
-        this.hideNameChecked = true
         return
       }
       this.form.name.visible = false
-      this.hideNameChecked = false
     },
     hideEmail () {
-      if (this.hideEmailChecked === false) {
+      if (this.form.email.visible === false) {
         this.form.email.visible = true
-        this.hideEmailChecked = true
         return
       }
       this.form.email.visible = false
-      this.hideEmailChecked = false
     },
     hidePhone () {
-      if (this.hidePhoneChecked === false) {
+      if (this.form.phone.visible === false) {
         this.form.phone.visible = true
-        this.hidePhoneChecked = true
         return
       }
       this.form.phone.visible = false
-      this.hidePhoneChecked = false
     },
     hideComment () {
-      if (this.hideCommentChecked === false) {
+      if (this.form.comment.visible === false) {
         this.form.comment.visible = true
-        this.hideCommentChecked = true
         return
       }
       this.form.comment.visible = false
-      this.hideCommentChecked = false
     },
     clickSaveForm () {
       const data = {
