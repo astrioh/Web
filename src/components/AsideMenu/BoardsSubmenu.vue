@@ -72,15 +72,16 @@
         @click.stop="clickAddBoard"
       />
       <div v-if="allDepartments.length">
-        <AsideMenuListTitle
+        <div
           v-for="dep in allDepartments"
           :key="dep.uid"
         >
-          <span
+          <AsideMenuListTitle
             v-if="isDepBoardsAreAvalible(dep.uid)"
           >
             {{ dep.name }}
-          </span>
+          </AsideMenuListTitle>
+
           <template
             v-for="board in commonBoards"
             :key="board.uid"
@@ -96,8 +97,26 @@
               />
             </router-link>
           </template>
-        </AsideMenuListTitle>
+        </div>
       </div>
+      <AsideMenuListTitle v-if="commonBoards.length">
+        Общие доски
+      </AsideMenuListTitle>
+      <template
+        v-for="board in commonBoards"
+        :key="board.uid"
+      >
+        <router-link
+          v-slot="{ isActive }"
+          :to="'/board/' + board.uid"
+        >
+          <BoardsSubmenuItem
+            :selected="isActive"
+            :board="board"
+            @click="closeMenu"
+          />
+        </router-link>
+      </template>
     </template>
   </div>
 </template>
