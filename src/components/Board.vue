@@ -90,6 +90,7 @@
                 v-if="showRenameColumn && column.UID === selectedColumn.UID"
                 :show="showRenameColumn && column.UID === selectedColumn.UID"
                 :value="selectedColumnName"
+                maxlength="50"
                 @cancel="showRenameColumn = false"
                 @save="onRenameColumn"
               />
@@ -324,7 +325,7 @@
           <BoardInputValue
             v-if="showAddColumn"
             :show="showAddColumn"
-            :maxlength="'50'"
+            maxlength="50"
             class="mt-[4px] h-[40px]"
             @cancel="showAddColumn = false"
             @save="onAddNewColumn"
