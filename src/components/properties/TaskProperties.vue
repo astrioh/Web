@@ -404,7 +404,9 @@ export default {
       if (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) return true
       return false
     },
-    isLicenseExpired () { return !this.$store.getters.isLicenseExpired },
+    isLicenseExpired () {
+      return this.$store.getters.isLicenseExpired
+    },
     modalBoxDeleteText () {
       let text = 'Вы действительно хотите удалить задачу?'
       if (this.tasks[this.selectedTaskUid]?.children?.length > 0) {
@@ -412,8 +414,8 @@ export default {
       }
       return text
     },
-    canEditChecklist () { return ((this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free') || this.isLicenseExpired },
-    canCheckChecklist () { return ((this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free') || this.isLicenseExpired },
+    canEditChecklist () { return ((this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free') || !this.isLicenseExpired },
+    canCheckChecklist () { return ((this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free') || !this.isLicenseExpired },
     canEditComment () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) },
     messageQuoteUser () {
       if (!this.currentAnswerMessageUid) return ''
