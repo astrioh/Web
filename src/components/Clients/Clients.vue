@@ -220,10 +220,6 @@ tr:nth-child(2) {
   @apply min-h-[74px]
 }
 
-tr:nth-child(2) .content {
-  @apply mt-[16px]
-}
-
 /*Стили наведения курсора мыши*/
 tr:not(:first-child):hover {
   @apply bg-[#f4f5f7] cursor-pointer
