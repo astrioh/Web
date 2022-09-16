@@ -112,7 +112,7 @@ export default {
       }
     },
     onShowSearchBar () {
-      if (this.$store.state.user.user.tarif === 'free') {
+      if (this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired) {
         this.showFreeModal = true
         return
       }
