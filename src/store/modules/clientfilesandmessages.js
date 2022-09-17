@@ -37,8 +37,17 @@ const actions = {
     })
   },
   [CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST]: ({ commit, dispatch }, messageUid) => {
-    const data = { uid: messageUid, key: 'deleted', value: 1 }
-    commit(CLIENT_FILES_AND_MESSAGES.CHANGE_MESSAGE, data)
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clients_chat?uid_message=' + messageUid
+      axios({ url: url, method: 'PATCH' })
+        .then((resp) => {
+          commit(CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST, messageUid)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: ({ commit, dispatch }, clientUid) => {
     commit(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST)
@@ -81,6 +90,14 @@ const mutations = {
   },
   [CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES]: (state, data) => {
     state.messages = [...data]
+  },
+  [CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST]: (state, messageUid) => {
+    for (let i = 0; i < state.messages.length; i++) {
+      if (state.messages[i].uid_message === messageUid) {
+        state.messages[i].deleted = 1
+        return
+      }
+    }
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {
     state.messages.push(data)

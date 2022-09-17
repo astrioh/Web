@@ -223,6 +223,7 @@ export default {
         date_create: new Date().toISOString(),
         uid_creator: this.user.current_user_uid,
         uid_client: this.selectedClient.uid,
+        deleted: 0,
         msg: msgclient
       }
       this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data).then(() => {

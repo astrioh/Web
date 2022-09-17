@@ -2,7 +2,11 @@
   <div
     class="py-[10px] px-[15px] rounded-t-[12px] bg-[#FCEBEB] rounded-br-[12px] mb-[5px] float-left max-w-[300px] group"
   >
+    <ClientChatDeletedMsg
+      v-if="message.deleted"
+    />
     <div
+      v-else
       class="flex"
     >
       <span
@@ -53,10 +57,12 @@
 
 <script>
 import ClientChatMessageOptionsPopMenu from '@/components/Clients/ClientChatMessageOptionsPopMenu.vue'
+import ClientChatDeletedMsg from '@/components/Clients/ClientChatDeletedMsg.vue'
 
 export default {
   components: {
-    ClientChatMessageOptionsPopMenu
+    ClientChatMessageOptionsPopMenu,
+    ClientChatDeletedMsg
   },
   props: {
     message: {

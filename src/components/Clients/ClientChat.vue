@@ -30,12 +30,14 @@
         v-if="isMyMessage(message)"
         :message="message"
         :employee="employees[message.uid_creator]"
+        @onDeleteMessage="onDeleteMessage"
       />
     </div>
   </div>
 </template>
 
 <script>
+import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import ClientChatInterlocutorMessage from '@/components/Clients/ClientChatInterlocutorMessage.vue'
 import ClientChatSelfMessage from '@/components/Clients/ClientChatSelfMessage.vue'
 
@@ -78,6 +80,9 @@ export default {
     }
   },
   methods: {
+    onDeleteMessage (msgUid) {
+      this.$store.dispatch(CLIENTS_CHAT.DELETE_MESSAGE_REQUEST, msgUid)
+    },
     getMessageByUid (uid) {
       for (const message of this.messages) {
         if (message.uid === uid) return message

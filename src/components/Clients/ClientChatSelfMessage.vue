@@ -2,7 +2,11 @@
   <div
     class="bg-[#F4F5F7] py-[10px] px-[15px] rounded-t-[12px] rounded-bl-[12px] mb-[5px] float-right max-w-[300px] group"
   >
+    <ClientChatDeletedMsg
+      v-if="message.deleted"
+    />
     <div
+      v-else
       class="flex break-words"
     >
       <span
@@ -20,7 +24,7 @@
       <div class="self-end group-hover:flex hidden">
         <ClientChatMessageOptionsPopMenu
           @onQuoteMessage="$emit('onQuoteMessage', message)"
-          @onDeleteMessage="$emit('onDeleteMessage', message.uid)"
+          @onDeleteMessage="$emit('onDeleteMessage', message.uid_message)"
         >
           <div class="min-w-[30px] min-h-[16px] flex cursor-pointer items-end justify-center">
             <svg
@@ -52,10 +56,12 @@
 </template>
 <script>
 import ClientChatMessageOptionsPopMenu from '@/components/Clients/ClientChatMessageOptionsPopMenu.vue'
+import ClientChatDeletedMsg from '@/components/Clients/ClientChatDeletedMsg.vue'
 
 export default {
   components: {
-    ClientChatMessageOptionsPopMenu
+    ClientChatMessageOptionsPopMenu,
+    ClientChatDeletedMsg
   },
   props: {
     message: {
@@ -67,7 +73,6 @@ export default {
   emits: ['onQuoteMessage', 'onDeleteMessage'],
 
   methods: {
-
     getMessageTimeString (dateCreate) {
       if (!dateCreate) return ''
       // добавляем Z в конец, чтобы он посчитал что это UTC время
