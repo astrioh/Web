@@ -71,6 +71,34 @@
         title="Добавить доску"
         @click.stop="clickAddBoard"
       />
+      <div v-if="allDepartments.length">
+        <div
+          v-for="dep in allDepartments"
+          :key="dep.uid"
+        >
+          <AsideMenuListTitle
+            v-if="isDepBoardsAreAvalible(dep.uid)"
+          >
+            {{ dep.name }}
+          </AsideMenuListTitle>
+
+          <template
+            v-for="board in commonBoards"
+            :key="board.uid"
+          >
+            <router-link
+              v-if="isBoardInCurrDepartment(board, dep.uid)"
+              :to="'/board/' + board.uid"
+            >
+              <BoardsSubmenuItem
+                :selected="isActive"
+                :board="board"
+                @click="closeMenu"
+              />
+            </router-link>
+          </template>
+        </div>
+      </div>
       <AsideMenuListTitle v-if="commonBoards.length">
         Общие доски
       </AsideMenuListTitle>
@@ -154,6 +182,26 @@ export default {
     },
     commonBoards () {
       return this.storeNavigator?.new_private_boards[1]?.items ?? []
+    },
+    allDepartments () {
+      const deps = Object.values(this.$store.state.departments.deps)
+      deps.sort((item1, item2) => {
+        // сначала по порядку
+        if (item1.order > item2.order) return 1
+        if (item1.order < item2.order) return -1
+        // если одинаковый, то по имени
+        if (item1.name > item2.name) return 1
+        if (item1.name < item2.name) return -1
+        return 0
+      })
+      deps.unshift({
+        uid: '00000000-0000-0000-0000-000000000000',
+        name: 'Вне отдела'
+      })
+      return deps
+    },
+    employees () {
+      return this.$store.state.employees.employees
     }
   },
   methods: {
@@ -164,6 +212,12 @@ export default {
         return
       }
       this.showAddBoard = true
+    },
+    isBoardInCurrDepartment (board, depUid) {
+      return board?.deps[depUid]
+    },
+    isDepBoardsAreAvalible (depUid) {
+      return this.employees[this.user.current_user_uid].uid_dep === depUid
     },
     onAddNewBoard (name) {
       this.showAddBoard = false

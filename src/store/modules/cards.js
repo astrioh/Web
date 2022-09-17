@@ -20,8 +20,8 @@ const actions = {
     return new Promise((resolve, reject) => {
       commit(CARD.BOARD_CARDS_REQUEST)
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/cards/byboard?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'cards?uid=' +
         boardUid
       axios({ url: url, method: 'GET', signal: cardsAbortController.signal })
         .then((resp) => {
@@ -236,7 +236,22 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [CARD.CHANGE_CARD_DATE_REMINDER]: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'cards'
+      axios({ url: url, method: 'POST', data: data })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
+
 }
 
 const mutations = {
@@ -367,6 +382,9 @@ const mutations = {
     state.cards.forEach((stage) => {
       const index = stage.cards.findIndex((crd) => crd.uid === card.uid)
       if (index !== -1) {
+        // Не бейтет это костыль
+        card.date_reminder = state.cards[index].date_reminder
+        card.uid_client = state.cards[index].uid_client
         // удаляем
         stage.cards.splice(index, 1)
       }
@@ -456,6 +474,15 @@ const mutations = {
     if (state.cardsAbortController) {
       state.cardsAbortController.abort()
     }
+  },
+  CardSaveReminder: (state, data) => {
+    state.cards.forEach((stage) => {
+      const index = stage.cards.findIndex((card) => card.uid === data.uid)
+      console.log('Index: ', index)
+      if (index !== -1) {
+        stage.cards[index] = { ...stage.cards[index], ...data }
+      }
+    })
   }
 }
 

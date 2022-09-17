@@ -16,6 +16,18 @@ const state = {
 const getters = {}
 
 const actions = {
+  [BOARD.SEND_BOARD_FORM_REQUEST]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_LEADERTASK_API + '/api/boardsforms/addboardleadbyjson?uid_board=' + data.board_uid
+      axios({ url: url, method: 'POST', data: data })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   [BOARD.CREATE_BOARD_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_LEADERTASK_API + '/api/v1/board'
@@ -75,6 +87,20 @@ const actions = {
       const board = state.boards[data.boardUid]
       if (!board) return reject(new Error(`not find board ${data.boardUid}`))
       board.name = data.newBoardTitle
+      dispatch(BOARD.UPDATE_BOARD_REQUEST, board)
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [BOARD.CHANGE_BOARD_DEPARTMENTS]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const board = state.boards[data.boardUid]
+      if (!board) return reject(new Error(`not find board ${data.boardUid}`))
+      board.deps = data.newDeps
       dispatch(BOARD.UPDATE_BOARD_REQUEST, board)
         .then((resp) => {
           resolve(resp)
@@ -320,6 +346,9 @@ const mutations = {
     state.showOnlyCardsWithNoResponsible = false
     state.showOnlyMyCreatedCards = false
     state.searchText = undefined
+  },
+  [BOARD.ADD_BOARD_DEPARTMENTS]: (state, data) => {
+    state.boards[data.boardUid].deps = { ...state.boards[data.boardUid].deps, [data.dep.uid]: data.dep }
   }
 }
 
