@@ -223,6 +223,7 @@ export default {
         date_create: new Date().toISOString(),
         uid_creator: this.user.current_user_uid,
         uid_client: this.selectedClient.uid,
+        uid_quote: this.currentQuote.uid_message,
         deleted: 0,
         msg: msgclient
       }
@@ -304,8 +305,13 @@ export default {
         }
       }
     },
+    focusMessageInput () {
+      const messageInput = document.getElementById('client-message-textarea')
+      messageInput.focus()
+    },
     setCurrentQuote (quote) {
       this.currentQuote = quote
+      console.log(quote)
       this.focusMessageInput()
     },
     deleteClientMessage (uid) {

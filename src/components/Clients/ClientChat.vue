@@ -21,16 +21,22 @@
           {{ employees[message.uid_creator].name }}
         </span>
       </div>
+      <ClientChatQuoteMessage
+        v-if="message.uid_quote?.length"
+        :quote-message-uid="message.uid_quote"
+      />
       <ClientChatInterlocutorMessage
         v-if="!isMyMessage(message)"
         :message="message"
         :employee="employees[message.uid_creator]"
+        @onQuoteMessage="setCurrentQuote"
       />
       <ClientChatSelfMessage
         v-if="isMyMessage(message)"
         :message="message"
         :employee="employees[message.uid_creator]"
         @onDeleteMessage="onDeleteMessage"
+        @onQuoteMessage="setCurrentQuote"
       />
     </div>
   </div>
@@ -38,13 +44,15 @@
 
 <script>
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
+import ClientChatQuoteMessage from '@/components/Clients/ClientChatQuoteMessage.vue'
 import ClientChatInterlocutorMessage from '@/components/Clients/ClientChatInterlocutorMessage.vue'
 import ClientChatSelfMessage from '@/components/Clients/ClientChatSelfMessage.vue'
 
 export default {
   components: {
     ClientChatInterlocutorMessage,
-    ClientChatSelfMessage
+    ClientChatSelfMessage,
+    ClientChatQuoteMessage
   },
   props: {
     key: {

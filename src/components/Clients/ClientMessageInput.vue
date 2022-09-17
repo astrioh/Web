@@ -79,7 +79,7 @@
       </div>
 
       <textarea
-        id="card-message-textarea"
+        id="client-message-textarea"
         ref="taskMsgEdit"
         v-model="computedValue"
         :disabled="!canAddFiles"
