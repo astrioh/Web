@@ -58,98 +58,8 @@
       </template>
     </table>
 
-    <template v-if="status === 'loading'">
-      <div
-        role="status"
-        class="p-4 animate-pulse dark:divide-gray-700 md:p-6"
-      >
-        <div class="flex justify-between items-center">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <div class="flex justify-between items-center pt-4">
-          <div>
-            <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 w-24 mb-2.5" />
-            <div class="w-32 h-2 bg-gray-200 rounded-full dark:bg-gray-700" />
-          </div>
-          <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-700 w-12" />
-        </div>
-        <span class="sr-only">Loading...</span>
-      </div>
-    </template>
+    <ClientsSkeleton v-if="status === 'loading'" />
+
     <div
       class="group flex justify-center border border-[#0000001F] rounded-[7px] p-[7px] mt-[15px] cursor-pointer"
       @click="clickAddClient"
@@ -186,12 +96,14 @@ import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
+import ClientsSkeleton from '@/components/Clients/ClientsSkeleton.vue'
 import Pagination from '../Pagination.vue'
 
 export default {
   components: {
     NavBarClients,
     ModalBoxAddClient,
+    ClientsSkeleton,
     Pagination
   },
   data () {
