@@ -190,6 +190,7 @@ export default {
   },
   methods: {
     closeProperties () {
+      this.$store.commit(CLIENTS.SELECT_CLIENT, {})
       this.$store.dispatch('asidePropertiesToggle', false)
     },
     removeClient () {

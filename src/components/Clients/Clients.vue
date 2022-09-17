@@ -22,7 +22,8 @@
       <template v-if="status === 'success'">
         <tr
           v-for="client in clients"
-          :key="client.uid"
+          :key="client?.uid"
+          :class="client?.uid === selectedClient?.uid ? 'bg-[#F4F5F7]' : ''"
           @click.stop="showClientProperties(client)"
         >
           <td>
@@ -195,7 +196,6 @@ export default {
   },
   data () {
     return {
-      selectedClient: '',
       showAddClient: false,
       currentPage: 0
     }
@@ -203,6 +203,9 @@ export default {
   computed: {
     clients () {
       return this.$store.state.clients.clients
+    },
+    selectedClient () {
+      return this.$store.state.clients.selectedClient
     },
     paging () {
       return this.$store.state.clients.paging
@@ -218,14 +221,6 @@ export default {
     }
   },
   watch: {
-    isPropertiesMobileExpanded: {
-      immediate: true,
-      handler: function (val) {
-        if (!val) {
-          this.selectedClient = ''
-        }
-      }
-    },
     currentPageRouter () {
       this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
     }
@@ -240,9 +235,8 @@ export default {
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
-      this.selectedClient = client.email
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
-      this.$store.commit(CLIENTS.SELECT_CLIENT, client.uid)
+      this.$store.commit(CLIENTS.SELECT_CLIENT, client)
     },
     clickAddClient () {
       this.showAddClient = true

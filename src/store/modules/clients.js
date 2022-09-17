@@ -84,8 +84,8 @@ const mutations = {
   [CLIENTS.UPDATE_CLIENT]: (state, data) => {
     console.log(data)
   },
-  [CLIENTS.SELECT_CLIENT]: (state, clientUid) => {
-    state.selectedClient = state.clients.filter(cl => cl.uid === clientUid)[0]
+  [CLIENTS.SELECT_CLIENT]: (state, client) => {
+    state.selectedClient = client
   },
   [CLIENTS.CHANGE_CLIENT_NAME]: (state, client) => {
     state.clients.find(cl => cl.uid === client.uid).name = client.name
