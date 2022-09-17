@@ -746,7 +746,7 @@ export default {
         }
       )
 
-      if (this.$route.name === 'tasksToday') {
+      if (this.$route.name === 'tasksToday' || this.$route.name === 'tasksByDate') {
         this.$store.commit(TASK.REMOVE_TASK, taskUid)
         this.$store.dispatch('asidePropertiesToggle', false)
       }
