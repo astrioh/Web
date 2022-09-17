@@ -1,5 +1,6 @@
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
 import axios from 'axios'
+import store from '@/store/index.js'
 
 const state = {
   messages: [],
@@ -39,9 +40,11 @@ const actions = {
   [CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST]: ({ commit, dispatch }, messageUid) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_INSPECTOR_API + 'clients_chat?uid_message=' + messageUid
-      axios({ url: url, method: 'PATCH' })
+      console.log('store in store', store.state.user.user.owner_email)
+      axios({ url: url, method: 'PATCH', data: { organization: store.state.user.user.owner_email } })
         .then((resp) => {
           commit(CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST, messageUid)
+          console.log(resp, 'delete')
           resolve(resp)
         })
         .catch((err) => {

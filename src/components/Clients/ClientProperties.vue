@@ -190,7 +190,7 @@ export default {
   },
   methods: {
     closeProperties () {
-      this.$store.commit(CLIENTS.SELECT_CLIENT, {})
+      this.$store.commit(CLIENTS.SELECT_CLIENT, null)
       this.$store.dispatch('asidePropertiesToggle', false)
     },
     removeClient () {
@@ -223,6 +223,7 @@ export default {
         date_create: new Date().toISOString(),
         uid_creator: this.user.current_user_uid,
         uid_client: this.selectedClient.uid,
+        organization: this.user.owner_email,
         uid_quote: this.currentQuote.uid_message,
         deleted: 0,
         msg: msgclient
