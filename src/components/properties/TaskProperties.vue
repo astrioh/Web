@@ -278,7 +278,7 @@
     <CardMessageInput
       v-model="taskMsg"
       class="mt-[16px]"
-      :can-add-files="isLicenseExpired"
+      :can-add-files="!isLicenseExpired"
       @cantWriteMessages="showFreeModalChat = true"
       @createCardMessage="sendTaskMsg"
       @createCardFile="createTaskFile"
@@ -404,7 +404,9 @@ export default {
       if (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) return true
       return false
     },
-    isLicenseExpired () { return !this.$store.getters.isLicenseExpired },
+    isLicenseExpired () {
+      return this.$store.getters.isLicenseExpired
+    },
     modalBoxDeleteText () {
       let text = 'Вы действительно хотите удалить задачу?'
       if (this.tasks[this.selectedTaskUid]?.children?.length > 0) {
@@ -412,8 +414,8 @@ export default {
       }
       return text
     },
-    canEditChecklist () { return ((this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free') || this.isLicenseExpired },
-    canCheckChecklist () { return ((this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free') || this.isLicenseExpired },
+    canEditChecklist () { return ((this.selectedTask?.type === 1 || this.selectedTask?.type === 2) && this.user.tarif !== 'free') || !this.isLicenseExpired },
+    canCheckChecklist () { return ((this.canEditChecklist || this.selectedTask?.type === 3) && this.user.tarif !== 'free') || !this.isLicenseExpired },
     canEditComment () { return (this.selectedTask?.type === 1 || this.selectedTask?.type === 2) },
     messageQuoteUser () {
       if (!this.currentAnswerMessageUid) return ''
@@ -457,6 +459,10 @@ export default {
         })
     },
     createTaskFile (event) {
+      if (event === false) {
+        this.showFreeModalChat = true
+        return
+      }
       this.tooBigFiles = []
       this.files = event.target.files ? event.target.files : event.dataTransfer.files
       const formData = new FormData()
@@ -740,7 +746,7 @@ export default {
         }
       )
 
-      if (this.$route.name === 'tasksToday') {
+      if (this.$route.name === 'tasksToday' || this.$route.name === 'tasksByDate') {
         this.$store.commit(TASK.REMOVE_TASK, taskUid)
         this.$store.dispatch('asidePropertiesToggle', false)
       }

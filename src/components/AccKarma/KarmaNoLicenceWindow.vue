@@ -9,7 +9,7 @@
 
     <a
       href="https://www.leadertask.ru/alpha"
-      class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E]  rounded-md hover:bg-slate-200 hover:text-[#422b14] text-xl font-bold py-2 px-12"
+      class="w-[238px] font-[500] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E]  rounded-md hover:bg-slate-200 hover:text-[#422b14] text-xl font-bold py-2 px-12"
     >
       Купить
     </a>

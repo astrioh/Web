@@ -16,13 +16,13 @@
     @exitEditMode="isEditing = false"
   />
   <div v-else>
-    <div class="flex justify-between items-center mt-4">
-      <h1
+    <div class="flex justify-between items-center mt-2">
+      <NavBar
         v-if="!isTesting"
         class="font-roboto font-bold font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap"
       >
         {{ reglamentTitle }}
-      </h1>
+      </NavBar>
       <div
         v-if="!showCompleteMessage && !isTesting"
         class="flex justify-end h-[30px]"
@@ -80,7 +80,7 @@
     </div>
     <div
       v-if="!isTesting"
-      class="mt-[15px] p-7 bg-white rounded-[28px]"
+      class="p-7 bg-white rounded-[28px]"
     >
       <div class="flex justify-start leading-[30px] text-[13px] text-[#424242]">
         <div
@@ -124,7 +124,7 @@
         class="flex justify-center"
       >
         <button
-          class="flex items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+          class="flex font-[400] items-end bg-[#FF912380] p-3 px-10 rounded-[8px] mt-2 text-black text-sm mr-1 hover:bg-[#F5DEB3]"
           @click="startTheReglament"
         >
           Пройти тест
@@ -212,6 +212,7 @@ import ReglamentContentEditor from '@/components/Reglaments/ReglamentContentEdit
 import EmployeeProfile from '../Employees/EmployeeProfile.vue'
 import ReglamentTest from '@/components/Reglaments/ReglamentTest'
 import * as TASK from '@/store/actions/tasks'
+import NavBar from '../Navbar/NavBar.vue'
 
 export default {
   components: {
@@ -221,7 +222,8 @@ export default {
     ReglamentSmallButton,
     ReglamentEditLimit,
     ReglamentTestLimit,
-    EmployeeProfile
+    EmployeeProfile,
+    NavBar
   },
   data () {
     return {

@@ -5,7 +5,7 @@
   />
   <!--  -->
   <div
-    v-if="user.tarif !== 'alpha' && user.tarif !== 'trial' || $store.getters.isLicenseExpired"
+    v-if="user.tarif !== 'alpha' && user.tarif !== 'trial' || isLicenseExpired"
     class="grid grid-cols-1 gap-4 p-5 bg-white rounded mt-2"
   >
     <KarmaNoLicenceWindow />
@@ -21,30 +21,30 @@
       <p class="text-center p-2">
         <span
           class="text-6xl tracking-tighter"
-          :class="{'text-green-500': karmaQuantity, 'text-red-500': !karmaQuantity, 'text-gray-600': karmaQuantity === 0 }"
+          :class="{'text-green-500': karmaQuantity, 'text-red-500': !karmaQuantity, 'text-[#4C4C4D]': karmaQuantity === 0 }"
         >
           <span v-if="karmaQuantity > 0">+</span>
           {{ karmaQuantity }}
         </span>
       </p>
       <p class="text-center mt-2 p-2">
-        <span class="text-sm text-gray-600">В срок:</span> <span class="text-xl mr-6 text-green-500"> {{ successQuantity }}</span>
-        <span class="text-sm text-gray-600">Просроченныx:</span> <span class="text-xl text-red-500">{{ overdueQuantity }}</span>
+        <span class="text-sm text-[#4C4C4D]">В срок:</span> <span class="text-xl mr-6 text-green-500"> {{ successQuantity }}</span>
+        <span class="text-sm text-[#4C4C4D]">Просроченныx:</span> <span class="text-xl text-red-500">{{ overdueQuantity }}</span>
       </p>
       <br>
       <div class="grid grid-cols-1 gap-4 p-5">
         <div class="grid grid-cols-1 ">
-          <p class="text-center text-2xl font-bold">
+          <p class="text-center text-2xl font-bold text-[#424242]">
             Графики
           </p>
-          <p class="text-left text-sm font-semibold px-2.5">
+          <p class="text-left text-sm font-semibold px-2.5 text-[#4C4C4D]">
             В срок
           </p>
           <line-chart
             :data="successChartData"
             class="max-h-[120px]"
           />
-          <p class="text-left text-sm font-semibold mt-4 px-2.5">
+          <p class="text-left text-sm font-semibold mt-4 px-2.5 text-[#4C4C4D]">
             Просрочено
           </p>
           <line-chart
@@ -84,6 +84,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user.user
+    },
+    isLicenseExpired () {
+      return this.$store.getters.isLicenseExpired
     },
     currentLocation () {
       return window.location.href

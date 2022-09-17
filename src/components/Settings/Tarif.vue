@@ -16,8 +16,10 @@
       v-if="$store.state.user.user?.date_expired"
       class="text-sm landing-5 font-[Roboto] mt-1 font-normal text-[#606061]"
     >
-      <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
-      <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+      <a v-if="user.tarif !== 'free' && user.tarif !== 'trial' && !isLicenseExpired">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+
+      <a v-if="user.tarif === 'free' || isLicenseExpired">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+
       <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
     </p>
     <!-- Владелец тарифа -->
@@ -117,6 +119,9 @@ export default {
         default:
           return this.$store.state.user.user?.tarif
       }
+    },
+    isLicenseExpired () {
+      return this.$store.getters.isLicenseExpired
     },
     tarifButtonTitle () {
       if (this.user.tarif === 'trial' || this.user.tarif === 'free') {

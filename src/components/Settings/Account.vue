@@ -152,13 +152,12 @@
             v-if="
               user.tarif !== 'free' &&
                 user.tarif !== 'trial' &&
-                $store.state.user.user?.days_left != 0
+                !isLicenseExpired
             "
           >Лицензия истекает {{ getDateExpired() }} (дней:
             {{ $store.state.user.user?.days_left ?? 0 }})</a>
           <a
-            v-if="user.tarif === 'free' || (user.tarif !== 'free' &&
-              user.tarif !== 'trial' && $store.state.user.user?.days_left == 0)"
+            v-if="user.tarif === 'free' || isLicenseExpired"
           >Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
           <a
             v-if="user.tarif === 'trial'"
@@ -295,6 +294,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user.user
+    },
+    isLicenseExpired () {
+      return this.$store.getters.isLicenseExpired
     },
     tarifText () {
       switch (this.user?.tarif) {
