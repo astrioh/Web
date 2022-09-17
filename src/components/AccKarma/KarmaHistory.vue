@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p class="text-center text-2xl mt-2 font-bold">
+    <p class="text-center text-2xl mt-2 font-bold text-[#424242]">
       История кармы
     </p>
     <div v-if="!sortedKarmaListByDate.length">
-      <p class="text-center text-md text-gray-400 mt-10">
+      <p class="text-center text-md mt-10 text-[#4C4C4D]">
         У Вас еще нет истории :( <br> Завершите инспектируемые задачи
       </p>
     </div>

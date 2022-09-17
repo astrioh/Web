@@ -4,20 +4,22 @@
     title="Тариф"
   />
   <form class="px-5 text-lg bg-white p-2 rounded-xl pb-[150px]">
-    <div class="font-medium text-[roboto] mb-4 text-base landing-[19px]">
+    <div class="font-medium text-[roboto] mb-4 text-base landing-[19px] text-[#4C4C4D]">
       Тип аккаунта
     </div>
     <p
-      class="text-sm landing-4 font-medium"
+      class="text-sm landing-4 font-medium text-[#606061]"
     >
       {{ tarifText }}
     </p>
     <p
       v-if="$store.state.user.user?.date_expired"
-      class="text-sm landing-5 font-[Roboto] mt-1 font-normal"
+      class="text-sm landing-5 font-[Roboto] mt-1 font-normal text-[#606061]"
     >
-      <a v-if="user.tarif !== 'free' && user.tarif !== 'trial'">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
-      <a v-if="user.tarif === 'free'">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+      <a v-if="user.tarif !== 'free' && user.tarif !== 'trial' && !isLicenseExpired">Лицензия истекает {{ getDateExpired() }} (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
+
+      <a v-if="user.tarif === 'free' || isLicenseExpired">Обновите тарифный план ЛидерТаск для неограниченных возможностей</a>
+
       <a v-if="user.tarif === 'trial'">Мы активировали Вам пробную версию, в которой доступны 100% функций ЛидерТаск (дней: {{ $store.state.user.user?.days_left ?? 0 }})</a>
     </p>
     <!-- Владелец тарифа -->
@@ -25,10 +27,10 @@
       :user="user"
     />
     <div class="mt-[36px]">
-      <p class="text-base font-medium">
+      <p class="text-base font-medium text-[#4C4C4D]">
         Количество рабочих мест
       </p>
-      <div class="flex mt-[17px]">
+      <div class="flex mt-[17px] text-[#606061]">
         <span class="relative mr-1.5">
           <svg
             width="20"
@@ -55,10 +57,10 @@
       </div>
     </div>
     <div class="mt-[36px]">
-      <p class="text-base font-medium">
+      <p class="text-base font-medium text-[#4C4C4D]">
         Занято места на сервере
       </p>
-      <div class="flex mt-[17px]">
+      <div class="flex mt-[17px] text-[#606061]">
         <span class="relative mr-1.5">
           <svg
             width="20"
@@ -117,6 +119,9 @@ export default {
         default:
           return this.$store.state.user.user?.tarif
       }
+    },
+    isLicenseExpired () {
+      return this.$store.getters.isLicenseExpired
     },
     tarifButtonTitle () {
       if (this.user.tarif === 'trial' || this.user.tarif === 'free') {

@@ -6,24 +6,30 @@ const state = {
   selectedCard: false,
   selectedCardUid: '',
   boardUid: '',
-  status: ''
+  status: '',
+  cardsAbortController: null
 }
 
 const getters = {}
 
 const actions = {
   [CARD.BOARD_CARDS_REQUEST]: ({ commit, rootState }, boardUid) => {
+    commit('abortCardsAbortController')
+    const cardsAbortController = new AbortController()
+    commit('InitCardsAbortController', cardsAbortController)
     return new Promise((resolve, reject) => {
       commit(CARD.BOARD_CARDS_REQUEST)
       const url =
         process.env.VUE_APP_INSPECTOR_API +
         'cards?uid=' +
         boardUid
-      axios({ url: url, method: 'GET' })
+      axios({ url: url, method: 'GET', signal: cardsAbortController.signal })
         .then((resp) => {
-          resp.boardUid = boardUid
-          resp.rootState = rootState
-          commit(CARD.BOARD_CARDS_SUCCESS, resp)
+          if (resp) {
+            resp.boardUid = boardUid
+            resp.rootState = rootState
+            commit(CARD.BOARD_CARDS_SUCCESS, resp)
+          }
           resolve(resp)
         })
         .catch((err) => {
@@ -460,6 +466,14 @@ const mutations = {
       if (stage1.Name < stage2.Name) return -1
       return 0
     })
+  },
+  InitCardsAbortController: (state, controller) => {
+    state.cardsAbortController = controller
+  },
+  abortCardsAbortController: (state) => {
+    if (state.cardsAbortController) {
+      state.cardsAbortController.abort()
+    }
   },
   CardSaveReminder: (state, data) => {
     state.cards.forEach((stage) => {

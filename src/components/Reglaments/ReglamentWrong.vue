@@ -4,13 +4,13 @@
     class="bg-[#F4F5F7] p-3 rounded-[10px] mb-[10px]"
   >
     <div class="px-1 flex justify-between items-center group">
-      <div class="font-[400] text-[16px] font-[#4C4C4D] my-3 min-w-[10px] min-h-[10px] break-words">
+      <div class="font-[400] text-[16px] leading-[22px] font-['Roboto'] text-[#4C4C4D] my-3 min-w-[10px] min-h-[10px] break-words">
         {{ question.name }}
       </div>
     </div>
     <div
       v-if="correctAnswers.length"
-      class="font-[400] text-[16px] my-1 min-w-[10px] min-h-[10px] px-1 break-words"
+      class="font-[400] text-[#4C4C4D] text-[16px] my-1 min-w-[10px] min-h-[10px] px-1 break-words"
     >
       Правильные ответы:
       <ul>

@@ -111,7 +111,6 @@
                   @changeStatus="onChangeStatus($event, props.node.info)"
                 />
               </div>
-
               <!-- Editable name -->
               <contenteditable
                 v-model="props.node.info.name"
@@ -119,6 +118,7 @@
                 class="taskName p-0 ring-0 outline-none w-[calc(100%-26px)] overflow-x-clip break-words cursor-default text-[14px]"
                 :contenteditable="props.node.info._isEditable"
                 placeholder="Введите название задачи"
+                spellcheck="false"
                 :no-nl="true"
                 :no-html="true"
                 :class="{ 'uppercase': !props.node.info._isEditable && colors[props.node.info.uid_marker] && colors[props.node.info.uid_marker].uppercase, 'text-gray-500': props.node.info.status == 1 || props.node.info.status == 7, 'line-through': props.node.info.status == 1 || props.node.info.status == 7, 'font-extrabold': props.node.info.readed == 0 }"
@@ -791,8 +791,10 @@ export default {
         data.name = title
         this.$store.dispatch(TASK.CREATE_TASK, data)
           .then((resp) => {
-          // выделяем добавленную задачу
-          // и отображаем её свойства
+            // в респонсе uid_performer приходит пустым, поэтому пока оставил такой костыль
+            if (this.$route.name === 'tasksDelegateToMe' || this.$route.name === 'tasksDelegateByMe') { resp.data.uid_performer = data.uid_performer }
+            // выделяем добавленную задачу
+            // и отображаем её свойства
             this.nodeSelected({ id: data.uid, info: resp.data })
             if (this.$route.name === 'tasksToday') {
               this.$store.commit('addDot', new Date(data.date_begin))
@@ -815,7 +817,6 @@ export default {
     },
     updateTask (event, task) {
       if (task.name.length === 0) {
-        this.showError = true
         return
       }
       if (task._isEditable) {
@@ -913,7 +914,6 @@ export default {
       range.collapse(true)
       sel.removeAllRanges()
       sel.addRange(range)
-      this.$store.commit(TASK.SELECT_TASK, uid)
     },
     addSubtask (parent) {
       this.orderNewSubtask = this.orderNewSubtask - 1
