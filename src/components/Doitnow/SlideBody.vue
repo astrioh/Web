@@ -13,11 +13,7 @@
       v-if="name === 'welcome'"
       class="flex flex-col items-center w-8/12"
     >
-      <div
-        class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-      >
-        Добро пожаловать в ЛидерТаск Web!
-      </div>
+      <SlideBodyTitle title="Добро пожаловать в ЛидерТаск Web!" />
       <div class="flex justify-center">
         <article class="font-[400] text-[18px] text-left leading-[29px] w-full text-[#4C4C4D] mb-[35px] pl-0">
           <p class="mb-3">
@@ -42,12 +38,11 @@
         allowfullscreen
         class="border rounded-xl"
       />
-      <button
-        class="w-[238px] mt-[35px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        class="mt-[35px]"
+        text="Понятно"
         @click="clickSuccess"
-      >
-        Понятно
-      </button>
+      />
     </div>
 
     <!-- addAvatar -->
@@ -56,11 +51,7 @@
       class="w-8/12"
     >
       <div class="flex flex-col items-center">
-        <div
-          class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-        >
-          Установите фото профиля (аватар) в ЛидерТаск
-        </div>
+        <SlideBodyTitle title="Установите фото профиля (аватар) в ЛидерТаск" />
         <div>
           <article class="font-[400] text-[18px] leading-[29px] text-left w-full text-[#4C4C4D] mb-[35px] pl-0">
             <p>
@@ -71,12 +62,10 @@
           </article>
         </div>
       </div>
-      <button
-        class="w-[238px] h-[40px] text-[14px] justify-center cursor-pointer bg-[#F2B679] text-[#2E2E2E] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        text="Загрузить"
         @click="clickAddAvatar"
-      >
-        Загрузить
-      </button>
+      />
     </div>
 
     <!-- addEmployees -->
@@ -84,20 +73,16 @@
       v-if="name === 'addEmployees'"
       class="flex flex-col items-center"
     >
-      <div
-        class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-      >
-        Добавьте сотрудников
-      </div>
-      <div class="max-w-[750px]">
-        <article class="font-[400] text-[18px] text-left leading-[29px] w-full text-[#4C4C4D] mb-[35px] pl-0">
-          <p class="mt-1 mb-1">
+      <SlideBodyTitle title="Добавьте сотрудников" />
+      <div class="max-w-[550px] mb-[28px]">
+        <article class="font-normal text-[18px] text-center leading-[29px] w-full pl-0">
+          <p class="mb-[28px] font-bold text-[#424242]">
             Для успешного использования Лидертаск Вам необходимо добавить сотрудников.
           </p>
-          <p class="mt-1 mb-1">
+          <p class="mb-[28px] text-[#4C4C4D]">
             После добавления сотрудников Вы сможете поручать им задачи, а Лидертаск сможет самостоятельно им напоминать звонками, смс и сообщениями в телеграмм о том, чтобы Ваши задачи были сделаны в срок.
           </p>
-          <p class="mt-1">
+          <p class="text-[16px] font-bold text-[#2E2E2E]">
             Посмотрите, как Лидертаск помогает завершать задачи в срок:
           </p>
         </article>
@@ -112,13 +97,11 @@
         allowfullscreen
         class="border rounded-xl"
       />
-      <button
-        v-if="name === 'addEmployees'"
-        class="w-[238px] mt-[35px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        class="mt-[35px]"
+        text="Добавить сотрудников"
         @click="clickAddEmployees"
-      >
-        Добавить сотрудников
-      </button>
+      />
     </div>
 
     <!-- addReglaments -->
@@ -127,11 +110,7 @@
       class="w-8/12"
     >
       <div class="flex flex-col items-center">
-        <div
-          class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-        >
-          Добавьте ваши правила и регламенты
-        </div>
+        <SlideBodyTitle title="Добавьте ваши правила и регламенты" />
         <div>
           <article class="font-[400] text-[18px] text-left leading-[29px] w-full text-[#4C4C4D] mb-[35px] pl-0">
             <p class="mt-1 mb-3">
@@ -145,12 +124,10 @@
           </article>
         </div>
       </div>
-      <button
-        class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+      <SlideBodyButton
+        text="Создать регламент"
         @click="clickAddReglament"
-      >
-        Создать регламент
-      </button>
+      />
     </div>
 
     <!-- delegateTasks -->
@@ -159,11 +136,7 @@
       class="w-8/12"
     >
       <div class="flex flex-col items-center">
-        <div
-          class="taskName leading-[25px] p-2 ring-0 outline-none max-w-7xl mt-0.5 ml-1 overflow-x-hidden w-full text-[25px] font-bold mb-[28px]"
-        >
-          Поручите задачи
-        </div>
+        <SlideBodyTitle title="Поручите задачи" />
         <div>
           <article class="font-[400] text-[18px] leading-[29px] text-left w-full text-[#4C4C4D] mb-[35px] pl-0">
             Поручите задачи вашим сотрудникам. Это можно сделать так:
@@ -183,23 +156,25 @@
           </article>
         </div>
       </div>
-      <button
+      <SlideBodyButton
         v-if="name === 'delegateTasks'"
-        class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-normal"
+        text="Поручить задачу"
         @click="showInspector = true"
-      >
-        Поручить задачу
-      </button>
+      />
     </div>
   </div>
 </template>
 <script>
 import InspectorModalBox from '@/components/Inspector/InspectorModalBox.vue'
+import SlideBodyButton from './SlideBodyButton.vue'
+import SlideBodyTitle from './SlideBodyTitle.vue'
 import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
 import * as SLIDES from '@/store/actions/slides.js'
 export default {
   components: {
-    InspectorModalBox
+    InspectorModalBox,
+    SlideBodyButton,
+    SlideBodyTitle
   },
   props: {
     name: {

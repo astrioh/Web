@@ -50,7 +50,8 @@ export default {
     newTaskProps () {
       if (this.employee?.email) {
         return ({
-          email_performer: this.employee.email
+          email_performer: this.employee.email,
+          uid_performer: this.$route.params.employee_uid
         })
       }
       return ({})
@@ -69,7 +70,6 @@ export default {
   methods: {
     selectAnotherEmployee (uid) {
       this.$store.dispatch(TASK.ACTION_GET_TASKS_DELEGATED_BY_ME, uid)
-      this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
     },
     reload () {
       this.selectAnotherEmployee(this.employeeUid)

@@ -52,7 +52,7 @@
   />
   <div
     v-if="!displayModal"
-    class="w-full"
+    class="w-full pb-6"
   >
     <div class="flex items-center justify-between w-full">
       <NavBar
@@ -159,7 +159,9 @@
         >
           <ListBlocItem
             :title="userValue.name"
+            title-color="#4C4C4D"
             :sub-title="userValue.email"
+            sub-title-color="#606061"
             :right-icon="empIcon(userValue)"
             :selected="selectedEmployee === userValue.email"
             @click.stop="showUserProperties(userValue)"

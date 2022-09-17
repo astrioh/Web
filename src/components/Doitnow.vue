@@ -44,7 +44,7 @@
       >
         <!-- header -->
         <button
-          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center"
+          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
           @click="nextTask"
         >
           <span class="pr-2">Следующая задача</span>
@@ -65,7 +65,7 @@
       class="ml-0 pt-[15px] z-[2] grow"
     />
     <DoitnowEmpty
-      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage)"
+      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage) && !displayModal"
       class="ml-0 pt-[15px] z-[2] grow"
     />
     <div
@@ -212,7 +212,7 @@ export default {
     },
     showLimitMessage () {
       const tarif = this.$store.state.user.user.tarif
-      return tarif !== 'alpha' && tarif !== 'trial'
+      return (tarif !== 'alpha' && tarif !== 'trial') || this.$store.getters.isLicenseExpired
     }
   },
   watch: {
@@ -330,7 +330,7 @@ export default {
     },
     setSlidesCopy () {
       for (let i = 0; i < this.slides.length; i++) {
-        if (this.slides[i].visible) {
+        if (this.slides[i].visible === 'true' || this.slides[i].visible === true) {
           this.slidesCopy.push(this.slides[i])
         }
       }
@@ -346,9 +346,6 @@ export default {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
     },
     nextTask: function () {
-      for (let i = 0; i < this.slides.length; i++) {
-        console.log(this.slides[i].name === 'welcome')
-      }
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
         return

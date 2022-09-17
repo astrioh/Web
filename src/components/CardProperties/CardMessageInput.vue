@@ -184,7 +184,11 @@ export default {
     },
     createCardFileEmit (e) {
       this.$emit('createCardFile', e)
-      this.$refs.fileInput.value = ''
+      if (this.$refs?.fileInput?.value) {
+        this.$refs.fileInput.value = ''
+      } else {
+        console.log('Для пользования чатом нужна лицензия')
+      }
     }
   }
 }
