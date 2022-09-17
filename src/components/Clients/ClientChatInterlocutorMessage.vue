@@ -18,7 +18,7 @@
         {{ getMessageTimeString(message.date_create) }}
       </p>
       <div class="self-end group-hover:flex hidden">
-        <CardChatMessageOptionsPopMenu
+        <ClientChatMessageOptionsPopMenu
           :can-delete="false"
           @onQuoteMessage="onQuoteMessage"
         >
@@ -45,18 +45,18 @@
               />
             </svg>
           </div>
-        </CardChatMessageOptionsPopMenu>
+        </ClientChatMessageOptionsPopMenu>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
+import ClientChatMessageOptionsPopMenu from '@/components/Clients/ClientChatMessageOptionsPopMenu.vue'
 
 export default {
   components: {
-    CardChatMessageOptionsPopMenu
+    ClientChatMessageOptionsPopMenu
   },
   props: {
     message: {
