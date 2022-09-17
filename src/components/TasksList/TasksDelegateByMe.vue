@@ -50,7 +50,8 @@ export default {
     newTaskProps () {
       if (this.employee?.email) {
         return ({
-          email_performer: this.employee.email
+          email_performer: this.employee.email,
+          uid_performer: this.$route.params.employee_uid
         })
       }
       return ({})
