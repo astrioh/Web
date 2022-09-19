@@ -11,8 +11,10 @@ const state = {
 const actions = {
   [CLIENTS.GET_CLIENTS]: ({ commit, dispatch, state }, data) => {
     return new Promise((resolve, reject) => {
-      const url =
-        process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + data.organization + '&page=' + data.page
+      let url = process.env.VUE_APP_INSPECTOR_API + 'clients?organization=' + data.organization + '&page=' + data.page
+      if (data.search) {
+        url += '&search=' + data.search
+      }
       commit(CLIENTS.GET_CLIENTS)
       axios({ url: url, method: 'GET' })
         .then((resp) => {

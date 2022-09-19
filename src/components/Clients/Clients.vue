@@ -139,7 +139,14 @@ export default {
   },
   mounted () {
     this.currentPage = this.$route.query.page && 0
-    this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
+    const data = {
+      organization: this.user?.owner_email,
+      page: this.currentPage
+    }
+    if (this.$route.query.search) {
+      data.search = this.$route.query.search
+    }
+    this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
   },
   methods: {
     showClientProperties (client) {
