@@ -104,8 +104,11 @@ export default {
         title: this.modelInput1,
         comment: this.modelInput2 + ', ' + this.modelInput3 + ', ' + this.modelInput4
       }
-      this.$store.dispatch(BOARD.SEND_BOARD_FORM_REQUEST, data)
-      console.log(data)
+      this.$store.dispatch(BOARD.SEND_BOARD_FORM_REQUEST, data).then(() => {
+        if (this.item.redirectLink.length > 0) {
+          window.location.href = this.item.redirectLink
+        }
+      })
     }
   }
 }
