@@ -184,10 +184,12 @@ export default {
     this.$store.dispatch(BOARD_FORMS.GET_BOARD_FORM_REQUEST, this.$route.params.board_id).then((res) => {
       const data = {
         uid_board: this.$route.params.board_id,
-        info: res.data[0].info
+        info: res.data[0]?.info
       }
       this.$store.state.boardforms.boardForm = data
-      this.form = data.info
+      if (data.info) {
+        this.form = data.info
+      }
       this.showParams = true
       console.log(this.form)
     })
