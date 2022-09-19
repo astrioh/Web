@@ -161,7 +161,7 @@ const TaskListChecker = {
   },
   tasksInWork (task) {
     if (
-      task.uid_customer === user.value.current_user_uid &&
+      (task.uid_customer === user.value.current_user_uid || task.uid_performer === user.value.current_user_uid) &&
       task.status === TASK_STATUS.TASK_IN_WORK
     ) {
       return true
