@@ -21,14 +21,12 @@
     </PopMenu>
     <PropsButtonClose @click="closeProperties" />
   </div>
-  <div
-    v-if="ClientStub"
-    class="flex-none mt-[20px] w-[82px] h-[82px] bg-cover bg-center bg-origin-content bg-clip-content rounded-[14px]"
-    :style="{
-      'background-image': `url(${ClientStub})`
-    }"
-  />
   <div class="flex flex-col">
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Имя
+    </div>
     <input
       v-model="currClient.name"
       type="text"
@@ -159,9 +157,6 @@ export default {
         this.selectedEmployeeType !== 1 &&
         !this.isSelectedEmployeeCurrentUser
       )
-    },
-    ClientStub () {
-      return 'https://mobimg.b-cdn.net/v3/fetch/21/215e3ddf9d2d722a16e435992d354932.jpeg?h=900&r=0.5'
     },
     selectedClient () {
       return this.$store.state.clients.selectedClient
