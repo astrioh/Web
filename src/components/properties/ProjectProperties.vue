@@ -215,36 +215,12 @@
       </div>
       <template #menu>
         <div class="max-h-[220px] overflow-y-auto w-[220px] scroll-style">
-          <PopMenuItem
+          <ProjectPropsMenuItemDeps
             v-for="(dep,index) in allDepartments"
             :key="dep.uid"
+            :dep-name="dep.name"
             @click="setDepartment(index)"
-          >
-            <div class="flex justify-between w-full items-center">
-              <span
-                class="truncate"
-                :class="currDepTitle === dep.name ? 'font-bold' : ''"
-              >
-                {{ dep.name }}
-              </span>
-              <svg
-                v-if="currDepTitle === dep.name"
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M13.3346 4L6.0013 11.3333L2.66797 8"
-                  stroke="#1CA345"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
-            </div>
-          </PopMenuItem>
+          />
         </div>
       </template>
     </PopMenu>
@@ -296,6 +272,7 @@ import TaskPropsAccessLimitModalBox from '@/components/properties/TaskPropsAcces
 
 import * as PROJECT from '@/store/actions/projects'
 import { NAVIGATOR_REMOVE_PROJECT } from '@/store/actions/navigator'
+import ProjectPropsMenuItemDeps from '../Projects/ProjectPropsMenuItemDeps.vue'
 
 export default {
   components: {
@@ -307,7 +284,8 @@ export default {
     PopMenu,
     PopMenuItem,
     PropsButtonClose,
-    PropsButtonMenu
+    PropsButtonMenu,
+    ProjectPropsMenuItemDeps
   },
   data () {
     return {
