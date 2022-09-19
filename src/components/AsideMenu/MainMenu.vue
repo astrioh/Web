@@ -242,6 +242,7 @@ export default {
         'reglaments',
         'project',
         'board',
+        'clients',
         'settings',
         'doitnow'
       ]
