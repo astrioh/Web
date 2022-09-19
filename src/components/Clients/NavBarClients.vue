@@ -5,6 +5,7 @@
   >
     <NavBarSearch
       @search="onSearch"
+      @eraseSearch="onEraseSearch"
     />
   </NavBar>
 </template>
@@ -27,6 +28,9 @@ export default {
   methods: {
     onSearch (text) {
       this.$router.push({ path: '/clients', query: { search: text } })
+    },
+    onEraseSearch () {
+      this.$router.push({ path: '/clients' })
     }
   }
 }
