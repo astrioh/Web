@@ -355,7 +355,7 @@ export default {
           console.log('quitProject', resp)
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.selectedProject)
-          this.$route.push('/project')
+          this.$router.push('/project')
         })
     },
     favoriteToggle () {

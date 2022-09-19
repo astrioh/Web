@@ -291,10 +291,11 @@ export default {
   appearance: none;
   height: 40px;
   color:#606061;
+  background-color: white;
   background: transparent
     url('http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png')
-    no-repeat 130px center;
-  background-size: 8%;
+    no-repeat 132px center;
+  background-size: 7%;
 }
 /* CAUTION: IE hackery ahead */
 .custom-select::-ms-expand {

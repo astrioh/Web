@@ -3,6 +3,7 @@
     :title="reglament.name"
     :sub-title="author"
     sub-title-color="#7E7E80"
+    title-color="#4C4C4D"
     :right-icon="iconCheck"
   >
     <svg
@@ -36,7 +37,7 @@ export default {
   },
   computed: {
     iconCheck () {
-      if (this.reglament.is_passed) return 'check'
+      if (this.reglament.is_passed) return 'reglamentDone'
       return ''
     },
     employeesByEmail () {

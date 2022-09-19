@@ -18,7 +18,7 @@
 
     <div
       v-if="task.mode === 'slide' && task.visible"
-      class="py-6 px-5 w-full bg-white rounded-lg"
+      class="pt-[45px] pb-6 px-5 w-full bg-white rounded-lg"
     >
       <SlideBody
         :name="task.name"
@@ -586,10 +586,10 @@ export default {
   },
   computed: {
     canEditChecklist () {
-      return (this.task?.type === 1 || this.task?.type === 2) && this.user.tarif !== 'free'
+      return ((this.task?.type === 1 || this.task?.type === 2) && this.user.tarif !== 'free') || !this.$store.getters.isLicenseExpired
     },
     canCheckChecklist () {
-      return (this.canEditChecklist || this.task?.type === 3) && this.user.tarif !== 'free'
+      return ((this.canEditChecklist || this.task?.type === 3) && this.user.tarif !== 'free') || !this.$store.getters.isLicenseExpired
     },
     selectedTask () {
       return this.$store.state.tasks.selectedTask

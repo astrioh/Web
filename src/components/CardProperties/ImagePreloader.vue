@@ -19,7 +19,8 @@
   <a
     :href="imageSrc"
     target="_blank"
-    class="text-[#7E7E80] font-[500] leading-[15px] text-[13px] text-right mt-[8px]"
+    class="text-[#7E7E80] font-[500] leading-[15px] text-[13px] text-right mt-[8px] inline-block truncate w-full"
+    :title="fileName"
   >
     {{ fileName }}
   </a>

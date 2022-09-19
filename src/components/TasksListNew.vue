@@ -111,7 +111,6 @@
                   @changeStatus="onChangeStatus($event, props.node.info)"
                 />
               </div>
-
               <!-- Editable name -->
               <contenteditable
                 v-model="props.node.info.name"
@@ -792,8 +791,10 @@ export default {
         data.name = title
         this.$store.dispatch(TASK.CREATE_TASK, data)
           .then((resp) => {
-          // выделяем добавленную задачу
-          // и отображаем её свойства
+            // в респонсе uid_performer приходит пустым, поэтому пока оставил такой костыль
+            if (this.$route.name === 'tasksDelegateToMe' || this.$route.name === 'tasksDelegateByMe') { resp.data.uid_performer = data.uid_performer }
+            // выделяем добавленную задачу
+            // и отображаем её свойства
             this.nodeSelected({ id: data.uid, info: resp.data })
             if (this.$route.name === 'tasksToday') {
               this.$store.commit('addDot', new Date(data.date_begin))
