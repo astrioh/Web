@@ -34,7 +34,8 @@ import {
   NAVIGATOR_UPDATE_EMPLOYEE,
   NAVIGATOR_UPDATE_REGLAMENT,
   PATCH_SETTINGS,
-  PATCH_SETTINGS_SUCCESS
+  PATCH_SETTINGS_SUCCESS,
+  UPDATE_SETTINGS_VALUE
 } from '../actions/navigator'
 import { PUSH_PROJECT } from '../actions/projects'
 import { ADD_TASK_TAGS } from '../actions/tasks'
@@ -758,6 +759,9 @@ const mutations = {
   },
   [PATCH_SETTINGS_SUCCESS]: (state, resp) => {
     state.navigator.settings = resp
+  },
+  [UPDATE_SETTINGS_VALUE]: (state, { key, value }) => {
+    state.navigator.settings[key] = value
   },
   initInviteMe (state, data) {
     if (!('invite_me' in state.navigator)) state.navigator.invite_me = {}

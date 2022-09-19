@@ -18,6 +18,20 @@
       <PopMenu>
         <PropsButtonMenu />
         <template #menu>
+          <router-link :to="`/board/${selectedBoardUid}/form_settings`">
+            <PopMenuItem
+              icon="add"
+            >
+              Форма сбора заявок
+            </PopMenuItem>
+          </router-link>
+          <router-link :to="`/board/${selectedBoardUid}/stats`">
+            <PopMenuItem
+              icon="check"
+            >
+              Статистика доски
+            </PopMenuItem>
+          </router-link>
           <PopMenuItem
             v-if="isCanDelete"
             icon="delete"
@@ -181,7 +195,68 @@
       @reader="setMemberStatus(user.uid, 0)"
       @writer="setMemberStatus(user.uid, 2)"
     />
+    <div
+      class="mt-[30px] mb-[8px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Отдел
+    </div>
+    <div
+      v-if="!depsBoard.length"
+      class="grow w-7/12 font-roboto text-[15px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px] overflow-hidden text-ellipsis"
+    >
+      Общий для всех отделов
+    </div>
+    <PopMenu
+      v-if="isCanEdit && usersCanAddToAccess.length"
+      class="w-full"
+    >
+      <div
+        class="w-full h-[34px] gap-[5px] flex items-center text-[#4c4c4d] hover:text-[#4c4c4d]/75 cursor-pointer"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M8.66824 7.3379L8.67295 3.28854C8.67295 3.111 8.60243 2.94074 8.47689 2.8152C8.35135 2.68967 8.18109 2.61914 8.00356 2.61914C7.82602 2.61914 7.65576 2.68967 7.53022 2.8152C7.40469 2.94074 7.33416 3.111 7.33416 3.28853L7.33888 7.3379L3.28951 7.33319C3.11198 7.33319 2.94171 7.40371 2.81618 7.52925C2.69064 7.65478 2.62012 7.82505 2.62012 8.00258C2.62012 8.18011 2.69064 8.35038 2.81618 8.47591C2.94171 8.60145 3.11198 8.67197 3.28951 8.67197L7.33888 8.66726L7.33416 12.7166C7.3338 12.8046 7.35087 12.8918 7.38438 12.9732C7.41789 13.0546 7.46719 13.1285 7.52942 13.1908C7.59165 13.253 7.66559 13.3023 7.74696 13.3358C7.82834 13.3693 7.91555 13.3864 8.00356 13.386C8.09156 13.3864 8.17877 13.3693 8.26015 13.3358C8.34153 13.3023 8.41546 13.253 8.47769 13.1908C8.53993 13.1285 8.58922 13.0546 8.62273 12.9732C8.65624 12.8918 8.67331 12.8046 8.67295 12.7166L8.66824 8.66726L12.7176 8.67197C12.8056 8.67233 12.8928 8.65527 12.9742 8.62176C13.0556 8.58824 13.1295 8.53895 13.1917 8.47672C13.254 8.41449 13.3033 8.34055 13.3368 8.25917C13.3703 8.17779 13.3874 8.09059 13.387 8.00258C13.3874 7.91457 13.3703 7.82736 13.3368 7.74599C13.3033 7.66461 13.254 7.59067 13.1917 7.52844C13.1295 7.46621 13.0556 7.41692 12.9742 7.3834C12.8928 7.34989 12.8056 7.33283 12.7176 7.33319L8.66824 7.3379Z"
+            fill="currentColor"
+          />
+        </svg>
+        <div
+          class="font-roboto text-[13px] leading-[15px] font-medium"
+        >
+          Добавить отдел
+        </div>
+      </div>
+      <template #menu>
+        <div class="max-h-[220px] overflow-y-auto overflow-x-hidden w-[220px] scroll-style">
+          <BoardPropsMenuItemDeps
+            v-for="(dep,index) in allDepartments"
+            :key="dep.uid"
+            :dep-name="dep.name"
+            @click="addDepartment(index)"
+          />
+        </div>
+      </template>
+    </PopMenu>
+    <div
+      v-for="dep in depsBoard"
+      :key="dep.uid"
+    >
+      <BoardPropsMenuDepButton
+        :dep-name="dep.name"
+        :dep-status="dep.status"
+        @delete="deleteDepartment(dep.uid)"
+        @setAdmin="setDepartmentStatus(dep.uid,1)"
+        @setReader="setDepartmentStatus(dep.uid,0)"
+        @setWriter="setDepartmentStatus(dep.uid,2)"
+      />
+    </div>
   </div>
+
   <div v-else>
     <div class="flex justify-end items-center">
       <PropsButtonClose @click="closeProperties" />
@@ -206,6 +281,8 @@ import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vu
 
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
+import BoardPropsMenuItemDeps from '../Board/BoardPropsMenuItemDeps.vue'
+import BoardPropsMenuDepButton from '../Board/BoardPropsMenuDepButton.vue'
 
 export default {
   components: {
@@ -216,7 +293,9 @@ export default {
     PropsButtonMenu,
     PropsButtonClose,
     BoardPropsUserButton,
-    BoardPropsMenuItemUser
+    BoardPropsMenuItemUser,
+    BoardPropsMenuItemDeps,
+    BoardPropsMenuDepButton
   },
   data () {
     return {
@@ -262,6 +341,9 @@ export default {
       while (colors.length) arrColors.push(colors.splice(0, rowLength))
       return arrColors
     },
+    statuses () {
+      return ['Читатель', 'Администратор', 'Редактор']
+    },
     isFavorite () {
       return this.selectedBoard?.favorite
     },
@@ -294,7 +376,6 @@ export default {
       return this.selectedBoard?.type_access === 1
     },
     usersBoard () {
-      const statuses = ['Читатель', 'Администратор', 'Редактор']
       const users = []
       const employees = this.$store.state.employees.employees
       const members = this.selectedBoard?.members || {}
@@ -304,7 +385,7 @@ export default {
           users.push({
             uid: userUid,
             email: emp?.email,
-            status: statuses[members[userUid]]
+            status: this.statuses[members[userUid]]
           })
         }
       }
@@ -323,6 +404,37 @@ export default {
         }
       }
       return users
+    },
+    depsBoard () {
+      const allDeps = []
+      const deps = this.$store.state.departments.deps
+      const currentBoardDeps = this.selectedBoard.deps
+      for (const depUid in currentBoardDeps) {
+        const oneDep = deps[depUid]
+        allDeps.push({
+          uid: depUid,
+          name: oneDep.name,
+          status: this.statuses[currentBoardDeps[depUid]]
+        })
+      }
+      return allDeps
+    },
+    allDepartments () {
+      const deps = Object.values(this.$store.state.departments.deps)
+      deps.sort((item1, item2) => {
+        // сначала по порядку
+        if (item1.order > item2.order) return 1
+        if (item1.order < item2.order) return -1
+        // если одинаковый, то по имени
+        if (item1.name > item2.name) return 1
+        if (item1.name < item2.name) return -1
+        return 0
+      })
+      deps.unshift({
+        uid: '00000000-0000-0000-0000-000000000000',
+        name: 'Вне отдела'
+      })
+      return deps
     }
   },
   watch: {
@@ -348,6 +460,59 @@ export default {
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
           this.$router.push('/board')
         })
+    },
+    addDepartment (index) {
+      const dep = this.allDepartments[index]
+      if (
+        this.isCanEdit &&
+        this.selectedBoard?.deps &&
+        this.selectedBoard?.deps[dep.uid] === undefined
+      ) {
+        const deps = { ...this.selectedBoard.deps }
+        deps[dep.uid] = 0
+        this.selectedBoard.deps = deps
+        this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+          boardUid: this.selectedBoard.uid,
+          newDeps: deps
+        }).then((resp) => {
+          console.log('addBoardDepartment', resp, deps)
+        })
+      }
+    },
+    deleteDepartment (depUid) {
+      if (
+        this.isCanEdit &&
+        this.selectedBoard?.deps &&
+        this.selectedBoard?.deps[depUid] !== undefined
+      ) {
+        const deps = { ...this.selectedBoard.deps }
+        delete deps[depUid]
+        this.selectedBoard.deps = deps
+        this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+          boardUid: this.selectedBoard.uid,
+          newDeps: deps
+        }).then((resp) => {
+          console.log('deleteBoardDepartment', resp, deps)
+        })
+      }
+    },
+    setDepartmentStatus (depUid, status) {
+      if (
+        this.isCanEdit &&
+        this.selectedBoard?.deps &&
+        this.selectedBoard?.deps[depUid] !== undefined &&
+        this.selectedBoard?.deps[depUid] !== status
+      ) {
+        const deps = { ...this.selectedBoard.deps }
+        deps[depUid] = status
+        this.selectedBoard.deps = deps
+        this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
+          boardUid: this.selectedBoard.uid,
+          newDeps: deps
+        }).then((resp) => {
+          console.log('setStatusForDep', resp, deps)
+        })
+      }
     },
     favoriteToggle () {
       if (!this.isFavorite) {

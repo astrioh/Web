@@ -87,7 +87,7 @@ export default {
   components: {
     NavbarSearchLimit
   },
-  emits: ['search', 'change'],
+  emits: ['search', 'change', 'eraseSearch'],
   data: () => ({
     showSearchBar: false,
     showFreeModal: false,
@@ -126,6 +126,7 @@ export default {
       this.$nextTick(function () {
         this.$refs.searchInput.focus({ preventScroll: false })
       })
+      this.$emit('eraseSearch')
     },
     closeSearch () {
       this.searchText = ''

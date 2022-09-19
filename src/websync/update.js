@@ -13,6 +13,7 @@ import { updateTask } from '@/websync/task.js'
 import { removeTaskMessage } from '@/websync/task_message'
 import * as TYPES from '@/websync/types.js'
 import { updateCurrentUser } from '@/websync/user.js'
+import { updateClient } from '@/websync/clients.js'
 
 export default function processUpdate (obj) {
   switch (obj.type) {
@@ -86,6 +87,7 @@ export default function processUpdate (obj) {
       removeCardMessage(obj)
       break
     case TYPES.TYPE_OBJECT_CLIENT:
+      updateClient(obj)
       break
     case TYPES.TYPE_OBJECT_CLIENT_FILE:
       break

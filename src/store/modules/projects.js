@@ -63,6 +63,22 @@ const actions = {
         })
     })
   },
+  [PROJECT.CHANGE_PROJECT_DEPS]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const project = state.projects[data.projectUid]
+      if (!project) { return reject(new Error(`not find project ${data.projectUid}`)) }
+      project.deps = data.newDeps
+      console.log(project)
+      dispatch(PROJECT.UPDATE_PROJECT_REQUEST, project)
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          console.log(err)
+          reject(err)
+        })
+    })
+  },
   [PROJECT.UPDATE_PROJECT_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/projects'

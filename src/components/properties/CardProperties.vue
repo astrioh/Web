@@ -110,12 +110,17 @@
       </PopMenu>
     </div>
 
-    <div class="flex justify-start mb-[25px] space-x-[4px]">
+    <div class="flex flex-wrap justify-start items-center mb-[25px] gap-[4px]">
       <CardResponsibleUser
         :responsible="selectedCard?.user"
         :org-employees="orgEmployees"
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
+      />
+      <CardSetDate
+        :date-time="selectedCard.date_reminder"
+        :date-text="cardDateReminderText"
+        @changeDates="onChangeDates"
       />
       <CardBudget
         :budget="selectedCard?.cost"
@@ -184,6 +189,7 @@ import {
   CHANGE_CARD_COLOR,
   CHANGE_CARD_COVER,
   CHANGE_CARD_CLEAR_COVER,
+  CHANGE_CARD_DATE_REMINDER,
   DELETE_CARD
 } from '@/store/actions/cards'
 
@@ -194,6 +200,7 @@ import CardName from '@/components/CardProperties/CardName.vue'
 import CardCover from '@/components/CardProperties/CardCover.vue'
 import CardChat from '@/components/CardProperties/CardChat.vue'
 import CardResponsibleUser from '@/components/CardProperties/CardResponsibleUser.vue'
+import CardSetDate from '@/components/CardProperties/CardSetDate.vue'
 import CardOptions from '@/components/CardProperties/CardOptions.vue'
 import CardBudget from '@/components/CardProperties/CardBudget.vue'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput.vue'
@@ -227,7 +234,8 @@ export default {
     CardMessagesModalBoxLimit,
     MessageSkeleton,
     PropsButtonClose,
-    TaskPropertiesModalBoxFileSizeLimit
+    TaskPropertiesModalBoxFileSizeLimit,
+    CardSetDate
   },
   data () {
     return {
@@ -290,6 +298,13 @@ export default {
     },
     columns () {
       return [...this.columnsUser, ...this.columnsArchive]
+    },
+    cardDateReminderText () {
+      if (!this.selectedCard.date_reminder) {
+        return ''
+      } else {
+        return this.dateToLabelFormat(new Date(this.selectedCard.date_reminder))
+      }
     }
   },
   watch: {
@@ -299,6 +314,11 @@ export default {
     }
   },
   methods: {
+    dateToLabelFormat (calendarDate) {
+      const day = calendarDate.getDate()
+      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      return day + ' ' + month
+    },
     isFilePreloadable (fileExtension) {
       const preloadableFiles = ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'mov', 'mp4', 'mp3', 'wav']
       return preloadableFiles.includes(fileExtension)
@@ -434,11 +454,6 @@ export default {
       if (this.cardMessageInputValue <= 0) {
         return
       }
-      let msgcard = this.cardMessageInputValue
-      msgcard = msgcard.trim()
-      msgcard = msgcard.replaceAll('&', '&amp;')
-      msgcard = msgcard.replaceAll('>', '&gt;')
-      msgcard = msgcard.replaceAll('<', '&lt;')
       const uid = uuidv4()
       const data = {
         uid_card: this.selectedCard?.uid,
@@ -447,8 +462,8 @@ export default {
         date_create: new Date().toISOString(),
         uid_creator: this.user.current_user_uid,
         uid_quote: this.currentQuote?.uid ?? '',
-        text: msgcard,
-        msg: msgcard,
+        text: this.cardMessageInputValue,
+        msg: this.cardMessageInputValue,
         order: 0,
         deleted: 0
       }
@@ -551,6 +566,26 @@ export default {
         .then((resp) => {
           console.log('Card is moved')
         })
+    },
+    onChangeDates: function (dateTimeString) {
+      if (dateTimeString === '0001-01-01T00:00:00') {
+        this.$store.commit('CardSaveReminder', {
+          uid: this.selectedCard.uid,
+          uid_board: this.selectedCard.uid_board,
+          date_reminder: null,
+          uid_client: this.selectedCard.uid_client
+        })
+      } else {
+        this.$store.commit('CardSaveReminder', {
+          uid: this.selectedCard.uid,
+          uid_board: this.selectedCard.uid_board,
+          date_reminder: dateTimeString,
+          uid_client: this.selectedCard.uid_client
+        })
+
+        this.selectedCard.date_reminder = dateTimeString
+      }
+      this.$store.dispatch(CHANGE_CARD_DATE_REMINDER, this.selectedCard)
     }
   }
 }

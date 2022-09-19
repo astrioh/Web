@@ -1,7 +1,8 @@
 <template>
   <Popper
-    arrow
     class="pop-menu-light"
+    :class="boxShadowClass"
+    :arrow="arrow"
     :disabled="disabled"
     :placement="placement"
     @open:popper="openMenu"
@@ -34,9 +35,26 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    arrow: {
+      type: Boolean,
+      default: true
+    },
+    shadow: {
+      type: Boolean,
+      default: true
+    },
+    typeClass: {
+      type: String,
+      default: 'pop-menu-light'
     }
   },
   emits: ['openMenu', 'closeMenu'],
+  computed: {
+    boxShadowClass () {
+      return this.shadow ? 'pop-menu-light_shadow' : ''
+    }
+  },
   methods: {
     print (val) {
       console.log(val)
@@ -61,6 +79,9 @@ export default {
   --popper-theme-border-color: rgba(0, 0, 0, 0.12);
   --popper-theme-border-radius: 8px;
   --popper-theme-padding: 12px 8px;
+  --popper-theme-box-shadow: none;
+}
+.pop-menu-light_shadow {
   --popper-theme-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
 }
 </style>
