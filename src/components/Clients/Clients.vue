@@ -130,25 +130,35 @@ export default {
     },
     currentPageRouter () {
       return this.$route.query.page
+    },
+    searchQuery () {
+      return this.$route.query.search
     }
   },
   watch: {
     currentPageRouter () {
-      this.$store.dispatch(CLIENTS.GET_CLIENTS, { organization: this.user?.owner_email, page: this.$route.query.page || 0 })
+      this.requestClients()
+    },
+    searchQuery () {
+      this.requestClients()
     }
   },
   mounted () {
-    this.currentPage = this.$route.query.page && 0
-    const data = {
-      organization: this.user?.owner_email,
-      page: this.currentPage
-    }
-    if (this.$route.query.search) {
-      data.search = this.$route.query.search
-    }
-    this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+    this.requestClients()
   },
   methods: {
+    requestClients () {
+      this.currentPage = this.$route.query.page || 0
+
+      const data = {
+        organization: this.user?.owner_email,
+        page: this.currentPage
+      }
+      if (this.$route.query.search) {
+        data.search = this.$route.query.search
+      }
+      this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+    },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {

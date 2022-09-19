@@ -4,7 +4,7 @@
     title="Контакты"
   >
     <NavBarSearch
-      @change="onSearch"
+      @search="onSearch"
     />
   </NavBar>
 </template>
@@ -26,8 +26,7 @@ export default {
   },
   methods: {
     onSearch (text) {
-      // TODO: implement clients search
-      return text
+      this.$router.push({ path: '/clients', query: { search: text } })
     }
   }
 }
