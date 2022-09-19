@@ -132,8 +132,12 @@ export default {
   },
   data () {
     return {
-      currClientName: '',
-      currClient: {},
+      currClient: {
+        name: '',
+        phone: '',
+        email: '',
+        comment: ''
+      },
       showConfirm: false,
       showFilesOnly: false,
       currentQuote: false,
@@ -182,7 +186,9 @@ export default {
   },
   watch: {
     selectedClient (newval, oldval) {
-      this.currClient = newval
+      if (newval) {
+        this.currClient = newval
+      }
     }
   },
   mounted () {
