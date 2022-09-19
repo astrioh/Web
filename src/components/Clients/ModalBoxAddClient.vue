@@ -86,7 +86,7 @@ export default {
       return '50'
     },
     buttonSaveDisabled () {
-      return !this.validateNameField || !this.phone || !this.validateEmailField || !this.comment
+      return !this.validateNameField || !this.phone || !this.validateEmailField
     },
     validateNameField () {
       const minNameLength = 0
