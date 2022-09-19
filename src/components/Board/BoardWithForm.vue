@@ -6,7 +6,7 @@
     />
     <div class="flex flex-row">
       <form
-        class="p-5 bg-white rounded-xl w-[30%]"
+        class="p-5 bg-white rounded-xl w-[30%] shrink-0"
       >
         <input
           v-model="form.title"
@@ -188,6 +188,7 @@ export default {
       }
       this.$store.state.boardforms.boardForm = data
       this.form = data.info
+      this.showParams = true
       console.log(this.form)
     })
   },
