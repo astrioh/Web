@@ -346,9 +346,6 @@ const mutations = {
     state.showOnlyCardsWithNoResponsible = false
     state.showOnlyMyCreatedCards = false
     state.searchText = undefined
-  },
-  [BOARD.ADD_BOARD_DEPARTMENTS]: (state, data) => {
-    state.boards[data.boardUid].deps = { ...state.boards[data.boardUid].deps, [data.dep.uid]: data.dep }
   }
 }
 

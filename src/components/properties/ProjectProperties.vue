@@ -257,47 +257,26 @@
           {{ dep.name }}
         </div>
         <div class="flex-none">
-          <PopMenu :disabled="disabled">
-            <div
-              class="flex items-center text-[#7e7e80]"
-              :class="{ 'cursor-pointer hover:text-[#4c4c4d]': !disabled }"
+          <div
+            class="flex items-center text-[#7e7e80]"
+            :class="{ 'cursor-pointer hover:text-[#4c4c4d]': !disabled }"
+            @click="deleteDepartment(dep.uid)"
+          >
+            <svg
+              class="invisible"
+              :class="{ 'group-hover:visible': !disabled }"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <div class="mr-[4px] font-roboto text-[12px] leading-[20px]">
-                {{ dep.status }}
-              </div>
-              <svg
-                class="invisible -mt-3"
-                :class="{ 'group-hover:visible': !disabled }"
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M10.7603 3.56099C11.0027 3.80668 11.0001 4.2024 10.7544 4.44486L6.7011 8.44486C6.47139 8.67154 6.10687 8.68606 5.85986 8.47836L1.46875 4.78606C1.20456 4.56391 1.17047 4.16965 1.39262 3.90546C1.61477 3.64126 2.00903 3.60718 2.27322 3.82933L6.22845 7.15512L9.87642 3.55514C10.1221 3.31269 10.5178 3.31531 10.7603 3.56099Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </div>
-            <template #menu>
-              <PopMenuItem @click="clickAdmin">
-                Администратор
-              </PopMenuItem>
-              <PopMenuItem @click="clickWriter">
-                Редактор
-              </PopMenuItem>
-              <PopMenuItem @click="clickReader">
-                Читатель
-              </PopMenuItem>
-              <PopMenuDivider />
-              <PopMenuItem @click="clickDelete">
-                Удалить
-              </PopMenuItem>
-            </template>
-          </PopMenu>
+              <path
+                d="M11.1798 10.0034L14.7632 6.42841C14.9201 6.27149 15.0082 6.05866 15.0082 5.83674C15.0082 5.61483 14.9201 5.402 14.7632 5.24508C14.6062 5.08816 14.3934 5 14.1715 5C13.9496 5 13.7368 5.08816 13.5798 5.24508L10.0048 8.82841L6.42983 5.24508C6.27291 5.08816 6.06008 5 5.83817 5C5.61625 5 5.40342 5.08816 5.2465 5.24508C5.08958 5.402 5.00142 5.61483 5.00142 5.83674C5.00142 6.05866 5.08958 6.27149 5.2465 6.42841L8.82983 10.0034L5.2465 13.5784C5.16839 13.6559 5.1064 13.748 5.06409 13.8496C5.02178 13.9511 5 14.0601 5 14.1701C5 14.2801 5.02178 14.389 5.06409 14.4906C5.1064 14.5921 5.16839 14.6843 5.2465 14.7617C5.32397 14.8399 5.41614 14.9018 5.51768 14.9442C5.61923 14.9865 5.72816 15.0082 5.83817 15.0082C5.94818 15.0082 6.0571 14.9865 6.15865 14.9442C6.2602 14.9018 6.35236 14.8399 6.42983 14.7617L10.0048 11.1784L13.5798 14.7617C13.6573 14.8399 13.7495 14.9018 13.851 14.9442C13.9526 14.9865 14.0615 15.0082 14.1715 15.0082C14.2815 15.0082 14.3904 14.9865 14.492 14.9442C14.5935 14.9018 14.6857 14.8399 14.7632 14.7617C14.8413 14.6843 14.9033 14.5921 14.9456 14.4906C14.9879 14.389 15.0097 14.2801 15.0097 14.1701C15.0097 14.0601 14.9879 13.9511 14.9456 13.8496C14.9033 13.748 14.8413 13.6559 14.7632 13.5784L11.1798 10.0034Z"
+                fill="currentColor"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </div>
@@ -404,11 +383,11 @@ export default {
     selectedProject () {
       return this.$store.state.projects.selectedProject
     },
-    selectedProjectDep () {
-      return this.$store.state.projects.selectedProject?.deps
-    },
     selectedProjectUid () {
       return this.selectedProject?.uid || ''
+    },
+    selectedProjectDeps () {
+      return this.selectedProject?.deps || ''
     },
     selectedProjectName () {
       return this.selectedProject?.name || ''
@@ -466,10 +445,15 @@ export default {
     },
     depsProject () {
       const allDeps = []
-
-      for (const dep in this.selectedProject.deps) {
-        allDeps.push(this.selectedProject.deps[dep])
-      }
+      const deps = this.$store.state.departments.deps
+      this.selectedProjectDeps.map((depUid) => {
+        const oneDep = deps[depUid]
+        allDeps.push({
+          uid: depUid,
+          name: oneDep.name
+        })
+        return allDeps
+      })
       return allDeps
     }
   },
@@ -481,16 +465,9 @@ export default {
       }
     }
   },
-  mounted () {
-    // ТОЛЬКО ДЛЯ ОТОБРАЖЕНИЯ БЕЗ БЕКА, ПОТОМ УБРАТЬ
-    this.setDepsForProjects()
-  },
   methods: {
     print (msg, param) {
       console.log(msg, param)
-    },
-    setDepsForProjects () {
-      this.$store.state.projects.selectedProject.deps = {}
     },
     removeProject () {
       this.showConfirm = false
@@ -506,10 +483,30 @@ export default {
     },
     setDepartment (index) {
       const dep = this.allDepartments[index]
-      this.$store.commit(PROJECT.ADD_PROJECT_DEPARTMENTS, {
-        projectUid: this.selectedProject.uid,
-        dep: dep
-      })
+      if (this.isCanEdit &&
+        !this.selectedProjectDeps.includes(dep.uid)
+      ) {
+        const deps = [...this.selectedProjectDeps]
+        deps.push(dep.uid)
+        this.selectedProject.deps = deps
+        this.$store.dispatch(PROJECT.CHANGE_PROJECT_DEPS, {
+          projectUid: this.selectedProject.uid,
+          newDeps: deps
+        })
+      }
+    },
+    deleteDepartment (depUid) {
+      if (this.isCanEdit &&
+        this.selectedProjectDeps.includes(depUid)
+      ) {
+        const deps = [...this.selectedProjectDeps]
+        const filteredDeps = deps.filter(d => d !== depUid)
+        this.selectedProject.deps = filteredDeps
+        this.$store.dispatch(PROJECT.CHANGE_PROJECT_DEPS, {
+          projectUid: this.selectedProject.uid,
+          newDeps: filteredDeps
+        })
+      }
     },
     quitProject () {
       this.showConfirmQuit = false
