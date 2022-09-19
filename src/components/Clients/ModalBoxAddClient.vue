@@ -22,12 +22,19 @@
         :maxLength="maxLengthInput"
         class="bg-[#f4f5f7]/50 mb-3 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
       >
-      <span class="mb-1">Email</span>
-      <input
-        v-model="email"
-        type="text"
-        class="bg-[#f4f5f7]/50 mb-3 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
-      >
+      <div class="mb-3">
+        <span class="mb-1">Email</span>
+        <input
+          v-model="email"
+          type="text"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto border"
+          :class="onValidateField('email')"
+        >
+        <span
+          v-if="!validateEmailField"
+          class="text-[11px] text-[#dc2626]"
+        >Обязательное для заполнения</span>
+      </div>
       <span class="mb-1">Комментарий</span>
       <input
         v-model="comment"
@@ -72,7 +79,14 @@ export default {
       return '50'
     },
     buttonSaveDisabled () {
-      return !this.name || !this.phone || !this.email || !this.comment
+      return !this.name || !this.phone || !this.validateEmailField || !this.comment
+    },
+    validateEmailField () {
+      return String(this.email)
+        .toLowerCase()
+        .match(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        )
     }
   },
   methods: {
@@ -95,6 +109,17 @@ export default {
       this.phone = ''
       this.email = ''
       this.comment = ''
+    },
+    onValidateField (key) {
+      const defaultClass = 'border-[#4c4c4d] focus:border-[#ff9123]'
+      const errorClass = 'border-rose-500 focus:border-rose-500'
+
+      switch (key) {
+        case 'email':
+          return !this.validateEmailField ? errorClass : defaultClass
+        default:
+          return defaultClass
+      }
     }
   }
 }
