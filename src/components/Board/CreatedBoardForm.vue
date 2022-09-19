@@ -1,5 +1,8 @@
 <template>
-  <div class="h-full flex items-center justify-center max-w-[400px] mx-auto">
+  <div
+    v-if="showFormSended === false"
+    class="h-full flex items-center justify-center max-w-[400px] mx-auto"
+  >
     <div class="flex flex-col w-full bg-[#F9F9F9] p-[25px] shadow-2xl">
       <h1 class="mb-[15px] text-[30px] text-center text-[#777]">
         {{ item.title }}
@@ -40,6 +43,15 @@
       </button>
     </div>
   </div>
+  <div
+    v-if="showFormSended === true"
+    class="h-full flex items-center justify-center max-w-[600px] mx-auto"
+  >
+    <div class="flex justify-center items-center flex-col w-full rounded-[8px] bg-[#F9F9F9] p-[25px] shadow-2xl">
+      <span>Форма успешно отправлена</span>
+      <span v-if="showRedirectText">Через несколько секунд произойдет редирект</span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -49,6 +61,8 @@ import * as BOARD_FORMS from '@/store/actions/boardforms'
 export default {
   data () {
     return {
+      showFormSended: false,
+      showRedirectText: false,
       showInput1: true,
       showInput2: true,
       showInput3: true,
@@ -105,8 +119,15 @@ export default {
         comment: this.modelInput2 + ', ' + this.modelInput3 + ', ' + this.modelInput4
       }
       this.$store.dispatch(BOARD.SEND_BOARD_FORM_REQUEST, data).then(() => {
+        console.log('send success')
         if (this.item.redirectLink.length > 0) {
-          window.location.href = this.item.redirectLink
+          this.showFormSended = true
+          this.showRedirectText = true
+          setTimeout(() => {
+            window.location.href = this.item.redirectLink
+          }, 5000)
+        } else {
+          this.showFormSended = true
         }
       })
     }
