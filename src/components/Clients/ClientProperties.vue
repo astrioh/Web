@@ -40,19 +40,6 @@
     <div
       class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
     >
-      Email
-    </div>
-    <input
-      v-model="currClient.email"
-      type="text"
-      maxlength="50"
-      placeholder="Email"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
-      @blur="updateClient"
-    >
-    <div
-      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
-    >
       Телефон
     </div>
     <input
@@ -60,6 +47,19 @@
       type="text"
       maxlength="50"
       placeholder="Телефон"
+      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      @blur="updateClient"
+    >
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Email
+    </div>
+    <input
+      v-model="currClient.email"
+      type="text"
+      maxlength="50"
+      placeholder="Email"
       class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
