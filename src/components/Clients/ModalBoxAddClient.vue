@@ -22,6 +22,20 @@
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
       </div>
+      <div class="mb-3">
+        <span class="mb-1">Телефон</span>
+        <input
+          v-model="phone"
+          type="text"
+          :maxLength="maxLengthInput"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="onValidateField('phone')"
+        >
+        <span
+          v-if="!validatePhoneField"
+          class="text-[11px] text-[#dc2626]"
+        >Обязательное для заполнения</span>
+      </div>
       <span class="mb-1">Телефон</span>
       <input
         v-model="phone"
@@ -86,13 +100,17 @@ export default {
       return '50'
     },
     buttonSaveDisabled () {
-      return !this.validateNameField || !this.phone || !this.validateEmailField
+      return !this.validateNameField || !this.validatePhoneField || !this.validateEmailField
     },
     validateNameField () {
       const minNameLength = 0
       const maxNameLength = 50
 
       return this.name.length > minNameLength && this.name.length < maxNameLength
+    },
+    validatePhoneField () {
+      // eslint-disable-next-line no-useless-escape
+      return this.phone.toLowerCase().match(/^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/)
     },
     validateEmailField () {
       return String(this.email)
@@ -130,6 +148,8 @@ export default {
       switch (key) {
         case 'name':
           return !this.validateNameField ? errorClass : defaultClass
+        case 'phone':
+          return !this.validatePhoneField ? errorClass : defaultClass
         case 'email':
           return !this.validateEmailField ? errorClass : defaultClass
         default:
