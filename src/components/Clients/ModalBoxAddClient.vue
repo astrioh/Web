@@ -7,14 +7,21 @@
     @cancel="onCancel"
   >
     <div class="flex flex-col w-full">
-      <span class="mb-1">Имя</span>
-      <input
-        ref="inputValue"
-        v-model="name"
-        type="text"
-        :maxLength="maxLengthInput"
-        class="bg-[#f4f5f7]/50 mb-3 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
-      >
+      <div class="mb-3">
+        <span class="mb-1">Имя</span>
+        <input
+          ref="inputValue"
+          v-model="name"
+          type="text"
+          :maxLength="maxLengthInput"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="onValidateField('name')"
+        >
+        <span
+          v-if="!validateNameField"
+          class="text-[11px] text-[#dc2626]"
+        >Обязательное для заполнения</span>
+      </div>
       <span class="mb-1">Телефон</span>
       <input
         v-model="phone"
@@ -79,7 +86,13 @@ export default {
       return '50'
     },
     buttonSaveDisabled () {
-      return !this.name || !this.phone || !this.validateEmailField || !this.comment
+      return !this.validateNameField || !this.phone || !this.validateEmailField || !this.comment
+    },
+    validateNameField () {
+      const minNameLength = 0
+      const maxNameLength = 50
+
+      return this.name.length > minNameLength && this.name.length < maxNameLength
     },
     validateEmailField () {
       return String(this.email)
@@ -115,6 +128,8 @@ export default {
       const errorClass = 'border-rose-500 focus:border-rose-500'
 
       switch (key) {
+        case 'name':
+          return !this.validateNameField ? errorClass : defaultClass
         case 'email':
           return !this.validateEmailField ? errorClass : defaultClass
         default:
