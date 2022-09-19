@@ -12,6 +12,8 @@ import { removeColor } from '@/websync/colors_dop.js'
 import { removeParentTag, removeTag } from '@/websync/tag'
 import { removeDepartment } from '@/websync/departments'
 import { removeBoard } from '@/websync/board'
+import { removeClient } from '@/websync/clients'
+import { removeClientChatMessage } from '@/websync/clients_chat'
 
 export default function processRemove (obj) {
   switch (obj.type) {
@@ -84,10 +86,12 @@ export default function processRemove (obj) {
     case TYPES.TYPE_OBJECT_CARD_MSG:
       break
     case TYPES.TYPE_OBJECT_CLIENT:
+      removeClient(obj.uid)
       break
     case TYPES.TYPE_OBJECT_CLIENT_FILE:
       break
     case TYPES.TYPE_OBJECT_CLIENT_MSG:
+      removeClientChatMessage(obj)
       break
     case TYPES.TYPE_OBJECT_CLIENT_EXT_FIELD:
       break
