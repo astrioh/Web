@@ -71,6 +71,35 @@
         @click.stop="clickAddProject"
       />
     </template>
+    <div v-if="allDepartments.length">
+      <div
+        v-for="dep in allDepartments"
+        :key="dep.uid"
+      >
+        <AsideMenuListTitle
+          v-if="isDepProjectsAreAvalible(dep.uid)"
+        >
+          {{ dep.name }}
+        </AsideMenuListTitle>
+
+        <template
+          v-for="project in commonProjects"
+          :key="project.uid"
+        >
+          <router-link
+            v-if="isProjectInCurrDepartment(project, dep.uid)"
+            v-slot="{ isActive }"
+            :to="'/project/' + project.uid"
+          >
+            <ProjectsSubmenuItem
+              :selected="isActive"
+              :project="project"
+              @click="closeMenu"
+            />
+          </router-link>
+        </template>
+      </div>
+    </div>
     <AsideMenuListTitle v-if="commonProjects.length">
       Общие проекты
     </AsideMenuListTitle>
@@ -151,8 +180,28 @@ export default {
     privateProjects () {
       return this.storeNavigator?.new_private_projects[0].items ?? []
     },
+    allDepartments () {
+      const deps = Object.values(this.$store.state.departments.deps)
+      deps.sort((item1, item2) => {
+        // сначала по порядку
+        if (item1.order > item2.order) return 1
+        if (item1.order < item2.order) return -1
+        // если одинаковый, то по имени
+        if (item1.name > item2.name) return 1
+        if (item1.name < item2.name) return -1
+        return 0
+      })
+      deps.unshift({
+        uid: '00000000-0000-0000-0000-000000000000',
+        name: 'Вне отдела'
+      })
+      return deps
+    },
     commonProjects () {
       return this.storeNavigator?.new_private_projects[1].items ?? []
+    },
+    employees () {
+      return this.$store.state.employees.employees
     }
   },
   methods: {
@@ -197,6 +246,12 @@ export default {
           this.$store.state.navigator.submenu.status = false
         })
       }
+    },
+    isProjectInCurrDepartment (project, depUid) {
+      return project?.deps.includes(depUid)
+    },
+    isDepProjectsAreAvalible (depUid) {
+      return this.employees[this.user.current_user_uid].uid_dep === depUid
     },
     clickAddProject () {
       // если лицензия истекла
