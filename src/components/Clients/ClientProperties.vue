@@ -21,32 +21,17 @@
     </PopMenu>
     <PropsButtonClose @click="closeProperties" />
   </div>
-  <div
-    v-if="ClientStub"
-    class="flex-none mt-[20px] w-[82px] h-[82px] bg-cover bg-center bg-origin-content bg-clip-content rounded-[14px]"
-    :style="{
-      'background-image': `url(${ClientStub})`
-    }"
-  />
   <div class="flex flex-col">
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Имя
+    </div>
     <input
       v-model="currClient.name"
       type="text"
       maxlength="50"
       placeholder="Имя"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
-      @blur="updateClient"
-    >
-    <div
-      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
-    >
-      Email
-    </div>
-    <input
-      v-model="currClient.email"
-      type="text"
-      maxlength="50"
-      placeholder="Email"
       class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
@@ -60,6 +45,19 @@
       type="text"
       maxlength="50"
       placeholder="Телефон"
+      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      @blur="updateClient"
+    >
+    <div
+      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+    >
+      Email
+    </div>
+    <input
+      v-model="currClient.email"
+      type="text"
+      maxlength="50"
+      placeholder="Email"
       class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
@@ -132,8 +130,12 @@ export default {
   },
   data () {
     return {
-      currClientName: '',
-      currClient: {},
+      currClient: {
+        name: '',
+        phone: '',
+        email: '',
+        comment: ''
+      },
       showConfirm: false,
       showFilesOnly: false,
       currentQuote: false,
@@ -155,9 +157,6 @@ export default {
         this.selectedEmployeeType !== 1 &&
         !this.isSelectedEmployeeCurrentUser
       )
-    },
-    ClientStub () {
-      return 'https://mobimg.b-cdn.net/v3/fetch/21/215e3ddf9d2d722a16e435992d354932.jpeg?h=900&r=0.5'
     },
     selectedClient () {
       return this.$store.state.clients.selectedClient
@@ -182,7 +181,9 @@ export default {
   },
   watch: {
     selectedClient (newval, oldval) {
-      this.currClient = newval
+      if (newval) {
+        this.currClient = newval
+      }
     }
   },
   mounted () {
