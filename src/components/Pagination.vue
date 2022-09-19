@@ -68,7 +68,7 @@ export default {
       this.$emit('update:modelValue', this.totalPages)
     },
     isPageActive (page) {
-      return this.currentPage === page
+      return this.currentPage.toString() === page.toString()
     }
   }
 }
