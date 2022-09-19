@@ -10,7 +10,7 @@
     class="pt-[8px]"
   />
   <div
-    class="bg-white rounded-xl h-[80%] px-[40px] py-[20px]"
+    class="bg-white rounded-xl min-h-[80%] px-[40px] py-[20px]"
   >
     <table>
       <tr>
