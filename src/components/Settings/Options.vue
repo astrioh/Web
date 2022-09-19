@@ -100,27 +100,55 @@
         Напоминание о задаче за:
       </p>
       <div class="flex mt-2">
-        <select
-          v-model="settings.reminders_in_n_minutes"
-          class="border border-gray-300 p-2 w-40 rounded-md text-sm custom-select"
-          @change="updateSettings"
+        <PopMenu
+          :arrow="false"
+          :shadow="false"
         >
-          <option value="0">
-            0 мин
-          </option>
-          <option value="10">
-            10 мин
-          </option>
-          <option value="15">
-            15 мин
-          </option>
-          <option value="30">
-            30 мин
-          </option>
-          <option value="60">
-            60 мин
-          </option>
-        </select>
+          <div
+            class="custom-select border p-2 w-40 rounded-md text-sm cursor-pointer"
+          >
+            {{ settings.reminders_in_n_minutes }} мин
+          </div>
+          <template
+            #menu
+          >
+            <PopMenuItem
+              class="w-[140px]"
+              :class="activeClassRemiderMinute(0)"
+              @click="updateSettingsValue('reminders_in_n_minutes', 0)"
+            >
+              0 мин
+            </PopMenuItem>
+            <PopMenuItem
+              class="w-[140px]"
+              :class="activeClassRemiderMinute(10)"
+              @click="updateSettingsValue('reminders_in_n_minutes', 10)"
+            >
+              10 мин
+            </PopMenuItem>
+            <PopMenuItem
+              class="w-[140px]"
+              :class="activeClassRemiderMinute(15)"
+              @click="updateSettingsValue('reminders_in_n_minutes', 15)"
+            >
+              15 мин
+            </PopMenuItem>
+            <PopMenuItem
+              class="w-[140px]"
+              :class="activeClassRemiderMinute(30)"
+              @click="updateSettingsValue('reminders_in_n_minutes', 30)"
+            >
+              30 мин
+            </PopMenuItem>
+            <PopMenuItem
+              class="w-[140px]"
+              :class="activeClassRemiderMinute(60)"
+              @click="updateSettingsValue('reminders_in_n_minutes', 60)"
+            >
+              60 мин
+            </PopMenuItem>
+          </template>
+        </PopMenu>
       </div>
     </div>
   </form>
@@ -128,11 +156,17 @@
 
 <script>
 import { UPDATE_SOUND_SETTING } from '@/store/actions/inspector'
-import { PATCH_SETTINGS } from '@/store/actions/navigator'
+import { PATCH_SETTINGS, UPDATE_SETTINGS_VALUE } from '@/store/actions/navigator'
 import NavBar from '@/components/Navbar/NavBar'
+import PopMenu from '@/components/Common/PopMenu.vue'
+import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 
 export default {
-  components: { NavBar },
+  components: {
+    NavBar,
+    PopMenu,
+    PopMenuItem
+  },
   data () {
     return {
       isNotificationSoundOn: this.$store.state.inspector.is_notification_sound_on,
@@ -180,6 +214,12 @@ export default {
         compact_mode: this.settings.compact_mode ? 1 : 0
       }
       this.$store.dispatch(PATCH_SETTINGS, data)
+    },
+    updateSettingsValue (key, value) {
+      this.$store.commit(UPDATE_SETTINGS_VALUE, { key, value })
+    },
+    activeClassRemiderMinute (value) {
+      return this.settings.reminders_in_n_minutes === value ? 'text-[#007BE5]' : ''
     }
   }
 }
@@ -245,7 +285,7 @@ export default {
 /* remove the original arrow */
 .custom-select {
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,0.17);
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
