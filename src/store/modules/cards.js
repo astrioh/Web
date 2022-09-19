@@ -382,9 +382,6 @@ const mutations = {
     state.cards.forEach((stage) => {
       const index = stage.cards.findIndex((crd) => crd.uid === card.uid)
       if (index !== -1) {
-        // Не бейтет это костыль
-        card.date_reminder = state.cards[index].date_reminder
-        card.uid_client = state.cards[index].uid_client
         // удаляем
         stage.cards.splice(index, 1)
       }
