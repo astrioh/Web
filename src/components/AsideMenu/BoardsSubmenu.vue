@@ -217,7 +217,8 @@ export default {
       return board?.deps[depUid]
     },
     isDepBoardsAreAvalible (depUid) {
-      return this.employees[this.user.current_user_uid].uid_dep === depUid
+      const isDepUidInBoards = this.commonBoards.find(item => item?.deps[depUid]) !== undefined
+      return this.employees[this.user.current_user_uid].uid_dep === depUid && isDepUidInBoards
     },
     onAddNewBoard (name) {
       this.showAddBoard = false
