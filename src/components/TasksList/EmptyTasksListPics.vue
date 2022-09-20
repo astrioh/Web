@@ -49,7 +49,7 @@
         v-if="!displayModal"
         class="mb-[35px]"
       >
-        <p class="text-xl font-medium mt-10 text-center">
+        <p class="text-xl text-[#3D3E40] font-medium mt-10 text-center">
           Задач пока нет.<br> Создайте задачи на сегодня или запланируйте завтрашний день.
         </p>
         <div class="grid grid-cols-1">
