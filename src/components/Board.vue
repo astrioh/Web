@@ -526,7 +526,7 @@ export default {
     },
     handleCardsScroll (event, columnUid, cardsLength) {
       const { scrollTop, offsetHeight, scrollHeight } = event.target
-      console.log(scrollTop, offsetHeight, scrollHeight)
+
       if ((scrollTop + offsetHeight) >= scrollHeight && this.cardQuantityByColumns[columnUid] < cardsLength) {
         this.cardQuantityByColumns[columnUid] += 50
       }
