@@ -33,7 +33,6 @@ const actions = {
         process.env.VUE_APP_INSPECTOR_API + 'clients'
       axios({ url: url, method: 'POST', data: client })
         .then((resp) => {
-          commit(CLIENTS.ADD_NEW_CLIENT, client)
           resolve(resp)
         })
         .catch((err) => {

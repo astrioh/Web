@@ -158,6 +158,11 @@ export default {
         data.search = this.$route.query.search
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+        .then(() => {
+          if (this.showAddClient) {
+            this.showAddClient = false
+          }
+        })
     },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
@@ -181,7 +186,7 @@ export default {
       }
       this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
         .then(() => {
-          this.showAddClient = false
+          this.requestClients()
         })
     },
     changePage () {

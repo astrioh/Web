@@ -126,13 +126,6 @@ export default {
         comment: this.comment
       }
       this.$emit('save', data)
-      this.onClear()
-    },
-    onClear () {
-      this.name = ''
-      this.phone = ''
-      this.email = ''
-      this.comment = ''
     },
     onValidateField (key) {
       const defaultClass = 'border-[#4c4c4d] focus:border-[#ff9123]'
