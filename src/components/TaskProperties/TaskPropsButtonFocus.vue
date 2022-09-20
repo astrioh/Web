@@ -18,7 +18,7 @@
         fill="#F2543F"
       />
     </svg>
-    <span class="rounded"> В фокусе</span>
+    <span class="rounded font-medium text-[#575758]"> В фокусе</span>
     <button
       class="btn-close-popover"
       @click="onClick"
@@ -57,7 +57,7 @@
         fill-opacity="0.5"
       />
     </svg>
-    <span class="rounded"> В фокус</span>
+    <span class="rounded font-medium text-[#575758]"> В фокус</span>
   </div>
 </template>
 

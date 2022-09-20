@@ -104,7 +104,7 @@
             fill-opacity="1"
           />
         </svg>
-        <span class="rounded truncate max-w-[300px]">{{
+        <span class="rounded truncate max-w-[300px] font-medium text-[#575758]">{{
           tags[key]?.name ?? '???'
         }}</span>
         <button
@@ -211,7 +211,7 @@
           fill-opacity="0.5"
         />
       </svg>
-      <span class="rounded">Метки</span>
+      <span class="rounded font-medium text-[#575758]">Метки</span>
     </button>
   </Popper>
 </template>
