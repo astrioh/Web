@@ -104,8 +104,7 @@ const mutations = {
     }
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {
-    // state.messages.push(data)
-    console.log(state.messages)
+    state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {
     state.status = 'loading'
