@@ -213,10 +213,10 @@
       <!-- Show all -->
       <!-- Chat messages -->
       <MessageSkeleton
-        v-if="status == 'loading'"
+        v-if="status == 'loading' && selectedTask?.has_msgs"
       />
       <TaskPropsChatMessages
-        v-if="taskMessages?.length && status=='success'"
+        v-if="taskMessages?.length && status=='success' && selectedTask?.has_msgs"
         id="content"
         :task-messages="taskMessages"
         :current-user-uid="user?.current_user_uid"

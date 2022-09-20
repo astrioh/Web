@@ -715,9 +715,13 @@ const actions = {
       dispatch(TASK.CHANGE_TASK_READ, data.uid)
     }
 
-    commit(REFRESH_FILES)
-    commit(REFRESH_CHAT_MESSAGES)
-    commit(REFRESH_INSPECTOR_MESSAGES)
+    if (data.has_msgs) {
+      commit(REFRESH_CHAT_MESSAGES)
+      commit(REFRESH_INSPECTOR_MESSAGES)
+    }
+    if (data.has_files) {
+      commit(REFRESH_FILES)
+    }
     commit(REFRESH_MESSAGES)
     commit(TASK.SELECT_TASK, data)
 
