@@ -186,7 +186,7 @@ export default {
       }
       this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
         .then(() => {
-          this.requestClients()
+          this.$router.push({ path: '/clients', query: { page: this.paging.pages - 1 } })
         })
     },
     changePage () {
