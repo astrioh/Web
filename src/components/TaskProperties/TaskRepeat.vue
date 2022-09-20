@@ -408,7 +408,7 @@
     <div>
       <div
         v-if="selectedTask.SeriesEnd !== ''"
-        class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close"
+        class="mt-3 tags-custom dark:bg-gray-800 dark:text-gray-100 project-hover-close font-medium text-[#575758]"
         :style="{
           cursor:
             selectedTask.type !== 1 && selectedTask.type !== 2

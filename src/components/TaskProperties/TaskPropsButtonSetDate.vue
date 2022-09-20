@@ -342,7 +342,7 @@
             />
           </svg>
         </button>
-        <span>{{ dateText }}</span>
+        <span class="font-medium text-[#575758]">{{ dateText }}</span>
         <button
           class="btn-close-popover"
           @click.stop="resetCalendar"
@@ -462,7 +462,7 @@
             />
           </svg>
         </button>
-        <span>Выбрать дату</span>
+        <span class="font-medium text-[#575758]">Выбрать дату</span>
       </span>
     </a>
   </Popper>

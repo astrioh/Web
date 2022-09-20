@@ -174,7 +174,7 @@
               fill-opacity="0.5"
             />
           </svg>
-          <span class="rounded"> Чек-лист</span>
+          <span class="rounded font-medium text-[#575758]"> Чек-лист</span>
         </div>
         <!-- Фокус -->
         <TaskPropsButtonFocus
