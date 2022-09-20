@@ -6,7 +6,7 @@
     />
     <div class="flex flex-row">
       <form
-        class="p-5 bg-white rounded-xl w-[30%] shrink-0"
+        class="p-5 bg-white rounded-xl w-[30%] shrink-0 self-start"
       >
         <input
           v-model="form.title"
@@ -118,6 +118,19 @@
         class="ml-10 mt-2"
       >
         <div class="mb-10">
+          <p>HTML-код:</p>
+          <span
+            class="bg-white p-3 leading-[50px] rounded-[8px]"
+            v-text="iframeHtml"
+          />
+          <button
+            class="mt-3 focus:ring min-w-[90px] focus:outline-none flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto"
+            @click="copyIframeHtml"
+          >
+            Копировать HTML код
+          </button>
+        </div>
+        <div class="mb-10">
           <span>Ссылка на форму: </span>
           <router-link
             target="_blank"
@@ -195,6 +208,9 @@ export default {
   computed: {
     boardForm () {
       return this.$store.state.boardforms.boardForm
+    },
+    iframeHtml () {
+      return `<iframe src="http://localhost:8080/form/${this.$route.params.board_id}?frame=true" title="Контакт" width="400" height="332" scrolling="no" frameBorder="0"></iframe>`
     }
   },
   mounted () {
@@ -273,6 +289,9 @@ export default {
       this.$store.state.boardforms.boardForm = data
       console.log(this.$store.state.boardforms.boardForm)
       this.showParams = true
+    },
+    copyIframeHtml () {
+      navigator.clipboard.writeText(this.iframeHtml)
     }
   }
 }
