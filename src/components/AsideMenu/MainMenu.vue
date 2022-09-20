@@ -133,7 +133,7 @@
         </svg>
       </AsideMenuListItem>
       <router-link
-        to="/clients"
+        to="/clients?page=1"
       >
         <AsideMenuListItem
           :selected="isPathSelected('clients')"
