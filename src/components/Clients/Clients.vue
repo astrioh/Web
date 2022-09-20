@@ -148,8 +148,11 @@ export default {
   },
   methods: {
     requestClients () {
+      if (this.$route.query.page < 1) {
+        this.$router.push('/clients?page=1')
+        this.$route.query.page = 1
+      }
       this.currentPage = this.$route.query.page || 1
-
       const data = {
         organization: this.user?.owner_email,
         page: this.currentPage
