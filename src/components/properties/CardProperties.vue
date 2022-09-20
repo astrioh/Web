@@ -1,4 +1,5 @@
 <template>
+  <pre class="text-[9px] leading-none">{{ selectedCard }}</pre>
   <BoardModalBoxDelete
     v-if="showDeleteCard"
     title="Удалить карточку"
@@ -117,6 +118,12 @@
         :can-edit="canEdit"
         @changeResponsible="changeResponsible"
       />
+      <CardClient
+        :client-uid="selectedCard?.uid_client"
+        :client-name="selectedCard?.client_name"
+        :can-edit="canEdit"
+        @changeClient="onChangeClient"
+      />
       <CardSetDate
         :date-time="selectedCard.date_reminder"
         :date-text="cardDateReminderText"
@@ -190,6 +197,7 @@ import {
   CHANGE_CARD_COVER,
   CHANGE_CARD_CLEAR_COVER,
   CHANGE_CARD_DATE_REMINDER,
+  CHANGE_CARD_UID_CLIENT,
   DELETE_CARD
 } from '@/store/actions/cards'
 
@@ -200,6 +208,7 @@ import CardName from '@/components/CardProperties/CardName.vue'
 import CardCover from '@/components/CardProperties/CardCover.vue'
 import CardChat from '@/components/CardProperties/CardChat.vue'
 import CardResponsibleUser from '@/components/CardProperties/CardResponsibleUser.vue'
+import CardClient from '@/components/CardProperties/CardClient.vue'
 import CardSetDate from '@/components/CardProperties/CardSetDate.vue'
 import CardOptions from '@/components/CardProperties/CardOptions.vue'
 import CardBudget from '@/components/CardProperties/CardBudget.vue'
@@ -224,6 +233,7 @@ export default {
     CardCover,
     CardChat,
     CardResponsibleUser,
+    CardClient,
     CardOptions,
     CardBudget,
     CardMessageInput,
@@ -566,6 +576,12 @@ export default {
         .then((resp) => {
           console.log('Card is moved')
         })
+    },
+    onChangeClient (payload) {
+      const [uid, name] = payload
+      this.selectedCard.uid_client = uid
+      this.selectedCard.client_name = name
+      this.$store.dispatch(CHANGE_CARD_UID_CLIENT, this.selectedCard)
     },
     onChangeDates: function (dateTimeString) {
       if (dateTimeString === '0001-01-01T00:00:00') {
