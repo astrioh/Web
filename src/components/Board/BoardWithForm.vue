@@ -84,6 +84,7 @@
         <input
           v-model="form.button_text"
           class="bg-[#f4f5f7]/50 mb-[10px] rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="errors.inputs.includes('button_text') ? 'border-red-500' : 'border-[#4c4c4d]'"
           name="button_text"
           placeholder="Надпись на кнопке"
           icon-class="cursor-pointer"
@@ -245,10 +246,14 @@ export default {
       this.errors.messages = []
       let inputsValidateError = false
       // Массив инпутов которые валидируем
-      const inputs = ['name', 'phone', 'email', 'comment']
+      const inputs = ['name', 'phone', 'email', 'comment', 'button_text']
       // Цикл, который проходит по всем инпутам для валидации и генерирует ошибку, если поля с галочкой, но пустые
       inputs.forEach(inputName => {
         if (this.form[inputName].visible && !this.form[inputName].text) {
+          this.errors.inputs.push(inputName)
+          inputsValidateError = true
+        }
+        if (!this.form[inputName]) {
           this.errors.inputs.push(inputName)
           inputsValidateError = true
         }
@@ -256,7 +261,7 @@ export default {
       // Общий текст ошибки для пустых инпутов
       if (inputsValidateError) {
         this.errors.messages.push('Форма не сохранена')
-        this.errors.messages.push('Поля напротив которых стоит "галочка" – должны быть обязательно заполнены')
+        this.errors.messages.push('Поля должны быть обязательно заполнены')
       }
     },
     clickSaveForm () {
