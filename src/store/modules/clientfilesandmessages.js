@@ -5,7 +5,7 @@ import store from '@/store/index.js'
 const state = {
   messages: [],
   files: [],
-  status: 'success'
+  status: 'loading'
 }
 
 const getters = {}
@@ -18,6 +18,7 @@ const actions = {
         .then(resp => {
           console.log('msgs', resp)
           commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
+          commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_SUCCESS, resp)
           resolve(resp)
         }).catch(err => {
           reject(err)
@@ -103,7 +104,8 @@ const mutations = {
     }
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {
-    state.messages.push(data)
+    // state.messages.push(data)
+    console.log(state.messages)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {
     state.status = 'loading'
