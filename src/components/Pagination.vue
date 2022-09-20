@@ -8,7 +8,7 @@
       :disabled="isPageActive(page.number) || disabled"
       @click="onClickPage(page.number)"
     >
-      {{ page.number }}
+      {{ page.number + 1 }}
     </button>
   </div>
 </template>
