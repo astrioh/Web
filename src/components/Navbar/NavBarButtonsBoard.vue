@@ -201,6 +201,7 @@ export default {
           favorite: 0,
           stages: [],
           children: [],
+          deps: [],
           members
         }
         console.log(`create board uid: ${board.uid}`, board)
