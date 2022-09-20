@@ -8,7 +8,7 @@
       :disabled="isPageActive(page.number) || disabled"
       @click="onClickPage(page.number)"
     >
-      {{ page.number + 1 }}
+      {{ page.number }}
     </button>
   </div>
 </template>
@@ -41,7 +41,7 @@ export default {
     pages () {
       const range = []
 
-      for (let i = 0; i < this.totalPages; i++) {
+      for (let i = 1; i <= this.totalPages; i++) {
         range.push({
           number: i,
           isDisabled: i === this.currentPage

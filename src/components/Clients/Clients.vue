@@ -109,7 +109,7 @@ export default {
   data () {
     return {
       showAddClient: false,
-      currentPage: 0
+      currentPage: 1
     }
   },
   computed: {
@@ -148,7 +148,7 @@ export default {
   },
   methods: {
     requestClients () {
-      this.currentPage = this.$route.query.page || 0
+      this.currentPage = this.$route.query.page || 1
 
       const data = {
         organization: this.user?.owner_email,

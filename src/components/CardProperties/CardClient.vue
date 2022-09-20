@@ -157,14 +157,14 @@ export default {
     requestClients () {
       const data = {
         organization: this.user?.owner_email,
-        page: 0
+        page: 1
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
     },
     searchClients (text) {
       const data = {
         organization: this.user?.owner_email,
-        page: 0,
+        page: 1,
         search: text
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
