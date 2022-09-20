@@ -83,10 +83,7 @@ const actions = {
   },
   [CARD.CHANGE_CARD_RESPONSIBLE_USER]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/card/responsible?uid=' +
-        data.cardUid
+      const url = process.env.VUE_APP_INSPECTOR_API + 'card/responsible?uid=' + data.cardUid
       axios({ url: url, method: 'PATCH', data: { user: data.email } })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data)
