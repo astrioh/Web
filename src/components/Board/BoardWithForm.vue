@@ -139,6 +139,12 @@
           >
             <span class="underline text-blue-500 hover:text-blue-800">http://localhost:8080/form/{{ $route.params.board_id }}</span>
           </router-link>
+          <button
+            class="mt-3 focus:ring min-w-[90px] focus:outline-none flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto"
+            @click="copyFormLink"
+          >
+            Копировать ссылку
+          </button>
         </div>
         <div class="mb-10">
           <span>JSON API: </span>
@@ -146,6 +152,12 @@
             class="underline text-blue-500 hover:text-blue-800"
             :href="'https://web.leadertask.com/api/boardsforms/addboardleadbyjson?uid_board=' + $route.params.board_id"
           >https://web.leadertask.com/api/boardsforms/addboardleadbyjson?uid_board={{ $route.params.board_id }}</a>
+          <button
+            class="mt-3 focus:ring min-w-[90px] focus:outline-none flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto"
+            @click="copyJson"
+          >
+            Копировать ссылку
+          </button>
         </div>
         <div class="mb-10">
           <span>JSON-запрос: </span>
@@ -297,6 +309,12 @@ export default {
     },
     copyIframeHtml () {
       navigator.clipboard.writeText(this.iframeHtml)
+    },
+    copyFormLink () {
+      navigator.clipboard.writeText('http://localhost:8080/form/' + this.$route.params.board_id)
+    },
+    copyJson () {
+      navigator.clipboard.writeText('https://web.leadertask.com/api/boardsforms/addboardleadbyjson?uid_board=' + this.$route.params.board_id)
     }
   }
 }
