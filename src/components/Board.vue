@@ -57,7 +57,7 @@
     <draggable
       v-dragscroll:nochilddrag
       class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
-      :list="storeCards"
+      :list="filteredColumns"
       ghost-class="ghost-column"
       item-key="UID"
       group="columns"
@@ -172,7 +172,7 @@
             :style="{ color: getContrastYIQ(column.Color) }"
           >
             <div
-              v-if="getColumnCards(column).length"
+              v-if="column.cards.length"
               data-dragscroll
               class="flex items-center justify-between h-[16px]"
             >
@@ -184,7 +184,7 @@
                   data-dragscroll
                   :class="{ 'hover:underline cursor-pointer': !isReadOnlyBoard}"
                 >
-                  Карточек: {{ getColumnCards(column).length }}
+                  Карточек: {{ column.cards.length }}
                 </p>
                 <template #menu>
                   <PopMenuItem
@@ -197,7 +197,7 @@
               </PopMenu>
 
               <div
-                v-if="totalItem(getColumnCards(column))"
+                v-if="totalItem(column.cards)"
                 class="flex items-center"
               >
                 <svg
@@ -227,7 +227,7 @@
                   />
                 </svg>
                 <p class="ml-1 text-[10px] leading-[12px]">
-                  {{ totalItem(getColumnCards(column)) }}
+                  {{ totalItem(column.cards) }}
                 </p>
               </div>
             </div>
@@ -240,11 +240,14 @@
             </div>
           </div>
           <!--карточки -->
-          <div class="min-h-0 overflow-y-auto scroll-style">
+          <div
+            class="min-h-0 overflow-y-auto scroll-style"
+            @scroll="handleCardsScroll($event, column.UID, column.cards.length)"
+          >
             <draggable
               :id="column.UID"
               :data-column-id="column.UID"
-              :list="getColumnCards(column)"
+              :list="getPaginatedCards(column, cardQuantityByColumns[column.UID], column.cards.length)"
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
@@ -418,7 +421,8 @@ export default {
       showMoveCard: false,
       showMoveAllCards: false,
       columnUid: '',
-      dragColumnParam: null
+      dragColumnParam: null,
+      cardQuantityByColumns: {}
     }
   },
   computed: {
@@ -475,6 +479,15 @@ export default {
     },
     isReadOnlyBoard () {
       return !this.board || this.board.type_access === 0
+    },
+    filteredColumns () {
+      return this.storeCards.map((column) => {
+        const cards = this.getColumnCards(column)
+        return {
+          ...column,
+          cards: cards
+        }
+      })
     }
   },
   watch: {
@@ -484,6 +497,14 @@ export default {
         this.$store.commit(BOARD.SELECT_BOARD, val)
         this.$store.state.cards.selectedCardUid = ''
         this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
+      }
+    },
+    storeCards: {
+      immediate: true,
+      handler: function (val) {
+        val.forEach((column) => {
+          this.cardQuantityByColumns[column.UID] = 50
+        })
       }
     },
     isPropertiesMobileExpanded: {
@@ -502,6 +523,13 @@ export default {
   methods: {
     print (msg, val) {
       console.log(msg, val)
+    },
+    handleCardsScroll (event, columnUid, cardsLength) {
+      const { scrollTop, offsetHeight, scrollHeight } = event.target
+
+      if ((scrollTop + offsetHeight) >= scrollHeight && this.cardQuantityByColumns[columnUid] < cardsLength) {
+        this.cardQuantityByColumns[columnUid] += 50
+      }
     },
     getContrastYIQ (hexcolor) {
       if (!hexcolor) return null
@@ -544,9 +572,15 @@ export default {
       }
       return ''
     },
+    getPaginatedCards (column, quantity = column.cards.length) {
+      if (quantity >= column.cards.length) {
+        quantity = column.cards.length
+      }
+      return this.filteredColumns.find((filteredColumn) => filteredColumn.UID === column.UID).cards.slice(0, quantity)
+    },
     getColumnCards (column) {
       if (!column?.cards?.length) return []
-      //
+
       if (this.showOnlyCardsWhereIAmResponsible && this.showOnlyMyCreatedCards) {
         const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
         return column.cards.filter(card => card.user.toLowerCase() === currentUserEmail && card.email_creator.toLowerCase() === currentUserEmail)

@@ -174,7 +174,7 @@
               fill-opacity="0.5"
             />
           </svg>
-          <span class="rounded"> Чек-лист</span>
+          <span class="rounded font-medium text-[#575758]"> Чек-лист</span>
         </div>
         <!-- Фокус -->
         <TaskPropsButtonFocus
@@ -213,10 +213,10 @@
       <!-- Show all -->
       <!-- Chat messages -->
       <MessageSkeleton
-        v-if="status == 'loading'"
+        v-if="status == 'loading' && selectedTask?.has_msgs"
       />
       <TaskPropsChatMessages
-        v-if="taskMessages?.length && status=='success'"
+        v-if="taskMessages?.length && status=='success' && selectedTask?.has_msgs"
         id="content"
         :task-messages="taskMessages"
         :current-user-uid="user?.current_user_uid"

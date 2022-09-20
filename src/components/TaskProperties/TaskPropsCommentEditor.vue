@@ -7,6 +7,7 @@
       id="taskPropsCommentEditor"
       v-linkify:options="{ className: 'text-blue-600' }"
       class="font-[400] text-[14px] leading-[21px] text-[#4C4C4D]"
+      :class="textStyle"
       :contenteditable="isEditable"
       :data-placeholder="placeholderComment"
       @blur="changeComment($event)"
@@ -30,6 +31,10 @@ export default {
       default: false
     },
     comment: {
+      type: String,
+      default: ''
+    },
+    textStyle: {
       type: String,
       default: ''
     }

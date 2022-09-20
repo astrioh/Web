@@ -3,6 +3,7 @@
     :title="board.name"
     :color="board.color"
     :count="board.children?.length ?? 0"
+    title-color="#4C4C4D"
   >
     <svg
       v-if="board.members && Object.keys(board.members).length > 1"

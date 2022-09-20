@@ -76,6 +76,8 @@
     >
   </div>
 
+  <!-- Chat skeleton -->
+  <MessageSkeleton v-if="status=='loading'" />
   <ClientChat
     v-if="status=='success'"
     :messages="clientMessages"
@@ -113,6 +115,7 @@ import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 import ClientChat from '@/components/Clients/ClientChat.vue'
 import ClientMessageQuoteUnderInput from '@/components/Clients/ClientMessageQuoteUnderInput.vue'
 import ClientMessageInput from '@/components/Clients/ClientMessageInput.vue'
+import MessageSkeleton from '@/components/TaskProperties/MessageSkeleton.vue'
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
 import { uuidv4 } from '@/helpers/functions'
@@ -126,7 +129,8 @@ export default {
     PopMenu,
     ClientChat,
     ClientMessageQuoteUnderInput,
-    ClientMessageInput
+    ClientMessageInput,
+    MessageSkeleton
   },
   data () {
     return {

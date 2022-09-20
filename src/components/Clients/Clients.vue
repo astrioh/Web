@@ -109,7 +109,7 @@ export default {
   data () {
     return {
       showAddClient: false,
-      currentPage: 0
+      currentPage: 1
     }
   },
   computed: {
@@ -148,8 +148,11 @@ export default {
   },
   methods: {
     requestClients () {
-      this.currentPage = this.$route.query.page || 0
-
+      if (this.$route.query.page < 1) {
+        this.$router.push('/clients?page=1')
+        this.$route.query.page = 1
+      }
+      this.currentPage = this.$route.query.page || 1
       const data = {
         organization: this.user?.owner_email,
         page: this.currentPage
@@ -158,6 +161,11 @@ export default {
         data.search = this.$route.query.search
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+        .then(() => {
+          if (this.showAddClient) {
+            this.showAddClient = false
+          }
+        })
     },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
@@ -181,7 +189,7 @@ export default {
       }
       this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
         .then(() => {
-          this.showAddClient = false
+          this.$router.push({ path: '/clients', query: { page: this.paging.pages - 1 } })
         })
     },
     changePage () {

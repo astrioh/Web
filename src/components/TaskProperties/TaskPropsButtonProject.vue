@@ -83,7 +83,7 @@
           fill-opacity="0.5"
         />
       </svg>
-      <span class="... max-w-[300px] truncate">
+      <span class="... max-w-[300px] truncate font-medium text-[#575758]">
         {{ projects[selectedProject]?.name ?? '???' }}
       </span>
       <button
@@ -123,7 +123,7 @@
           fill-opacity="0.5"
         />
       </svg>
-      <span class="rounded">Проект</span>
+      <span class="rounded font-medium text-[#575758]">Проект</span>
     </div>
   </Popper>
 </template>

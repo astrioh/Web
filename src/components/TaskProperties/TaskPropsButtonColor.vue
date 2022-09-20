@@ -90,7 +90,7 @@
             fill-opacity="1"
           />
         </svg>
-        <span class="rounded truncate max-w-[300px]"> {{ colors[selectedColor]?.name ?? '???' }}</span>
+        <span class="rounded truncate max-w-[300px] font-medium text-[#575758]"> {{ colors[selectedColor]?.name ?? '???' }}</span>
         <button
           v-if="canEdit"
           class="btn-close-popover"
@@ -130,7 +130,7 @@
             fill-opacity="0.5"
           />
         </svg>
-        <span class="rounded">Цвет</span>
+        <span class="rounded font-medium text-[#575758]">Цвет</span>
       </template>
     </div>
   </Popper>
