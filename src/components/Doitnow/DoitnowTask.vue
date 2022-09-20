@@ -43,7 +43,7 @@
             v-model="name"
             v-linkify:options="{ className: 'text-blue-600', tagName: 'a' }"
             tag="div"
-            class="taskName p-0.5 ring-0 outline-none max-w-7xl mt-0.5 ml-1 flex overflow-x-hidden"
+            class="p-0.5 ring-0 outline-none max-w-7xl ml-[8px] flex overflow-x-hidden font-bold text-[18px] text-[#424242]"
             style="word-break: break-word"
             :contenteditable="task._isEditable"
             placeholder="Введите название задачи"
@@ -64,7 +64,7 @@
         />
       </div>
       <div class="flex text-sm text-left justify-between w-[400px]">
-        <div class="flex flex-col font-medium w-[720px]">
+        <div class="flex flex-col font-normal w-[720px]">
           <div
             v-if="task.uid && task.emails.includes(user?.current_user_email) && task.uid_performer !== user?.current_user_uid"
             class="border-[#FF912380] w-[150px] text-center py-1 px-2 mb-2 border-2 rounded-[8px] inline-block"
@@ -78,7 +78,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-2 w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0"
             >
               Заказчик:
             </span>
@@ -114,7 +114,7 @@
                 :src="employees[task.uid_customer]?.fotolink"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
-              <span class="ml-1 text-black">{{ getByNameOrEmail(employees) }}</span>
+              <span class="ml-1 text-black text-[13px] font-medium">{{ getByNameOrEmail(employees) }}</span>
             </div>
           </div>
           <!-- performer -->
@@ -124,7 +124,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-2 w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0"
             >
               Исполнитель:
             </span>
@@ -136,7 +136,7 @@
                 :src="employees[task.uid_performer] ? employees[task.uid_performer]?.fotolink : ''"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
-              <span class="ml-1 text-black">{{ employees[task.uid_performer]?.name }}</span>
+              <span class="ml-1 text-black text-[13px] font-medium">{{ employees[task.uid_performer]?.name }}</span>
             </div>
           </div>
           <!-- days -->
@@ -146,7 +146,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-2 w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0"
             >
               Срок:
             </span>
@@ -154,7 +154,7 @@
               v-show="dateClearWords"
               class="flex"
             >
-              <span class="text-black">{{ dateClearWords + getTime }}</span>
+              <span class="text-black text-[13px] font-medium">{{ dateClearWords + getTime }}</span>
             </div>
           </div>
           <!-- overdue -->
@@ -163,13 +163,13 @@
             v-show="plural"
             class="flex mb-2"
           >
-            <span class="mr-2 w-[90px] shrink-0">
+            <span class="mr-[16px] w-[90px] shrink-0">
               Просрочено:
             </span>
             <div
               class="flex"
             >
-              <span class="text-red-500">{{ plural }}</span>
+              <span class="text-red-500 text-[13px] font-medium">{{ plural }}</span>
             </div>
           </div>
           <!-- project -->
@@ -178,14 +178,14 @@
             class="flex mb-2"
           >
             <span
-              class="mr-2 w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0"
             >
               Проект:
             </span>
             <div
               class="flex mb-2"
             >
-              <span class="text-black overflow-hidden truncate">{{
+              <span class="text-black overflow-hidden truncate text-[13px] font-medium">{{
                 projects[task.uid_project]?.name.length > 99
                   ? projects[task.uid_project]?.name.split('').slice(0,100).join('') + '...'
                   : projects[task.uid_project]?.name
@@ -198,6 +198,7 @@
         v-if="task.uid"
         v-show="task.comment.length || task.uid_customer === user?.current_user_uid"
         class="mt-3"
+        text-style="!text-[16px] leading-[155%] mb-[40px]"
         style="word-break: break-word"
         :comment="task.comment"
         :can-edit="task.uid_customer === user?.current_user_uid"

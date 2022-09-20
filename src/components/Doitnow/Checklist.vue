@@ -68,7 +68,7 @@
           v-model="check.text"
           tag="div"
           placeholder="Добавить"
-          class="self-center w-[500px] font-roboto font-medium text-[13px] leading-[15px]"
+          class="self-center w-[500px] font-roboto font-medium text-[14px] leading-[16px]"
           :class="{ 'text-[#979799] line-through': check.checked, 'text-[#4c4c4d]': !check.checked }"
           :contenteditable="canEdit"
           :no-n-l="true"
