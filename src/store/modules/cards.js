@@ -250,8 +250,21 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [CARD.CHANGE_CARD_UID_CLIENT]: ({ commit }, data) => {
+    return new Promise((resolve, reject) => {
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'cards'
+      axios({ url: url, method: 'POST', data: data })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
-
 }
 
 const mutations = {
