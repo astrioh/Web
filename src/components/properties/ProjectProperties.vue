@@ -400,16 +400,19 @@ export default {
     depsProject () {
       const allDeps = []
       const deps = this.$store.state.departments.deps
-      this.selectedProjectDeps.map((depUid) => {
-        const oneDep = deps[depUid]
-        allDeps.push({
-          uid: depUid,
-          name: oneDep.name
+      if (this.selectedProjectDeps) {
+        this.selectedProjectDeps.map((depUid) => {
+          const oneDep = deps[depUid]
+          allDeps.push({
+            uid: depUid,
+            name: oneDep.name
+          })
+          return allDeps
         })
-        return allDeps
-      })
+      }
       return allDeps
     }
+
   },
   watch: {
     selectedProjectName: {
