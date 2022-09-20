@@ -25,7 +25,8 @@
           <input
             v-model="
               form.name.text"
-            class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            class="bg-[#f4f5f7]/50 rounded-[6px] border focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            :class="errors.inputs.includes('name') ? 'border-red-500' : 'border-[#4c4c4d]'"
             name="name"
             placeholder="Имя"
             icon-class="cursor-pointer"
@@ -40,7 +41,8 @@
           />
           <input
             v-model="form.email.text"
-            class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            class="bg-[#f4f5f7]/50 rounded-[6px] border focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            :class="errors.inputs.includes('email') ? 'border-red-500' : 'border-[#4c4c4d]'"
             name="email"
             placeholder="Емайл"
             icon-class="cursor-pointer"
@@ -55,7 +57,8 @@
           />
           <input
             v-model="form.phone.text"
-            class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            class="bg-[#f4f5f7]/50 rounded-[6px] border focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            :class="errors.inputs.includes('phone') ? 'border-red-500' : 'border-[#4c4c4d]'"
             name="phone"
             placeholder="Телефон"
             icon-class="cursor-pointer"
@@ -70,7 +73,8 @@
           />
           <input
             v-model="form.comment.text"
-            class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+            :class="errors.inputs.includes('comment') ? 'border-red-500' : 'border-[#4c4c4d]'"
             name="comment"
             placeholder="Комментарий"
             icon-class="cursor-pointer"
@@ -87,15 +91,24 @@
         >
         <input
           v-model="form.redirect_link"
-          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto mb-3"
           name="redirect_link"
           placeholder="Ссылка для редиректа"
           icon-class="cursor-pointer"
           type="text"
         >
+        <template v-if="errors.messages">
+          <p
+            v-for="error in errors.messages"
+            :key="error"
+            class="text-red-500 text-xs mb-3"
+          >
+            {{ error }}
+          </p>
+        </template>
         <jb-button
           color="login"
-          class="w-full mt-[10px] rounded-lg text-sm"
+          class="w-full rounded-lg text-sm"
           label="Сохранить форму"
           @click="clickSaveForm"
         />
@@ -172,7 +185,11 @@ export default {
         button_text: '',
         redirect_link: ''
       },
-      showParams: false
+      showParams: false,
+      errors: {
+        inputs: [],
+        messages: []
+      }
     }
   },
   computed: {
@@ -189,8 +206,8 @@ export default {
       this.$store.state.boardforms.boardForm = data
       if (data.info) {
         this.form = data.info
+        this.showParams = true
       }
-      this.showParams = true
       console.log(this.form)
     })
   },
@@ -223,7 +240,31 @@ export default {
       }
       this.form.comment.visible = false
     },
+    validateForm () {
+      this.errors.inputs = []
+      this.errors.messages = []
+      let inputsValidateError = false
+      // Массив инпутов которые валидируем
+      const inputs = ['name', 'phone', 'email', 'comment']
+      // Цикл, который проходит по всем инпутам для валидации и генерирует ошибку, если поля с галочкой, но пустые
+      inputs.forEach(inputName => {
+        if (this.form[inputName].visible && !this.form[inputName].text) {
+          this.errors.inputs.push(inputName)
+          inputsValidateError = true
+        }
+      })
+      // Общий текст ошибки для пустых инпутов
+      if (inputsValidateError) {
+        this.errors.messages.push('Форма не сохранена')
+        this.errors.messages.push('Поля напротив которых стоит "галочка" – должны быть обязательно заполнены')
+      }
+    },
     clickSaveForm () {
+      this.validateForm()
+      if (this.errors.messages.length) {
+        return
+      }
+
       const data = {
         uid_board: this.$route.params.board_id,
         info: this.form
