@@ -35,7 +35,7 @@
           fill="white"
         />
       </svg>
-      <span class="rounded"> Поручить </span>
+      <span class="rounded font-medium"> Поручить </span>
     </div>
     <!-- Исполнитель -->
     <div
@@ -67,7 +67,7 @@
           fill="#22C55E"
         />
       </svg>
-      <span class="truncate"> {{ getEmpNameByEmail(performerEmail) }} </span>
+      <span class="truncate font-medium text-[#575758]"> {{ getEmpNameByEmail(performerEmail) }} </span>
       <button
         class="btn-close-popover"
         @click.stop="setPerformerCurrentUser"
@@ -118,7 +118,7 @@
           fill="white"
         />
       </svg>
-      <span class="rounded"> Перепоручить </span>
+      <span class="rounded font-medium"> Перепоручить </span>
     </div>
     <!-- Взять на исполнение -->
     <div
@@ -153,7 +153,7 @@
         />
       </svg>
 
-      <span class="rounded"> Взять на исполнение </span>
+      <span class="rounded font-medium"> Взять на исполнение </span>
     </div>
     <template
       #content="{ close }"

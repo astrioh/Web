@@ -67,6 +67,7 @@
               :to="'/project/' + project.uid"
             >
               <ProjectBlocItem
+                class="text-[#4C4C4D]"
                 :project="project"
               />
             </router-link>

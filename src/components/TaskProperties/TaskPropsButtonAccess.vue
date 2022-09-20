@@ -183,7 +183,7 @@
         />
       </svg>
 
-      <span class="rounded">Доступ</span>
+      <span class="rounded font-medium text-[#575758]">Доступ</span>
     </div>
   </Popper>
 </template>
