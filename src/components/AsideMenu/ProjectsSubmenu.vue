@@ -248,7 +248,7 @@ export default {
       }
     },
     isProjectInCurrDepartment (project, depUid) {
-      return project?.deps.includes(depUid)
+      return project?.deps.find(deps => deps === depUid) && this.employees[this.user.current_user_uid].uid_dep === depUid
     },
     isDepProjectsAreAvalible (depUid) {
       const isDepUidInBoards = this.commonProjects.find(item => item?.deps.includes(depUid))
