@@ -251,7 +251,8 @@ export default {
       return project?.deps.includes(depUid)
     },
     isDepProjectsAreAvalible (depUid) {
-      return this.employees[this.user.current_user_uid].uid_dep === depUid
+      const isDepUidInBoards = this.commonProjects.find(item => item?.deps.includes(depUid))
+      return this.employees[this.user.current_user_uid].uid_dep === depUid && isDepUidInBoards
     },
     clickAddProject () {
       // если лицензия истекла
