@@ -583,21 +583,10 @@ export default {
       this.$store.dispatch(CHANGE_CARD_UID_CLIENT, this.selectedCard)
     },
     onChangeDates: function (dateTimeString) {
-      if (dateTimeString === '0001-01-01T00:00:00') {
-        this.$store.commit('CardSaveReminder', {
-          uid: this.selectedCard.uid,
-          uid_board: this.selectedCard.uid_board,
-          date_reminder: null,
-          uid_client: this.selectedCard.uid_client
-        })
+      console.log(dateTimeString)
+      if (!dateTimeString || dateTimeString === '0001-01-01T00:00:00') {
+        this.selectedCard.date_reminder = null
       } else {
-        this.$store.commit('CardSaveReminder', {
-          uid: this.selectedCard.uid,
-          uid_board: this.selectedCard.uid_board,
-          date_reminder: dateTimeString,
-          uid_client: this.selectedCard.uid_client
-        })
-
         this.selectedCard.date_reminder = dateTimeString
       }
       this.$store.dispatch(CHANGE_CARD_DATE_REMINDER, this.selectedCard)
