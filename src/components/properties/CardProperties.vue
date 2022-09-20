@@ -1,5 +1,4 @@
 <template>
-  <pre class="text-[9px] leading-none">{{ selectedCard }}</pre>
   <BoardModalBoxDelete
     v-if="showDeleteCard"
     title="Удалить карточку"
