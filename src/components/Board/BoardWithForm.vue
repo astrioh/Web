@@ -4,8 +4,17 @@
       class="pt-[8px]"
       title="Настройка формы"
     />
+    <router-link :to="'/board/' + $route.params.board_id">
+      <button
+        class="bg-white justify-center px-5 h-[34px] rounded-[8px] mr-[7px] hover:bg-gray-200 flex items-center mb-5"
+      >
+        Назад
+      </button>
+    </router-link>
     <div class="flex flex-row">
+      <BoardWithFormSkeleton v-if="!formIsLoaded" />
       <form
+        v-else
         class="p-5 bg-white rounded-xl w-[30%] shrink-0 self-start"
       >
         <input
@@ -115,7 +124,7 @@
         />
       </form>
       <div
-        v-if="showParams === true"
+        v-if="showParams"
         class="ml-10 mt-2"
       >
         <div class="mb-10">
@@ -181,9 +190,11 @@ import JbButton from '@/components/JbButton.vue'
 import FormCheckbox from '@/components/Board/FormCheckbox.vue'
 
 import * as BOARD_FORMS from '@/store/actions/boardforms.js'
+import BoardWithFormSkeleton from '@/components/Board/BoardWithFormSkeleton'
 
 export default {
   components: {
+    BoardWithFormSkeleton,
     NavBar,
     JbButton,
     FormCheckbox
@@ -212,6 +223,7 @@ export default {
         redirect_link: ''
       },
       showParams: false,
+      formIsLoaded: false,
       errors: {
         inputs: [],
         messages: []
@@ -237,6 +249,7 @@ export default {
         this.form = data.info
         this.showParams = true
       }
+      this.formIsLoaded = true
       console.log(this.form)
     })
   },
@@ -290,7 +303,8 @@ export default {
       if (inputsValidateError) {
         this.errors.messages.push('Форма не сохранена')
         this.errors.messages.push('Поля должны быть обязательно заполнены')
-      } else if (this.validateRedirectLink()) {
+        console.log(this.form.redirect_link.length)
+      } else if (this.validateRedirectLink() && this.form.redirect_link.length > 0) {
         this.errors.messages.push('Поле "Ссылка для редеректа" должно содержать ссылку!')
       }
     },

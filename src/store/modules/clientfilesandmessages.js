@@ -30,7 +30,6 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'clients_chat'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
-          commit(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data)
           resolve(resp)
         })
         .catch((err) => {
@@ -110,7 +109,7 @@ const mutations = {
     state.status = 'loading'
   },
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_SUCCESS]: (state, resp) => {
-    state.messages = resp.data.msgs
+    state.messages = resp.data
     state.status = 'success'
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS]: (state, resp) => {

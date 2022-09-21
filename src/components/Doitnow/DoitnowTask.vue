@@ -78,7 +78,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
             >
               Заказчик:
             </span>
@@ -114,7 +114,7 @@
                 :src="employees[task.uid_customer]?.fotolink"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
-              <span class="ml-1 text-black text-[13px] font-medium">{{ getByNameOrEmail(employees) }}</span>
+              <span class="ml-1 text-[#4C4C4D] text-[13px] font-medium">{{ getByNameOrEmail(employees) }}</span>
             </div>
           </div>
           <!-- performer -->
@@ -124,7 +124,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
             >
               Исполнитель:
             </span>
@@ -136,7 +136,7 @@
                 :src="employees[task.uid_performer] ? employees[task.uid_performer]?.fotolink : ''"
                 class="rounded-lg ml-1 h-[20px] w-[20px]"
               >
-              <span class="ml-1 text-black text-[13px] font-medium">{{ employees[task.uid_performer]?.name }}</span>
+              <span class="ml-1 text-[#4C4C4D] text-[13px] font-medium">{{ employees[task.uid_performer]?.name }}</span>
             </div>
           </div>
           <!-- days -->
@@ -146,7 +146,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
             >
               Срок:
             </span>
@@ -154,7 +154,7 @@
               v-show="dateClearWords"
               class="flex"
             >
-              <span class="text-black text-[13px] font-medium">{{ dateClearWords + getTime }}</span>
+              <span class="text-[#4C4C4D] text-[13px] font-medium">{{ dateClearWords + getTime }}</span>
             </div>
           </div>
           <!-- overdue -->
@@ -163,7 +163,7 @@
             v-show="plural"
             class="flex mb-2"
           >
-            <span class="mr-[16px] w-[90px] shrink-0">
+            <span class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]">
               Просрочено:
             </span>
             <div
@@ -178,14 +178,14 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
             >
               Проект:
             </span>
             <div
               class="flex mb-2"
             >
-              <span class="text-black overflow-hidden truncate text-[13px] font-medium">{{
+              <span class="text-[#4C4C4D] overflow-hidden truncate text-[13px] font-medium">{{
                 projects[task.uid_project]?.name.length > 99
                   ? projects[task.uid_project]?.name.split('').slice(0,100).join('') + '...'
                   : projects[task.uid_project]?.name

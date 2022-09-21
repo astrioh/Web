@@ -3,10 +3,12 @@
     <NavBarTasks
       id="NavBarSearch"
       class="pt-[8px]"
-      :title="'Поиск: ' + searchText"
+      :title="navTitle"
       @reload="reload"
     />
+    <SearchLimit v-if="showLimitMessage" />
     <TasksListNew
+      v-else
       hide-input
     />
   </div>
@@ -14,17 +16,27 @@
 <script>
 import TasksListNew from '@/components/TasksListNew.vue'
 import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
+import SearchLimit from './SearchLimit.vue'
 
 import * as TASK from '@/store/actions/tasks'
 
 export default {
   components: {
     TasksListNew,
-    NavBarTasks
+    NavBarTasks,
+    SearchLimit
   },
   computed: {
     searchText () {
       return this.$route.query.q ?? ''
+    },
+    showLimitMessage () {
+      const noAccess = this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired
+      const isLoading = this.$store.state.tasks.status === 'loading'
+      return noAccess && !isLoading
+    },
+    navTitle () {
+      return this.showLimitMessage ? undefined : 'Поиск: ' + this.searchText
     }
   },
   watch: {
@@ -39,6 +51,7 @@ export default {
   },
   methods: {
     searchTasks (text) {
+      if (this.showLimitMessage) return
       this.$store.dispatch(TASK.SEARCH_TASK, text).then((resp) => {
         console.log('Search Tasks', resp)
       })

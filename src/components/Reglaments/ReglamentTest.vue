@@ -36,7 +36,7 @@
       class="flex justify-center pb-[20px]"
     >
       <button
-        class="flex min-w-[175px] justify-center items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3]"
+        class="flex min-w-[175px] justify-center items-end bg-[#FF912380] p-3 px-10 rounded-[8px] text-[#2E2E2E] text-sm mr-1 hover:bg-[#F5DEB3] font-medium"
         :class="{ 'bg-[#E7E2E1] hover:bg-[#C5C5C5]': disableButton === true }"
         :disabled="disableButton"
         @click="clickComplete"
@@ -70,7 +70,7 @@
       </p>
       <div class="w-full flex justify-center">
         <button
-          class="flex bg-[#F2B679] text-[14px] font-[400] leading-[16px] font-[500] p-3 px-10 mt-10 mb-5 rounded-[8px] text-[#2E2E2E] text-sm mr-1 hover:bg-[#F5DEB3]"
+          class="flex bg-[#F2B679] text-[14px] leading-[16px] font-medium p-3 px-10 mt-10 mb-5 rounded-[8px] text-[#2E2E2E] text-sm mr-1 hover:bg-[#F5DEB3]"
           @click="confirm(isPassed)"
         >
           Завершить

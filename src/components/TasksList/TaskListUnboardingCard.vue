@@ -16,17 +16,16 @@
       Запишите сюда все ваши рабочие дела и встречи, а также выполняйте поручения
       от коллег, которые ждут от вас результатов сегодня
     </p>
-    <button
-      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto my-[20px]"
-      @click="onOk"
-    >
-      Понятно
-    </button>
+    <OnBoardingButton
+      @okToModal="onOk"
+    />
   </div>
 </template>
 
 <script>
+import OnBoardingButton from '../onBoarding/onBoardingButton.vue'
 export default {
+  components: { OnBoardingButton },
   emits: ['ok'],
   methods: {
     onOk () {

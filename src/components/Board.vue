@@ -247,7 +247,7 @@
             <draggable
               :id="column.UID"
               :data-column-id="column.UID"
-              :list="getPaginatedCards(column, cardQuantityByColumns[column.UID], column.cards.length)"
+              :list="getPaginatedCards(column.cards, cardQuantityByColumns[column.UID])"
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
@@ -295,7 +295,7 @@
             />
             <button
               v-else
-              class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
+              class="flex justify-center items-center h-[40px] w-full font-['Roboto'] text-[#7e7e80]"
               :style="{ color: getContrastYIQ(column.Color) }"
               @click="addCard(column)"
             >
@@ -572,11 +572,11 @@ export default {
       }
       return ''
     },
-    getPaginatedCards (column, quantity = column.cards.length) {
-      if (quantity >= column.cards.length) {
-        quantity = column.cards.length
+    getPaginatedCards (cards, quantity) {
+      if (quantity >= cards.length) {
+        quantity = cards.length
       }
-      return this.filteredColumns.find((filteredColumn) => filteredColumn.UID === column.UID).cards.slice(0, quantity)
+      return cards.slice(0, quantity)
     },
     getColumnCards (column) {
       if (!column?.cards?.length) return []
@@ -720,6 +720,7 @@ export default {
             uid_stage: this.selectedColumn.UID
           })
           .then((resp) => {
+            resp.data.uid_client = ''
             if (this.$store.state.isPropertiesMobileExpanded) {
               this.selectCard(resp.data)
             }

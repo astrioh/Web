@@ -2,7 +2,6 @@
   <ModalBox
     :title="title"
     ok="Сохранить"
-    :disabled="buttonSaveDisabled"
     @ok="onSave"
     @cancel="onCancel"
   >
@@ -18,7 +17,7 @@
           :class="onValidateField('name')"
         >
         <span
-          v-if="!validateNameField"
+          v-if="!validationInputs.name"
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
       </div>
@@ -32,7 +31,7 @@
           :class="onValidateField('phone')"
         >
         <span
-          v-if="!validatePhoneField"
+          v-if="!validationInputs.phone"
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
       </div>
@@ -45,7 +44,7 @@
           :class="onValidateField('email')"
         >
         <span
-          v-if="!validateEmailField"
+          v-if="!validationInputs.email"
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
       </div>
@@ -86,13 +85,18 @@ export default {
     name: '',
     phone: '',
     email: '',
-    comment: ''
+    comment: '',
+    validationInputs: {
+      name: true,
+      phone: true,
+      email: true
+    }
   }),
   computed: {
     maxLengthInput () {
       return '50'
     },
-    buttonSaveDisabled () {
+    validateForm () {
       return !this.validateNameField || !this.validatePhoneField || !this.validateEmailField
     },
     validateNameField () {
@@ -118,26 +122,45 @@ export default {
       this.$emit('cancel')
     },
     onSave () {
-      const data = {
-        uid: uuidv4(),
-        name: this.name,
-        phone: this.phone,
-        email: this.email,
-        comment: this.comment
+      if (!this.validateNameField) {
+        this.validationInputs.name = false
+      } else {
+        this.validationInputs.name = true
       }
-      this.$emit('save', data)
+      if (!this.validatePhoneField) {
+        this.validationInputs.phone = false
+      } else {
+        this.validationInputs.phone = true
+      }
+      if (!this.validateEmailField) {
+        this.validationInputs.email = false
+      } else {
+        this.validationInputs.email = true
+      }
+
+      if (!this.validateForm) {
+        const data = {
+          uid: uuidv4(),
+          name: this.name,
+          phone: this.phone,
+          email: this.email,
+          comment: this.comment
+        }
+        this.$emit('save', data)
+      }
     },
     onValidateField (key) {
       const defaultClass = 'border-[#4c4c4d] focus:border-[#ff9123]'
       const errorClass = 'border-rose-500 focus:border-rose-500'
+      const { name, phone, email } = this.validationInputs
 
       switch (key) {
         case 'name':
-          return !this.validateNameField ? errorClass : defaultClass
+          return !name ? errorClass : defaultClass
         case 'phone':
-          return !this.validatePhoneField ? errorClass : defaultClass
+          return !phone ? errorClass : defaultClass
         case 'email':
-          return !this.validateEmailField ? errorClass : defaultClass
+          return !email ? errorClass : defaultClass
         default:
           return defaultClass
       }

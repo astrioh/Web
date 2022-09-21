@@ -1,4 +1,8 @@
 <template>
+  <NavbarSearchLimit
+    v-if="showFreeModal"
+    @cancel="showFreeModal = false"
+  />
   <ModalBoxAddClient
     v-if="showAddClient"
     title="Добавить клиента"
@@ -8,6 +12,7 @@
   <NavBarClients
     title="Контакты"
     class="pt-[8px]"
+    @search="requestClients"
   />
   <div
     class="bg-white rounded-xl min-h-[80%] px-[40px] py-[20px]"
@@ -19,6 +24,7 @@
         <th>Email</th>
         <th>Комментарий</th>
       </tr>
+      <ClientsSkeleton v-if="status === 'loading'" />
       <template v-if="status === 'success'">
         <tr
           v-for="client in clients"
@@ -57,8 +63,6 @@
         </tr>
       </template>
     </table>
-
-    <ClientsSkeleton v-if="status === 'loading'" />
 
     <div
       class="group flex justify-center border border-[#0000001F] rounded-[7px] p-[7px] mt-[15px] cursor-pointer"
@@ -109,7 +113,8 @@ export default {
   data () {
     return {
       showAddClient: false,
-      currentPage: 1
+      currentPage: 1,
+      wasLoaded: true
     }
   },
   computed: {
@@ -129,17 +134,18 @@ export default {
       return this.$store.state.user.user
     },
     currentPageRouter () {
-      return this.$route.query.page
-    },
-    searchQuery () {
-      return this.$route.query.search
+      return Number(this.$route.query.page) || 1
     }
   },
   watch: {
-    currentPageRouter () {
-      this.requestClients()
+    status (value) {
+      value === 'loading' && (this.wasLoaded = true)
     },
-    searchQuery () {
+    async clients () {
+      if (!this.wasLoaded) await this.requestClients()
+      this.wasLoaded = false
+    },
+    currentPageRouter () {
       this.requestClients()
     }
   },
@@ -147,7 +153,7 @@ export default {
     this.requestClients()
   },
   methods: {
-    requestClients () {
+    async requestClients () {
       if (this.$route.query.page < 1) {
         this.$router.push('/clients?page=1')
         this.$route.query.page = 1
@@ -157,15 +163,14 @@ export default {
         organization: this.user?.owner_email,
         page: this.currentPage
       }
-      if (this.$route.query.search) {
+      if (this.$route.query.search && !(this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired)) {
         data.search = this.$route.query.search
       }
-      this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
-        .then(() => {
-          if (this.showAddClient) {
-            this.showAddClient = false
-          }
-        })
+      await this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+      if (this.currentPageRouter > this.paging.pages) {
+        this.currentPage = this.paging.pages
+        this.changePage()
+      }
     },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
@@ -178,7 +183,7 @@ export default {
     clickAddClient () {
       this.showAddClient = true
     },
-    onAddNewClient (client) {
+    async onAddNewClient (client) {
       const clientToSend = {
         uid: client.uid,
         organization: this.user?.owner_email,
@@ -187,10 +192,10 @@ export default {
         phone: client.phone,
         comment: client.comment
       }
-      this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
-        .then(() => {
-          this.$router.push({ path: '/clients', query: { page: this.paging.pages - 1 } })
-        })
+      await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
+      this.showAddClient = false
+      if (Number(this.$route.query.page) === this.paging.pages) await this.requestClients()
+      await this.$router.push({ path: '/clients', query: { page: this.paging.pages } })
     },
     changePage () {
       this.$router.push({ path: '/clients', query: { page: this.currentPage } })

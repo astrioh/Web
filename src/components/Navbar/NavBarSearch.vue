@@ -102,6 +102,7 @@ export default {
     sendSearchRequest () {
       if (!this.searchText) {
         this.showSearchBar = false
+        this.$emit('search')
         return
       }
       this.$emit('search', this.searchText)

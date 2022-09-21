@@ -21,17 +21,17 @@
       </div>
       <div class="flex ml-[14px] flex-col">
         <div>
-          <p class="font-[500] text-[14px] leading-[20px]">
+          <p class="font-[500] text-[14px] leading-[20px] text-[#424242]">
             {{ getTarifTitle }}
           </p>
-          <p class="pt-[14px]">
+          <p class="pt-[14px] text-[#4C4C4DE5]">
             {{ getTarifText }}
           </p>
         </div>
         <a
           target="_blank"
           href="https://www.leadertask.ru/alpha"
-          class="flex items-center mt-[14px] h-[30px] w-[188px] justify-center bg-[#F2B679] rounded-[6px]"
+          class="flex items-center mt-[14px] h-[30px] w-[188px] justify-center bg-[#F2B679] rounded-[6px] text-[#424242] font-medium"
         >
           Купить
         </a>

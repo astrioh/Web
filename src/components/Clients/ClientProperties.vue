@@ -233,11 +233,12 @@ export default {
         deleted: 0,
         msg: msgclient
       }
+      this.$store.commit(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data)
+      this.clientMessageInputValue = ''
+      this.scrollDown()
+      this.currentQuote = false
       this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST, data).then(() => {
         if (this.selectedClient) this.selectedClient.has_msgs = true
-        this.clientMessageInputValue = ''
-        this.currentQuote = false
-        this.scrollDown()
       })
     },
     scrollDown () {

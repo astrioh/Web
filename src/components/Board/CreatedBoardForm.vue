@@ -3,8 +3,12 @@
     class="w-screen h-screen"
     :class="isFrame && 'bg-white'"
   >
+    <CreatedBoardFormSkeleton
+      v-if="!formIsLoaded"
+      :frame-mode="isFrame"
+    />
     <div
-      v-if="showFormSended === false"
+      v-if="!showFormSended && formIsLoaded"
       class="h-full flex justify-center max-w-[400px] mx-auto"
       :class="!isFrame && 'items-center'"
     >
@@ -52,7 +56,7 @@
       </div>
     </div>
     <div
-      v-if="showFormSended === true"
+      v-if="showFormSended && formIsLoaded"
       class="h-full flex items-center justify-center max-w-[600px] mx-auto"
     >
       <div class="flex justify-center items-center flex-col w-full rounded-[8px] bg-[#F9F9F9] p-[25px] shadow-2xl">
@@ -66,8 +70,10 @@
 <script>
 import * as BOARD from '@/store/actions/boards'
 import * as BOARD_FORMS from '@/store/actions/boardforms'
+import CreatedBoardFormSkeleton from '@/components/Board/CreatedBoardFormSkeleton'
 
 export default {
+  components: { CreatedBoardFormSkeleton },
   data () {
     return {
       showFormSended: false,
@@ -90,7 +96,8 @@ export default {
           input3: '',
           input4: ''
         }
-      }
+      },
+      formIsLoaded: false
     }
   },
   computed: {
@@ -121,6 +128,7 @@ export default {
       this.showInput2 = this.boardForm.info.email.visible
       this.showInput3 = this.boardForm.info.phone.visible
       this.showInput4 = this.boardForm.info.comment.visible
+      this.formIsLoaded = true
     })
   },
   methods: {
