@@ -27,7 +27,7 @@ import Support from '@/components/Settings/Support.vue'
 import Tarif from '@/components/Settings/Tarif.vue'
 
 import Boards from '@/components/Boards'
-import Search from '@/components/Search'
+import Search from '@/components/Search/Search.vue'
 import TaskByUid from '@/components/TasksList/TaskByUid.vue'
 import TasksByDate from '@/components/TasksList/TasksByDate.vue'
 import TasksDelegateByMe from '@/components/TasksList/TasksDelegateByMe.vue'
