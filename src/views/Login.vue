@@ -35,6 +35,7 @@
           type="email"
           required
           :disabled="form.emailControlDisabled"
+          :is-valid="form.isEmailValid"
           @blur="checkEmailExistense"
           @keyup.enter="checkEmailExistense"
         />
@@ -231,7 +232,7 @@ export default {
         phone: '',
         showError: false,
         errorMessage: '',
-        isEmailValid: false,
+        isEmailValid: true,
         isPasswordInvalid: false,
         emailMdi: mdiEmailOutline,
         emailIconClass: '',
@@ -396,10 +397,30 @@ export default {
       return false
     },
     checkEmailExistense () {
-      if (!this.form.email.length || !this.validateEmail()) {
+      if (this.form.email && this.validateEmail()) {
+        const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/exists?email=' + this.form.email
+        axios.get(uri)
+          .then(() => {
+            this.showLoginInputs()
+            this.form.emailMdi = mdiCheckBold
+            this.form.startScreenText = 'Войти в ЛидерТаск'
+            this.form.emailIconClass = 'text-lime-500'
+            this.form.emailControlDisabled = true
+            this.form.showCheckButton = false
+            this.form.showBackButton = true
+          })
+          .catch(() => {
+            this.showRegisterInputs()
+            this.form.emailMdi = mdiCheckBold
+            this.form.startScreenText = 'Создать аккаунт'
+            this.form.emailIconClass = 'text-lime-500'
+            this.form.emailControlDisabled = true
+            this.form.showCheckButton = false
+            this.form.showBackButton = true
+          })
+      } else {
         this.form.errorMessage = 'Некорректный Email'
         this.form.showError = true
-        return
       }
       const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/exists?email=' + this.form.email
       axios.get(uri)
