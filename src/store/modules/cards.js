@@ -1,5 +1,7 @@
 import axios from 'axios'
 import * as CARD from '../actions/cards'
+import { sendInspectorMessage } from '@/inspector'
+import store from '@/store/index.js'
 
 const state = {
   cards: [],
@@ -29,6 +31,11 @@ const actions = {
             resp.boardUid = boardUid
             resp.rootState = rootState
             commit(CARD.BOARD_CARDS_SUCCESS, resp)
+            sendInspectorMessage({
+              type: 'boardOnline',
+              uid_user: store.state.user.user.current_user_uid,
+              uid_board: boardUid
+            })
           }
           resolve(resp)
         })
