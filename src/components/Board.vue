@@ -520,13 +520,13 @@ export default {
       }
     }
   },
-  mounted () {
-    sendInspectorMessage({
-      type: 'boardOnline',
-      uid_user: this.user.current_user_uid,
-      uid_board: this.board.uid
-    })
-  },
+  // mounted () {
+  //   sendInspectorMessage({
+  //     type: 'boardOnline',
+  //     uid_user: this.user.current_user_uid,
+  //     uid_board: this.board.uid
+  //   })
+  // },
   unmounted () {
     this.$store.commit(BOARD.SHOW_SEARCH_CARDS, undefined)
     this.$store.state.tasks.selectedTask = null

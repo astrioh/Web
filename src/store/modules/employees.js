@@ -161,6 +161,15 @@ const mutations = {
   ChangeEmployeeDep: (state, data) => {
     const employee = state.employees[data.uidEmp]
     employee.dep = data.uidDepartmentNew
+  },
+  ChangeUserOnline: (state, data) => {
+    state.employees[data.uidUser].online = data.online
+  },
+  ChangeUserOnlineBoard: (state, data) => {
+    state.employees[data.uidUser].onlineBoardUid = data.onlineBoardUid
+  },
+  ChangeUserOnlineCard: (state, data) => {
+    state.employees[data.uidUser].onlineCardUid = data.onlineCardUid
   }
 }
 
