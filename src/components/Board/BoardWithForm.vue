@@ -4,6 +4,13 @@
       class="pt-[8px]"
       title="Настройка формы"
     />
+    <router-link :to="'/board/' + $route.params.board_id">
+      <button
+        class="bg-white justify-center px-5 h-[34px] rounded-[8px] mr-[7px] hover:bg-gray-200 flex items-center mb-5"
+      >
+        Назад
+      </button>
+    </router-link>
     <div class="flex flex-row">
       <BoardWithFormSkeleton v-if="!formIsLoaded" />
       <form
