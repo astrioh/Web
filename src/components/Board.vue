@@ -295,7 +295,7 @@
             />
             <button
               v-else
-              class="flex justify-center items-center h-full w-full font-['Roboto'] text-[#7e7e80]"
+              class="flex justify-center items-center h-[40px] w-full font-['Roboto'] text-[#7e7e80]"
               :style="{ color: getContrastYIQ(column.Color) }"
               @click="addCard(column)"
             >
