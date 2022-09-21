@@ -27,8 +27,8 @@ export default {
   },
   emits: ['search'],
   methods: {
-    onSearch (text) {
-      this.$router.push({ path: '/clients', query: { search: text } })
+    async onSearch (text) {
+      await this.$router.push({ path: '/clients', query: { search: text } })
       this.$emit('search', text)
     },
     onEraseSearch () {
