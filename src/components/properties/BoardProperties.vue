@@ -225,6 +225,7 @@
       :key="dep.uid"
       :name="dep.name"
       :status="dep.status"
+      :disabled="!isCanEdit"
       @delete="deleteDepartment(dep.uid)"
       @setAdmin="setDepartmentStatus(dep.uid,1)"
       @setReader="setDepartmentStatus(dep.uid,0)"

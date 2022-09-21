@@ -169,26 +169,8 @@
         </div>
       </template>
     </PopMenu>
-    <ProjectPropsUserButton
-      class="mt-[8px]"
-      :user-email="selectedProjectCreatorEmail"
-      status="Владелец"
-      disabled
-    />
-    <ProjectPropsUserButton
-      v-for="user in usersBoard"
-      :key="user.email"
-      :user-email="user.email"
-      :disabled="!isCanEdit"
-      @delete="deleteMember(user.email)"
-    />
-    <div
-      class="mt-[30px] mb-[8px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
-    >
-      Отдел
-    </div>
     <PopMenu
-      v-if="isCanEdit && usersCanAddToAccess.length"
+      v-if="isCanEdit && depsCanAddToAccess.length"
       class="w-full"
     >
       <div
@@ -216,19 +198,33 @@
       <template #menu>
         <div class="max-h-[220px] overflow-y-auto w-[220px] scroll-style">
           <ProjectPropsMenuItemDeps
-            v-for="(dep,index) in allDepartments"
+            v-for="dep in depsCanAddToAccess"
             :key="dep.uid"
             :dep-name="dep.name"
-            @click="setDepartment(index)"
+            @click="setDepartment(dep.uid)"
           />
         </div>
       </template>
     </PopMenu>
+    <ProjectPropsUserButton
+      class="mt-[8px]"
+      :user-email="selectedProjectCreatorEmail"
+      status="Владелец"
+      disabled
+    />
     <ProjectPropsDepButton
       v-for="dep in depsProject"
       :key="dep.uid"
-      :dep-name="dep.name"
-      @click="deleteDepartment(dep.uid)"
+      :name="dep.name"
+      :disabled="!isCanEdit"
+      @delete="deleteDepartment(dep.uid)"
+    />
+    <ProjectPropsUserButton
+      v-for="user in usersBoard"
+      :key="user.email"
+      :user-email="user.email"
+      :disabled="!isCanEdit"
+      @delete="deleteMember(user.email)"
     />
   </div>
 </template>
@@ -319,17 +315,19 @@ export default {
         if (item1.name < item2.name) return -1
         return 0
       })
-      deps.unshift({
-        uid: '00000000-0000-0000-0000-000000000000',
-        name: 'Вне отдела'
-      })
       return deps
     },
-    isCanChangeDepartments () {
-      const employees = this.$store.state.employees.employees
-      const user = this.$store.state.user.user
-      const userType = employees[user.current_user_uid].type
-      return userType === 1 || userType === 2
+    depsCanAddToAccess () {
+      const deps = []
+      for (const dep of this.allDepartments) {
+        if (!this.selectedProjectDeps.includes(dep.uid)) {
+          deps.push({
+            uid: dep.uid,
+            name: dep.name
+          })
+        }
+      }
+      return deps
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
@@ -341,7 +339,7 @@ export default {
       return this.selectedProject?.uid || ''
     },
     selectedProjectDeps () {
-      return this.selectedProject?.deps || ''
+      return this.selectedProject?.deps || []
     },
     selectedProjectName () {
       return this.selectedProject?.name || ''
@@ -405,14 +403,13 @@ export default {
           const oneDep = deps[depUid]
           allDeps.push({
             uid: depUid,
-            name: oneDep.name
+            name: oneDep?.name ?? '???'
           })
           return allDeps
         })
       }
       return allDeps
     }
-
   },
   watch: {
     selectedProjectName: {
@@ -438,13 +435,11 @@ export default {
           this.$router.push('/project')
         })
     },
-    setDepartment (index) {
-      const dep = this.allDepartments[index]
+    setDepartment (depUid) {
       if (this.isCanEdit &&
-        !this.selectedProjectDeps.includes(dep.uid)
+        !this.selectedProjectDeps.includes(depUid)
       ) {
-        const deps = [...this.selectedProjectDeps]
-        deps.push(dep.uid)
+        const deps = [...this.selectedProjectDeps, depUid]
         this.selectedProject.deps = deps
         this.$store.dispatch(PROJECT.CHANGE_PROJECT_DEPS, {
           projectUid: this.selectedProject.uid,
@@ -456,8 +451,7 @@ export default {
       if (this.isCanEdit &&
         this.selectedProjectDeps.includes(depUid)
       ) {
-        const deps = [...this.selectedProjectDeps]
-        const filteredDeps = deps.filter(d => d !== depUid)
+        const filteredDeps = this.selectedProjectDeps.filter(uid => uid !== depUid)
         this.selectedProject.deps = filteredDeps
         this.$store.dispatch(PROJECT.CHANGE_PROJECT_DEPS, {
           projectUid: this.selectedProject.uid,
