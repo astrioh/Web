@@ -54,30 +54,6 @@
       class="column-resize relative overflow-hidden"
     >
       <div
-        v-if="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent]"
-        class="user_customer_custom"
-        :class="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent] ? 'mt-3' : 'mt-0.5'"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12 14.3125C12 13.9328 11.6922 13.625 11.3125 13.625H7.5L7.5 5.5H9.99877C10.1795 5.5 10.2675 5.27934 10.1365 5.15494L6.8125 2L3.8194 5.16252C3.69873 5.29002 3.78912 5.5 3.96466 5.5H6.125L6.125 15H11.3125C11.6922 15 12 14.6922 12 14.3125Z"
-            fill="#7F7F80"
-          />
-        </svg>
-        <a
-          class="parent-name cursor-pointer dark:text-gray-100 mb-2"
-          @click="gotoParentNode(selectedTask?.uid_parent)"
-        >
-          {{ tasks[selectedTask?.uid_parent]?.info?.name }}
-        </a>
-      </div>
-      <div
         class="user_child_customer_custom"
       >
         <strong>
@@ -138,6 +114,12 @@
           :selected-project="selectedTask?.uid_project"
           :can-edit="selectedTask?.type === 1 || selectedTask?.type === 2"
           @changeProject="onChangeProject"
+        />
+        <!-- Кнопка родительской задачи -->
+        <TaskPropsButtonParentTask
+          v-if="selectedTask?.uid_parent !== '00000000-0000-0000-0000-000000000000' && tasks[selectedTask?.uid_parent]"
+          :parent="tasks[selectedTask?.uid_parent]?.info?.name"
+          @onParent="gotoParentNode(selectedTask?.uid_parent)"
         />
         <!-- Кнопка Цвет -->
         <TaskPropsButtonColor
@@ -323,6 +305,7 @@ import PerformerLimit from '@/components/TaskProperties/PerformerLimit'
 import CardMessageInput from '@/components/CardProperties/CardMessageInput'
 import TaskRepeat from '@/components/TaskProperties/TaskRepeat'
 import TaskPropertiesModalBoxFileSizeLimit from '@/components/TaskProperties/TaskPropertiesModalBoxFileSizeLimit.vue'
+import TaskPropsButtonParentTask from '../TaskProperties/TaskPropsButtonParentTask.vue'
 
 export default {
   components: {
@@ -345,7 +328,8 @@ export default {
     TaskPropsCommentEditor,
     TaskPropsChecklist,
     TaskRepeat,
-    TaskPropertiesModalBoxFileSizeLimit
+    TaskPropertiesModalBoxFileSizeLimit,
+    TaskPropsButtonParentTask
   },
   directives: {
     linkify,
