@@ -11,7 +11,7 @@
     <p>С помощью данного раздела вы сможете не отвлекаться на посторонние дела и сфокусироваться на одной задаче!</p>
     <a
       href="https://www.leadertask.ru/alpha"
-      class="mt-5 w-[238px] flex justify-center font-[500] items-center text-center cursor-pointer bg-[#F2B679] text-[#2E2E2E] text-lg px-10 py-1 rounded-md hover:bg-slate-200 hover:text-[#422b14]"
+      class="w-xl-1/6 mt-[35px] w-[238px] h-[40px] cursor-pointer bg-[#F2B679] text-[#2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200 font-medium text-center pt-[6px]"
     >
       Подключить сейчас
     </a>
