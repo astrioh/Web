@@ -70,7 +70,7 @@
       v-model="currClient.comment"
       type="text"
       maxlength="50"
-      placeholder="Телефон"
+      placeholder="Комментарий"
       class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
@@ -186,12 +186,12 @@ export default {
   watch: {
     selectedClient (newval, oldval) {
       if (newval) {
-        this.currClient = newval
+        this.currClient = { ...newval }
       }
     }
   },
   mounted () {
-    this.currClient = this.selectedClient
+    this.currClient = { ...this.selectedClient }
   },
   methods: {
     closeProperties () {
@@ -204,9 +204,13 @@ export default {
       this.$store.dispatch('asidePropertiesToggle', false)
     },
     updateClient () {
-      this.$store.dispatch(CLIENTS.UPDATE_CLIENT,
-        this.currClient
-      )
+      if (this.checkForm()) {
+        this.$store.dispatch(CLIENTS.UPDATE_CLIENT, this.currClient)
+      }
+    },
+    checkForm () {
+      const { name, phone, email } = this.currClient
+      return name.length && phone.length && email.length
     },
     createClientMessage () {
       // если лицензия истекла
