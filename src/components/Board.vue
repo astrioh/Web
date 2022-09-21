@@ -247,7 +247,7 @@
             <draggable
               :id="column.UID"
               :data-column-id="column.UID"
-              :list="getPaginatedCards(column, cardQuantityByColumns[column.UID], column.cards.length)"
+              :list="getPaginatedCards(column.cards, cardQuantityByColumns[column.UID])"
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
@@ -572,11 +572,11 @@ export default {
       }
       return ''
     },
-    getPaginatedCards (column, quantity = column.cards.length) {
-      if (quantity >= column.cards.length) {
-        quantity = column.cards.length
+    getPaginatedCards (cards, quantity) {
+      if (quantity >= cards.length) {
+        quantity = cards.length
       }
-      return this.filteredColumns.find((filteredColumn) => filteredColumn.UID === column.UID).cards.slice(0, quantity)
+      return cards.slice(0, quantity)
     },
     getColumnCards (column) {
       if (!column?.cards?.length) return []
