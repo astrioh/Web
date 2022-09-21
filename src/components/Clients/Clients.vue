@@ -8,6 +8,7 @@
   <NavBarClients
     title="Контакты"
     class="pt-[8px]"
+    @search="requestClients"
   />
   <div
     class="bg-white rounded-xl min-h-[80%] px-[40px] py-[20px]"
@@ -130,16 +131,10 @@ export default {
     },
     currentPageRouter () {
       return this.$route.query.page
-    },
-    searchQuery () {
-      return this.$route.query.search
     }
   },
   watch: {
     currentPageRouter () {
-      this.requestClients()
-    },
-    searchQuery () {
       this.requestClients()
     }
   },

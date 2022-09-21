@@ -25,9 +25,11 @@ export default {
       default: ''
     }
   },
+  emits: ['search'],
   methods: {
     onSearch (text) {
       this.$router.push({ path: '/clients', query: { search: text } })
+      this.$emit('search', text)
     },
     onEraseSearch () {
       this.$router.push({ path: '/clients' })
