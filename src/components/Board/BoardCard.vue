@@ -1,7 +1,7 @@
 <template>
   <div
-    class="group bg-white rounded-[10px] border px-[18px] py-[20px] cursor-default"
-    :class="{ 'border-[#e5e5e5]': !selected, 'border-[#ff9123]': selected }"
+    class="group bg-white rounded-[10px] border px-[18px] py-[20px] cursor-default transition-colors hover:bg-[rgba(0,0,0,.05)]"
+    :class="{ 'border-[rgba(0,0,0,0.1)]': !selected, 'border-[#ff9123]': selected }"
     @click="selectCard"
   >
     <div
