@@ -113,7 +113,8 @@ export default {
   data () {
     return {
       showAddClient: false,
-      currentPage: 1
+      currentPage: 1,
+      wasLoaded: true
     }
   },
   computed: {
@@ -137,6 +138,13 @@ export default {
     }
   },
   watch: {
+    status (value) {
+      value === 'loading' && (this.wasLoaded = true)
+    },
+    async clients () {
+      if (!this.wasLoaded) await this.requestClients()
+      this.wasLoaded = false
+    },
     currentPageRouter () {
       this.requestClients()
     }
@@ -145,7 +153,7 @@ export default {
     this.requestClients()
   },
   methods: {
-    requestClients () {
+    async requestClients () {
       if (this.$route.query.page < 1) {
         this.$router.push('/clients?page=1')
         this.$route.query.page = 1
@@ -158,7 +166,7 @@ export default {
       if (this.$route.query.search && !(this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired)) {
         data.search = this.$route.query.search
       }
-      this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+      await this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
     },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
