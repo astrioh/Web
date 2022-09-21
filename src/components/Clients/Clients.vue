@@ -171,7 +171,7 @@ export default {
     clickAddClient () {
       this.showAddClient = true
     },
-    onAddNewClient (client) {
+    async onAddNewClient (client) {
       const clientToSend = {
         uid: client.uid,
         organization: this.user?.owner_email,
@@ -180,11 +180,10 @@ export default {
         phone: client.phone,
         comment: client.comment
       }
-      this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
-        .then(() => {
-          this.showAddClient = false
-          this.$router.push({ path: '/clients', query: { page: this.paging.pages } })
-        })
+      await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
+      this.showAddClient = false
+      if (Number(this.$route.query.page) === this.paging.pages) this.requestClients()
+      await this.$router.push({ path: '/clients', query: { page: this.paging.pages } })
     },
     changePage () {
       this.$router.push({ path: '/clients', query: { page: this.currentPage } })
