@@ -55,7 +55,7 @@ export default {
       default: ''
     }
   },
-  emits: ['closeWindow'],
+  emits: ['closeWindow', 'nextTask'],
   data: function () {
     return {
       canvas: null
@@ -77,6 +77,7 @@ export default {
             this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addAvatar', visible: false })
           })
         this.$emit('closeWindow')
+        this.$emit('nextTask')
       }, 'image/jpeg')
     },
     fillTransparentPngBgToWhite () {

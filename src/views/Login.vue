@@ -39,6 +39,12 @@
           @keyup.enter="checkEmailExistense"
         />
       </field>
+      <p
+        v-if="form.showError"
+        class="text-red-500 text-xs pb-3"
+      >
+        {{ form.errorMessage }}
+      </p>
       <jb-button
         v-if="form.showCheckButton"
         class="w-full rounded-lg text-sm"
@@ -390,30 +396,31 @@ export default {
       return false
     },
     checkEmailExistense () {
-      if (this.form.email) {
-        if (this.validateEmail()) {
-          const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/exists?email=' + this.form.email
-          axios.get(uri)
-            .then(() => {
-              this.showLoginInputs()
-              this.form.emailMdi = mdiCheckBold
-              this.form.startScreenText = 'Войти в ЛидерТаск'
-              this.form.emailIconClass = 'text-lime-500'
-              this.form.emailControlDisabled = true
-              this.form.showCheckButton = false
-              this.form.showBackButton = true
-            })
-            .catch(() => {
-              this.showRegisterInputs()
-              this.form.emailMdi = mdiCheckBold
-              this.form.startScreenText = 'Создать аккаунт'
-              this.form.emailIconClass = 'text-lime-500'
-              this.form.emailControlDisabled = true
-              this.form.showCheckButton = false
-              this.form.showBackButton = true
-            })
-        }
+      if (!this.form.email.length || !this.validateEmail()) {
+        this.form.errorMessage = 'Некорректный Email'
+        this.form.showError = true
+        return
       }
+      const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/exists?email=' + this.form.email
+      axios.get(uri)
+        .then(() => {
+          this.showLoginInputs()
+          this.form.emailMdi = mdiCheckBold
+          this.form.startScreenText = 'Войти в ЛидерТаск'
+          this.form.emailIconClass = 'text-lime-500'
+          this.form.emailControlDisabled = true
+          this.form.showCheckButton = false
+          this.form.showBackButton = true
+        })
+        .catch(() => {
+          this.showRegisterInputs()
+          this.form.emailMdi = mdiCheckBold
+          this.form.startScreenText = 'Создать аккаунт'
+          this.form.emailIconClass = 'text-lime-500'
+          this.form.emailControlDisabled = true
+          this.form.showCheckButton = false
+          this.form.showBackButton = true
+        })
     },
     togglePasswordVisibility () {
       this.form.showPassword = !this.form.showPassword

@@ -1,4 +1,8 @@
 <template>
+  <NavbarSearchLimit
+    v-if="showFreeModal"
+    @cancel="showFreeModal = false"
+  />
   <ModalBoxAddClient
     v-if="showAddClient"
     title="Добавить клиента"
@@ -151,7 +155,7 @@ export default {
         organization: this.user?.owner_email,
         page: this.currentPage
       }
-      if (this.$route.query.search) {
+      if (this.$route.query.search && !(this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired)) {
         data.search = this.$route.query.search
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
