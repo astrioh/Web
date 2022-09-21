@@ -178,36 +178,8 @@
         </div>
       </template>
     </PopMenu>
-    <BoardPropsUserButton
-      class="mt-[8px]"
-      :user-email="selectedBoardCreatorEmail"
-      status="Владелец"
-      disabled
-    />
-    <BoardPropsUserButton
-      v-for="user in usersBoard"
-      :key="user.email"
-      :user-email="user.email"
-      :status="user.status"
-      :disabled="!isCanEdit"
-      @delete="deleteMember(user.uid)"
-      @admin="setMemberStatus(user.uid, 1)"
-      @reader="setMemberStatus(user.uid, 0)"
-      @writer="setMemberStatus(user.uid, 2)"
-    />
-    <div
-      class="mt-[30px] mb-[8px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
-    >
-      Отдел
-    </div>
-    <div
-      v-if="!depsBoard.length"
-      class="grow w-7/12 font-roboto text-[15px] leading-[20px] font-medium text-[#4c4c4d] mr-[7px] overflow-hidden text-ellipsis"
-    >
-      Общий для всех отделов
-    </div>
     <PopMenu
-      v-if="isCanEdit && usersCanAddToAccess.length"
+      v-if="isCanEdit && departmentsCanAddToAccess.length"
       class="w-full"
     >
       <div
@@ -234,27 +206,41 @@
       <template #menu>
         <div class="max-h-[220px] overflow-y-auto overflow-x-hidden w-[220px] scroll-style">
           <BoardPropsMenuItemDeps
-            v-for="(dep,index) in allDepartments"
+            v-for="dep in departmentsCanAddToAccess"
             :key="dep.uid"
             :dep-name="dep.name"
-            @click="addDepartment(index)"
+            @click="addDepartment(dep.uid)"
           />
         </div>
       </template>
     </PopMenu>
-    <div
+    <BoardPropsUserButton
+      class="mt-[8px]"
+      :user-email="selectedBoardCreatorEmail"
+      status="Владелец"
+      disabled
+    />
+    <BoardPropsDepButton
       v-for="dep in depsBoard"
       :key="dep.uid"
-    >
-      <BoardPropsMenuDepButton
-        :dep-name="dep.name"
-        :dep-status="dep.status"
-        @delete="deleteDepartment(dep.uid)"
-        @setAdmin="setDepartmentStatus(dep.uid,1)"
-        @setReader="setDepartmentStatus(dep.uid,0)"
-        @setWriter="setDepartmentStatus(dep.uid,2)"
-      />
-    </div>
+      :name="dep.name"
+      :status="dep.status"
+      @delete="deleteDepartment(dep.uid)"
+      @setAdmin="setDepartmentStatus(dep.uid,1)"
+      @setReader="setDepartmentStatus(dep.uid,0)"
+      @setWriter="setDepartmentStatus(dep.uid,2)"
+    />
+    <BoardPropsUserButton
+      v-for="user in usersBoard"
+      :key="user.email"
+      :user-email="user.email"
+      :status="user.status"
+      :disabled="!isCanEdit"
+      @delete="deleteMember(user.uid)"
+      @admin="setMemberStatus(user.uid, 1)"
+      @reader="setMemberStatus(user.uid, 0)"
+      @writer="setMemberStatus(user.uid, 2)"
+    />
   </div>
 
   <div v-else>
@@ -282,7 +268,7 @@ import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vu
 import * as BOARD from '@/store/actions/boards'
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
 import BoardPropsMenuItemDeps from '../Board/BoardPropsMenuItemDeps.vue'
-import BoardPropsMenuDepButton from '../Board/BoardPropsMenuDepButton.vue'
+import BoardPropsDepButton from '../Board/BoardPropsDepButton.vue'
 
 export default {
   components: {
@@ -295,7 +281,7 @@ export default {
     BoardPropsUserButton,
     BoardPropsMenuItemUser,
     BoardPropsMenuItemDeps,
-    BoardPropsMenuDepButton
+    BoardPropsDepButton
   },
   data () {
     return {
@@ -391,6 +377,19 @@ export default {
       }
       return users
     },
+    departmentsCanAddToAccess () {
+      const deps = []
+      const currentBoardDeps = this.selectedBoard?.deps || {}
+      for (const dep of this.allDepartments) {
+        if (currentBoardDeps[dep.uid] === undefined) {
+          deps.push({
+            uid: dep.uid,
+            name: dep.name
+          })
+        }
+      }
+      return deps
+    },
     usersCanAddToAccess () {
       const users = []
       const employees = Object.values(this.$store.state.employees.employees)
@@ -413,7 +412,7 @@ export default {
         const oneDep = deps[depUid]
         allDeps.push({
           uid: depUid,
-          name: oneDep.name,
+          name: oneDep?.name || '???',
           status: this.statuses[currentBoardDeps[depUid]]
         })
       }
@@ -429,10 +428,6 @@ export default {
         if (item1.name > item2.name) return 1
         if (item1.name < item2.name) return -1
         return 0
-      })
-      deps.unshift({
-        uid: '00000000-0000-0000-0000-000000000000',
-        name: 'Вне отдела'
       })
       return deps
     }
@@ -461,15 +456,14 @@ export default {
           this.$router.push('/board')
         })
     },
-    addDepartment (index) {
-      const dep = this.allDepartments[index]
+    addDepartment (depUid) {
       if (
         this.isCanEdit &&
         this.selectedBoard?.deps &&
-        this.selectedBoard?.deps[dep.uid] === undefined
+        this.selectedBoard?.deps[depUid] === undefined
       ) {
         const deps = { ...this.selectedBoard.deps }
-        deps[dep.uid] = 0
+        deps[depUid] = 0
         this.selectedBoard.deps = deps
         this.$store.dispatch(BOARD.CHANGE_BOARD_DEPARTMENTS, {
           boardUid: this.selectedBoard.uid,
