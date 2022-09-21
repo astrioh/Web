@@ -67,7 +67,7 @@ const actions = {
   [CARD.MOVE_CARD]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       let url =
-        process.env.VUE_APP_LEADERTASK_API + 'api/v1/card/stage?uid=' + data.uid
+        process.env.VUE_APP_INSPECTOR_API + 'card/stage?uid=' + data.uid
       url = url + '&stage=' + data.stageUid
       if (data.newOrder !== undefined) url = url + '&order=' + data.newOrder
       axios({ url: url, method: 'PATCH' })
