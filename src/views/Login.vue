@@ -59,8 +59,8 @@
           <jb-button
             class="w-full rounded-lg text-sm"
             color="white"
-            :icon="mdiArrowRight"
-            label="Продолжить с Google"
+            :icon="'google'"
+            label="Войти через Google"
           />
         </GoogleLogin>
       </div>
