@@ -145,8 +145,8 @@ const actions = {
   [CARD.CHANGE_CARD_COLOR]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/card/color?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/color?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH', data: { color: data.color } })
         .then((resp) => {
