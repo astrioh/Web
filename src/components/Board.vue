@@ -720,6 +720,7 @@ export default {
             uid_stage: this.selectedColumn.UID
           })
           .then((resp) => {
+            resp.data.uid_client = ''
             if (this.$store.state.isPropertiesMobileExpanded) {
               this.selectCard(resp.data)
             }
