@@ -3,14 +3,16 @@
     <NavBar
       class="pt-[8px]"
       title="Настройка формы"
-    />
-    <router-link :to="'/board/' + $route.params.board_id">
-      <button
-        class="bg-white justify-center px-5 h-[34px] rounded-[8px] mr-[7px] hover:bg-gray-200 flex items-center mb-5"
-      >
-        Назад
-      </button>
-    </router-link>
+    >
+      <router-link :to="'/board/' + $route.params.board_id">
+        <BoardSmallButton
+          class="flex items-center px-[10px] py-[5px]"
+          :icon="'back'"
+        >
+          Назад
+        </BoardSmallButton>
+      </router-link>
+    </NavBar>
     <div class="flex flex-row">
       <BoardWithFormSkeleton v-if="!formIsLoaded" />
       <form
@@ -191,10 +193,12 @@ import FormCheckbox from '@/components/Board/FormCheckbox.vue'
 
 import * as BOARD_FORMS from '@/store/actions/boardforms.js'
 import BoardWithFormSkeleton from '@/components/Board/BoardWithFormSkeleton'
+import BoardSmallButton from '@/components/Board/BoardSmallButton.vue'
 
 export default {
   components: {
     BoardWithFormSkeleton,
+    BoardSmallButton,
     NavBar,
     JbButton,
     FormCheckbox
