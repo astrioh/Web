@@ -102,6 +102,10 @@ export default {
       type: [String, Number, Boolean, Array, Object],
       default: ''
     },
+    isValid: {
+      type: Boolean,
+      default: true
+    },
     required: Boolean,
     disabled: Boolean,
     borderless: Boolean,
@@ -128,7 +132,8 @@ export default {
         this.computedType.value === 'textarea' ? 'h-24' : 'h-12',
         this.borderless ? 'border-0' : 'border-2',
         this.transparent ? 'bg-transparent' : 'bg-white dark:bg-gray-800',
-        this.valid ? 'border-stone-500 bg-amber-50' : ''
+        this.valid ? 'border-stone-500 bg-amber-50' : '',
+        !this.isValid ? 'border-rose-500 focus:border-rose-500' : ''
       ]
 
       if (this.icon) {
