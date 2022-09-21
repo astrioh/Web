@@ -210,6 +210,7 @@ export default {
           show_date: 0,
           favorite: 0,
           stages: [],
+          deps: [],
           children: [],
           members
         }
