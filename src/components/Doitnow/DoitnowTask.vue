@@ -78,7 +78,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
             >
               Заказчик:
             </span>
@@ -124,7 +124,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
             >
               Исполнитель:
             </span>
@@ -146,7 +146,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
             >
               Срок:
             </span>
@@ -163,7 +163,7 @@
             v-show="plural"
             class="flex mb-2"
           >
-            <span class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]">
+            <span class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]">
               Просрочено:
             </span>
             <div
@@ -178,7 +178,7 @@
             class="flex mb-2"
           >
             <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80]"
+              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
             >
               Проект:
             </span>
