@@ -38,12 +38,9 @@
         <p class="text-sm p-3">
           Работайте с задачами и поручениями, которые должны быть выполнены сегодня
         </p>
-        <button
-          class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-          @click="okToModal"
-        >
-          Понятно
-        </button>
+        <OnBoardingButton
+          @okToModal="okToModal"
+        />
       </div>
       <div
         v-if="!displayModal"
@@ -279,10 +276,12 @@ import Icon from '@/components/Icon.vue'
 import ready from '@/icons/ready.js'
 import * as TASK from '@/store/actions/tasks.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
+import OnBoardingButton from '../onBoarding/onBoardingButton.vue'
 
 export default {
   components: {
-    Icon
+    Icon,
+    OnBoardingButton
   },
   data () {
     return {

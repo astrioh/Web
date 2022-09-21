@@ -251,12 +251,9 @@
         </li>
       </ul>
     </div>
-    <button
-      class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[35px]"
-      @click="okToModal"
-    >
-      Понятно
-    </button>
+    <OnBoardingButton
+      @okToModal="okToModal"
+    />
   </div>
 </template>
 
@@ -285,6 +282,7 @@ import listView from '@/icons/list-view.js'
 import * as SLIDES from '@/store/actions/slides.js'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { uuidv4 } from '@/helpers/functions'
+import OnBoardingButton from './onBoarding/onBoardingButton.vue'
 
 export default {
   components: {
@@ -300,7 +298,8 @@ export default {
     EmployeesModalBoxOtherOrg,
     PopMenu,
     NavBar,
-    PopMenuItem
+    PopMenuItem,
+    OnBoardingButton
   },
   data () {
     return {

@@ -109,12 +109,9 @@
           </li>
         </ul>
       </div>
-      <button
-        class="bg-[#FF912380] px-2 rounded-[8px] text-black text-sm mr-1 hover:bg-[#F5DEB3] w-[156px] h-[51px] mr-auto ml-auto mt-[20px]"
-        @click="okToModal"
-      >
-        Понятно
-      </button>
+      <OnBoardingButton
+        @okToModal="okToModal"
+      />
     </div>
   </div>
 </template>
@@ -134,6 +131,7 @@ import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import BoardInputValue from './Board/BoardInputValue.vue'
 import { uuidv4 } from '@/helpers/functions'
 import NavBar from '@/components/Navbar/NavBar.vue'
+import OnBoardingButton from './onBoarding/onBoardingButton.vue'
 
 export default {
   components: {
@@ -142,7 +140,8 @@ export default {
     BoardBlocItem,
     ListBlocAdd,
     BoardInputValue,
-    NavBar
+    NavBar,
+    OnBoardingButton
   },
   data () {
     return {
