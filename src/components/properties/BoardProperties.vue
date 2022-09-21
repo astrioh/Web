@@ -18,20 +18,6 @@
       <PopMenu>
         <PropsButtonMenu />
         <template #menu>
-          <router-link :to="`/board/${selectedBoardUid}/form_settings`">
-            <PopMenuItem
-              icon="add"
-            >
-              Форма сбора заявок
-            </PopMenuItem>
-          </router-link>
-          <router-link :to="`/board/${selectedBoardUid}/stats`">
-            <PopMenuItem
-              icon="check"
-            >
-              Статистика доски
-            </PopMenuItem>
-          </router-link>
           <PopMenuItem
             v-if="isCanDelete"
             icon="delete"

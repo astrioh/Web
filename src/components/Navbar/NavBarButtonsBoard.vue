@@ -65,6 +65,20 @@
         >
           Свойства доски
         </PopMenuItem>
+        <router-link :to="`/board/${selectedBoardUid}/stats`">
+          <PopMenuItem
+            icon="check"
+          >
+            Статистика доски
+          </PopMenuItem>
+        </router-link>
+        <router-link :to="`/board/${selectedBoardUid}/form_settings`">
+          <PopMenuItem
+            icon="add"
+          >
+            Форма сбора заявок
+          </PopMenuItem>
+        </router-link>
         <PopMenuItem
           v-if="canEditBoard"
           icon="add"
@@ -149,6 +163,12 @@ export default {
     },
     showOnlyMyCreatedCards () {
       return this.$store.state.boards.showOnlyMyCreatedCards
+    },
+    selectedBoard () {
+      return this.$store.state.boards.selectedBoard
+    },
+    selectedBoardUid () {
+      return this.selectedBoard?.uid || ''
     },
     isFilterSet () {
       return this.showOnlyMyCreatedCards || this.showOnlyCardsWhereIAmResponsible || this.showArchive || this.showOnlyCardsWithNoResponsible
