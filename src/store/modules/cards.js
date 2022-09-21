@@ -129,8 +129,8 @@ const actions = {
   [CARD.CHANGE_CARD_BUDGET]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/card/cost?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/cost?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH', data: { cost: data.budget } })
         .then((resp) => {
