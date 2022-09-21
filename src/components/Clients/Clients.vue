@@ -145,7 +145,7 @@ export default {
     this.requestClients()
   },
   methods: {
-    requestClients () {
+    async requestClients () {
       if (this.$route.query.page < 1) {
         this.$router.push('/clients?page=1')
         this.$route.query.page = 1
@@ -158,7 +158,7 @@ export default {
       if (this.$route.query.search && !(this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired)) {
         data.search = this.$route.query.search
       }
-      this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+      await this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
     },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
@@ -182,7 +182,7 @@ export default {
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false
-      if (Number(this.$route.query.page) === this.paging.pages) this.requestClients()
+      if (Number(this.$route.query.page) === this.paging.pages) await this.requestClients()
       await this.$router.push({ path: '/clients', query: { page: this.paging.pages } })
     },
     changePage () {
