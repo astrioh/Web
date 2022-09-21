@@ -31,8 +31,7 @@ export default {
       return this.$route.query.q ?? ''
     },
     showLimitMessage () {
-      const tarif = this.$store.state.user.user.tarif
-      const noAccess = (tarif !== 'alpha' && tarif !== 'trial') || this.$store.getters.isLicenseExpired
+      const noAccess = this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired
       const isLoading = this.$store.state.tasks.status === 'loading'
       return noAccess && !isLoading
     },
