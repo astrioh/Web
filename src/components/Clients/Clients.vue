@@ -20,6 +20,7 @@
         <th>Email</th>
         <th>Комментарий</th>
       </tr>
+      <ClientsSkeleton v-if="status === 'loading'" />
       <template v-if="status === 'success'">
         <tr
           v-for="client in clients"
@@ -58,8 +59,6 @@
         </tr>
       </template>
     </table>
-
-    <ClientsSkeleton v-if="status === 'loading'" />
 
     <div
       class="group flex justify-center border border-[#0000001F] rounded-[7px] p-[7px] mt-[15px] cursor-pointer"
