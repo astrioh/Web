@@ -9,6 +9,15 @@ import processCreate from '@/websync/create.js'
 import processRemove from '@/websync/remove.js'
 import processUpdate from '@/websync/update.js'
 
+/**
+ * @type {WebSocket | undefined}
+ */
+let socket
+/**
+ * @type {boolean}
+ */
+let isSocketForceClosed = false
+
 const user = computed(() => store.state.user.user)
 
 const employees = computed(() => store.state.employees.employees)
@@ -33,10 +42,13 @@ function parseObject (obj) {
       break
   }
 }
-export function initInspectorSocket () {
-  const socket = new WebSocket(process.env.VUE_APP_INSPECTOR_WS)
-  window.inspectorSocket = socket
-  socket.onopen = function (event) {
+export function initInspectorSocket (force = false) {
+  if (socket && socket.readyState !== WebSocket.CLOSED && !force) return
+  if (socket && socket.readyState !== WebSocket.CLOSED) socket.close()
+
+  isSocketForceClosed = false
+  socket = new WebSocket(process.env.VUE_APP_INSPECTOR_WS)
+  socket.onopen = function () {
     const auth = {
       type: 'auth',
       message: user.value.current_user_uid,
@@ -51,10 +63,10 @@ export function initInspectorSocket () {
     if (process.env.VUE_APP_EXTENDED_LOGS) console.log('inspector obj', event.data)
     parseMessage(event.data)
   }
-  socket.onclose = function (event) {
+  socket.onclose = function () {
     setTimeout(function () {
-      initInspectorSocket()
-    }, 2500)
+      !isSocketForceClosed && initInspectorSocket()
+    }, 1000)
   }
   socket.onerror = function () {
     socket.close()
@@ -100,5 +112,6 @@ function createNotificationAndInspectorMessage (parsedData) {
 }
 
 export function disconnectInspectorSocket () {
-  window.inspectorSocket.close()
+  isSocketForceClosed = true
+  socket.close()
 }
