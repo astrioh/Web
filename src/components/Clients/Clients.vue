@@ -134,7 +134,7 @@ export default {
       return this.$store.state.user.user
     },
     currentPageRouter () {
-      return this.$route.query.page
+      return Number(this.$route.query.page) || 1
     }
   },
   watch: {
@@ -167,6 +167,10 @@ export default {
         data.search = this.$route.query.search
       }
       await this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+      if (this.currentPageRouter > this.paging.pages) {
+        this.currentPage = this.paging.pages
+        this.changePage()
+      }
     },
     showClientProperties (client) {
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
