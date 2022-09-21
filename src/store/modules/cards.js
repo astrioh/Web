@@ -67,7 +67,7 @@ const actions = {
   [CARD.MOVE_CARD]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       let url =
-        process.env.VUE_APP_LEADERTASK_API + 'api/v1/card/stage?uid=' + data.uid
+        process.env.VUE_APP_INSPECTOR_API + 'card/stage?uid=' + data.uid
       url = url + '&stage=' + data.stageUid
       if (data.newOrder !== undefined) url = url + '&order=' + data.newOrder
       axios({ url: url, method: 'PATCH' })
@@ -97,8 +97,8 @@ const actions = {
   [CARD.CHANGE_CARD_NAME]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        '/api/v1/card/name?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/name?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH', data: { name: data.name } })
         .then((resp) => {
@@ -113,8 +113,8 @@ const actions = {
   [CARD.CHANGE_CARD_COMMENT]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/card/comment?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/comment?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH', data: { comment: data.comment } })
         .then((resp) => {
@@ -129,8 +129,8 @@ const actions = {
   [CARD.CHANGE_CARD_BUDGET]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/card/cost?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/cost?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH', data: { cost: data.budget } })
         .then((resp) => {
