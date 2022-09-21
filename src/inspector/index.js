@@ -115,3 +115,7 @@ export function disconnectInspectorSocket () {
   isSocketForceClosed = true
   socket.close()
 }
+
+export function sendInspectorMessage (message) {
+  socket.send(JSON.stringify(message))
+}
