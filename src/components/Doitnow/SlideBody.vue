@@ -7,6 +7,13 @@
     button-label="Delete"
     @delegated="showSlide = false"
   />
+  <UploadAvatar
+    v-if="changeAvatar"
+    :img="uploadedAvatar"
+    :image-type="avatarType"
+    @close-window="changeAvatar = false"
+    @nextTask="nextTask"
+  />
   <div class="flex items-center justify-center text-center flex-col">
     <!-- welcome -->
     <div
@@ -62,10 +69,22 @@
           </article>
         </div>
       </div>
-      <SlideBodyButton
-        text="Загрузить"
-        @click="clickAddAvatar"
-      />
+      <div class="mb-3">
+        <input
+          id="iconfile"
+          type="file"
+          class="hidden"
+          accept="image/png, image/jpeg"
+          @change="changeUserPhoto"
+        >
+        <label
+          for="iconfile"
+          class="w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[#2E2E2E] text-[14px] px-[68px] py-3 rounded-md hover:bg-slate-200 hover:text-[#422b14] font-medium"
+        >
+          Загрузить
+        </label>
+        <br>
+      </div>
     </div>
 
     <!-- addEmployees -->
@@ -170,11 +189,13 @@ import SlideBodyButton from './SlideBodyButton.vue'
 import SlideBodyTitle from './SlideBodyTitle.vue'
 import { NAVIGATOR_SUCCESS } from '@/store/actions/navigator'
 import * as SLIDES from '@/store/actions/slides.js'
+import UploadAvatar from '../UploadAvatar.vue'
 export default {
   components: {
     InspectorModalBox,
     SlideBodyButton,
-    SlideBodyTitle
+    SlideBodyTitle,
+    UploadAvatar
   },
   props: {
     name: {
@@ -186,7 +207,10 @@ export default {
   data () {
     return {
       showInspector: false,
-      showSlide: true
+      showSlide: true,
+      uploadedAvatar: '',
+      changeAvatar: false,
+      avatarType: ''
     }
   },
   computed: {
@@ -197,27 +221,47 @@ export default {
   watch: {
     showSlide (newval, oldval) {
       if (!newval) {
-        this.$emit('nextTask')
+        this.nextTask()
       }
     }
   },
   methods: {
     clickAddAvatar () {
-      this.$emit('nextTask')
+      this.nextTask()
       this.$router.push('/account/myaccount')
       this.$store.commit(NAVIGATOR_SUCCESS)
     },
-    clickSuccess () {
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: false })
+    changeUserPhoto (event) {
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']
+      const file = event.target.files[0]
+      if (!allowedTypes.includes(file.type)) {
+        this.notAllowedImageType = true
+        return
+      }
+      if (file) {
+        const reader = new FileReader()
+        reader.addEventListener('load', () => {
+          this.uploadedAvatar = reader.result
+          this.avatarType = file.type
+          this.changeAvatar = true
+        })
+        reader.readAsDataURL(file)
+      }
+    },
+    nextTask () {
       this.$emit('nextTask')
     },
+    clickSuccess () {
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'welcome', visible: false })
+      this.nextTask()
+    },
     clickAddEmployees () {
-      this.$emit('nextTask')
+      this.nextTask()
       this.$router.push('/settings/employees')
       this.$store.commit(NAVIGATOR_SUCCESS)
     },
     clickAddReglament () {
-      this.$emit('nextTask')
+      this.nextTask()
       this.$router.push('/reglaments')
       this.$store.commit(NAVIGATOR_SUCCESS)
     }
