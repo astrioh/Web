@@ -5,7 +5,9 @@
       title="Настройка формы"
     />
     <div class="flex flex-row">
+      <BoardWithFormSkeleton v-if="!formIsLoaded" />
       <form
+        v-else
         class="p-5 bg-white rounded-xl w-[30%] shrink-0 self-start"
       >
         <input
@@ -115,7 +117,7 @@
         />
       </form>
       <div
-        v-if="showParams === true"
+        v-if="showParams"
         class="ml-10 mt-2"
       >
         <div class="mb-10">
@@ -181,9 +183,11 @@ import JbButton from '@/components/JbButton.vue'
 import FormCheckbox from '@/components/Board/FormCheckbox.vue'
 
 import * as BOARD_FORMS from '@/store/actions/boardforms.js'
+import BoardWithFormSkeleton from '@/components/Board/BoardWithFormSkeleton'
 
 export default {
   components: {
+    BoardWithFormSkeleton,
     NavBar,
     JbButton,
     FormCheckbox
@@ -212,6 +216,7 @@ export default {
         redirect_link: ''
       },
       showParams: false,
+      formIsLoaded: false,
       errors: {
         inputs: [],
         messages: []
@@ -237,6 +242,7 @@ export default {
         this.form = data.info
         this.showParams = true
       }
+      this.formIsLoaded = true
       console.log(this.form)
     })
   },
