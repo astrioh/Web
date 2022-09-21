@@ -97,8 +97,8 @@ const actions = {
   [CARD.CHANGE_CARD_NAME]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        '/api/v1/card/name?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/name?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH', data: { name: data.name } })
         .then((resp) => {
