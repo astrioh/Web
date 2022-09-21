@@ -13,6 +13,7 @@ export function createTask (obj) {
 export function removeTask (uid) {
   store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
   store.commit('REMOVE_TASK', uid)
+  store.dispatch('asidePropertiesToggle', false)
 }
 
 export function updateTask (obj) {
