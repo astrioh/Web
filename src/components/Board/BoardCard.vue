@@ -5,11 +5,13 @@
     @click="selectCard"
   >
     <div
-      class="absolute top-[-8px] left-[6px] flex -space-x-1.5"
+      v-if="onlineUsers.length"
+      class="-mt-[30px] -ml-[10px] mb-[10px] flex -space-x-1.5"
     >
       <img
         v-for="user in onlineUsers"
         :key="user"
+        :title="user.name"
         class="w-[20px] h-[20px] rounded-full border-[1px] border-blue-300"
         :src="user.fotolink"
       >
@@ -443,6 +445,9 @@ export default {
         if (this.employees[property].onlineCardUid === this.card.uid) {
           onlineUsers.push(this.employees[property])
         }
+      }
+      if (this.selected) {
+        onlineUsers.push(this.employees[this.$store.state.user.user.current_user_uid])
       }
       return onlineUsers
     },
