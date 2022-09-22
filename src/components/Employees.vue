@@ -164,6 +164,7 @@
             sub-title-color="#606061"
             :right-icon="empIcon(userValue)"
             :selected="selectedEmployee === userValue.email"
+            :is-online="isUserOnline(userValue.uid)"
             @click.stop="showUserProperties(userValue)"
           >
             <img
@@ -550,7 +551,11 @@ export default {
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'employee')
+    },
+    isUserOnline (uidUser) {
+      return this.$store.state.employees.employees[uidUser]?.online
     }
+
   }
 }
 </script>
