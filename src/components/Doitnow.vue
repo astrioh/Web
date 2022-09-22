@@ -113,7 +113,6 @@ export default {
   data () {
     return {
       unreadTasks: [],
-      overdueTasks: [],
       todayTasks: [],
       readyTasks: [],
       unreadDelegateByMe: [],
@@ -124,7 +123,6 @@ export default {
       slidesCopy: [],
       projectTasks: [],
       unsortedTasks: [],
-      overdueReaded: [],
       notifiesCopy: [],
       tasksLoaded: false,
       childrens: [],
@@ -137,7 +135,6 @@ export default {
       return (
         this.slidesCopy.length +
         this.unreadTasks.length +
-        this.overdueTasks.length +
         this.readyTasks.length +
         this.todayTasks.length +
         this.notifiesCopy.length
@@ -155,9 +152,6 @@ export default {
       }
       if (this.readyTasks.length) {
         return this.readyTasks[0]
-      }
-      if (this.overdueTasks.length) {
-        return this.overdueTasks[0]
       }
       if (this.todayTasks.length) {
         return this.todayTasks[0]
@@ -285,12 +279,6 @@ export default {
               }
             }
           }
-          // Сортировка просроченных
-          for (let i = 0; i < result[1].length; i++) {
-            if (result[1][i].readed) {
-              this.overdueReaded.push(result[1][i])
-            }
-          }
           // Готово к сдаче
           this.$store.dispatch(TASK.READY_FOR_COMPLITION_TASKS_REQUEST)
             .then((resp) => {
@@ -310,15 +298,12 @@ export default {
               // Отправляем в главный массив (непрочитанное) отсортированные массивы по очереди
               this.unreadTasks = [...this.unreadDelegateByMe, ...this.unreadDelegateToMe,
                 ...this.readyTasksUnreaded, ...this.projectTasks, ...this.unsortedTasks]
-              // Отправляем в главный массив (просрочено) отсортированные данные
-              this.overdueTasks = [...this.overdueReaded]
               // Отправляем в главный массив (готовые) отсортированные данные
               this.readyTasks = [...this.readyTasksReaded]
               this.todayTasks = [...result[2]]
               this.openedTasks = [...this.openedTasks]
               // удаляем из массивов задачи со статусом "завершено"
               this.unreadTasks = this.unreadTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
-              this.overdueTasks = this.overdueTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
               this.readyTasks = this.readyTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
               this.todayTasks = this.todayTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
               this.openedTasks = this.openedTasks.filter(task => (task.status !== TASK_STATUS.TASK_COMPLETED) && (task.status !== TASK_STATUS.TASK_REJECTED))
@@ -361,10 +346,6 @@ export default {
       }
       if (this.readyTasks.length) {
         this.readyTasks.shift()
-        return
-      }
-      if (this.overdueTasks.length) {
-        this.overdueTasks.shift()
         return
       }
       if (this.todayTasks.length) {
