@@ -24,6 +24,7 @@
         <th>Всего заявок</th>
         <th>Заявок в успехе</th>
         <th>Заявок в отказе</th>
+        <th>Заявок в работе</th>
       </tr>
       <BoardStatsSkeleton v-if="!isLoaded" />
       <template
@@ -98,7 +99,12 @@ export default {
                 quantity: ++this.membersByCost[card.user].allCards.quantity,
                 cost: this.membersByCost[card.user].allCards.cost + card.cost
               }
-
+              if (cardGroup.Archive === false) {
+                this.membersByCost[card.user].archiveCards = {
+                  quantity: ++this.membersByCost[card.user].archiveCards.quantity,
+                  cost: this.membersByCost[card.user].archiveCards.cost + card.cost
+                }
+              }
               if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
                 this.membersByCost[card.user].successfulCards = {
                   quantity: ++this.membersByCost[card.user].successfulCards.quantity,
@@ -126,9 +132,18 @@ export default {
                   rejectedCards: {
                     quantity: 0,
                     cost: 0
+                  },
+                  archiveCards: {
+                    quantity: 0,
+                    cost: 0
                   }
                 }
-
+                if (card.Archive === true) {
+                  this.membersByCost[card.user].archiveCards = {
+                    quantity: ++this.membersByCost[card.user].archiveCards.quantity,
+                    cost: this.membersByCost[card.user].archiveCards.cost + card.cost
+                  }
+                }
                 if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
                   userData.successfulCards = {
                     quantity: ++userData.successfulCards.quantity,
