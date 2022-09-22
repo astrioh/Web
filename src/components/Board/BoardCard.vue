@@ -1,12 +1,12 @@
 <template>
   <div
-    class="group bg-white rounded-[10px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
+    class="group bg-white rounded-[6px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
     :class="{ 'border-[rgba(0,0,0,0.1)]': !selected, 'border-[#ff9123]': selected }"
     @click="selectCard"
   >
     <div
       v-if="haveCover"
-      class="overflow-hidden rounded-[10px] mb-[20px] flex place-content-center"
+      class="overflow-hidden rounded-[6px] mb-[20px] flex place-content-center"
       :style="{ background: card.cover_color, height: `${coverHeight}px` }"
     >
       <div
