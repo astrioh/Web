@@ -11,6 +11,9 @@ export function createTask (obj) {
 }
 
 export function removeTask (uid) {
+  if (uid === store.state.tasks.selectedTask.uid) {
+    store.dispatch('asidePropertiesToggle', false)
+  }
   store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
   store.commit('REMOVE_TASK', uid)
 }
