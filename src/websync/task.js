@@ -1,7 +1,8 @@
 /* eslint-disable indent */
+import router from '@/router/index.js'
+import { NAVIGATOR_UPDATE_ASSIGNMENTS } from '@/store/actions/navigator'
 import store from '@/store/index.js'
 import { shouldAddTaskIntoList } from './utils'
-import { NAVIGATOR_UPDATE_ASSIGNMENTS } from '@/store/actions/navigator'
 
 export function createTask (obj) {
   store.dispatch(NAVIGATOR_UPDATE_ASSIGNMENTS)
@@ -24,6 +25,9 @@ export function updateTask (obj) {
   if (shouldAddTaskIntoList(obj.obj)) {
     store.commit('ADD_TASK', obj.obj)
   } else {
+    // не убираем из списка прочитанные задачи в списке непрочитанных
+    if (router?.currentRoute?.value?.name === 'tasksUnread') return
+    //
     store.commit('REMOVE_TASK', obj.obj.uid)
   }
 }
