@@ -7,17 +7,18 @@ export default [
       layout: Home
     },
     path: '/reglaments',
-    name: 'reglaments',
-    component: () => import('@/components/Reglaments/Reglaments.vue'),
-    beforeEnter: shouldRedirectToLogin
-  },
-  {
-    meta: {
-      layout: Home
-    },
-    path: '/reglaments/:id',
-    component: () => import('@/components/Reglaments/ReglamentContent.vue'),
-    name: 'currentReglament',
-    beforeEnter: shouldRedirectToLogin
+    beforeEnter: shouldRedirectToLogin,
+    children: [
+      {
+        path: '',
+        name: 'reglaments',
+        component: () => import('@/components/Reglaments/Reglaments.vue')
+      },
+      {
+        path: ':id',
+        name: 'currentReglament',
+        component: () => import('@/components/Reglaments/ReglamentContent.vue')
+      }
+    ]
   }
 ]
