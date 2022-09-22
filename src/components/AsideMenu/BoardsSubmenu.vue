@@ -128,7 +128,6 @@ import AsideMenuListAdd from '@/components/AsideMenu/AsideMenuListAdd.vue'
 import AsideMenuListInput from '@/components/AsideMenu/AsideMenuListInput.vue'
 import BoardsSubmenuItem from '@/components/AsideMenu/BoardsSubmenuItem.vue'
 import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
-import { uuidv4 } from '@/helpers/functions'
 
 import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
@@ -225,35 +224,13 @@ export default {
       const title = name.trim()
       if (title) {
         // добавляем новую доску и переходим в неё
-        const maxOrder =
-          this.items[0]?.items?.reduce(
-            (maxOrder, child) =>
-              child.order > maxOrder ? child.order : maxOrder,
-            0
-          ) || 0
-        const members = {}
-        members[this.user.current_user_uid] = 1
-        const board = {
-          uid: uuidv4(),
-          name: title,
-          uid_parent: '00000000-0000-0000-0000-000000000000',
-          email_creator: this.user.current_user_email,
-          order: maxOrder + 1,
-          collapsed: 0,
-          color: '',
-          public_link_status: 0,
-          show_date: 0,
-          favorite: 0,
-          stages: [],
-          children: [],
-          deps: [],
-          members
+        const boardData = {
+          name: title
         }
-        console.log(`create board uid: ${board.uid}`, board)
-        this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, board).then((res) => {
+        this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, boardData).then((res) => {
+          const board = res.data
           // заполняем недостающие параметры
           board.global_property_uid = '1b30b42c-b77e-40a4-9b43-a19991809add'
-          board.type_access = res.data.type_access
           board.color = '#A998B6'
           //
           this.$store.commit(BOARD.PUSH_BOARD, [board])

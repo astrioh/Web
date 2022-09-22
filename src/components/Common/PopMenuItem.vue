@@ -1,6 +1,7 @@
 <template>
   <div
-    class="h-[30px] flex items-center gap-[10px] px-[10px] cursor-pointer hover:bg-[#f4f5f7] rounded-[6px] text-[#4c4c4d] text-[13px] leading-[15px] font-roboto"
+    class="h-[30px] flex items-center gap-[10px] px-[10px] cursor-pointer rounded-[6px] text-[13px] leading-[15px] font-roboto"
+    :class="getItemClass"
   >
     <svg
       v-if="icon === 'answer'"
@@ -29,19 +30,19 @@
     >
       <path
         d="M11.2382 5.46133L9.73929 5.40713L9.46121 12.908L10.9602 12.9622L11.2382 5.46133Z"
-        fill="#7E7E80"
+        fill="#EF4444"
       />
       <path
         d="M14.9 2.37037H11.3V1.08642C11.3 0.493827 10.8 0 10.2 0H6C5.4 0 4.9 0.493827 4.9 1.08642V2.37037H1.2C0.8 2.37037 0.5 2.66667 0.5 3.06173C0.5 3.45679 0.8 3.75309 1.2 3.75309H1.8L2.8 15.3086C2.8 15.7037 3.1 16 3.5 16H12.5C12.9 16 13.2 15.7037 13.2 15.3086L14.2 3.75309H14.8C15.2 3.75309 15.5 3.45679 15.5 3.06173C15.5 2.66667 15.3 2.37037 14.9 2.37037ZM6.3 1.48148H9.8V2.37037H6.3V1.48148ZM11.9 14.5185H4.2L3.2 3.75309H12.7L11.9 14.5185Z"
-        fill="#7E7E80"
+        fill="#EF4444"
       />
       <path
         d="M8.8 5.4321H7.3V12.9383H8.8V5.4321Z"
-        fill="#7E7E80"
+        fill="#EF4444"
       />
       <path
         d="M6.60447 12.9392L6.32632 5.43832L4.82737 5.49254L5.10552 12.9935L6.60447 12.9392Z"
-        fill="#7E7E80"
+        fill="#EF4444"
       />
     </svg>
     <svg
@@ -233,6 +234,11 @@ export default {
     icon: {
       type: String,
       default: ''
+    }
+  },
+  computed: {
+    getItemClass () {
+      return this.icon === 'delete' ? 'text-[#EF4444] hover:bg-[#FEF2F2]' : 'text-[#4c4c4d] hover:bg-[#f4f5f7]'
     }
   }
 }

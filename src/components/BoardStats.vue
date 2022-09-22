@@ -3,31 +3,31 @@
     class="pt-[8px]"
     :title="`Статистика доски ${boardName}`"
   >
-    <div class="flex-none flex gap-[10px] items-center">
-      <router-link
-        :to="`/board/${boardUid}`"
+    <router-link
+      :to="`/board/${boardUid}`"
+    >
+      <BoardSmallButton
+        class="flex items-center px-[10px] py-[5px]"
+        :icon="'back'"
       >
-        <BoardSmallButton
-          class="flex items-center px-[10px] py-[5px]"
-          :icon="'back'"
-        >
-          Назад
-        </BoardSmallButton>
-      </router-link>
-      <slot />
-    </div>
+        Назад
+      </BoardSmallButton>
+    </router-link>
   </NavBar>
   <div class="bg-white rounded-xl min-h-[75%] p-[20px]">
     <table>
       <tr>
         <th>Сотрудник</th>
-        <th>Всего заявок</th>
+        <th>Заявок в работе</th>
         <th>Заявок в успехе</th>
         <th>Заявок в отказе</th>
+        <th>Всего заявок</th>
       </tr>
+      <BoardStatsSkeleton v-if="!isLoaded" />
       <template
-        v-for="(member, index) in membersByCost"
-        :key="index"
+        v-for="member in membersSortedByCardsCount"
+        v-else
+        :key="member.email"
       >
         <BoardStatsItem
           :member="member"
@@ -43,16 +43,19 @@ import NavBar from '@/components/Navbar/NavBar'
 import BoardSmallButton from '@/components/Board/BoardSmallButton.vue'
 import * as CARD from '@/store/actions/cards'
 import { CARD_STAGE } from '@/constants'
+import BoardStatsSkeleton from '@/components/Board/BoardStatsSkeleton'
 
 export default {
   components: {
+    BoardStatsSkeleton,
     NavBar,
     BoardStatsItem,
     BoardSmallButton
   },
   data () {
     return {
-      membersByCost: {}
+      membersWithCards: {},
+      isLoaded: true
     }
   },
   computed: {
@@ -70,12 +73,27 @@ export default {
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
+    },
+    membersSortedByCardsCount () {
+      const members = Object.values(this.membersWithCards)
+      members.sort((member1, member2) => {
+        // сначала по количеству карточек
+        if (member1.allCards.quantity > member2.allCards.quantity) return -1
+        if (member1.allCards.quantity < member2.allCards.quantity) return 1
+        // если одинаковый, то по email`у
+        if (member1.email > member2.email) return -1
+        if (member1.email < member2.email) return 1
+        return 0
+      })
+      return members
     }
   },
   mounted () {
     if (!this.boardCards?.length) {
+      this.isLoaded = false
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.boardUid).then(() => {
         this.calculateMembersCost()
+        this.isLoaded = true
       })
       return
     }
@@ -86,60 +104,62 @@ export default {
       this.boardCards.forEach((cardGroup) => {
         if (cardGroup.cards) {
           cardGroup.cards.forEach((card) => {
-            if (this.membersByCost[card.user]) {
-              this.membersByCost[card.user].allCards = {
-                quantity: ++this.membersByCost[card.user].allCards.quantity,
-                cost: this.membersByCost[card.user].allCards.cost + card.cost
+            const member = this.getMemberByUser(card.user)
+            if (member) {
+              member.allCards = {
+                quantity: member.allCards.quantity + 1,
+                cost: member.allCards.cost + card.cost
               }
-
+              if (!cardGroup.Archive) {
+                member.activeCards = {
+                  quantity: member.activeCards.quantity + 1,
+                  cost: member.activeCards.cost + card.cost
+                }
+              }
               if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
-                this.membersByCost[card.user].successfulCards = {
-                  quantity: ++this.membersByCost[card.user].successfulCards.quantity,
-                  cost: this.membersByCost[card.user].successfulCards.cost + card.cost
+                member.successfulCards = {
+                  quantity: member.successfulCards.quantity + 1,
+                  cost: member.successfulCards.cost + card.cost
                 }
               } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT) {
-                this.membersByCost[card.user].rejectedCards = {
-                  quantity: ++this.membersByCost[card.user].rejectedCards.quantity,
-                  cost: this.membersByCost[card.user].rejectedCards.cost + card.cost
+                member.rejectedCards = {
+                  quantity: member.rejectedCards.quantity + 1,
+                  cost: member.rejectedCards.cost + card.cost
                 }
-              }
-            } else {
-              if (card.user !== '' && this.employeesByEmail[card.user]?.name) {
-                const userData = {
-                  email: card.user,
-                  username: this.employeesByEmail[card.user].name,
-                  allCards: {
-                    quantity: 1,
-                    cost: card.cost
-                  },
-                  successfulCards: {
-                    quantity: 0,
-                    cost: 0
-                  },
-                  rejectedCards: {
-                    quantity: 0,
-                    cost: 0
-                  }
-                }
-
-                if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
-                  userData.successfulCards = {
-                    quantity: ++userData.successfulCards.quantity,
-                    cost: userData.successfulCards.cost + card.cost
-                  }
-                } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT) {
-                  userData.rejectedCards = {
-                    quantity: ++userData.rejectedCards.quantity,
-                    cost: userData.rejectedCards.cost + card.cost
-                  }
-                }
-
-                this.membersByCost[card.user] = userData
               }
             }
           })
         }
       })
+    },
+    getMemberByUser (user) {
+      if (!user) return null
+      const member = this.membersWithCards[user]
+      if (!member) {
+        const newMember = {
+          email: user,
+          username: this.employeesByEmail[user.toLowerCase()]?.name || user,
+          allCards: {
+            quantity: 0,
+            cost: 0
+          },
+          successfulCards: {
+            quantity: 0,
+            cost: 0
+          },
+          rejectedCards: {
+            quantity: 0,
+            cost: 0
+          },
+          activeCards: {
+            quantity: 0,
+            cost: 0
+          }
+        }
+        this.membersWithCards[user] = newMember
+        return newMember
+      }
+      return member
     }
   }
 }

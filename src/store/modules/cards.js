@@ -1,5 +1,7 @@
 import axios from 'axios'
 import * as CARD from '../actions/cards'
+import { sendInspectorMessage } from '@/inspector'
+import store from '@/store/index.js'
 
 const state = {
   cards: [],
@@ -29,6 +31,11 @@ const actions = {
             resp.boardUid = boardUid
             resp.rootState = rootState
             commit(CARD.BOARD_CARDS_SUCCESS, resp)
+            sendInspectorMessage({
+              type: 'boardOnline',
+              uid_user: store.state.user.user.current_user_uid,
+              uid_board: boardUid
+            })
           }
           resolve(resp)
         })
@@ -221,7 +228,7 @@ const actions = {
   },
   [CARD.MOVE_ALL_CARDS]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url = `${process.env.VUE_APP_LEADERTASK_API}/api/v1/cards/move?uid_board=${data.boardTo}&uid_stage=${data.stageTo}`
+      const url = `${process.env.VUE_APP_LEADERTASK_API}/api/v1/cards/move?uid_board=${data.boardTo}&uid_stage=${data.stageTo}&place=up`
       axios({ url, method: 'PATCH', data: { cards: data.cards } })
         .then((resp) => {
           resp.data.forEach((card) => {

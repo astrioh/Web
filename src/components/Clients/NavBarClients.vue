@@ -33,6 +33,8 @@ export default {
     },
     onEraseSearch () {
       this.$router.push({ path: '/clients' })
+      this.$route.query.search = ''
+      this.$emit('search')
     }
   }
 }

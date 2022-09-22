@@ -74,7 +74,7 @@
         <div
           v-if="isColumnVisible(column)"
           data-dragscroll
-          class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
+          class="max-h-full flex flex-col flex-none bg-white rounded-xl overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
         >
@@ -241,7 +241,7 @@
           </div>
           <!--карточки -->
           <div
-            class="min-h-0 overflow-y-auto scroll-style"
+            class="min-h-0 overflow-y-hidden scroll-style hover:overflow-y-auto"
             @scroll="handleCardsScroll($event, column.UID, column.cards.length)"
           >
             <draggable
@@ -251,7 +251,7 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
-              :disabled="isReadOnlyBoard || isFiltered || showArchive"
+              :disabled="isReadOnlyBoard || isFiltered || showArchive || isSavingMoveNow"
               :move="checkMoveDragCard"
               :fallback-tolerance="1"
               :force-fallback="true"
@@ -377,6 +377,7 @@ import BoardModalBoxCardMove from '@/components/Board/BoardModalBoxCardMove.vue'
 import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
+import { sendInspectorMessage } from '@/inspector'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
 import BoardInputValue from './Board/BoardInputValue.vue'
 
@@ -422,7 +423,8 @@ export default {
       showMoveAllCards: false,
       columnUid: '',
       dragColumnParam: null,
-      cardQuantityByColumns: {}
+      cardQuantityByColumns: {},
+      isSavingMoveNow: false
     }
   },
   computed: {
@@ -488,6 +490,9 @@ export default {
           cards: cards
         }
       })
+    },
+    user () {
+      return this.$store.state.user.user
     }
   },
   watch: {
@@ -736,6 +741,14 @@ export default {
       if (this.$store.state.cards.selectedCardUid === card.uid) {
         return
       }
+
+      sendInspectorMessage({
+        type: 'cardOnline',
+        uid_user: this.user.current_user_uid,
+        uid_board: this.board.uid,
+        uid_card: card.uid
+      })
+
       this.$store.state.cards.selectedCardUid = card.uid
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)
@@ -755,10 +768,13 @@ export default {
     },
     moveCard (cardUid, stageUid, newOrder) {
       this.closeProperties()
+      this.isSavingMoveNow = true
       this.$store
         .dispatch(CARD.MOVE_CARD, { uid: cardUid, stageUid, newOrder })
         .then((resp) => {
           console.log('Card is moved')
+        }).finally(() => {
+          this.isSavingMoveNow = false
         })
     },
     getNewMinCardsOrderAtColumn (columnUid) {
@@ -953,6 +969,22 @@ export default {
 </script>
 
 <style scoped>
+  .scroll-style::-webkit-scrollbar {
+  width: 15px;
+  height: 14px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+  background-color: rgb(215 215 215);
+}
+
+.scroll-style::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(190 190 190);
+}
+
 .stage-column:hover .stage-column-hover\:visible {
   visibility: visible;
 }

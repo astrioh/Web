@@ -164,6 +164,7 @@
             sub-title-color="#606061"
             :right-icon="empIcon(userValue)"
             :selected="selectedEmployee === userValue.email"
+            :is-online="isUserOnline(userValue.uid)"
             @click.stop="showUserProperties(userValue)"
           >
             <img
@@ -363,7 +364,7 @@ export default {
       const employees = this.$store.state.employees.employees
       const user = this.$store.state.user.user
       const userType = employees[user.current_user_uid].type
-      return userType === 1
+      return userType === 1 || userType === 2
     },
     allDepartments () {
       return this.items.filter(item => item.uid !== '').map(item => item.item)
@@ -550,7 +551,11 @@ export default {
     },
     okToModal () {
       this.$store.commit(USER_VIEWED_MODAL, 'employee')
+    },
+    isUserOnline (uidUser) {
+      return this.$store.state.employees.employees[uidUser]?.online
     }
+
   }
 }
 </script>

@@ -58,7 +58,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'clients'
       axios({ url: url, method: 'PATCH', data: data })
         .then((resp) => {
-          // commit(CLIENTS.UPDATE_CLIENT, resp.data)
+          commit(CLIENTS.UPDATE_CLIENT, data)
           resolve(resp)
         })
         .catch((err) => {
@@ -83,7 +83,8 @@ const mutations = {
     state.clients = state.clients.filter(cl => cl.uid !== clientUid)
   },
   [CLIENTS.UPDATE_CLIENT]: (state, data) => {
-    console.log(data)
+    state.selectedClient = { ...data }
+    state.clients[state.clients.findIndex(client => client.uid === data.uid)] = { ...data }
   },
   [CLIENTS.SELECT_CLIENT]: (state, client) => {
     state.selectedClient = client

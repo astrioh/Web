@@ -41,10 +41,10 @@
         />
       </field>
       <p
-        v-if="form.showError"
+        v-if="form.emailShowError"
         class="text-red-500 text-xs pb-3"
       >
-        {{ form.errorMessage }}
+        {{ form.emailErrorMessage }}
       </p>
       <jb-button
         v-if="form.showCheckButton"
@@ -230,6 +230,8 @@ export default {
         password: '',
         username: '',
         phone: '',
+        emailShowError: false,
+        emailErrorMessage: 'Некорректный Email',
         showError: false,
         errorMessage: '',
         isEmailValid: true,
@@ -397,7 +399,10 @@ export default {
       return false
     },
     checkEmailExistense () {
-      if (this.form.email && this.validateEmail()) {
+      if (this.validateEmail()) {
+        this.form.isEmailValid = true
+        this.form.emailShowError = false
+
         const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/exists?email=' + this.form.email
         axios.get(uri)
           .then(() => {
@@ -419,29 +424,9 @@ export default {
             this.form.showBackButton = true
           })
       } else {
-        this.form.errorMessage = 'Некорректный Email'
-        this.form.showError = true
+        this.form.isEmailValid = false
+        this.form.emailShowError = true
       }
-      const uri = process.env.VUE_APP_LEADERTASK_API + 'api/v1/users/exists?email=' + this.form.email
-      axios.get(uri)
-        .then(() => {
-          this.showLoginInputs()
-          this.form.emailMdi = mdiCheckBold
-          this.form.startScreenText = 'Войти в ЛидерТаск'
-          this.form.emailIconClass = 'text-lime-500'
-          this.form.emailControlDisabled = true
-          this.form.showCheckButton = false
-          this.form.showBackButton = true
-        })
-        .catch(() => {
-          this.showRegisterInputs()
-          this.form.emailMdi = mdiCheckBold
-          this.form.startScreenText = 'Создать аккаунт'
-          this.form.emailIconClass = 'text-lime-500'
-          this.form.emailControlDisabled = true
-          this.form.showCheckButton = false
-          this.form.showBackButton = true
-        })
     },
     togglePasswordVisibility () {
       this.form.showPassword = !this.form.showPassword

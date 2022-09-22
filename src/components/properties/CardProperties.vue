@@ -568,10 +568,12 @@ export default {
           this.showDeleteCard = false
         })
     },
-    setColumn (stageUid) {
+    setColumn (stageTo) {
       this.closeProperties()
       this.$store
-        .dispatch(CARD.MOVE_CARD, { uid: this.selectedCard?.uid, stageUid })
+        .dispatch(CARD.MOVE_ALL_CARDS, {
+          cards: [{ uid: this.selectedCard?.uid }], stageTo, boardTo: this.selectedCardBoard.uid
+        })
         .then((resp) => {
           console.log('Card is moved')
         })
