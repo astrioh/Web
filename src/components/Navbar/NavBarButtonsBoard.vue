@@ -110,7 +110,6 @@ import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
-import { uuidv4 } from '@/helpers/functions'
 
 export default {
   components: {
@@ -199,36 +198,13 @@ export default {
       const title = name.trim()
       if (title) {
         // добавляем новую доску и переходим в неё
-        const maxOrder =
-          this.board?.children?.reduce(
-            (maxOrder, child) =>
-              child.order > maxOrder ? child.order : maxOrder,
-            0
-          ) ?? 0
-        const user = this.$store.state.user.user
-        const members = {}
-        members[user.current_user_uid] = 1
-        const board = {
-          uid: uuidv4(),
-          name: title,
-          uid_parent: this.board.uid,
-          email_creator: user.current_user_email,
-          order: maxOrder + 1,
-          collapsed: 0,
-          color: '',
-          public_link_status: 0,
-          show_date: 0,
-          favorite: 0,
-          stages: [],
-          children: [],
-          deps: [],
-          members
+        const boardData = {
+          name: title
         }
-        console.log(`create board uid: ${board.uid}`, board)
-        this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, board).then((res) => {
+        this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, boardData).then((res) => {
+          const board = res.data
           // заполняем недостающие параметры
           board.global_property_uid = '1b30b42c-b77e-40a4-9b43-a19991809add'
-          board.type_access = res.data.type_access
           board.color = '#A998B6'
           //
           this.$store.commit(BOARD.PUSH_BOARD, [board])

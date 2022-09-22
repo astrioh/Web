@@ -28,10 +28,42 @@ const actions = {
         })
     })
   },
+  /**
+   * @param {Object} param1 Vuex commit/dispatch объект
+   * @param {Object} data Данные для доски
+   * @param {String} data.name Название доски
+   * @returns Ответ от сервера
+   */
   [BOARD.CREATE_BOARD_REQUEST]: ({ commit, dispatch }, data) => {
+    const maxOrder = this.boards[0]?.items?.reduce(
+      (maxOrder, child) =>
+        child.order > maxOrder ? child.order : maxOrder,
+      0
+    ) || 0
+
+    const boardData = {
+      uid: uuidv4(),
+      name: data.name,
+      uid_parent: '00000000-0000-0000-0000-000000000000',
+      email_creator: this.$store.state.user.user.current_user_email,
+      order: maxOrder + 1,
+      collapsed: 0,
+      color: '',
+      public_link_status: 0,
+      show_date: 0,
+      favorite: 0,
+      stages: [],
+      deps: [],
+      children: [],
+      members: {
+        [this.$store.state.user.user.current_user_Uid]: 1
+      },
+      ...data
+    }
+
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_LEADERTASK_API + '/api/v1/board'
-      axios({ url: url, method: 'POST', data: data })
+      axios({ url: url, method: 'POST', data: boardData })
         .then((resp) => {
           resolve(resp)
         })
