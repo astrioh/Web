@@ -251,7 +251,7 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
-              :disabled="isReadOnlyBoard || isFiltered || showArchive"
+              :disabled="isReadOnlyBoard || isFiltered || showArchive || isSavingMoveNow"
               :move="checkMoveDragCard"
               :fallback-tolerance="1"
               :force-fallback="true"
@@ -423,7 +423,8 @@ export default {
       showMoveAllCards: false,
       columnUid: '',
       dragColumnParam: null,
-      cardQuantityByColumns: {}
+      cardQuantityByColumns: {},
+      isSavingMoveNow: false
     }
   },
   computed: {
@@ -767,10 +768,13 @@ export default {
     },
     moveCard (cardUid, stageUid, newOrder) {
       this.closeProperties()
+      this.isSavingMoveNow = true
       this.$store
         .dispatch(CARD.MOVE_CARD, { uid: cardUid, stageUid, newOrder })
         .then((resp) => {
           console.log('Card is moved')
+        }).finally(() => {
+          this.isSavingMoveNow = false
         })
     },
     getNewMinCardsOrderAtColumn (columnUid) {
