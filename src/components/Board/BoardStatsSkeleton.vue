@@ -14,7 +14,7 @@
         </div>
       </td>
       <td
-        v-for="j in 3"
+        v-for="j in 4"
         :key="j"
         class="pl-[14px]"
       >
