@@ -5,6 +5,18 @@
     route="/board"
     :breadcrumbs="breadcrumbs"
   >
+    <div
+      v-if="onlineUsers?.length"
+      class="flex -space-x-1.5"
+    >
+      <img
+        v-for="user in onlineUsers"
+        :key="user"
+        :title="user.name"
+        class="w-[30px] h-[30px] rounded-full border-[1px] border-blue-300"
+        :src="user.fotolink"
+      >
+    </div>
     <NavBarSearch
       @change="onSearch"
     />
@@ -35,6 +47,19 @@ export default {
     }
   },
   computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    },
+    onlineUsers () {
+      const onlineUsers = []
+      for (const property in this.employees) {
+        if (this.employees[property].onlineBoardUid === this.boardUid) {
+          onlineUsers.push(this.employees[property])
+        }
+      }
+      onlineUsers.push(this.employees[this.$store.state.user.user.current_user_uid])
+      return onlineUsers
+    },
     boards () {
       return this.$store.state.boards.boards
     },
