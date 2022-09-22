@@ -11,6 +11,7 @@
       <PopMenuItem
         v-if="canDelete"
         icon="delete"
+        type="delete"
         @click="$emit('onDeleteMessage')"
       >
         Удалить

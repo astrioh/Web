@@ -158,6 +158,7 @@
                   <PopMenuItem
                     v-if="column.CanEditStage"
                     icon="delete"
+                    type="delete"
                     @click="clickDeleteColumn(column, $event)"
                   >
                     Удалить

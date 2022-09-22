@@ -31,6 +31,7 @@
       </PopMenuItem>
       <PopMenuItem
         v-if="showDelete"
+        type="delete"
         @click="selectItem('deleteTask')"
       >
         Удалить

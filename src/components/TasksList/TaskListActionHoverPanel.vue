@@ -104,6 +104,7 @@
         <PopMenuItem
           v-if="isMyTask"
           icon="delete"
+          type="delete"
           @click="deleteTask"
         >
           Удалить

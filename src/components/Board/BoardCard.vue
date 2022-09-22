@@ -107,6 +107,7 @@
             <PopMenuDivider />
             <PopMenuItem
               icon="delete"
+              type="delete"
               @click="clickDelete"
             >
               Удалить

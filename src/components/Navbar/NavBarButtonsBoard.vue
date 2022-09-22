@@ -90,6 +90,7 @@
         <PopMenuItem
           v-if="canEditBoard"
           icon="delete"
+          type="delete"
           @click="clickDeleteBoard"
         >
           Удалить доску
