@@ -114,7 +114,7 @@
       </div>
     </div>
     <div
-      v-if="showDate || cost || card.has_files || card.has_msgs || card.date_reminder"
+      v-if="showDate || cost || card.has_files || card.has_msgs || card.date_reminder || card.comment.length"
       class="flex justify-between mt-[20px]"
     >
       <div class="flex flex-wrap gap-1">
@@ -375,8 +375,8 @@
       v-if="card.user"
       class="flex items-center"
       :class="{
-        'mt-2': showDate || cost || card.has_files || card.has_msgs,
-        'mt-[20px]': !showDate && !cost && !card.has_files && !card.has_msgs
+        'mt-2': showDate || cost || card.has_files || card.has_msgs || card.comment.length,
+        'mt-[20px]': !showDate && !cost && !card.has_files && !card.has_msgs || !card.comment.length
       }"
     >
       <img
