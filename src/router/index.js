@@ -2,7 +2,6 @@ import { shouldRedirectToLogin, ifAuthenticated, ifRouteNotExists } from './util
 import boardRouter from './board'
 import taskRouter from './task'
 import settingsRouter from './settings'
-import accountRouter from './account'
 import reglamentRouter from './reglament'
 import projectRouter from './project'
 import clientRouter from './client'
@@ -76,7 +75,6 @@ const routes = [
   ...projectRouter,
   ...reglamentRouter,
   ...settingsRouter,
-  ...accountRouter,
   ...taskRouter,
   ...boardRouter,
   {
