@@ -2,6 +2,7 @@ import { visitChildren } from '@/store/helpers/functions'
 import axios from 'axios'
 import * as BOARD from '../actions/boards'
 import { uuidv4 } from '@/helpers/functions'
+import store from '@/store/index.js'
 
 const state = {
   boards: {},
@@ -35,7 +36,7 @@ const actions = {
    * @returns Ответ от сервера
    */
   [BOARD.CREATE_BOARD_REQUEST]: ({ commit, dispatch }, data) => {
-    const maxOrder = this.boards[0]?.items?.reduce(
+    const maxOrder = state.boards[0]?.items?.reduce(
       (maxOrder, child) =>
         child.order > maxOrder ? child.order : maxOrder,
       0
@@ -45,7 +46,7 @@ const actions = {
       uid: uuidv4(),
       name: data.name,
       uid_parent: '00000000-0000-0000-0000-000000000000',
-      email_creator: this.$store.state.user.user.current_user_email,
+      email_creator: store.state.user.user.current_user_email,
       order: maxOrder + 1,
       collapsed: 0,
       color: '',
@@ -56,7 +57,7 @@ const actions = {
       deps: [],
       children: [],
       members: {
-        [this.$store.state.user.user.current_user_Uid]: 1
+        [store.state.user.user.current_user_Uid]: 1
       },
       ...data
     }
