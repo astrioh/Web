@@ -363,7 +363,7 @@ export default {
       const employees = this.$store.state.employees.employees
       const user = this.$store.state.user.user
       const userType = employees[user.current_user_uid].type
-      return userType === 1
+      return userType === 1 || userType === 2
     },
     allDepartments () {
       return this.items.filter(item => item.uid !== '').map(item => item.item)
