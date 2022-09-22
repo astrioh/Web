@@ -11,18 +11,17 @@ export default [
       }
     },
     path: '/project',
-    beforeEnter: shouldRedirectToLogin,
-    children: [
-      {
-        path: '',
-        name: 'allProjects',
-        component: () => import('@/components/Projects.vue')
-      },
-      {
-        path: ':project_id',
-        name: 'project',
-        component: () => import('@/components/Projects/ProjectWithChildren.vue')
-      }
-    ]
+    name: 'allProjects',
+    component: () => import('@/components/Projects.vue'),
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      layout: Home
+    },
+    path: '/project/:project_id',
+    name: 'project',
+    component: () => import('@/components/Projects/ProjectWithChildren.vue'),
+    beforeEnter: shouldRedirectToLogin
   }
 ]
