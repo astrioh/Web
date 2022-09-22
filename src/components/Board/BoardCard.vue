@@ -1,9 +1,19 @@
 <template>
   <div
-    class="group bg-white rounded-[6px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
+    class="relative group bg-white rounded-[10px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
     :class="{ 'border-[rgba(0,0,0,0.1)]': !selected, 'border-[#ff9123]': selected }"
     @click="selectCard"
   >
+    <div
+      class="absolute top-[-8px] left-[6px] flex -space-x-1.5"
+    >
+      <img
+        v-for="user in onlineUsers"
+        :key="user"
+        class="w-[20px] h-[20px] rounded-full border-[1px] border-blue-300"
+        :src="user.fotolink"
+      >
+    </div>
     <div
       v-if="haveCover"
       class="overflow-hidden rounded-[6px] mb-[20px] flex place-content-center"
@@ -426,6 +436,15 @@ export default {
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
+    },
+    onlineUsers () {
+      const onlineUsers = []
+      for (const property in this.employees) {
+        if (this.employees[property].onlineCardUid === this.card.uid) {
+          onlineUsers.push(this.employees[property])
+        }
+      }
+      return onlineUsers
     },
     // делаем картинки маленькими - ограничиваем по высоте и ширине
     coverSize () {

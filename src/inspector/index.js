@@ -78,11 +78,27 @@ function parseMessage (data) {
     const parsedData = { ...JSON.parse(data) }
     if (parsedData?.uid_json) {
       createNotificationAndInspectorMessage(parsedData)
+    } else if (['userOnline', 'boardOnline', 'cardOnline'].includes(parsedData.type)) {
+      updateOnlineMap(parsedData)
     } else {
       parseObject(parsedData)
     }
   } catch (e) {
     console.log('parseMessage inspector error', e)
+  }
+}
+
+function updateOnlineMap (message) {
+  switch (message.type) {
+    case 'userOnline':
+      store.commit('ChangeUserOnline', { uidUser: message.uid_user, online: message.online })
+      break
+    case 'boardOnline':
+      store.commit('ChangeUserOnlineBoard', { uidUser: message.uid_user, onlineBoardUid: message.uid_board })
+      break
+    case 'cardOnline':
+      store.commit('ChangeUserOnlineCard', { uidUser: message.uid_user, onlineCardUid: message.uid_card })
+      break
   }
 }
 
@@ -114,4 +130,8 @@ function createNotificationAndInspectorMessage (parsedData) {
 export function disconnectInspectorSocket () {
   isSocketForceClosed = true
   socket.close()
+}
+
+export function sendInspectorMessage (message) {
+  socket.send(JSON.stringify(message))
 }

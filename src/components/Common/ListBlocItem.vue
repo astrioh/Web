@@ -29,6 +29,12 @@
             :style="{'color': titleColor}"
           >
             {{ title }}
+            <span
+              v-if="isOnline"
+              class="text-[12px] text-blue-500 font-[700]"
+            >
+              online
+            </span>
           </p>
           <p
             class="font-roboto text-[12px] leading-[14px] truncate"
@@ -150,6 +156,10 @@ export default {
       default: ''
     },
     selected: {
+      type: Boolean,
+      default: false
+    },
+    isOnline: {
       type: Boolean,
       default: false
     }
