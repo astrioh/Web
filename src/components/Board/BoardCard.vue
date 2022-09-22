@@ -1,6 +1,6 @@
 <template>
   <div
-    class="group bg-white rounded-[10px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
+    class="max-w-[252px] group bg-white rounded-[10px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
     :class="{ 'border-[rgba(0,0,0,0.1)]': !selected, 'border-[#ff9123]': selected }"
     @click="selectCard"
   >

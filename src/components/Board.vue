@@ -74,7 +74,7 @@
         <div
           v-if="isColumnVisible(column)"
           data-dragscroll
-          class="max-h-full flex flex-col flex-none bg-white rounded-xl px-3 py-4 w-[280px] mr-[10px] stage-column"
+          class="max-h-full flex flex-col flex-none bg-white rounded-xl overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
         >
@@ -241,7 +241,7 @@
           </div>
           <!--карточки -->
           <div
-            class="min-h-0 overflow-y-auto scroll-style"
+            class="min-h-0 overflow-y-hidden scroll-style hover:overflow-y-auto"
             @scroll="handleCardsScroll($event, column.UID, column.cards.length)"
           >
             <draggable
@@ -969,6 +969,22 @@ export default {
 </script>
 
 <style scoped>
+  .scroll-style::-webkit-scrollbar {
+  width: 15px;
+  height: 14px;
+}
+
+.scroll-style::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  border-radius: 9999px;
+  background-clip: padding-box;
+  background-color: rgb(215 215 215);
+}
+
+.scroll-style::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(190 190 190);
+}
+
 .stage-column:hover .stage-column-hover\:visible {
   visibility: visible;
 }
