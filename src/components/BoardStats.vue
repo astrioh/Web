@@ -25,8 +25,10 @@
         <th>Заявок в успехе</th>
         <th>Заявок в отказе</th>
       </tr>
+      <BoardStatsSkeleton v-if="!isLoaded" />
       <template
         v-for="(member, index) in membersByCost"
+        v-else
         :key="index"
       >
         <BoardStatsItem
@@ -43,16 +45,19 @@ import NavBar from '@/components/Navbar/NavBar'
 import BoardSmallButton from '@/components/Board/BoardSmallButton.vue'
 import * as CARD from '@/store/actions/cards'
 import { CARD_STAGE } from '@/constants'
+import BoardStatsSkeleton from '@/components/Board/BoardStatsSkeleton'
 
 export default {
   components: {
+    BoardStatsSkeleton,
     NavBar,
     BoardStatsItem,
     BoardSmallButton
   },
   data () {
     return {
-      membersByCost: {}
+      membersByCost: {},
+      isLoaded: true
     }
   },
   computed: {
@@ -74,8 +79,10 @@ export default {
   },
   mounted () {
     if (!this.boardCards?.length) {
+      this.isLoaded = false
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.boardUid).then(() => {
         this.calculateMembersCost()
+        this.isLoaded = true
       })
       return
     }
