@@ -12,6 +12,7 @@
         <AsideMenuListItem
           :selected="isTodaySelected"
           title="Сегодня"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -37,6 +38,7 @@
           v-if="$store.state.navigator?.navigator?.settings.nav_show_overdue"
           :selected="isOverdueSelected"
           title="Просроченные"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -62,6 +64,7 @@
         <AsideMenuListItem
           :selected="isActive"
           title="Неразобранные"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -96,6 +99,8 @@
         <AsideMenuListItem
           :selected="isUnreadSelected"
           title="Непрочитанные"
+          :is-sub-menu-item="true"
+
           @click="closeMenu"
         >
           <svg
@@ -119,6 +124,8 @@
       <router-link to="/tasks/in-work">
         <AsideMenuListItem
           :selected="isInWorkSelected"
+          :is-sub-menu-item="true"
+
           title="В работе"
           @click="closeMenu"
         >
@@ -141,6 +148,8 @@
       <router-link to="/tasks/in-focus">
         <AsideMenuListItem
           :selected="isFocusSelected"
+          :is-sub-menu-item="true"
+
           title="Задачи в фокусе"
           @click="closeMenu"
         >
@@ -162,6 +171,7 @@
         <AsideMenuListItem
           :selected="isReadySelected"
           title="Готово к сдаче"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -190,6 +200,7 @@
             <AsideMenuListItem
               :selected="isUserDelegateByMeSelected(userDelegate)"
               :title="getDelegateName(userDelegate.uid) || '???'"
+              :is-sub-menu-item="true"
               @click="closeMenu"
             >
               <img
@@ -216,6 +227,7 @@
             <AsideMenuListItem
               :selected="isUserDelegateToMeSelected(userDelegate)"
               :title="getDelegateName(userDelegate.uid) || '???'"
+              :is-sub-menu-item="true"
               @click="closeMenu"
             >
               <img

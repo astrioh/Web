@@ -9,6 +9,7 @@
         <AsideMenuListItem
           :selected="isActive"
           title="Сотрудники"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -30,6 +31,8 @@
         to="/settings/tags"
       >
         <AsideMenuListItem
+          :is-sub-menu-item="true"
+
           :selected="isActive"
           title="Метки"
           @click="closeMenu"
@@ -70,6 +73,8 @@
         to="/settings/colors"
       >
         <AsideMenuListItem
+          :is-sub-menu-item="true"
+
           :selected="isActive"
           title="Цвета"
           @click="closeMenu"
@@ -99,6 +104,7 @@
         <AsideMenuListItem
           :selected="isActive"
           title="Основные"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -138,6 +144,7 @@
         <AsideMenuListItem
           :selected="isActive"
           title="Тариф"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg
@@ -161,6 +168,7 @@
         <AsideMenuListItem
           :selected="isActive"
           title="Помощь"
+          :is-sub-menu-item="true"
           @click="closeMenu"
         >
           <svg

@@ -3,6 +3,7 @@
     :count="board.children?.length ?? 0"
     :title="board.name"
     :selected="selected"
+    :is-sub-menu-item="true"
   >
     <svg
       v-if="board.members && Object.keys(board.members).length > 1"

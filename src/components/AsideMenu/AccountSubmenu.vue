@@ -6,6 +6,7 @@
         <AsideMenuListItem
           :selected="isTabSelected('myaccount')"
           title="Аккаунт"
+          :is-sub-menu-item="true"
           @click="closeSubmenu"
         >
           <svg
@@ -26,6 +27,7 @@
       </router-link>
       <router-link to="/account/karma">
         <AsideMenuListItem
+          :is-sub-menu-item="true"
           :selected="isTabSelected('karma')"
           title="Карма"
           @click="closeSubmenu"
