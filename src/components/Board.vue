@@ -84,7 +84,7 @@
             :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
-              class="w-11/12"
+              class="w-[calc(100%-18px)] "
             >
               <BoardInputValue
                 v-if="showRenameColumn && column.UID === selectedColumn.UID"
