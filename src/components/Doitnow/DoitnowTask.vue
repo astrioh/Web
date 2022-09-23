@@ -315,11 +315,9 @@ export default {
         time = new Date(this.task.customer_date_end)
       }
       let hours = String(time.getHours())
-      let minutes = String(time.getMinutes())
+      const minutes = String(time.getMinutes()).padStart(2, '0')
       if (hours === '0') {
         hours += '0'
-      } else if (minutes === '0') {
-        minutes += '0'
       }
       if (!this.task.customer_date_end.includes('23:59:59')) {
         return '(' + hours + ':' + minutes + ')'
