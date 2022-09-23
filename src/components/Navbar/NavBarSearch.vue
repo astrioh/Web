@@ -101,9 +101,11 @@ export default {
   methods: {
     sendSearchRequest () {
       if (!this.searchText || this.searchText === this.$route.query.search) {
+        this.showSearchBar = false
         return
       }
       this.$emit('search', this.searchText)
+      this.showSearchBar = false
     },
     onBlurSearchInput () {
       if (!this.searchText) {
