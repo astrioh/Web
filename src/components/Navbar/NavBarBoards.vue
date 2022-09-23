@@ -53,7 +53,10 @@ export default {
     onlineUsers () {
       const onlineUsers = []
       for (const property in this.employees) {
-        if (this.employees[property].onlineBoardUid === this.boardUid) {
+        if (
+          this.employees[property].onlineBoardUid === this.boardUid &&
+          property !== this.$store.state.user.user.current_user_uid
+        ) {
           onlineUsers.push(this.employees[property])
         }
       }
