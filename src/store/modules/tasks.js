@@ -345,10 +345,22 @@ const actions = {
           const overdueTasks = [...respAll[1].data.tasks].filter(
             (task) => unreadTasks.findIndex((t) => t.uid === task.uid) === -1
           )
+          const pad2 = function (n) {
+            return (n < 10 ? '0' : '') + n
+          }
+          const dateNow = new Date()
+          const month = pad2(dateNow.getMonth() + 1)
+          const day = pad2(dateNow.getDate())
+          const year = dateNow.getFullYear()
+          const hours = pad2(dateNow.getHours())
+          const minutes = pad2(dateNow.getMinutes())
+          const seconds = pad2(dateNow.getSeconds())
+          const dateNowStr = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
           const todayTasks = [...respAll[2].data.tasks].filter(
             (task) =>
               unreadTasks.findIndex((t) => t.uid === task.uid) === -1 &&
-              overdueTasks.findIndex((t) => t.uid === task.uid) === -1
+              overdueTasks.findIndex((t) => t.uid === task.uid) === -1 &&
+              task.date_begin < dateNowStr
           )
           const tasks = [...unreadTasks, ...overdueTasks, ...todayTasks]
           commit(TASK.TASKS_SUCCESS, { data: { tasks } })
