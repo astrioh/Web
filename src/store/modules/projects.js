@@ -6,7 +6,53 @@ const state = {
   projects: {},
   selectedProject: undefined
 }
-const getters = {}
+const getters = {
+  favoriteProjects (state) {
+    const arr = []
+    const projects = state.projects
+    Object.keys(projects).forEach(key => {
+      if (projects[key].favorite === 1) {
+        arr.push(projects[key])
+      }
+    })
+
+    return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
+  },
+  privateProjects (state, getters, rootState) {
+    return rootState.navigator.navigator?.new_private_projects[0].items ?? []
+  },
+  commonProjects (state, getters, rootState) {
+    return rootState.navigator.navigator?.new_private_projects[1].items ?? []
+  },
+  /**
+   * @typedef {Object} DepartmentsProject
+   * @property {string} UID - id отдела
+   * @property {string} name - название отдела
+   * @property {number} order - порядок отдела
+   * @property {Array} emails - емейлы сотрудников отдела
+   * @property {Array} projects - проекты отдела
+   */
+  /**
+   * @return {DepartmentsProject} Отделы с проектами, которые им доступны
+   */
+  departmentsProjects (state, getters, rootState, rootGetters) {
+    return rootGetters.sortedDepartments
+      .filter((department) => {
+        // Оставляем только отдел пользователя
+        return rootState.employees.employees[rootState.user.user.current_user_uid].uid_dep === department.uid
+      })
+      .map((department) => {
+        const departmentProjects = getters.commonProjects.filter((project) => {
+          return project.deps.includes(department.uid)
+        })
+
+        return {
+          ...department,
+          projects: departmentProjects
+        }
+      })
+  }
+}
 
 const actions = {
   [PROJECT.CREATE_PROJECT_REQUEST]: ({ commit, dispatch }, data) => {
