@@ -294,20 +294,56 @@
       v-if="task && !task.visible"
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
-      <div
-        class="rounded-lg hover:cursor-pointer hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white mb-[20px] whitespace-nowrap text-center text-[#424242] "
-        @click="nextTask"
+      <PopMenu
+        :disabled="dateIsNotEditingNow"
+        class="flex ml-[10px] flex-col min-w-[200px] items-center"
       >
-        <span class="ml-[40px] w-[70px]">Следующая задача</span>
-        <Icon
-          class="ml-[68px]"
-          :height="arrowForw.height"
-          :width="arrowForw.width"
-          :box="arrowForw.viewBox"
-          :path="arrowForw.path"
-        />
-      </div>
-      <!-- accept -->
+        <div
+          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+          class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
+          @click="dateIsNotEditingNow = false"
+        >
+          <div class="w-[16px] h-[16px] flex items-center justify-center">
+            <Icon
+              :path="pauseD.path"
+              :width="pauseD.width"
+              :height="pauseD.height"
+              :box="pauseD.viewBox"
+            />
+          </div>
+          <span class="ml-[10px] w-[70px]">Отложить</span>
+        </div>
+        <template #menu>
+          <div class="h-[155px] overflow-y-auto w-[220px] scroll-style">
+            <PopMenuItem
+              v-for="item in timeArr"
+              :key="item.index"
+              @click="postponeTask(task.date_begin, task.date_end, item)"
+            >
+              <div class="flex justify-between w-full items-center">
+                <span
+                  class="truncate"
+                >
+                  {{ item.name }}
+                </span>
+              </div>
+            </PopMenuItem>
+            <PopMenuItem
+              v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && task.uid_customer === user?.current_user_uid"
+              @click.stop=""
+            >
+              <SetDate
+                class="hover:cursor-pointer"
+                :name="'Назначить срок'"
+                :date-begin="task.date_begin"
+                :date-end="task.date_end"
+                :date-text="task.term_user"
+                @changeDates="onChangeDates"
+              />
+            </PopMenuItem>
+          </div>
+        </template>
+      </PopMenu>
       <div
         v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
         class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
@@ -354,21 +390,6 @@
         }}</span>
       </div>
       <!-- decline -->
-      <div
-        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
-        @click="decline"
-      >
-        <div class="w-[16px] h-[16px] flex items-center justify-center">
-          <Icon
-            :path="pauseD.path"
-            :width="pauseD.width"
-            :height="pauseD.height"
-            :box="pauseD.viewBox"
-          />
-        </div>
-        <span class="ml-[10px] w-[70px]">Отложить</span>
-      </div>
       <PerformButton
         v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
         class="hover:cursor-pointer"
@@ -397,16 +418,6 @@
           class="ml-5"
         />
       </div>
-      <SetDate
-        v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && task.uid_customer === user?.current_user_uid"
-        class="hover:cursor-pointer"
-        :name="'Назначить срок'"
-        :date-begin="task.date_begin"
-        :date-end="task.date_end"
-        :date-text="task.term_user"
-        @changeDates="onChangeDates"
-      />
-
       <div
         v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
         class="flex w-[221px] hover:cursor-pointer border border-transparent items-center text-sm hover:border hover:bg-[#0000000a] pl-[22px] font-medium min-h-[40px] rounded-lg text-[#3e3e3f] whitespace-nowrap text-end"
@@ -439,7 +450,6 @@ import linkify from 'vue-linkify'
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
 import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
-import SetDate from '@/components/Doitnow/SetDate.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
 import TaskPropsChatMessages from '@/components/TaskProperties/TaskPropsChatMessages.vue'
 import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.vue'
@@ -481,12 +491,14 @@ import pause from '@/icons/pause.js'
 import canceled from '@/icons/canceled.js'
 import improve from '@/icons/improve.js'
 import repeat from '@/icons/repeat.js'
+import PopMenu from '../Common/PopMenu.vue'
+import PopMenuItem from '../Common/PopMenuItem.vue'
+import SetDate from './SetDate.vue'
 /* /Icons */
 
 export default {
   components: {
     Icon,
-    SetDate,
     TaskPropsChatMessages,
     TaskPropsCommentEditor,
     DoitnowTaskButtonDots,
@@ -497,7 +509,10 @@ export default {
     contenteditable,
     TaskStatus,
     SlideBody,
-    MessageSkeleton
+    MessageSkeleton,
+    PopMenu,
+    PopMenuItem,
+    SetDate
   },
   directives: {
     linkify
@@ -555,7 +570,7 @@ export default {
       name: props.task.name,
       isloading: false,
       showOnlyFiles: false,
-
+      dateIsNotEditingNow: false,
       // * imports * //
       taskoptions,
       TASK_STATUS,
@@ -600,6 +615,22 @@ export default {
     },
     isCustomer () {
       return this.task.uid_customer === this.user?.current_user_uid
+    },
+    timeArr () {
+      return [{
+        value: 10,
+        name: '10 минут'
+      }, {
+        value: 1,
+        name: '1 час'
+      }, {
+        value: 3,
+        name: '3 часа'
+      },
+      {
+        value: 1,
+        name: 'Завтра'
+      }]
     },
     getTime () {
       let time
@@ -796,6 +827,58 @@ export default {
     },
     removeAnswerHint () {
       this.currentAnswerMessageUid = ''
+    },
+    postponeTask (begin, end, item) {
+      const dateEnd = new Date(end)
+      switch (item.name) {
+        case '10 минут':
+          dateEnd.setMinutes(dateEnd.getMinutes() + item.value)
+          break
+        case '1 час':
+        case '3 часа':
+          dateEnd.setHours(dateEnd.getHours() + item.value)
+          break
+        case 'Завтра':
+          dateEnd.setDate(dateEnd.getDate() + item.value)
+          break
+      }
+
+      const month = this.pad2(dateEnd.getMonth() + 1)
+      const day = this.pad2(dateEnd.getDate())
+      const year = dateEnd.getFullYear()
+      const hours = this.pad2(dateEnd.getHours())
+      const minutes = this.pad2(dateEnd.getMinutes())
+      const seconds = this.pad2(dateEnd.getSeconds())
+      const newDateEnd = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+
+      const data = {
+        uid_task: this.task.uid,
+        str_date_begin: begin,
+        str_date_end: newDateEnd,
+        reset: 0
+      }
+      this.$store.dispatch(TASK.CHANGE_TASK_DATE, data)
+        .then(
+          resp => {
+            const data = {
+              is_overdue: resp.is_overdue,
+              term_user: resp.term,
+              date_begin: resp.str_date_begin,
+              date_end: resp.str_date_end
+            }
+            this.$emit('changeValue', data)
+            this.readTask()
+          })
+      this.nextTask()
+    },
+    onShowCalendar () {
+      // устанавливаем выбранную дату в календарике
+      this.date = this.getDateValue()
+      const moveDate = this.date ? new Date(this.date) : new Date()
+      this.$refs.datePicker.move(moveDate)
+      this.$refs.datePicker.updateValue(new Date(this.date))
+      // устанавливаем время
+      this.time = this.getTimeValue()
     },
     readTask () {
       this.$emit('readTask')
@@ -1124,7 +1207,7 @@ export default {
     onAnswerMessage (uid) {
       this.currentAnswerMessageUid = uid
     },
-    onChangeDates: function (begin, end) {
+    onChangeDates (begin, end) {
       const data = {
         uid_task: this.task.uid,
         str_date_begin: begin,
@@ -1142,7 +1225,9 @@ export default {
             }
             this.$emit('changeValue', data)
             this.readTask()
+            this.dateIsNotEditingNow = true
           })
+      this.nextTask()
     },
     changeStatus (status, isModalAnswer) {
       if (this.childrens?.length && !(isModalAnswer) && [TASK_STATUS.TASK_COMPLETED, TASK_STATUS.TASK_READY, TASK_STATUS.TASK_CANCELLED, TASK_STATUS.TASK_REJECTED].includes(status)) {
