@@ -12,7 +12,7 @@
       leave-to-class="opacity-0"
     >
       <div
-        class="absolute inset-0 bg-[#0A0A0A] opacity-90"
+        class="absolute inset-0 bg-[#2B2D32] opacity-60"
         @click="overlayClick"
       />
     </transition>
