@@ -53,7 +53,7 @@
     <SubMenu
       v-if="isSubMenuActive"
     />
-    <overlay
+    <MenuOverlay
       v-show="isSubMenuActive"
       :z-index="'z-20'"
       @overlay-click="closeSubMenu"
@@ -80,6 +80,7 @@
 import MainMenu from '@/components/AsideMenu/MainMenu.vue'
 import SubMenu from '@/components/AsideMenu/SubMenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
+import MenuOverlay from '@/components/modals/MenuOverlay.vue'
 
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import PropertiesRight from '@/components/PropertiesRight.vue'
@@ -105,6 +106,7 @@ export default {
     ModalBoxNotificationInstruction,
     MainSection,
     Overlay,
+    MenuOverlay,
     PropertiesRight,
     ErrorNotification,
     Notification,
