@@ -10,7 +10,25 @@ const state = {
   selectedDepartment: null
 }
 
-const getters = {}
+const getters = {
+  sortedDepartments (state) {
+    const deps = Object.values(state.deps)
+    deps.sort((item1, item2) => {
+      // сначала по порядку
+      if (item1.order > item2.order) return 1
+      if (item1.order < item2.order) return -1
+      // если одинаковый, то по имени
+      if (item1.name > item2.name) return 1
+      if (item1.name < item2.name) return -1
+      return 0
+    })
+    deps.unshift({
+      uid: '00000000-0000-0000-0000-000000000000',
+      name: 'Вне отдела'
+    })
+    return deps
+  }
+}
 
 const actions = {
   [DEPARTMENTS.CREATE_DEPARTMENT_REQUEST]: ({ commit, dispatch }, data) => {
