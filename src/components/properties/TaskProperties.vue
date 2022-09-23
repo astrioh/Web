@@ -198,7 +198,7 @@
         v-if="status == 'loading' && selectedTask?.has_msgs"
       />
       <TaskPropsChatMessages
-        v-if="taskMessages?.length && status=='success' && selectedTask?.has_msgs"
+        v-if="taskMessages?.length && status=='success' && (selectedTask?.has_msgs || selectedTask?.has_files)"
         id="content"
         :task-messages="taskMessages"
         :current-user-uid="user?.current_user_uid"
