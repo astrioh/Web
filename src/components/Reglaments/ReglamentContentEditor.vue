@@ -47,6 +47,14 @@
               </svg>
               Назад
             </ReglamentSmallButton>
+            <router-link :to="$route.params.id + '/history'">
+              <ReglamentSmallButton
+                v-if="!isTesting"
+                class="flex items-center px-[10px] py-[5px]"
+              >
+                История изменений
+              </ReglamentSmallButton>
+            </router-link>
             <ReglamentSmallButton
               v-if="!isTesting"
               class="flex items-center px-[10px] py-[5px]"

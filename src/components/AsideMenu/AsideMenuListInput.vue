@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full border border-[#ff9123] bg-white h-[40px] flex items-center rounded-[10px] justify-center">
+  <div class="w-full border border-[#ff9123] bg-white h-[40px] flex items-center rounded-[6px] justify-center">
     <div class="flex-none flex items-center justify-center h-[30px] w-[30px] ml-[5px] text-[#606061]">
       <slot />
     </div>

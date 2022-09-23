@@ -4,129 +4,87 @@
     @cancel="showBoardsLimit = false"
     @ok="showBoardsLimit = false"
   />
-  <div class="px-[16px] pt-[15px]">
+  <div class="px-[20px] pt-[22px]">
     <AsideMenuListSkeleton v-if="status == 'loading'" />
-    <template v-if="status == 'success'">
-      <AsideMenuListTitle v-if="favoriteBoards.length">
-        Избранные доски
-      </AsideMenuListTitle>
-      <template
-        v-for="board in favoriteBoards"
-        :key="board.uid"
-      >
-        <router-link
-          v-slot="{ isActive }"
-          :to="'/board/' + board.uid"
-        >
-          <BoardsSubmenuItem
-            :board="board"
-            :selected="isActive"
-            @click="closeMenu"
-          />
-        </router-link>
-      </template>
-      <AsideMenuListTitle>
-        Мои доски
-      </AsideMenuListTitle>
-      <template
-        v-for="board in privateBoards"
-        :key="board.uid"
-      >
-        <router-link
-          v-slot="{ isActive }"
-          :to="'/board/' + board.uid"
-        >
-          <BoardsSubmenuItem
-            :board="board"
-            :selected="isActive"
-            @click="closeMenu"
-          />
-        </router-link>
-      </template>
-      <AsideMenuListInput
-        v-if="showAddBoard"
-        class="mb-[16px]"
-        :show="showAddBoard"
-        @cancel="showAddBoard = false"
-        @save="onAddNewBoard"
-      >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 20 20"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
-            d="M3.2 18C2.53878 18 2 17.4623 2 16.8005V4.93771C2 4.27591 2.53878 3.7382 3.2 3.7382H6.08163V2.88613C6.08163 2.59659 6.3102 2.36496 6.59592 2.36496H8.18775L8.22857 2.25742C8.4898 1.50462 9.20816 1 10 1C10.7918 1 11.5102 1.50462 11.7714 2.25742L11.8122 2.36496H13.4041C13.6898 2.36496 13.9184 2.59659 13.9184 2.88613V3.7382H16.8C17.4612 3.7382 18 4.27591 18 4.93771V16.8005C18 17.4623 17.4612 18 16.8 18H3.2ZM3.03673 16.9659H16.9714V4.77226H13.9184V5.62433C13.9184 5.91387 13.6898 6.1455 13.4041 6.1455H6.59592C6.3102 6.1455 6.08163 5.91387 6.08163 5.62433V4.77226H3.03673V16.9659ZM7.11837 5.10316H12.8898V3.4073H11.3633C11.0776 3.4073 10.849 3.17567 10.849 2.88613C10.849 2.4146 10.4735 2.03406 10.0082 2.03406C9.54286 2.03406 9.15918 2.4146 9.15918 2.88613C9.15918 3.17567 8.93061 3.4073 8.6449 3.4073H7.11837V5.10316ZM13.3061 14.2608C12.9633 14.2608 12.6939 13.9796 12.6939 13.6404V12.8545C12.6939 12.5071 12.9714 12.2341 13.3061 12.2341H15.0531C15.3959 12.2341 15.6653 12.5153 15.6653 12.8545V13.6404C15.6653 13.9878 15.3878 14.2608 15.0531 14.2608H13.3061ZM9.22449 14.2608C8.8898 14.2608 8.61225 13.9796 8.61225 13.6404V12.8545C8.61225 12.5071 8.8898 12.2341 9.22449 12.2341H10.9714C11.3143 12.2341 11.5837 12.5153 11.5837 12.8545V13.6404C11.5837 13.9878 11.3061 14.2608 10.9714 14.2608H9.22449ZM4.94694 14.2608C4.60408 14.2608 4.33469 13.9796 4.33469 13.6404V12.8545C4.33469 12.5071 4.61224 12.2341 4.94694 12.2341H6.69388C7.02857 12.2341 7.30612 12.5153 7.30612 12.8545V13.6404C7.30612 13.9878 7.02857 14.2608 6.69388 14.2608H4.94694ZM13.3061 10.3231C12.9633 10.3231 12.6939 10.0419 12.6939 9.70268V8.90852C12.6939 8.56934 12.9714 8.28808 13.3061 8.28808H15.0531C15.3959 8.28808 15.6653 8.56934 15.6653 8.90852V9.6944C15.6653 10.0336 15.3878 10.3148 15.0531 10.3148H13.3061V10.3231ZM9.22449 10.3231C8.8898 10.3231 8.61225 10.0419 8.61225 9.70268V8.90852C8.61225 8.56934 8.8898 8.28808 9.22449 8.28808H10.9714C11.3143 8.28808 11.5837 8.56934 11.5837 8.90852V9.6944C11.5837 10.0336 11.3061 10.3148 10.9714 10.3148H9.22449V10.3231ZM4.94694 10.3231C4.60408 10.3231 4.33469 10.0419 4.33469 9.70268V8.90852C4.33469 8.56934 4.61224 8.28808 4.94694 8.28808H6.69388C7.02857 8.28808 7.30612 8.56934 7.30612 8.90852V9.6944C7.30612 10.0336 7.02857 10.3148 6.69388 10.3148H4.94694V10.3231Z"
-            fill="currentColor"
-          />
-        </svg>
-      </AsideMenuListInput>
-      <AsideMenuListAdd
-        v-else
-        class="mb-[16px]"
-        title="Добавить доску"
-        @click.stop="clickAddBoard"
+    <div
+      v-if="status == 'success'"
+      class="flex flex-col gap-[25px]"
+    >
+      <BoardsSubmenuGroup
+        v-if="favoriteBoards.length"
+        title="Избранные доски"
+        :boards="favoriteBoards"
+        @goto="closeMenu"
       />
-      <div v-if="allDepartments.length">
-        <div
-          v-for="dep in allDepartments"
-          :key="dep.uid"
-        >
-          <AsideMenuListTitle
-            v-if="isDepBoardsAreAvalible(dep.uid)"
-          >
-            {{ dep.name }}
-          </AsideMenuListTitle>
 
-          <template
-            v-for="board in commonBoards"
-            :key="board.uid"
-          >
-            <router-link
-              v-if="isBoardInCurrDepartment(board, dep.uid)"
-              :to="'/board/' + board.uid"
-            >
-              <BoardsSubmenuItem
-                :selected="isActive"
-                :board="board"
-                @click="closeMenu"
-              />
-            </router-link>
-          </template>
-        </div>
-      </div>
-      <AsideMenuListTitle v-if="commonBoards.length">
-        Общие доски
-      </AsideMenuListTitle>
-      <template
-        v-for="board in commonBoards"
-        :key="board.uid"
+      <BoardsSubmenuGroup
+        v-if="depBoards.length"
+        :title="currentUserDepTitle"
+        :boards="depBoards"
+        @goto="closeMenu"
+      />
+
+      <BoardsSubmenuGroup
+        title="Мои доски"
+        :boards="privateBoards"
+        @goto="closeMenu"
       >
-        <router-link
-          v-slot="{ isActive }"
-          :to="'/board/' + board.uid"
+        <AsideMenuListInput
+          v-if="showAddBoard"
+          :show="showAddBoard"
+          @cancel="showAddBoard = false"
+          @save="onAddNewBoard"
         >
-          <BoardsSubmenuItem
-            :selected="isActive"
-            :board="board"
-            @click="closeMenu"
-          />
-        </router-link>
-      </template>
-    </template>
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M6.5 24.9694C5.67347 24.9694 5 24.3061 5 23.4898V8.85714C5 8.04082 5.67347 7.37755 6.5 7.37755H10.102V6.32653C10.102 5.96939 10.3878 5.68367 10.7449 5.68367H12.7347L12.7857 5.55102C13.1122 4.62245 14.0102 4 15 4C15.9898 4 16.8878 4.62245 17.2143 5.55102L17.2653 5.68367H19.2551C19.6122 5.68367 19.898 5.96939 19.898 6.32653V7.37755H23.5C24.3265 7.37755 25 8.04082 25 8.85714V23.4898C25 24.3061 24.3265 24.9694 23.5 24.9694H6.5ZM6.29592 23.6939H23.7143V8.65306H19.898V9.70408C19.898 10.0612 19.6122 10.3469 19.2551 10.3469H10.7449C10.3878 10.3469 10.102 10.0612 10.102 9.70408V8.65306H6.29592V23.6939ZM11.398 9.06122H18.6122V6.96939H16.7041C16.3469 6.96939 16.0612 6.68367 16.0612 6.32653C16.0612 5.7449 15.5918 5.27551 15.0102 5.27551C14.4286 5.27551 13.949 5.7449 13.949 6.32653C13.949 6.68367 13.6633 6.96939 13.3061 6.96939H11.398V9.06122Z"
+              fill="currentColor"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8 14.75C8 14.3358 8.33579 14 8.75 14H11.25C11.6642 14 12 14.3358 12 14.75C12 15.1642 11.6642 15.5 11.25 15.5H8.75C8.33579 15.5 8 15.1642 8 14.75ZM13 14.75C13 14.3358 13.3358 14 13.75 14H16.25C16.6642 14 17 14.3358 17 14.75C17 15.1642 16.6642 15.5 16.25 15.5H13.75C13.3358 15.5 13 15.1642 13 14.75ZM18.75 14C18.3358 14 18 14.3358 18 14.75C18 15.1642 18.3358 15.5 18.75 15.5H21.25C21.6642 15.5 22 15.1642 22 14.75C22 14.3358 21.6642 14 21.25 14H18.75Z"
+              fill="currentColor"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8 19.75C8 19.3358 8.33579 19 8.75 19H11.25C11.6642 19 12 19.3358 12 19.75C12 20.1642 11.6642 20.5 11.25 20.5H8.75C8.33579 20.5 8 20.1642 8 19.75ZM13 19.75C13 19.3358 13.3358 19 13.75 19H16.25C16.6642 19 17 19.3358 17 19.75C17 20.1642 16.6642 20.5 16.25 20.5H13.75C13.3358 20.5 13 20.1642 13 19.75ZM18.75 19C18.3358 19 18 19.3358 18 19.75C18 20.1642 18.3358 20.5 18.75 20.5H21.25C21.6642 20.5 22 20.1642 22 19.75C22 19.3358 21.6642 19 21.25 19H18.75Z"
+              fill="currentColor"
+            />
+          </svg>
+        </AsideMenuListInput>
+        <AsideMenuListAdd
+          v-else
+          class="mt-[6px]"
+          title="Добавить доску"
+          @click.stop="clickAddBoard"
+        />
+      </BoardsSubmenuGroup>
+
+      <BoardsSubmenuGroup
+        v-if="commonBoards.length"
+        title="Общие доски"
+        :boards="commonBoards"
+        @goto="closeMenu"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
-import AsideMenuListTitle from '@/components/AsideMenu/AsideMenuListTitle.vue'
 import AsideMenuListAdd from '@/components/AsideMenu/AsideMenuListAdd.vue'
 import AsideMenuListInput from '@/components/AsideMenu/AsideMenuListInput.vue'
-import BoardsSubmenuItem from '@/components/AsideMenu/BoardsSubmenuItem.vue'
+import BoardsSubmenuGroup from '@/components/AsideMenu/BoardsSubmenuGroup.vue'
 import AsideMenuListSkeleton from '@/components/AsideMenu/AsideMenuListSkeleton.vue'
 
 import * as BOARD from '@/store/actions/boards'
@@ -135,10 +93,9 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 export default {
   components: {
     BoardModalBoxBoardsLimit,
-    AsideMenuListTitle,
+    BoardsSubmenuGroup,
     AsideMenuListAdd,
     AsideMenuListInput,
-    BoardsSubmenuItem,
     AsideMenuListSkeleton
   },
   data () {
@@ -157,6 +114,9 @@ export default {
     user () {
       return this.$store.state.user.user
     },
+    employees () {
+      return this.$store.state.employees.employees
+    },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
@@ -164,17 +124,10 @@ export default {
       return this.$store.state.isAsideMobileExpanded
     },
     favoriteBoards () {
-      const arr = []
-      const boards = this.$store.state.boards.boards
-      Object.keys(boards).forEach(key => {
-        if (boards[key].favorite === 1) {
-          arr.push(boards[key])
-        }
-      })
-      return arr.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
-    },
-    items () {
-      return this.storeNavigator?.new_private_boards ?? []
+      const boards = Object.values(this.$store.state.boards.boards)
+      const arrFavBoards = boards.filter(board => board.favorite === 1)
+      arrFavBoards.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
+      return arrFavBoards
     },
     privateBoards () {
       return this.storeNavigator?.new_private_boards[0]?.items ?? []
@@ -182,25 +135,19 @@ export default {
     commonBoards () {
       return this.storeNavigator?.new_private_boards[1]?.items ?? []
     },
-    allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
-      deps.unshift({
-        uid: '00000000-0000-0000-0000-000000000000',
-        name: 'Вне отдела'
-      })
-      return deps
+    currentUserDepUid () {
+      return this.employees[this.user.current_user_uid]?.uid_dep || ''
     },
-    employees () {
-      return this.$store.state.employees.employees
+    currentUserDepTitle () {
+      return this.$store.state.departments.deps[this.currentUserDepUid]?.name || ''
+    },
+    depBoards () {
+      if (!this.currentUserDepUid || !this.currentUserDepTitle) return []
+      //
+      const boards = Object.values(this.$store.state.boards.boards)
+      const arrDepBoards = boards.filter(board => board.deps[this.currentUserDepUid] !== undefined)
+      arrDepBoards.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
+      return arrDepBoards
     }
   },
   methods: {
@@ -211,9 +158,6 @@ export default {
         return
       }
       this.showAddBoard = true
-    },
-    isBoardInCurrDepartment (board, depUid) {
-      return board?.deps[depUid]
     },
     isDepBoardsAreAvalible (depUid) {
       const isDepUidInBoards = this.commonBoards.find(item => item?.deps[depUid]) !== undefined
@@ -240,7 +184,7 @@ export default {
         })
       }
     },
-    closeMenu (board) {
+    closeMenu () {
       // закрываем сабменю
       this.$store.state.navigator.submenu.status = false
 

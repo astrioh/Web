@@ -11,7 +11,7 @@
   >
     <img
       v-if="imageLoaded"
-      class="rounded-[8px]"
+      class="rounded-[8px] max-h-[250px]"
       :src="imageSrc"
       alt="chat image "
     >

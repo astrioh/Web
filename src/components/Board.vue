@@ -80,11 +80,11 @@
         >
           <!--заголовок -->
           <div
-            class="px-1 flex justify-between items-start"
+            class="pl-1 pr-[12px] flex justify-between items-start"
             :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
-              class="w-11/12"
+              class="w-[calc(100%-18px)] "
             >
               <BoardInputValue
                 v-if="showRenameColumn && column.UID === selectedColumn.UID"
@@ -158,6 +158,7 @@
                   <PopMenuItem
                     v-if="column.CanEditStage"
                     icon="delete"
+                    type="delete"
                     @click="clickDeleteColumn(column, $event)"
                   >
                     Удалить
@@ -405,6 +406,10 @@ export default {
     board: {
       type: Object,
       default: () => ({})
+    },
+    showArchive: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -454,9 +459,6 @@ export default {
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
-    },
-    showArchive () {
-      return this.$store.state.boards.showArchive
     },
     showOnlyCardsWhereIAmResponsible () {
       return this.$store.state.boards.showOnlyCardsWhereIAmResponsible

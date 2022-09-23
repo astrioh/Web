@@ -6,6 +6,9 @@ module.exports = {
       zIndex: {
         '-1': '-1'
       },
+      colors: {
+        'light-gray': '#F4F5F7'
+      },
       fontFamily: {
         roboto: ['Roboto', 'sans-serif']
       },

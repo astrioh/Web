@@ -91,6 +91,7 @@ export default {
         </PopMenuItem>
         <PopMenuItem
           v-if="canEdit"
+          type="delete"
           @click="$emit('clickRemoveButton')"
         >
           Удалить

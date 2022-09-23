@@ -16,15 +16,21 @@
       class="bottom"
     >
       <div
-        v-if="myProjects.length || sharedProjects.length"
+        v-if="favoriteProjects.length || privateProjects.length || commonProjects.length || nonEmptyDepartmentsProjects.length"
         class="popper"
         @click="close"
       >
         <div class="text-white body-popover-custom max-w-[320px] overflow-auto whitespace-nowrap">
           <div class="container-project-popover">
+            <div
+              v-if="favoriteProjects.length"
+              class="ml-[10px] mt-2 my-[8px] font-roboto text-[12px] leading-[14px] font-medium text-[#383838]"
+            >
+              Избранные проекты
+            </div>
             <TaskPropsButtonProjectItem
-              v-for="(project, index) in myProjects"
-              :key="index"
+              v-for="project in favoriteProjects"
+              :key="project.uid"
               :check-project="currProject"
               :collapsed-project="collapsedProject"
               :project="project"
@@ -32,19 +38,52 @@
               @checkProject="onCheckProject"
             />
             <div
-              v-if="sharedProjects?.length"
-              class="mt-4"
+              v-if="privateProjects.length"
+              class="ml-[10px] mt-4 my-[8px] font-roboto text-[12px] leading-[14px] font-medium text-[#383838]"
             >
+              Мои проекты
+            </div>
+            <TaskPropsButtonProjectItem
+              v-for="project in privateProjects"
+              :key="project.uid"
+              :check-project="currProject"
+              :collapsed-project="collapsedProject"
+              :project="project"
+              @collapseProject="onCollapseProject"
+              @checkProject="onCheckProject"
+            />
+            <div
+              v-if="commonProjects.length"
+              class="ml-[10px] mt-4 my-[8px] font-roboto text-[12px] leading-[14px] font-medium text-[#383838]"
+            >
+              Общие проекты
+            </div>
+            <TaskPropsButtonProjectItem
+              v-for="project in commonProjects"
+              :key="project.uid"
+              :check-project="currProject"
+              :collapsed-project="collapsedProject"
+              :project="project"
+              @collapseProject="onCollapseProject"
+              @checkProject="onCheckProject"
+            />
+            <template
+              v-for="department in nonEmptyDepartmentsProjects"
+              :key="department.uid"
+            >
+              <div class="ml-[10px] mt-4 my-[8px] font-roboto text-[12px] leading-[14px] font-medium text-[#383838]">
+                {{ department.name }}
+              </div>
               <TaskPropsButtonProjectItem
-                v-for="(project, index) in sharedProjects"
-                :key="index"
+                v-for="project in department.projects"
+                :key="project.uid"
                 :check-project="currProject"
                 :collapsed-project="collapsedProject"
                 :project="project"
                 @collapseProject="onCollapseProject"
                 @checkProject="onCheckProject"
               />
-            </div>
+            </template>
           </div>
         </div>
       </div>
@@ -131,6 +170,7 @@
 <script>
 import Popper from 'vue3-popper'
 import TaskPropsButtonProjectItem from '@/components/TaskProperties/TaskPropsButtonProjectItem.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -155,25 +195,17 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'favoriteProjects',
+      'privateProjects',
+      'commonProjects',
+      'departmentsProjects'
+    ]),
     projects () {
       return this.$store.state.projects.projects
     },
-    myProjects () {
-      return Object.values(this.$store.state.projects.projects).filter(
-        (project) =>
-          project.uid_parent === '00000000-0000-0000-0000-000000000000' &&
-          project.email_creator === this.currUserEmail
-      )
-    },
-    sharedProjects () {
-      return Object.values(this.$store.state.projects.projects).filter(
-        (project) =>
-          project.uid_parent === '00000000-0000-0000-0000-000000000000' &&
-          project.email_creator !== this.currUserEmail
-      )
-    },
-    currUserEmail () {
-      return this.$store.state.user.user.current_user_email
+    nonEmptyDepartmentsProjects () {
+      return this.departmentsProjects.filter((department) => department.projects.length !== 0)
     }
   },
   methods: {

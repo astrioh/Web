@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     boardUid () {
-      return this.$route.params.board_uid
+      return this.$route.params.board_id
     },
     selectedBoard () {
       return this.$store.state.boards.boards[this.boardUid]

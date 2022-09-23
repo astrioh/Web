@@ -16,8 +16,18 @@ export default [
       },
       {
         path: ':id',
-        name: 'currentReglament',
-        component: () => import('@/components/Reglaments/ReglamentContent.vue')
+        children: [
+          {
+            path: '',
+            name: 'currentReglament',
+            component: () => import('@/components/Reglaments/ReglamentContent.vue')
+          },
+          {
+            path: 'history',
+            name: 'reglamentHistory',
+            component: () => import('@/components/Reglaments/ReglamentHistoryChanges.vue')
+          }
+        ]
       }
     ]
   }

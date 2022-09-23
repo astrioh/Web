@@ -3,6 +3,7 @@
     :count="project.children?.length ?? 0"
     :title="project.name"
     :selected="selected"
+    :is-sub-menu-item="true"
   >
     <svg
       v-if="project.members?.length > 1"

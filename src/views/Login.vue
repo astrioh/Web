@@ -280,11 +280,21 @@ export default {
         .then(() => {
           this.$router.push('/doitnow')
           const slides = {
-            addAvatar: false,
-            addEmployees: false,
-            addReglaments: false,
-            delegateTasks: false,
-            welcome: false
+            addAvatar: {
+              visible: false
+            },
+            addEmployees: {
+              visible: false
+            },
+            addReglaments: {
+              visible: false
+            },
+            delegateTasks: {
+              visible: false
+            },
+            welcome: {
+              visible: false
+            }
           }
           localStorage.setItem('slides', JSON.stringify(slides))
         })
@@ -315,11 +325,26 @@ export default {
           localStorage.removeItem('slides')
           this.$router.push('/doitnow')
           const slides = {
-            addAvatar: true,
-            addEmployees: true,
-            addReglaments: true,
-            delegateTasks: true,
-            welcome: true
+            addAvatar: {
+              visible: true,
+              reminder: new Date()
+            },
+            addEmployees: {
+              visible: true,
+              reminder: new Date()
+            },
+            addReglaments: {
+              visible: true,
+              reminder: new Date()
+            },
+            delegateTasks: {
+              visible: true,
+              reminder: new Date()
+            },
+            welcome: {
+              visible: true,
+              reminder: new Date()
+            }
           }
           localStorage.setItem('slides', JSON.stringify(slides))
           this.$store.dispatch(USER_START_ONBOARDING)

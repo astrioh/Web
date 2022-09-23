@@ -9,7 +9,7 @@
       class="flex justify-between gap-[20px]"
     >
       <transition :name="taskTransition">
-        <div class="ml-0 z-[2] grow">
+        <div class="ml-0 grow">
           <DoitnowTask
             v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
             :key="firstTask.uid"
@@ -42,19 +42,43 @@
 
         class="flex mb-5 justify-end z-[1]"
       >
+        <PopMenu>
+          <button
+            class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
+          >
+            <span class="pr-2">Отложить</span>
+          </button>
+          <template #menu>
+            <div class="h-[155px] overflow-y-auto w-[220px] scroll-style">
+              <PopMenuItem
+                v-for="item in timeArr"
+                :key="item.index"
+                @click="postponeTask(firstTask.reminder, firstTask.reminder, item)"
+              >
+                <div class="flex justify-between w-full items-center">
+                  <span
+                    class="truncate"
+                  >
+                    {{ item.name }}
+                  </span>
+                </div>
+              </PopMenuItem>
+              <PopMenuItem
+                @click.stop
+              >
+                <SetDate
+                  class="hover:cursor-pointer"
+                  :name="'Назначить срок'"
+                  :date-begin="new Date()"
+                  :date-end="new Date()"
+                  :date-text="'Сегодня'"
+                  @changeDates="changeSlideReminder"
+                />
+              </PopMenuItem>
+            </div>
+          </template>
+        </PopMenu>
         <!-- header -->
-        <button
-          class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
-          @click="nextTask"
-        >
-          <span class="pr-2">Следующая задача</span>
-          <Icon
-            :height="arrowForw.height"
-            :width="arrowForw.width"
-            :box="arrowForw.viewBox"
-            :path="arrowForw.path"
-          />
-        </button>
       </div>
     </div>
     <DoitnowLimit
@@ -83,14 +107,16 @@
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
+import * as SLIDES from '@/store/actions/slides.js'
 
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
+import PopMenu from '@/components/Common/PopMenu.vue'
+import PopMenuItem from '@/components/Common/PopMenuItem.vue'
+import SetDate from '@/components/Doitnow/SetDate.vue'
 import NavBar from '@/components/Navbar/NavBar.vue'
-import Icon from '@/components/Icon.vue'
 
-import arrowForw from '@/icons/arrow-forw-sm.js'
 import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { TASK_STATUS } from '@/constants'
@@ -105,10 +131,12 @@ export default {
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
-    Icon,
     DoitnowNotificationTasks,
     NavBar,
-    DoitnowOnboarding
+    DoitnowOnboarding,
+    PopMenu,
+    PopMenuItem,
+    SetDate
   },
   data () {
     return {
@@ -126,8 +154,7 @@ export default {
       notifiesCopy: [],
       tasksLoaded: false,
       childrens: [],
-      isTaskMessagesLoading: false,
-      arrowForw
+      isTaskMessagesLoading: false
     }
   },
   computed: {
@@ -139,6 +166,22 @@ export default {
         this.todayTasks.length +
         this.notifiesCopy.length
       )
+    },
+    timeArr () {
+      return [{
+        value: 10,
+        name: '10 минут'
+      }, {
+        value: 1,
+        name: '1 час'
+      }, {
+        value: 3,
+        name: '3 часа'
+      },
+      {
+        value: 1,
+        name: 'Завтра'
+      }]
     },
     firstTask () {
       if (this.slidesCopy.length && this.justRegistered) {
@@ -315,10 +358,53 @@ export default {
     },
     setSlidesCopy () {
       for (let i = 0; i < this.slides.length; i++) {
-        if (this.slides[i].visible === 'true' || this.slides[i].visible === true) {
+        if (!!this.slides[i].visible && (new Date(this.slides[i].reminder) <= new Date())) {
           this.slidesCopy.push(this.slides[i])
         }
       }
+    },
+    pad2 (n) {
+      return (n < 10 ? '0' : '') + n
+    },
+    postponeTask (begin, end, item) {
+      const dateEnd = new Date(end)
+      switch (item.name) {
+        case '10 минут':
+          dateEnd.setMinutes(dateEnd.getMinutes() + item.value)
+          break
+        case '1 час':
+        case '3 часа':
+          dateEnd.setHours(dateEnd.getHours() + item.value)
+          break
+        case 'Завтра':
+          dateEnd.setDate(dateEnd.getDate() + item.value)
+          break
+      }
+
+      const month = this.pad2(dateEnd.getMonth() + 1)
+      const day = this.pad2(dateEnd.getDate())
+      const year = dateEnd.getFullYear()
+      const hours = this.pad2(dateEnd.getHours())
+      const minutes = this.pad2(dateEnd.getMinutes())
+      const seconds = this.pad2(dateEnd.getSeconds())
+      const newDateEnd = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+
+      const slide = {
+        name: this.firstTask.name,
+        visible: this.firstTask.visible,
+        reminder: newDateEnd
+      }
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
+      this.nextTask()
+    },
+    changeSlideReminder (dateBegin, dateEnd) {
+      const slide = {
+        name: this.firstTask.name,
+        visible: this.firstTask.visible,
+        reminder: dateEnd
+      }
+      this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
+      this.nextTask()
     },
     setNotifiesCopy () {
       this.notifiesCopy = this.notifies

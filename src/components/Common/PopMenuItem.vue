@@ -234,11 +234,15 @@ export default {
     icon: {
       type: String,
       default: ''
+    },
+    type: {
+      type: String,
+      default: ''
     }
   },
   computed: {
     getItemClass () {
-      return this.icon === 'delete' ? 'text-[#EF4444] hover:bg-[#FEF2F2]' : 'text-[#4c4c4d] hover:bg-[#f4f5f7]'
+      return this.type === 'delete' ? 'text-[#EF4444] hover:bg-[#FEF2F2]' : 'text-[#4c4c4d] hover:bg-[#f4f5f7]'
     }
   }
 }

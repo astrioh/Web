@@ -1,7 +1,7 @@
 <template>
   <div
-    class="flex items-center h-[40px] cursor-pointer hover:bg-white hover:rounded-[10px]"
-    :class="{'bg-white rounded-[10px] text-[#424242]': selected, 'text-[#606061]': !selected, 'hover:bg-[#F4F5F7]': isSubMenuItem}"
+    class="flex items-center h-[40px] cursor-pointer hover:bg-[#f4f5f7] hover:rounded-[6px]"
+    :class="{'bg-[#f4f5f7] rounded-[6px] text-[#424242]': selected, 'text-[#606061]': !selected}"
   >
     <div class="flex-none flex items-center justify-center h-[30px] w-[30px] ml-[5px] mr-[8px] relative">
       <div
@@ -37,10 +37,6 @@ export default {
       type: Boolean,
       default: false
     },
-    isSubMenuItem: {
-      type: Boolean,
-      default: false
-    },
     title: {
       type: String,
       default: ''
@@ -50,5 +46,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

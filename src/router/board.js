@@ -23,6 +23,12 @@ export default [
             component: () => import('@/components/Board/BoardWithChildren.vue')
           },
           {
+            path: 'archive',
+            name: 'boardArchive',
+            component: () => import('@/components/Board/BoardWithChildren.vue'),
+            props: { showArchive: true }
+          },
+          {
             path: 'stats',
             name: 'boardStats',
             component: () => import('@/components/BoardStats.vue')

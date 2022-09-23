@@ -175,6 +175,7 @@
                     </PopMenuItem>
                     <PopMenuItem
                       v-if="isMyMessage"
+                      type="delete"
                       @click="deleteMessage"
                     >
                       <div class="flex">

@@ -138,6 +138,7 @@
               </PopMenuItem>
               <PopMenuItem
                 icon="delete"
+                type="delete"
                 @click="clickDeleteDep(value.uid)"
               >
                 Удалить
@@ -553,7 +554,7 @@ export default {
       this.$store.commit(USER_VIEWED_MODAL, 'employee')
     },
     isUserOnline (uidUser) {
-      return this.$store.state.employees.employees[uidUser]?.online
+      return this.$store.state.employees.employees[uidUser]?.online || uidUser === this.$store.state.user.user.current_user_uid
     }
 
   }

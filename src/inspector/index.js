@@ -1,5 +1,6 @@
 import { getInspectorMessage, isKnownInspectorMessageType } from '@/inspector/message.js'
 import { showNotify } from '@/store/helpers/functions'
+import router from '@/router/index.js'
 import store from '@/store/index.js'
 import { createTaskMessage } from '@/websync/task_message.js'
 import { computed } from 'vue'
@@ -58,6 +59,15 @@ export function initInspectorSocket (force = false) {
       employee: JSON.stringify(employees.value[user.value.current_user_uid])
     }
     socket.send(JSON.stringify(auth))
+
+    if (router.currentRoute.value.name === 'boardWithChildren' && router.currentRoute.value.params.board_id) {
+      const data = {
+        type: 'boardOnline',
+        uid_user: store.state.user.user.current_user_uid,
+        uid_board: router.currentRoute.value.params.board_id
+      }
+      socket.send(JSON.stringify(data))
+    }
   }
   socket.onmessage = function (event) {
     if (process.env.VUE_APP_EXTENDED_LOGS) console.log('inspector obj', event.data)
