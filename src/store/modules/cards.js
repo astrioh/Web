@@ -46,7 +46,7 @@ const actions = {
   },
   [CARD.ADD_CARD]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/cards'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'card'
       axios({ url: url, method: 'POST', data })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data)
