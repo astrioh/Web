@@ -577,9 +577,15 @@ export default {
       this.selectedTask.name = taskName
     },
     scrollToBottom () {
+      // TODO: нужно переписать этот кусок
+      // не должен искать по имени класса - сделать ref или еще
+      // как-то по нормальному
       this.$nextTick(() => {
         const messages = document.getElementsByClassName('messages')
-        messages[messages.length - 1].scrollIntoView(false)
+        if (messages) {
+          const lastMessage = messages[messages.length - 1]
+          if (lastMessage) lastMessage.scrollIntoView(false)
+        }
       })
     },
     createChecklist () {
