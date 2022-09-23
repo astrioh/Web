@@ -28,6 +28,7 @@
         <Board
           :store-cards="storeCards"
           :board="currentBoard"
+          :show-archive="showArchive"
         />
       </div>
     </div>
@@ -47,6 +48,12 @@ export default {
     BoardBlocItem,
     NavBarBoards,
     Board
+  },
+  props: {
+    showArchive: {
+      type: Boolean,
+      default: false
+    }
   },
   data () {
     return {

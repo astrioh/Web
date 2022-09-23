@@ -38,12 +38,6 @@
         >
           Создатель я
         </PopMenuItem>
-        <PopMenuItem
-          :icon="showArchive ? 'check' : 'uncheck'"
-          @click="clickBoardArchive"
-        >
-          Архив
-        </PopMenuItem>
         <PopMenuDivider
           v-if="isFilterSet"
         />
@@ -77,6 +71,13 @@
             icon="add"
           >
             Форма сбора заявок
+          </PopMenuItem>
+        </router-link>
+        <router-link :to="archiveLink">
+          <PopMenuItem
+            icon="add"
+          >
+            {{ archiveText }}
           </PopMenuItem>
         </router-link>
         <PopMenuItem
@@ -140,6 +141,20 @@ export default {
         return 'Вы действительно хотите удалить доску? \n\n Внимание! Все дочерние доски будут удалены.'
       }
       return 'Вы действительно хотите удалить доску?'
+    },
+    archiveLink () {
+      if (this.$route.name === 'boardArchive') {
+        return `/board/${this.selectedBoardUid}/`
+      } else {
+        return `/board/${this.selectedBoardUid}/archive`
+      }
+    },
+    archiveText () {
+      if (this.$route.name === 'boardArchive') {
+        return 'Вернуться в доску'
+      } else {
+        return 'Архив'
+      }
     },
     board () {
       return this.$store.state.boards.boards[this.boardUid]
@@ -239,9 +254,6 @@ export default {
     },
     clickBoardMyCardsCreated () {
       this.$store.commit(BOARD.SHOW_BOARD_MY_CREATED_CARDS, !this.showOnlyMyCreatedCards)
-    },
-    clickBoardArchive () {
-      this.$store.commit(BOARD.SHOW_BOARD_ARCHIVE, !this.showArchive)
     },
     clickBoardFilterClear () {
       this.$store.commit(BOARD.BOARD_CLEAR_FILTER)

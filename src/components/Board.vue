@@ -405,6 +405,10 @@ export default {
     board: {
       type: Object,
       default: () => ({})
+    },
+    showArchive: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -454,9 +458,6 @@ export default {
     },
     employeesByEmail () {
       return this.$store.state.employees.employeesByEmail
-    },
-    showArchive () {
-      return this.$store.state.boards.showArchive
     },
     showOnlyCardsWhereIAmResponsible () {
       return this.$store.state.boards.showOnlyCardsWhereIAmResponsible

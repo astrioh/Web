@@ -7,7 +7,6 @@ import store from '@/store/index.js'
 const state = {
   boards: {},
   selectedBoard: undefined,
-  showArchive: false,
   showOnlyCardsWhereIAmResponsible: false,
   showOnlyCardsWithNoResponsible: false,
   showOnlyMyCreatedCards: false,
@@ -305,9 +304,6 @@ const mutations = {
   [BOARD.SELECT_BOARD]: (state, board) => {
     state.selectedBoard = board
   },
-  [BOARD.SHOW_BOARD_ARCHIVE]: (state, showArchive) => {
-    state.showArchive = showArchive
-  },
   [BOARD.SHOW_BOARD_MY_CARDS_WHERE_IAM_RESPONSIBLE]: (state, show) => {
     state.showOnlyCardsWhereIAmResponsible = show
   },
@@ -321,7 +317,6 @@ const mutations = {
     state.searchText = searchText
   },
   [BOARD.BOARD_CLEAR_FILTER]: (state) => {
-    state.showArchive = false
     state.showOnlyCardsWhereIAmResponsible = false
     state.showOnlyCardsWithNoResponsible = false
     state.showOnlyMyCreatedCards = false
