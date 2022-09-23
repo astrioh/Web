@@ -364,7 +364,7 @@
           />
         </svg>
       </div>
-      <button class="btn-calendar" /><span class="w-[70px] text-center ml-[10px]">Назначить дату</span>
+      <button class="btn-calendar" /><span class="w-full text-center ml-[10px]">Назначить дату</span>
     </span>
   </Popper>
 </template>

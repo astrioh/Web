@@ -5,27 +5,32 @@ const state = {
     {
       name: 'welcome',
       mode: 'slide',
-      visible: JSON.parse(localStorage.getItem('slides'))?.welcome ?? true
+      visible: JSON.parse(localStorage.getItem('slides'))?.welcome?.visible ?? true,
+      reminder: JSON.parse(localStorage.getItem('slides'))?.welcome?.reminder
     },
     {
       name: 'addAvatar',
       mode: 'slide',
-      visible: JSON.parse(localStorage.getItem('slides'))?.addAvatar ?? true
+      visible: JSON.parse(localStorage.getItem('slides'))?.addAvatar?.visible ?? true,
+      reminder: JSON.parse(localStorage.getItem('slides'))?.addAvatar?.reminder
     },
     {
       name: 'addEmployees',
       mode: 'slide',
-      visible: JSON.parse(localStorage.getItem('slides'))?.addEmployees ?? true
+      visible: JSON.parse(localStorage.getItem('slides'))?.addEmployees?.visible ?? true,
+      reminder: JSON.parse(localStorage.getItem('slides'))?.addEmployees?.reminder
     },
     {
       name: 'addReglaments',
       mode: 'slide',
-      visible: JSON.parse(localStorage.getItem('slides'))?.addReglaments ?? true
+      visible: JSON.parse(localStorage.getItem('slides'))?.addReglaments?.visible ?? true,
+      reminder: JSON.parse(localStorage.getItem('slides'))?.addReglaments?.reminder
     },
     {
       name: 'delegateTasks',
       mode: 'slide',
-      visible: JSON.parse(localStorage.getItem('slides'))?.delegateTasks ?? true
+      visible: JSON.parse(localStorage.getItem('slides'))?.delegateTasks?.visible ?? true,
+      reminder: JSON.parse(localStorage.getItem('slides'))?.delegateTasks?.reminder ?? new Date()
     }
   ]
 }
@@ -51,6 +56,7 @@ const mutations = {
           data[value.name] = value.visible
         }
         state.slides[i].visible = value.visible
+        state.slides[i].reminder = value.reminder ?? new Date()
         localStorage.setItem('slides', JSON.stringify(data))
       }
     }

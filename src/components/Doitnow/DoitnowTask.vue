@@ -22,6 +22,7 @@
     >
       <SlideBody
         :name="task.name"
+        :reminder="task.reminder"
         @nextTask="nextTask"
       />
     </div>
