@@ -71,23 +71,22 @@
         @click.stop="clickAddProject"
       />
     </template>
-    <div v-if="allDepartments.length">
+    <div v-if="departmentsProjects.length">
       <div
-        v-for="dep in allDepartments"
+        v-for="dep in departmentsProjects"
         :key="dep.uid"
       >
         <AsideMenuListTitle
-          v-if="isDepProjectsAreAvalible(dep.uid)"
+          v-if="dep.projects.length"
         >
           {{ dep.name }}
         </AsideMenuListTitle>
 
         <template
-          v-for="project in commonProjects"
+          v-for="project in dep.projects"
           :key="project.uid"
         >
           <router-link
-            v-if="isProjectInCurrDepartment(project, dep.uid)"
             v-slot="{ isActive }"
             :to="'/project/' + project.uid"
           >
@@ -132,6 +131,7 @@ import { uuidv4 } from '@/helpers/functions'
 
 import * as PROJECT from '@/store/actions/projects'
 import * as NAVIGATOR from '@/store/actions/navigator'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -149,6 +149,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'favoriteProjects',
+      'privateProjects',
+      'commonProjects',
+      'departmentsProjects'
+    ]),
     status () {
       return this.$store.state.navigator.status
     },
@@ -158,16 +164,6 @@ export default {
     user () {
       return this.$store.state.user.user
     },
-    favoriteProjects () {
-      const arr = []
-      const projects = this.$store.state.projects.projects
-      Object.keys(projects).forEach(key => {
-        if (projects[key].favorite === 1) {
-          arr.push(projects[key])
-        }
-      })
-      return arr.sort((project1, project2) => { return project1.name.localeCompare(project2.name) })
-    },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
@@ -176,29 +172,6 @@ export default {
     },
     items () {
       return this.storeNavigator?.new_private_projects ?? []
-    },
-    privateProjects () {
-      return this.storeNavigator?.new_private_projects[0].items ?? []
-    },
-    allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
-      deps.unshift({
-        uid: '00000000-0000-0000-0000-000000000000',
-        name: 'Вне отдела'
-      })
-      return deps
-    },
-    commonProjects () {
-      return this.storeNavigator?.new_private_projects[1].items ?? []
     },
     employees () {
       return this.$store.state.employees.employees

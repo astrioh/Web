@@ -13,6 +13,7 @@
       <template #menu>
         <PopMenuItem
           icon="delete"
+          type="delete"
           @click="showConfirm = true"
         >
           Удалить

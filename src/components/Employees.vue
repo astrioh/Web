@@ -138,6 +138,7 @@
               </PopMenuItem>
               <PopMenuItem
                 icon="delete"
+                type="delete"
                 @click="clickDeleteDep(value.uid)"
               >
                 Удалить

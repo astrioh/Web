@@ -53,7 +53,10 @@
             Читатель
           </PopMenuItem>
           <PopMenuDivider />
-          <PopMenuItem @click="deleteDep">
+          <PopMenuItem
+            type="delete"
+            @click="deleteDep"
+          >
             Удалить
           </PopMenuItem>
         </template>

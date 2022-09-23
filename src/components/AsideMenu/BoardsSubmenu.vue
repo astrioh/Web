@@ -139,7 +139,7 @@ export default {
       return this.employees[this.user.current_user_uid]?.uid_dep || ''
     },
     currentUserDepTitle () {
-      return this.$store.state.departments.deps[this.currentUserDepUid].name || ''
+      return this.$store.state.departments.deps[this.currentUserDepUid]?.name || ''
     },
     depBoards () {
       if (!this.currentUserDepUid || !this.currentUserDepTitle) return []

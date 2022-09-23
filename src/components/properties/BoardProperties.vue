@@ -21,6 +21,7 @@
           <PopMenuItem
             v-if="isCanDelete"
             icon="delete"
+            type="delete"
             @click="showConfirm = true"
           >
             Удалить
