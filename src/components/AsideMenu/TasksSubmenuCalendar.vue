@@ -93,7 +93,7 @@ export default {
 }
 
 .calendar-nav-custom .vc-weeknumber-content {
-  @apply bg-white rounded-[6px] text-[#8b64bd] not-italic text-[11px] mt-0 mr-[2px] h-[24px] w-[24px];
+  @apply bg-white rounded-[6px] border border-black/[.08] text-[#8b64bd] not-italic text-[11px] mt-0 mr-[2px] h-[24px] w-[24px];
 }
 
 .calendar-nav-custom .vc-weeks {
@@ -104,8 +104,12 @@ export default {
   @apply text-[#424242] w-[32px] h-[32px];
 }
 
+.calendar-nav-custom .vc-arrow .vc-svg-icon {
+  @apply w-[22px] h-[22px];
+}
+
 .calendar-nav-custom .vc-title {
-  @apply text-[#424242] capitalize text-[15px] font-bold;
+  @apply text-[#424242] capitalize text-[14px] font-bold;
 }
 
 .calendar-nav-custom .vc-weekday {
