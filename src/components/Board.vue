@@ -80,7 +80,7 @@
         >
           <!--заголовок -->
           <div
-            class="px-1 flex justify-between items-start"
+            class="pl-1 pr-[12px] flex justify-between items-start"
             :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
