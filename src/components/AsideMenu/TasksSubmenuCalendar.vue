@@ -46,7 +46,7 @@ export default {
       return this.$store.state.darkMode
     },
     datePickerBG () {
-      return this.isDark ? 'rgb(31 41 55)' : '#f4f5f7'
+      return this.isDark ? 'rgb(31 41 55)' : '#FFFFFF'
     }
   },
   mounted () {
