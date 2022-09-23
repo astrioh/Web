@@ -148,7 +148,7 @@
             target="_blank"
             :to="'/form/' + $route.params.board_id"
           >
-            <span class="underline text-blue-500 hover:text-blue-800">http://localhost:8080/form/{{ $route.params.board_id }}</span>
+            <span class="underline text-blue-500 hover:text-blue-800">{{ currentLocation }}/form/{{ $route.params.board_id }}</span>
           </router-link>
           <button
             class="mt-3 focus:ring min-w-[90px] focus:outline-none flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto"
@@ -239,7 +239,10 @@ export default {
       return this.$store.state.boardforms.boardForm
     },
     iframeHtml () {
-      return `<iframe src="http://localhost:8080/form/${this.$route.params.board_id}?frame=true" title="Контакт" width="400" height="332" scrolling="no" frameBorder="0"></iframe>`
+      return `<iframe src="${this.currentLocation}/form/${this.$route.params.board_id}?frame=true" title="Контакт" width="400" height="332" scrolling="no" frameBorder="0"></iframe>`
+    },
+    currentLocation () {
+      return window.location.origin
     }
   },
   mounted () {
@@ -335,7 +338,7 @@ export default {
       navigator.clipboard.writeText(this.iframeHtml)
     },
     copyFormLink () {
-      navigator.clipboard.writeText('http://localhost:8080/form/' + this.$route.params.board_id)
+      navigator.clipboard.writeText(this.currentLocation + '/form/' + this.$route.params.board_id)
     },
     copyJson () {
       navigator.clipboard.writeText('https://web.leadertask.com/api/boardsforms/addboardleadbyjson?uid_board=' + this.$route.params.board_id)
