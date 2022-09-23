@@ -9,13 +9,17 @@
       v-if="onlineUsers?.length"
       class="flex -space-x-1.5"
     >
-      <img
+      <div
         v-for="user in onlineUsers"
         :key="user"
-        :title="user.name"
-        class="w-[30px] h-[30px] rounded-full border-[1px] border-blue-300"
-        :src="user.fotolink"
+        class="w-[32px] h-[32px] p-[1px] bg-blue-300 rounded-full"
       >
+        <img
+          :title="user.name"
+          class="w-[30px] h-[30px] rounded-full"
+          :src="user.fotolink"
+        >
+      </div>
     </div>
     <NavBarSearch
       @change="onSearch"
@@ -53,7 +57,10 @@ export default {
     onlineUsers () {
       const onlineUsers = []
       for (const property in this.employees) {
-        if (this.employees[property].onlineBoardUid === this.boardUid) {
+        if (
+          this.employees[property].onlineBoardUid === this.boardUid &&
+          property !== this.$store.state.user.user.current_user_uid
+        ) {
           onlineUsers.push(this.employees[property])
         }
       }
