@@ -15,10 +15,11 @@
           class="flex flex-col gap-[6px]"
         >
           <router-link
+            v-slot="{ isActive }"
             to="/tasks/today"
           >
             <SubmenuListItem
-              :selected="isTodaySelected"
+              :selected="isActive"
               title="Сегодня"
               @click="closeMenu"
             >
@@ -45,11 +46,12 @@
             </SubmenuListItem>
           </router-link>
           <router-link
+            v-slot="{ isActive }"
             to="/tasks/overdue"
           >
             <SubmenuListItem
               v-if="$store.state.navigator?.navigator?.settings.nav_show_overdue"
-              :selected="isOverdueSelected"
+              :selected="isActive"
               title="Просроченные"
               @click="closeMenu"
             >
@@ -105,10 +107,11 @@
             </SubmenuListItem>
           </router-link>
           <router-link
+            v-slot="{ isActive }"
             to="/tasks/unread"
           >
             <SubmenuListItem
-              :selected="isUnreadSelected"
+              :selected="isActive"
               title="Непрочитанные"
               @click="closeMenu"
             >
@@ -130,9 +133,12 @@
               </svg>
             </SubmenuListItem>
           </router-link>
-          <router-link to="/tasks/in-work">
+          <router-link
+            v-slot="{ isActive }"
+            to="/tasks/in-work"
+          >
             <SubmenuListItem
-              :selected="isInWorkSelected"
+              :selected="isActive"
               title="В работе"
               @click="closeMenu"
             >
@@ -152,9 +158,12 @@
               </svg>
             </SubmenuListItem>
           </router-link>
-          <router-link to="/tasks/in-focus">
+          <router-link
+            v-slot="{ isActive }"
+            to="/tasks/in-focus"
+          >
             <SubmenuListItem
-              :selected="isFocusSelected"
+              :selected="isActive"
               title="Задачи в фокусе"
               @click="closeMenu"
             >
@@ -172,9 +181,12 @@
               </svg>
             </SubmenuListItem>
           </router-link>
-          <router-link to="/tasks/ready">
+          <router-link
+            v-slot="{ isActive }"
+            to="/tasks/ready"
+          >
             <SubmenuListItem
-              :selected="isReadySelected"
+              :selected="isActive"
               title="Готово к сдаче"
               @click="closeMenu"
             >
@@ -204,16 +216,17 @@
           <router-link
             v-for="userDelegate in delegate[0].items"
             :key="userDelegate.uid"
+            v-slot="{ isActive }"
             :to="'/tasks/delegate-by-me/' + userDelegate.uid"
           >
             <SubmenuListItem
-              :selected="isUserDelegateByMeSelected(userDelegate)"
-              :title="getDelegateName(userDelegate.uid) || '???'"
+              :selected="isActive"
+              :title="getDelegateName(userDelegate.uid)"
               @click="closeMenu"
             >
               <img
                 :src="userDelegate.fotolink"
-                :alt="getDelegateName(userDelegate.uid) || '???'"
+                :alt="getDelegateName(userDelegate.uid)"
                 height="25"
                 width="25"
                 class="rounded-[6px] border-2 border-[#31a81e] mr-[5px]"
@@ -230,16 +243,17 @@
           <router-link
             v-for="userDelegate in delegate[1].items"
             :key="userDelegate.uid"
+            v-slot="{ isActive }"
             :to="'/tasks/delegate-to-me/' + userDelegate.uid"
           >
             <SubmenuListItem
-              :selected="isUserDelegateToMeSelected(userDelegate)"
-              :title="getDelegateName(userDelegate.uid) || '???'"
+              :selected="isActive"
+              :title="getDelegateName(userDelegate.uid)"
               @click="closeMenu"
             >
               <img
                 :src="userDelegate.fotolink"
-                :alt="getDelegateName(userDelegate.uid) || '???'"
+                :alt="getDelegateName(userDelegate.uid)"
                 height="25"
                 width="25"
                 class="rounded-[6px] border-2 border-[#f46868] mr-[5px]"
@@ -277,33 +291,9 @@ export default {
     },
     delegate () {
       return this.$store.getters.sortedNavigator.new_delegate
-    },
-    isTodaySelected () {
-      return this.$route.name === 'tasksToday'
-    },
-    isOverdueSelected () {
-      return this.$route.name === 'tasksOverdue'
-    },
-    isUnreadSelected () {
-      return this.$route.name === 'tasksUnread'
-    },
-    isInWorkSelected () {
-      return this.$route.name === 'tasksInWork'
-    },
-    isFocusSelected () {
-      return this.$route.name === 'tasksInFocus'
-    },
-    isReadySelected () {
-      return this.$route.name === 'tasksReady'
     }
   },
   methods: {
-    isUserDelegateToMeSelected (user) {
-      return this.$route.name === 'tasksDelegateToMe' && this.$route.params.employee_uid === user.uid
-    },
-    isUserDelegateByMeSelected (user) {
-      return this.$route.name === 'tasksDelegateByMe' && this.$route.params.employee_uid === user.uid
-    },
     onDayClick (date) {
       const today = new Date()
       const convertToday = `${today.getFullYear()}-${('0' + (today.getMonth() + 1)).slice(-2)}-${('0' + (today.getDate())).slice(-2)}`
@@ -324,7 +314,7 @@ export default {
       }
     },
     getDelegateName (uid) {
-      return this.$store.state.employees.employees[uid]?.name
+      return this.$store.state.employees.employees[uid]?.name || '???'
     }
   }
 }
