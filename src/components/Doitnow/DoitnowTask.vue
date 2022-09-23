@@ -299,7 +299,7 @@
         class="flex ml-[10px] flex-col min-w-[200px] items-center"
       >
         <div
-          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+          v-if="putAsideBtnIsShow"
           class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
           @click="dateIsNotEditingNow = false"
         >
@@ -662,6 +662,9 @@ export default {
       } else {
         return 'Готово к сдаче'
       }
+    },
+    putAsideBtnIsShow () {
+      return (this.task.uid_customer === this.user?.current_user_uid || this.task.uid_performer === this.user?.current_user_uid) && this.acceptBtnText !== 'Готово к сдаче'
     },
     dateClearWords () {
       let time
