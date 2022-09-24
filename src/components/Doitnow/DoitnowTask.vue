@@ -72,122 +72,30 @@
           >
             Задача в доступе
           </div>
-          <!-- customer -->
-          <div
+          <DoitnowCustomerInfo
             v-if="shouldShowCustomer"
-            class="flex mb-2"
-          >
-            <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
-            >
-              Заказчик:
-            </span>
-            <div
-              class="flex"
-            >
-              <div
-                v-if="!employees[task.uid_customer]?.fotolink"
-              >
-                <svg
-                  class="rounded-lg ml-1 h-[20px] w-[20px]"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 42 42"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect
-                    width="42"
-                    height="42"
-                    rx="8"
-                    fill="#ded9d9"
-                  />
-                  <path
-                    d="M15.75 14.583C15.75 17.4775 18.1055 19.833 21 19.833C23.8945 19.833 26.25 17.4775 26.25 14.583C26.25 11.6885 23.8945 9.33301 21 9.33301C18.1055 9.33301 15.75 11.6885 15.75 14.583ZM30.3333 31.4997H31.5V30.333C31.5 25.8308 27.8355 22.1663 23.3333 22.1663H18.6667C14.1633 22.1663 10.5 25.8308 10.5 30.333V31.4997H30.3333Z"
-                    fill="#ed3b18"
-                  />
-                </svg>
-              </div>
-              <img
-                v-else
-                :alt="employees[task.uid_customer]?.name"
-                :src="employees[task.uid_customer]?.fotolink"
-                class="rounded-lg ml-1 h-[20px] w-[20px]"
-              >
-              <span class="ml-1 text-[#4C4C4D] text-[13px] font-medium">{{ getByNameOrEmail(employees) }}</span>
-            </div>
-          </div>
-          <!-- performer -->
-          <div
+            :task="task"
+            :employees="employees"
+          />
+          <DoitnowPerformerInfo
             v-if="shouldShowPerformer"
-            class="flex mb-2"
-          >
-            <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
-            >
-              Исполнитель:
-            </span>
-            <div
-              class="flex"
-            >
-              <img
-                :alt="employees[task.uid_performer]?.name"
-                :src="employees[task.uid_performer] ? employees[task.uid_performer]?.fotolink : ''"
-                class="rounded-lg ml-1 h-[20px] w-[20px]"
-              >
-              <span class="ml-1 text-[#4C4C4D] text-[13px] font-medium">{{ employees[task.uid_performer]?.name }}</span>
-            </div>
-          </div>
-          <!-- days -->
-          <div
+            :task="task"
+            :employees="employees"
+          />
+          <DoitnowDaysInfo
             v-if="dateClearWords"
-            class="flex mb-2"
-          >
-            <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
-            >
-              Срок:
-            </span>
-            <div
-              class="flex"
-            >
-              <span class="text-[#4C4C4D] text-[13px] font-medium">{{ dateClearWords + getTime }}</span>
-            </div>
-          </div>
-          <!-- overdue -->
-          <div
+            :date-clear-words="dateClearWords"
+            :get-time="getTime"
+          />
+          <DoitnowOverdueInfo
             v-if="isTaskHaveOverdueTime"
-            class="flex mb-2"
-          >
-            <span class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]">
-              Просрочено:
-            </span>
-            <div
-              class="flex"
-            >
-              <span class="text-red-500 text-[13px] font-medium">{{ isTaskHaveOverdueTime }}</span>
-            </div>
-          </div>
-          <!-- project -->
-          <div
+            :is-task-have-overdue-time="isTaskHaveOverdueTime"
+          />
+          <DoitnowProjectInfo
             v-if="shouldShowProject"
-            class="flex mb-2"
-          >
-            <span
-              class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]"
-            >
-              Проект:
-            </span>
-            <div
-              class="flex mb-2"
-            >
-              <span class="text-[#4C4C4D] overflow-hidden truncate text-[13px] font-medium">{{
-                projects[task.uid_project]?.name.length > 99
-                  ? projects[task.uid_project]?.name.split('').slice(0,100).join('') + '...'
-                  : projects[task.uid_project]?.name
-              }}</span>
-            </div>
-          </div>
+            :projects="projects"
+            :task="task"
+          />
         </div>
       </div>
       <TaskPropsCommentEditor
@@ -291,6 +199,11 @@ import DoitnowAcceptButton from '@/components/Doitnow/DoitnowAcceptButton.vue'
 import DoitnowRedoButton from '@/components/Doitnow/DoitnowRedoButton.vue'
 import DoitnowChangeAccessButton from '@/components/Doitnow/DoitnowChangeAccessButton.vue'
 import DoitnowOpenTask from '@/components/Doitnow/DoitnowOpenTask.vue'
+import DoitnowCustomerInfo from '@/components/Doitnow/DoitnowCustomerInfo.vue'
+import DoitnowPerformerInfo from '@/components/Doitnow/DoitnowPerformerInfo.vue'
+import DoitnowDaysInfo from '@/components/Doitnow/DoitnowDaysInfo.vue'
+import DoitnowOverdueInfo from '@/components/Doitnow/DoitnowOverdueInfo.vue'
+import DoitnowProjectInfo from '@/components/Doitnow/DoitnowProjectInfo.vue'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -327,6 +240,11 @@ export default {
     TaskPropsCommentEditor,
     DoitnowTaskButtonDots,
     PerformButton,
+    DoitnowCustomerInfo,
+    DoitnowPerformerInfo,
+    DoitnowDaysInfo,
+    DoitnowOverdueInfo,
+    DoitnowProjectInfo,
     Checklist,
     DoitnowAcceptButton,
     DoitnowChangeAccessButton,
@@ -560,6 +478,9 @@ export default {
       return msg
     },
     // состояния для v-if
+    shouldShowCustomer () {
+      return this.task?.type !== 1
+    },
     shouldShowSlidebody () {
       return this.task?.mode === 'slide' && this.task?.visible
     },
@@ -568,9 +489,6 @@ export default {
     },
     shouldShowPerformer () {
       return (this.task?.type !== 1) && (this.task?.uid_performer !== this.task?.uid_customer)
-    },
-    shouldShowCustomer () {
-      return this.task?.type !== 1
     },
     shouldShowProject () {
       return this.task?.uid && this.projects[this.task?.uid_project]
