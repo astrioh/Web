@@ -228,104 +228,27 @@
       v-if="!task.mode"
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
-      <PopMenu
-        :disabled="dateIsNotEditingNow"
-        class="flex ml-[10px] flex-col min-w-[200px] items-center"
-      >
-        <div
-          v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-          class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
-          @click="dateIsNotEditingNow = false"
-        >
-          <div class="w-[16px] h-[16px] flex items-center justify-center">
-            <Icon
-              :path="pauseD.path"
-              :width="pauseD.width"
-              :height="pauseD.height"
-              :box="pauseD.viewBox"
-            />
-          </div>
-          <span class="ml-[10px] w-[70px]">Отложить</span>
-        </div>
-        <template #menu>
-          <div class="h-[155px] overflow-y-auto w-[220px] scroll-style">
-            <PopMenuItem
-              v-for="item in timeArr"
-              :key="item.index"
-              @click="postponeTask(task.date_begin, task.date_end, item)"
-            >
-              <div class="flex justify-between w-full items-center">
-                <span
-                  class="truncate"
-                >
-                  {{ item.name }}
-                </span>
-              </div>
-            </PopMenuItem>
-            <PopMenuItem
-              v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && task.uid_customer === user?.current_user_uid"
-              @click.stop=""
-            >
-              <SetDate
-                class="hover:cursor-pointer"
-                :name="'Назначить срок'"
-                :date-begin="task.date_begin"
-                :date-end="task.date_end"
-                :date-text="task.term_user"
-                @changeDates="onChangeDates"
-              />
-            </PopMenuItem>
-          </div>
-        </template>
-      </PopMenu>
-      <div
-        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
-        @click="accept"
-      >
-        <div class="w-[16px] h-[16px] flex items-center justify-center">
-          <svg
-            width="14"
-            height="10"
-            viewBox="0 0 14 10"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12.3337 1L5.00033 8.33333L1.66699 5"
-              stroke="#4C4C4D"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </div>
-        <span
-          class="ml-[10px] w-[70px]"
-        >{{ acceptBtnText }}</span>
-      </div>
-      <!-- redo -->
-      <div
-        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
-        @click="reDo"
-      >
-        <div class="w-[16px] h-[16px] flex items-center justify-center">
-          <Icon
-            :path="cancelImproveRejectIcon('path')"
-            :width="cancelImproveRejectIcon('width')"
-            :height="cancelImproveRejectIcon('height')"
-            :box="cancelImproveRejectIcon('viewBox')"
-          />
-        </div>
-        <span
-          class="ml-[10px] w-[70px]"
-        >{{ task.uid_customer === user?.current_user_uid ? (task.uid_performer === user?.current_user_uid ? 'Отменить' : 'На доработку') : 'Отклонить'
-        }}</span>
-      </div>
-      <!-- decline -->
+      <DoitnowPostponeButton
+        :task="task"
+        :user="user"
+        @postponeTask="postponeTask"
+        @changeDateEditingStatus="changeDateEditingStatus"
+        @changeDates="onChangeDates"
+      />
+      <DoitnowAcceptButton
+        v-if="shouldShowAcceptButton"
+        :task="task"
+        :user="user"
+        @accept="accept"
+      />
+      <DoitnowRedoButton
+        v-if="shouldShowRedoButton"
+        :task="task"
+        :user="user"
+        @reDo="reDo"
+      />
       <PerformButton
-        v-if="task.status !== TASK_STATUS.NOTE && task.type !== TASK_STATUS.TASK_IN_WORK && (task.uid_customer === user?.current_user_uid || task.uid_customer === task.uid_performer)"
+        v-if="shouldShowPerformButton"
         class="hover:cursor-pointer"
         :task-type="task.type"
         :current-user-uid="user?.current_user_uid"
@@ -333,44 +256,16 @@
         @changePerformer="onChangePerformer"
         @reAssign="onReAssignToUser"
       />
-      <!-- Change access -->
-      <div
-        v-if="task.status !== TASK_STATUS.NOTE && (task.type !== TASK_STATUS.TASK_IN_WORK || task.emails.includes(user?.current_user_email)) && task.uid_customer !== user?.current_user_uid && task.uid_performer !== user?.current_user_uid && task.mode !== 'slide'"
-        class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
-        @click="() => onChangeAccess(task.emails)"
-      >
-        <span
-          class="ml-[11px] w-[70px]"
-        >
-          Выйти из доступа
-        </span>
-        <Icon
-          :path="close.path"
-          :width="close.width"
-          :height="close.height"
-          :box="close.viewBox"
-          class="ml-5"
-        />
-      </div>
-      <div
-        v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
-        class="flex w-[221px] hover:cursor-pointer border border-transparent items-center text-sm hover:border hover:bg-[#0000000a] pl-[22px] font-medium min-h-[40px] rounded-lg text-[#3e3e3f] whitespace-nowrap text-end"
-        @click="setTaskFromQueue(task.uid)"
-      >
-        <div class="w-[16px] h-[16px] flex items-center justify-center">
-          <Icon
-            :path="openTask.path"
-            :width="openTask.width"
-            :height="openTask.height"
-            :box="openTask.viewBox"
-          />
-        </div>
-        <span
-          class="ml-[10px]"
-        >
-          Открыть задачу
-        </span>
-      </div>
+      <DoitnowChangeAccessButton
+        v-if="shouldShowAccessButton"
+        :task="task"
+        @onChangeAccess="onChangeAccess"
+      />
+      <DoitnowOpenTask
+        v-if="shouldShowOpenTask"
+        :task="task"
+        @setTaskFromQueue="setTaskFromQueue"
+      />
     </div>
   </div>
 </template>
@@ -382,14 +277,20 @@ import { TASK_STATUS } from '@/constants'
 import contenteditable from 'vue-contenteditable'
 import linkify from 'vue-linkify'
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
-import PerformButton from '@/components/Doitnow/PerformButton.vue'
-import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
-import Checklist from '@/components/Doitnow/Checklist.vue'
-import DoitnowTaskButtonDots from '@/components/Doitnow/DoitnowTaskButtonDots.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
-import Icon from '@/components/Icon.vue'
+
+// Doitnow components
+import PerformButton from '@/components/Doitnow/PerformButton.vue'
+import Checklist from '@/components/Doitnow/Checklist.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
+import DoitnowTaskButtonDots from '@/components/Doitnow/DoitnowTaskButtonDots.vue'
+import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
 import DoitnowChatMessages from '@/components/Doitnow/DoitnowChatMessages.vue'
+import DoitnowPostponeButton from '@/components/Doitnow/DoitnowPostponeButton.vue'
+import DoitnowAcceptButton from '@/components/Doitnow/DoitnowAcceptButton.vue'
+import DoitnowRedoButton from '@/components/Doitnow/DoitnowRedoButton.vue'
+import DoitnowChangeAccessButton from '@/components/Doitnow/DoitnowChangeAccessButton.vue'
+import DoitnowOpenTask from '@/components/Doitnow/DoitnowOpenTask.vue'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -401,13 +302,11 @@ import taskoptions from '@/icons/taskoptions.js'
 import file from '@/icons/file.js'
 import inaccess from '@/icons/inaccess.js'
 import doublecheck from '@/icons/doublecheck.js'
-import close from '@/icons/doitnow/close.js'
 import pauseD from '@/icons/doitnow/pause.js'
 import msgs from '@/icons/msgs.js'
 import taskcomment from '@/icons/taskcomment.js'
 import checklist from '@/icons/checklist.js'
 import project from '@/icons/doitnow/project.js'
-import openTask from '@/icons/doitnow/openTask.js'
 import tagIcon from '@/icons/tag.js'
 import performerRead from '@/icons/performer-read.js'
 import performerNotRead from '@/icons/performer-not-read.js'
@@ -415,34 +314,30 @@ import taskfocus from '@/icons/taskfocus.js'
 import check from '@/icons/doitnow/check.js'
 import clock from '@/icons/clock.js'
 import arrowForw from '@/icons/arrow-forw-sm.js'
+
 // Statuses icons
 import readyStatus from '@/icons/ready-status.js'
 import note from '@/icons/note.js'
 import inwork from '@/icons/inwork.js'
-import pause from '@/icons/pause.js'
 import canceled from '@/icons/canceled.js'
-import improve from '@/icons/improve.js'
 import repeat from '@/icons/repeat.js'
-import PopMenu from '../Common/PopMenu.vue'
-import PopMenuItem from '../Common/PopMenuItem.vue'
-import SetDate from './SetDate.vue'
-/* /Icons */
 
 export default {
   components: {
-    Icon,
     TaskPropsCommentEditor,
     DoitnowTaskButtonDots,
     PerformButton,
     Checklist,
+    DoitnowAcceptButton,
+    DoitnowChangeAccessButton,
+    DoitnowPostponeButton,
+    DoitnowRedoButton,
+    DoitnowOpenTask,
     DoitnowStatusModal,
     contenteditable,
     TaskStatus,
     SlideBody,
-    DoitnowChatMessages,
-    PopMenu,
-    PopMenuItem,
-    SetDate
+    DoitnowChatMessages
   },
   directives: {
     linkify
@@ -504,13 +399,10 @@ export default {
       // * imports * //
       taskoptions,
       TASK_STATUS,
-      close,
       file,
-      pause,
       inaccess,
       msgs,
       pauseD,
-      openTask,
       check,
       doublecheck,
       taskcomment,
@@ -525,7 +417,6 @@ export default {
       note,
       inwork,
       canceled,
-      improve,
       repeat,
       arrowForw
     }
@@ -580,17 +471,6 @@ export default {
         return '(' + hours + ':' + minutes + ')'
       } else {
         return ''
-      }
-    },
-    acceptBtnText () {
-      if (this.task.mode === 'slide') {
-        return 'Понятно'
-      } else if (this.task.uid_customer === this.user.current_user_uid && this.task.uid_performer === this.user.current_user_uid) {
-        return 'Завершить'
-      } else if (this.task.uid_customer === this.user.current_user_uid && this.task.uid_performer !== this.user.current_user_uid) {
-        return 'Принять и завершить'
-      } else {
-        return 'Готово к сдаче'
       }
     },
     dateClearWords () {
@@ -700,6 +580,21 @@ export default {
     },
     shouldShowChecklist () {
       return this.task?.checklist || this.checklistshow || this.checklistSavedNow
+    },
+    shouldShowAcceptButton () {
+      return this.task.uid_customer === this.user?.current_user_uid || this.task.uid_performer === this.user?.current_user_uid
+    },
+    shouldShowRedoButton () {
+      return this.task.uid_customer === this.user?.current_user_uid || this.task.uid_performer === this.user?.current_user_uid
+    },
+    shouldShowPerformButton () {
+      return this.task.status !== TASK_STATUS.NOTE && this.task.type !== TASK_STATUS.TASK_IN_WORK && (this.task.uid_customer === this.user?.current_user_uid || this.task.uid_customer === this.task.uid_performer)
+    },
+    shouldShowAccessButton () {
+      return this.task.status !== TASK_STATUS.NOTE && (this.task.type !== TASK_STATUS.TASK_IN_WORK || this.task.emails.includes(this.user?.current_user_email)) && this.task.uid_customer !== this.user?.current_user_uid && this.task.uid_performer !== this.user?.current_user_uid && this.task.mode !== 'slide'
+    },
+    shouldShowOpenTask () {
+      return this.task.mode !== 'slide' || this.task.uid_customer === this.user?.current_user_uid || this.task.uid_performer === this.user?.current_user_uid
     }
   },
   watch: {
@@ -710,6 +605,9 @@ export default {
     }
   },
   methods: {
+    changeDateEditingStatus (value) {
+      this.dateIsNotEditingNow = value
+    },
     onChangeChecklist (checklist) {
       const data = {
         uid_task: this.task?.uid,
@@ -1177,7 +1075,7 @@ export default {
             }
             this.$emit('changeValue', data)
             this.readTask()
-            this.dateIsNotEditingNow = true
+            this.changeDateEditingStatus(true)
           })
       this.nextTask()
     },
@@ -1195,9 +1093,6 @@ export default {
         this.showStatusModal = false
         this.$emit('nextTask')
       })
-    },
-    cancelImproveRejectIcon (param) {
-      return this.task.uid_customer === this.user?.current_user_uid && this.task.uid_performer !== this.user?.current_user_uid ? this.improve[param] : this.close[param]
     }
   }
 }
