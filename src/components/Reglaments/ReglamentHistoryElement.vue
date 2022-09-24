@@ -6,7 +6,7 @@
           <a
             class="text text-gray-500 text-sm min-w-[40%]"
           >
-            Комментарий
+            {{ comment }}
           </a>
         </div>
       </div>
@@ -120,7 +120,7 @@
             </svg>
           </span>
           <span class="cursor-default pl-1 text-xs text-black-600">
-            Дата добавления
+            {{ commentDate }}
           </span>
         </span>
       </div>
@@ -129,6 +129,7 @@
           class="flex items-center "
         >
           <img
+            :src="employees[uidEmployee].fotolink"
             width="40"
             height="40"
             class="w-[22px] h-[22px] rounded-[5px] border border-black/10"
@@ -136,7 +137,7 @@
           <p
             class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
           >
-            Имя сотрудника
+            {{ EmployeeNameOrEmail }}
           </p>
         </div>
       </div>
@@ -146,8 +147,26 @@
 <script>
 export default {
   props: {
+    comment: {
+      type: String,
+      default: ''
+    },
+    uidEmployee: {
+      type: String,
+      default: ''
+    },
+    commentDate: {
+      type: String,
+      default: ''
+    }
   },
   computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    },
+    EmployeeNameOrEmail () {
+      return this.employees[this.uidEmployee].name ?? this.employees[this.uidEmployee].email
+    }
   },
   methods: {
   }

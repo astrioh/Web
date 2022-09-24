@@ -25,7 +25,16 @@
     </div>
   </div>
   <div class="mt-5 p-7 bg-white rounded-[28px] flex flex-col">
-    <ReglamentHistoryElement />
+    <template
+      v-for="(comment, index) in reglamentComments"
+      :key="index"
+    >
+      <ReglamentHistoryElement
+        :comment="reglamentComments[index].comment"
+        :uid-employee="reglamentComments[index].uid_employee"
+        :comment-date="reglamentComments[index].comment_date"
+      />
+    </template>
   </div>
 </template>
 
@@ -38,8 +47,15 @@ export default {
     ReglamentSmallButton,
     ReglamentHistoryElement
   },
+  data () {
+    return {
+      reglamentComments: []
+    }
+  },
   mounted () {
-    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id)
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
+      this.reglamentComments = res.data
+    })
   }
 }
 </script>
