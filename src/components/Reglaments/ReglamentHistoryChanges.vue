@@ -32,11 +32,14 @@
 <script>
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
 import ReglamentHistoryElement from '@/components/Reglaments/ReglamentHistoryElement.vue'
-
+import * as REGLAMENTS from '@/store/actions/reglaments.js'
 export default {
   components: {
     ReglamentSmallButton,
     ReglamentHistoryElement
+  },
+  mounted () {
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id)
   }
 }
 </script>
