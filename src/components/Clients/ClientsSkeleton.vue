@@ -3,14 +3,27 @@
     v-for="i in 10"
     :key="i"
   >
-    <tr>
+    <tr class="h-[48px] animate-pulse">
       <td
-        v-for="k in 4"
-        :key="k"
-        class="mt-[10px]"
+        v-for="j in 4"
+        :key="j"
+        class="pl-[14px]"
       >
-        <div class="h-2.5 bg-gray-300 rounded-full dark:bg-gray-600 mt-2.5 w-[80%] mb-2.5" />
+        <div
+          class="h-2.5 bg-gray-300 rounded-[20px]"
+          :style="{width: getRandomNumber(100, 140) + 'px'}"
+        />
       </td>
     </tr>
   </template>
 </template>
+
+<script>
+export default {
+  methods: {
+    getRandomNumber (min, max) {
+      return Math.random() * (max - min) + min
+    }
+  }
+}
+</script>
