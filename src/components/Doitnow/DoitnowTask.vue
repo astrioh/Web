@@ -121,6 +121,8 @@
         :task="task"
         :task-messages="taskMessages"
         :current-user-uid="user?.current_user_uid"
+        :message-quote-user="messageQuoteUser"
+        :message-quoute-string="messageQuouteString"
         :show-all-messages="true"
         :show-only-files="showOnlyFiles"
         @answerMessage="onAnswerMessage"
@@ -210,31 +212,6 @@ import * as TASK from '@/store/actions/tasks'
 import * as MSG from '@/store/actions/taskmessages'
 import * as FILES from '@/store/actions/taskfiles.js'
 
-/* Icons */
-import taskoptions from '@/icons/taskoptions.js'
-import file from '@/icons/file.js'
-import inaccess from '@/icons/inaccess.js'
-import doublecheck from '@/icons/doublecheck.js'
-import pauseD from '@/icons/doitnow/pause.js'
-import msgs from '@/icons/msgs.js'
-import taskcomment from '@/icons/taskcomment.js'
-import checklist from '@/icons/checklist.js'
-import project from '@/icons/doitnow/project.js'
-import tagIcon from '@/icons/tag.js'
-import performerRead from '@/icons/performer-read.js'
-import performerNotRead from '@/icons/performer-not-read.js'
-import taskfocus from '@/icons/taskfocus.js'
-import check from '@/icons/doitnow/check.js'
-import clock from '@/icons/clock.js'
-import arrowForw from '@/icons/arrow-forw-sm.js'
-
-// Statuses icons
-import readyStatus from '@/icons/ready-status.js'
-import note from '@/icons/note.js'
-import inwork from '@/icons/inwork.js'
-import canceled from '@/icons/canceled.js'
-import repeat from '@/icons/repeat.js'
-
 export default {
   components: {
     TaskPropsCommentEditor,
@@ -299,44 +276,19 @@ export default {
     }
   },
   emits: ['clickTask', 'nextTask', 'changeValue', 'readTask'],
-  data (props) {
+  data () {
     return {
-      // * variables * //
-      isChatVisible: false,
       showStatusModal: false,
       lastSelectedStatus: '',
       showConfirm: false,
       checklistshow: false,
       checklistSavedNow: false,
       currentAnswerMessageUid: '',
-      showAllMessages: false,
-      name: props.task.name,
+      name: this.task.name,
       isloading: false,
       showOnlyFiles: false,
       dateIsNotEditingNow: false,
-      // * imports * //
-      taskoptions,
-      TASK_STATUS,
-      file,
-      inaccess,
-      msgs,
-      pauseD,
-      check,
-      doublecheck,
-      taskcomment,
-      checklist,
-      project,
-      tagIcon,
-      performerRead,
-      performerNotRead,
-      taskfocus,
-      clock,
-      readyStatus,
-      note,
-      inwork,
-      canceled,
-      repeat,
-      arrowForw
+      TASK_STATUS
     }
   },
   computed: {
@@ -354,22 +306,6 @@ export default {
     },
     isCustomer () {
       return this.task.uid_customer === this.user?.current_user_uid
-    },
-    timeArr () {
-      return [{
-        value: 10,
-        name: '10 минут'
-      }, {
-        value: 1,
-        name: '1 час'
-      }, {
-        value: 3,
-        name: '3 часа'
-      },
-      {
-        value: 1,
-        name: 'Завтра'
-      }]
     },
     getTime () {
       let time
@@ -406,38 +342,11 @@ export default {
       const date = new Date(time).getDate() + months[month - 1] + (new Date().getFullYear() === new Date(time).getUTCFullYear() ? '' : new Date(time).getUTCFullYear())
       return date
     },
-    isAccessVisible () {
-      if (this.task.emails) return true
-      if (this.task.type === 1 || this.task.type === 2) return true
-      return false
-    },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
     },
-    computed () {
-      return this.$store.state.projects
-    },
-    statusColor () {
-      const statusColor = {
-        4: 'text-green-600',
-        5: 'text-red-600',
-        8: 'text-red-600',
-        9: 'text-blue-500'
-      }
-      return statusColor[this.task.status]
-        ? statusColor[this.task.status]
-        : 'text-gray-500 dark:text-gray-100'
-    },
     isTaskComplete () {
       return this.task.status === TASK_STATUS.TASK_COMPLETED || this.task.status === TASK_STATUS.TASK_CANCELLED
-    },
-    backgroundColor () {
-      return this.getValidBackColor(
-        this.colors[this.task.uid_marker]?.back_color
-      )
-    },
-    uppercase () {
-      return this.colors[this.task.uid_marker]?.uppercase ?? false
     },
     isTaskHaveOverdueTime () {
       let time
@@ -517,8 +426,6 @@ export default {
   },
   watch: {
     task () {
-      this.showAllMessages = false
-      this.isChatVisible = false
       this.name = this.task.name
     }
   },
@@ -593,9 +500,6 @@ export default {
       this.$router.push('/task/' + uid)
       this.$store.state.tasks.taskFromQueue = uid
     },
-    removeAnswerHint () {
-      this.currentAnswerMessageUid = ''
-    },
     postponeTask (begin, end, item) {
       const dateEnd = new Date(end)
       switch (item.name) {
@@ -639,15 +543,6 @@ export default {
           })
       this.nextTask()
     },
-    onShowCalendar () {
-      // устанавливаем выбранную дату в календарике
-      this.date = this.getDateValue()
-      const moveDate = this.date ? new Date(this.date) : new Date()
-      this.$refs.datePicker.move(moveDate)
-      this.$refs.datePicker.updateValue(new Date(this.date))
-      // устанавливаем время
-      this.time = this.getTimeValue()
-    },
     readTask () {
       this.$emit('readTask')
     },
@@ -661,9 +556,6 @@ export default {
       }
       this.$store.dispatch(TASK.CHANGE_TASK_COMMENT, data)
       this.$emit('changeValue', { comment: text })
-    },
-    getByNameOrEmail (employees) {
-      return employees[this.task.uid_customer]?.name || this.task?.email_customer
     },
     _linkify (text) {
       return text.replace(/(lt?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
@@ -785,54 +677,15 @@ export default {
       }
       this.$emit('changeValue', data)
     },
-    scrollDown () {
-      this.showAllMessages = true
-      this.infoComplete = true
-      setTimeout(() => {
-        const elem = document.getElementById('content').lastElementChild
-        elem.scrollIntoView()
-      }, 200)
-    },
     getValidForeColor (foreColor) {
       if (foreColor && foreColor !== '#A998B6') return foreColor
       return ''
-    },
-    getValidBackColor (backColor) {
-      if (backColor && backColor !== '#A998B6') return backColor
-      return ''
-    },
-    countChecklist (checklist) {
-      const data = {
-        done: 0,
-        undone: 0
-      }
-      // нормализуем перенос строки (разные на windows и на mac)
-      const chlist = checklist.replaceAll('\r\n', '\n').replaceAll('\r', '\n').replaceAll('\n', '\r\n')
-      for (const line of chlist.split('\r\n\r\n')) {
-        data.undone++
-        if (+line.split('\r\n')[0] === 1) {
-          data.done++
-        }
-      }
-      return data
     },
     changeValue (value) {
       this.$emit('changeValue', value)
     },
     nextTask () {
       this.$emit('nextTask')
-    },
-    changeFocus (uid, value) {
-      this.$store.dispatch(TASK.CHANGE_TASK_FOCUS, {
-        uid: uid,
-        value: value
-      })
-        .then(() => {
-          const data = {
-            focus: value
-          }
-          this.$emit('changeValue', data)
-        })
     },
     onChangeAccess (checkEmails) {
       let emails = checkEmails
@@ -851,9 +704,6 @@ export default {
           this.$emit('changeValue', data)
         })
       this.nextTask()
-    },
-    onClick (task) {
-      this.$emit('clickTask', task)
     },
     reDo () {
       if (this.childrens?.length) {
