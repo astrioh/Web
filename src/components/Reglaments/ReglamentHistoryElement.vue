@@ -6,7 +6,7 @@
           <a
             class="text text-gray-500 text-sm min-w-[40%]"
           >
-            Комментарий
+            {{ comment }}
           </a>
         </div>
       </div>
@@ -14,7 +14,7 @@
     <div class="whitespace-nowrap flex items-center p-2 ml-1 ">
       <div class="bg-gray-100 rounded-[4px] pr-3 mr-4">
         <span class="inline-flex justify-center items-center h-[30px] ">
-          <span class=" text-red-600">
+          <span class=" text-orange-600">
             <svg
               fill="none"
               viewBox="0 0 16 16"
@@ -120,15 +120,16 @@
             </svg>
           </span>
           <span class="cursor-default pl-1 text-xs text-black-600">
-            Дата добавления
+            {{ commentDate }}
           </span>
         </span>
       </div>
-      <div class="tag-label cursor-default p-1 py-1.5 px-2 text-xs whitespace-nowrap rounded-[4px] flex items-center max-w-full text-white border-red-500 bg-opacity-50 bg-red-500 h-[30px]">
+      <div class="tag-label cursor-default p-1 py-1.5 px-2 text-xs whitespace-nowrap rounded-[4px] flex items-center max-w-full text-white border-orange-500 bg-opacity-50 bg-orange-500 h-[30px]">
         <div
           class="flex items-center "
         >
           <img
+            :src="employees[uidEmployee].fotolink"
             width="40"
             height="40"
             class="w-[22px] h-[22px] rounded-[5px] border border-black/10"
@@ -136,7 +137,7 @@
           <p
             class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
           >
-            Имя сотрудника
+            {{ EmployeeNameOrEmail }}
           </p>
         </div>
       </div>
@@ -146,8 +147,26 @@
 <script>
 export default {
   props: {
+    comment: {
+      type: String,
+      default: ''
+    },
+    uidEmployee: {
+      type: String,
+      default: ''
+    },
+    commentDate: {
+      type: String,
+      default: ''
+    }
   },
   computed: {
+    employees () {
+      return this.$store.state.employees.employees
+    },
+    EmployeeNameOrEmail () {
+      return this.employees[this.uidEmployee].name ?? this.employees[this.uidEmployee].email
+    }
   },
   methods: {
   }

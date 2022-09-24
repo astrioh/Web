@@ -52,7 +52,7 @@
                 v-if="!isTesting"
                 class="flex items-center px-[10px] py-[5px]"
               >
-                История изменений
+                Дата последнего изменения: {{ $store.state.reglaments.lastCommentDate }}
               </ReglamentSmallButton>
             </router-link>
             <ReglamentSmallButton
@@ -76,9 +76,8 @@
             </ReglamentSmallButton>
             <ReglamentSmallButton
               :disabled="disabledButtons"
-              :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': buttonSaveReglament === 2}"
-              title="Сохранить"
-              @click="onSaveReglamentButtonClick"
+              :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': saveContentStatus === 2}"
+              @click="clickSaveReglament"
             >
               <svg
                 width="20"
@@ -96,7 +95,7 @@
             <ReglamentSmallButton
               class="w-auto flex flex-row justify-center items-center"
               :disabled="disabledButtons"
-              @click="showSaveModal = true"
+              @click="clickSaveAndExitReglament"
             >
               <svg
                 width="20"
@@ -488,13 +487,17 @@ export default {
       return 'Сохраняется'
     },
     disabledButtons () {
-      return this.buttonDisabled === true || this.buttonSaveReglament === 0 || this.saveContentStatus === 0
+      return this.buttonDisabled === true || this.saveContentStatus === 0
     }
   },
   mounted () {
     this.currName = this.reglamentTitle
     this.currEditors = [...this.reglamentEditors]
     this.currDep = this.reglamentDep
+
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
+      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1].comment_date
+    })
   },
   methods: {
     onDeleteQuestion (uid) {
@@ -636,6 +639,14 @@ export default {
 
       return this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     },
+    clickSaveReglament () {
+      this.showSaveModal = true
+      this.$store.state.reglaments.hideSaveParams = true
+    },
+    clickSaveAndExitReglament () {
+      this.showSaveModal = true
+      this.$store.state.reglaments.hideSaveParams = false
+    },
     setEdit () {
       const reglament = { ...this.currReglament }
       reglament.content = this.currText
@@ -660,10 +671,21 @@ export default {
         const reglaments = this.$store.state.navigator.navigator.reglaments
         const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
         if (index !== -1) reglaments.items[index] = reglament
-        this.$emit('exitEditMode')
+        if (this.$store.state.reglaments.hideSaveParams === false) {
+          this.getBack()
+        } else {
+          this.showSaveModal = false
+        }
+        this.$store.state.reglaments.lastCommentDate = this.dateToLabelFormat(new Date())
       }).catch(() => {
         this.saveContentStatus = 2
       })
+    },
+    dateToLabelFormat (calendarDate) {
+      const day = calendarDate.getDate()
+      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
+      return day + ' ' + month + ', ' + weekday
     },
     getBack () {
       this.$emit('exitEditMode')
@@ -704,35 +726,6 @@ export default {
           }
         }
       }
-    },
-    onSaveReglamentButtonClick () {
-      const reglament = { ...this.currReglament }
-      reglament.content = this.currText
-      reglament.name = this.currName.trim()
-      reglament.department_uid = this.currDep
-      reglament.editors = [...this.currEditors]
-
-      this.isFormInvalid = false
-      this.firstInvalidQuestionUid = null
-      this.validateReglamentQuestions()
-      if (this.isFormInvalid && this.firstInvalidQuestionUid) {
-        this.gotoNode(this.firstInvalidQuestionUid)
-        return
-      }
-
-      this.buttonSaveReglament = 0
-      this.saveReglament(reglament).then(() => {
-        this.buttonSaveReglament = 1
-        // обновляем регламент в сторе
-        // надо бы сделать по нормальному через мутацию
-        const reglaments = this.$store.state.navigator.navigator.reglaments
-        const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
-        if (index !== -1) reglaments.items[index] = reglament
-        this.buttonDisabled = true
-        this.buttonDisabled = false
-      }).catch(() => {
-        this.buttonSaveReglament = 2
-      })
     },
     removeReglament () {
       // копия регламента, нужна для NAVIGATOR_REMOVE_REGLAMENT, он при удалении регламента использовал greedSource.

@@ -9,7 +9,8 @@
   >
     <div class="flex flex-col">
       <div
-        class="flex gap-[10px] items-center cursor-pointer"
+        v-if="$store.state.reglaments.hideSaveParams === false"
+        class="flex gap-[10px] items-center cursor-pointer mb-4"
         @click="toggleEmployes"
       >
         <svg
@@ -53,17 +54,17 @@
             stroke-opacity="0.1"
           />
         </svg>
-        <div class="font-roboto text-[14px] leading-[20px] text-[#4c4c4d] cursor-pointer">
+        <div class="text-[14px] cursor-pointer">
           Очистить сотрудников прошедших регламент
         </div>
       </div>
-      <h2 class="mt-4 text-[14px]">
+      <h2 class="text-[14px] mt-[-5px]">
         Добавить комментарий к изменениям
       </h2>
       <textarea
         v-model="reglamentComment"
         type="text"
-        class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] ml-1 mt-2 max-w-[300px] font-[500] px-2 text-[14px] leading-6 break-words"
+        class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] scroll-style ml-1 mt-2 w-[300px] font-[500] px-2 text-[14px] leading-6 break-words"
         placeholder="Комментарий"
         spellcheck="false"
       />
