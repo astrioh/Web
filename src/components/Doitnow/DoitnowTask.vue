@@ -17,7 +17,7 @@
     />
 
     <div
-      v-if="task.mode === 'slide' && task.visible"
+      v-if="shouldShowSlidebody"
       class="pt-[45px] pb-6 px-5 w-full bg-white rounded-lg"
     >
       <SlideBody
@@ -67,15 +67,14 @@
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-normal w-[720px]">
           <div
-            v-if="task.uid && task.emails.includes(user?.current_user_email) && task.uid_performer !== user?.current_user_uid"
+            v-if="shouldShowAccessLabel"
             class="border-[#FF912380] w-[150px] text-center py-1 px-2 mb-2 border-2 rounded-[8px] inline-block"
           >
             Задача в доступе
           </div>
           <!-- customer -->
           <div
-            v-if="task.uid"
-            v-show="task.type !== 1"
+            v-if="shouldShowCustomer"
             class="flex mb-2"
           >
             <span
@@ -120,8 +119,7 @@
           </div>
           <!-- performer -->
           <div
-            v-if="task.uid"
-            v-show="(task.type !== 1) && (task.uid_performer !== task.uid_customer)"
+            v-if="shouldShowPerformer"
             class="flex mb-2"
           >
             <span
@@ -142,8 +140,7 @@
           </div>
           <!-- days -->
           <div
-            v-if="task.uid"
-            v-show="dateClearWords"
+            v-if="dateClearWords"
             class="flex mb-2"
           >
             <span
@@ -152,7 +149,6 @@
               Срок:
             </span>
             <div
-              v-show="dateClearWords"
               class="flex"
             >
               <span class="text-[#4C4C4D] text-[13px] font-medium">{{ dateClearWords + getTime }}</span>
@@ -160,8 +156,7 @@
           </div>
           <!-- overdue -->
           <div
-            v-if="task.uid"
-            v-show="plural"
+            v-if="isTaskHaveOverdueTime"
             class="flex mb-2"
           >
             <span class="mr-[16px] w-[90px] shrink-0 text-[#7E7E80] text-[13px]">
@@ -170,12 +165,12 @@
             <div
               class="flex"
             >
-              <span class="text-red-500 text-[13px] font-medium">{{ plural }}</span>
+              <span class="text-red-500 text-[13px] font-medium">{{ isTaskHaveOverdueTime }}</span>
             </div>
           </div>
           <!-- project -->
           <div
-            v-if="task.uid && projects[task.uid_project]"
+            v-if="shouldShowProject"
             class="flex mb-2"
           >
             <span
@@ -196,8 +191,7 @@
         </div>
       </div>
       <TaskPropsCommentEditor
-        v-if="task.uid"
-        v-show="task.comment.length || task.uid_customer === user?.current_user_uid"
+        v-if="shouldShowCommentEditor"
         class="mt-3"
         text-style="!text-[16px] leading-[155%] mb-[40px]"
         style="word-break: break-word"
@@ -206,7 +200,7 @@
         @changeComment="onChangeComment"
       />
       <Checklist
-        v-if="task?.checklist || checklistshow || checklistSavedNow"
+        v-if="shouldShowChecklist"
         class="mt-3 checklist-custom font-medium"
         :checklist="task?.checklist"
         :can-edit="canEditChecklist"
@@ -215,84 +209,23 @@
         @changeChecklist="onChangeChecklist"
         @endEdit="onAddChecklistComplete"
       />
-      <div
-        v-if="task.uid"
-        class="max-w-1/2 border-t mt-2 pt-2"
-        :class="task.uid_marker !== '00000000-0000-0000-0000-000000000000' ? 'bg-white p-1 mt-1 rounded-lg' : ''"
-      >
-        <div class="mx-auto max-w-[540px]">
-          <div
-            v-if="currentAnswerMessageUid !== ''"
-            class="quote-request border-l-2 border-[#7E7E80] mt-[8px] h-[40px]"
-          >
-            <div class="flex flex-row items-center">
-              <div class="grow w-[calc(100%-20px)]">
-                <div
-                  class="mx-[4px]"
-                >
-                  <p class="text-[11px] leading-[16px] overflow-hidden text-black text-ellipsis whitespace-nowrap">
-                    <!-- Кому отвечают -->
-                    {{ messageQuoteUser }}
-                  </p>
-                  <p class="text-[12px] leading-[16px] overflow-hidden text-[#9a9fa6] text-ellipsis whitespace-nowrap">
-                    <!-- Сообщение на которое отвечают -->
-                    {{ messageQuoteString }}
-                  </p>
-                </div>
-              </div>
-              <div
-                class="flex-none"
-                @click="onAnswerMessage('')"
-              >
-                <svg
-                  class="m-[2px]"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M4.28481 4.30107C4.67082 3.90608 5.30395 3.8988 5.69893 4.28481L9.25 7.75517L12.8011 4.28481C13.1961 3.8988 13.8292 3.90608 14.2152 4.30107C14.6012 4.69605 14.5939 5.32918 14.1989 5.71519L10.6808 9.15341L14.1989 12.5916C14.5939 12.9776 14.6012 13.6108 14.2152 14.0058C13.8292 14.4007 13.1961 14.408 12.8011 14.022L9.25 10.5516L5.69893 14.022C5.30395 14.408 4.67082 14.4007 4.28481 14.0058C3.8988 13.6108 3.90608 12.9776 4.30107 12.5916L7.81925 9.15341L4.30107 5.71519C3.90608 5.32918 3.8988 4.69605 4.28481 4.30107Z"
-                    fill="#999999"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <!-- input -->
-          <TaskPropsInputForm
-            :task="task"
-            :answer="currentAnswerMessageUid"
-            @readTask="readTask"
-            @removeAnswerHint="removeAnswerHint"
-          />
-          <MessageSkeleton v-if="isTaskMessagesLoading" />
-          <!-- chat -->
-          <TaskPropsChatMessages
-            v-else-if="taskMessages?.length"
-            id="content"
-            class="mt-3"
-            :task="task"
-            :task-messages="taskMessages"
-            :current-user-uid="user?.current_user_uid"
-            :show-all-messages="true"
-            :show-only-files="showOnlyFiles"
-            @answerMessage="onAnswerMessage"
-            @sendTaskMsg="sendTaskMsg"
-            @onPasteEvent="onPasteEvent"
-            @deleteFiles="deleteFiles"
-            @deleteTaskMsg="deleteTaskMsg"
-            @readTask="readTask"
-          />
-        </div>
-      </div>
+      <DoitnowChatMessages
+        :task="task"
+        :task-messages="taskMessages"
+        :current-user-uid="user?.current_user_uid"
+        :show-all-messages="true"
+        :show-only-files="showOnlyFiles"
+        @answerMessage="onAnswerMessage"
+        @sendTaskMsg="sendTaskMsg"
+        @onPasteEvent="onPasteEvent"
+        @deleteFiles="deleteFiles"
+        @deleteTaskMsg="deleteTaskMsg"
+        @readTask="readTask"
+      />
     </div>
     <!-- accept/redo/decline -->
     <div
-      v-if="task && !task.visible"
+      v-if="!task.mode"
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
       <PopMenu
@@ -346,7 +279,7 @@
         </template>
       </PopMenu>
       <div
-        v-if="task.mode !== 'slide' || task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
+        v-if="task.uid_customer === user?.current_user_uid || task.uid_performer === user?.current_user_uid"
         class="flex hover:cursor-pointer items-center text-sm hover:bg-[#0000000a] font-medium min-h-[40px] w-[221px] rounded-lg mb-2 pl-[22px] whitespace-nowrap text-[#3e3e3f]"
         @click="accept"
       >
@@ -452,13 +385,11 @@ import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsComment
 import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
-import TaskPropsChatMessages from '@/components/TaskProperties/TaskPropsChatMessages.vue'
-import TaskPropsInputForm from '@/components/TaskProperties/TaskPropsInputForm.vue'
 import DoitnowTaskButtonDots from '@/components/Doitnow/DoitnowTaskButtonDots.vue'
 import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import Icon from '@/components/Icon.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
-import MessageSkeleton from '../TaskProperties/MessageSkeleton.vue'
+import DoitnowChatMessages from '@/components/Doitnow/DoitnowChatMessages.vue'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -500,17 +431,15 @@ import SetDate from './SetDate.vue'
 export default {
   components: {
     Icon,
-    TaskPropsChatMessages,
     TaskPropsCommentEditor,
     DoitnowTaskButtonDots,
     PerformButton,
     Checklist,
-    TaskPropsInputForm,
     DoitnowStatusModal,
     contenteditable,
     TaskStatus,
     SlideBody,
-    MessageSkeleton,
+    DoitnowChatMessages,
     PopMenu,
     PopMenuItem,
     SetDate
@@ -712,7 +641,7 @@ export default {
     uppercase () {
       return this.colors[this.task.uid_marker]?.uppercase ?? false
     },
-    plural () {
+    isTaskHaveOverdueTime () {
       let time
       if (this.isCustomer) {
         time = this.task.date_end
@@ -728,7 +657,7 @@ export default {
       dateEnd.setHours(0, 0, 0, 0)
       const date = Math.floor((todayDate - dateEnd) / (60 * 60 * 24 * 1000))
       const dayName = date % 10 === 1 && date % 100 !== 11 ? 'день' : (((date >= 2) && (date % 10 <= 4)) && (date % 100 < 10 || date % 100 >= 20) ? 'дня' : 'дней')
-      if (date === 0 || date < 0) {
+      if (date <= 0) {
         return false
       } else {
         return date + ' ' + dayName
@@ -749,6 +678,28 @@ export default {
       msg = msg.replaceAll('&lt;', '<')
       msg = msg.replaceAll('&gt;', '>')
       return msg
+    },
+    // состояния для v-if
+    shouldShowSlidebody () {
+      return this.task?.mode === 'slide' && this.task?.visible
+    },
+    shouldShowAccessLabel () {
+      return this.task?.uid && this.task?.emails.includes(this.user?.current_user_email) && this.task?.uid_performer !== this.user?.current_user_uid
+    },
+    shouldShowPerformer () {
+      return (this.task?.type !== 1) && (this.task?.uid_performer !== this.task?.uid_customer)
+    },
+    shouldShowCustomer () {
+      return this.task?.type !== 1
+    },
+    shouldShowProject () {
+      return this.task?.uid && this.projects[this.task?.uid_project]
+    },
+    shouldShowCommentEditor () {
+      return this.task?.comment?.length || this.task?.uid_customer === this.user?.current_user_uid
+    },
+    shouldShowChecklist () {
+      return this.task?.checklist || this.checklistshow || this.checklistSavedNow
     }
   },
   watch: {
