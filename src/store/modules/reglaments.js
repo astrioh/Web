@@ -8,7 +8,8 @@ const state = {
   reglamentQuestions: [], // вопросы по текущему регламенту
   contributors: [], // сотрудники, прошедшие текущий регламент
   questionsToDelete: [],
-  answersToDelete: []
+  answersToDelete: [],
+  hideSaveParams: false
 }
 
 const actions = {
