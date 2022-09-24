@@ -8,7 +8,8 @@ const state = {
   reglamentQuestions: [], // вопросы по текущему регламенту
   contributors: [], // сотрудники, прошедшие текущий регламент
   questionsToDelete: [],
-  answersToDelete: []
+  answersToDelete: [],
+  hideSaveParams: false
 }
 
 const actions = {
@@ -154,7 +155,7 @@ const actions = {
   },
   [REGLAMENTS.GET_REGLAMENT_COMMENTS]: ({ commit, dispatch }, reglamentUid) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament_comments' + reglamentUid
+      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament_comments?uid_reglament=' + reglamentUid
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           resolve(resp)

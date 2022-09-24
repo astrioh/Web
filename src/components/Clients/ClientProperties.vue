@@ -148,35 +148,8 @@ export default {
     }
   },
   computed: {
-    isCanDeleteClient () {
-      const employees = this.$store.state.employees.employees
-      const user = this.$store.state.user.user
-      const userType = employees[user.current_user_uid].type
-      const userAdmin = userType === 1 || userType === 2
-      // текущий пользователь админ
-      // тот которого удаляем не суперадмин
-      // тот которого удаляем не текущий пользователь
-      return (
-        userAdmin &&
-        this.selectedEmployeeType !== userType &&
-        this.selectedEmployeeType !== 1 &&
-        !this.isSelectedEmployeeCurrentUser
-      )
-    },
     selectedClient () {
       return this.$store.state.clients.selectedClient
-    },
-    selectedClientName () {
-      return this.selectedClient?.name || ''
-    },
-    selectedClientUid () {
-      return this.selectedClient?.uid || ''
-    },
-    selectedClientEmail () {
-      return this.selectedClient?.email || ''
-    },
-    selectedClientPhone () {
-      return this.selectedClient?.phone || ''
     },
     status () { return this.$store.state.clientfilesandmessages.status },
     user () { return this.$store.state.user.user },
@@ -185,7 +158,7 @@ export default {
     clientMessages () { return this.$store.state.clientfilesandmessages.messages }
   },
   watch: {
-    selectedClient (newval, oldval) {
+    selectedClient (newval) {
       if (newval) {
         this.currClient = { ...newval }
       }
@@ -215,7 +188,7 @@ export default {
     },
     createClientMessage () {
       // если лицензия истекла
-      if (this.$store.getters.isLicenseExpired) {
+      if (!this.canAddFiles) {
         this.showMessagesLimit = true
         return
       }
