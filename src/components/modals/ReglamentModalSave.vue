@@ -61,6 +61,12 @@
       <h2 class="text-[14px] mt-[-5px]">
         Добавить комментарий к изменениям
       </h2>
+      <p
+        v-if="isError"
+        class="text-red-500 text-[10px]"
+      >
+        Поле комментарий не должно быть пустым
+      </p>
       <textarea
         v-model="reglamentComment"
         type="text"
@@ -83,6 +89,7 @@ export default {
     return {
       note: '',
       isClear: false,
+      isError: false,
       reglamentComment: ''
     }
   },
@@ -99,14 +106,18 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     onSave () {
-      this.$emit('onSave')
-      const data = {
-        uid_employee: this.user.current_user_uid,
-        uid_reglament: this.$route.params.id,
-        comment: this.reglamentComment,
-        comment_date: this.dateToLabelFormat(new Date())
+      if (this.reglamentComment) {
+        this.$emit('onSave')
+        const data = {
+          uid_employee: this.user.current_user_uid,
+          uid_reglament: this.$route.params.id,
+          comment: this.reglamentComment,
+          comment_date: this.dateToLabelFormat(new Date())
+        }
+        this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_COMMENT, data)
+      } else {
+        this.isError = true
       }
-      this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_COMMENT, data)
     },
     close () {
       this.$emit('close')
