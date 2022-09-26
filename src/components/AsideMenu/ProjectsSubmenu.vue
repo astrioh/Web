@@ -123,6 +123,7 @@ export default {
       return this.employees[this.user.current_user_uid]?.uid_dep || ''
     },
     currentUserDepTitle () {
+      if (this.currentUserDepUid === '00000000-0000-0000-0000-000000000000') return
       return this.$store.state.departments.deps[this.currentUserDepUid].name || ''
     },
     depProjects () {
