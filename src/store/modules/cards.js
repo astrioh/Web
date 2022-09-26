@@ -1,18 +1,29 @@
-import axios from 'axios'
-import * as CARD from '../actions/cards'
 import { sendInspectorMessage } from '@/inspector'
 import store from '@/store/index.js'
+import axios from 'axios'
+import * as CARD from '../actions/cards'
 
 const state = {
   cards: [],
-  selectedCard: false,
   selectedCardUid: '',
   boardUid: '',
   status: '',
   cardsAbortController: null
 }
 
-const getters = {}
+const getters = {
+  cardsMap (state) {
+    return state.cards.reduce((acc, stage) => {
+      stage.cards.forEach((card) => {
+        acc[card.uid] = card
+      })
+      return acc
+    }, {})
+  },
+  selectedCard (state, getters) {
+    return getters.cardsMap[state.selectedCardUid]
+  }
+}
 
 const actions = {
   [CARD.BOARD_CARDS_REQUEST]: ({ commit, rootState }, boardUid) => {
@@ -21,10 +32,7 @@ const actions = {
     commit('InitCardsAbortController', cardsAbortController)
     return new Promise((resolve, reject) => {
       commit(CARD.BOARD_CARDS_REQUEST)
-      const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'cards?uid=' +
-        boardUid
+      const url = process.env.VUE_APP_INSPECTOR_API + 'cards?uid=' + boardUid
       axios({ url: url, method: 'GET', signal: cardsAbortController.signal })
         .then((resp) => {
           if (resp) {
@@ -85,8 +93,7 @@ const actions = {
   },
   [CARD.MOVE_CARD]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      let url =
-        process.env.VUE_APP_INSPECTOR_API + 'card/stage?uid=' + data.uid
+      let url = process.env.VUE_APP_INSPECTOR_API + 'card/stage?uid=' + data.uid
       url = url + '&stage=' + data.stageUid
       if (data.newOrder !== undefined) url = url + '&order=' + data.newOrder
       axios({ url: url, method: 'PATCH' })
@@ -102,7 +109,10 @@ const actions = {
   },
   [CARD.CHANGE_CARD_RESPONSIBLE_USER]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'card/responsible?uid=' + data.cardUid
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/responsible?uid=' +
+        data.cardUid
       axios({ url: url, method: 'PATCH', data: { user: data.email } })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data)
@@ -116,9 +126,7 @@ const actions = {
   [CARD.CHANGE_CARD_NAME]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'card/name?uid=' +
-        data.cardUid
+        process.env.VUE_APP_INSPECTOR_API + 'card/name?uid=' + data.cardUid
       axios({ url: url, method: 'PATCH', data: { name: data.name } })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data)
@@ -132,9 +140,7 @@ const actions = {
   [CARD.CHANGE_CARD_COMMENT]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'card/comment?uid=' +
-        data.cardUid
+        process.env.VUE_APP_INSPECTOR_API + 'card/comment?uid=' + data.cardUid
       axios({ url: url, method: 'PATCH', data: { comment: data.comment } })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data)
@@ -148,9 +154,7 @@ const actions = {
   [CARD.CHANGE_CARD_BUDGET]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'card/cost?uid=' +
-        data.cardUid
+        process.env.VUE_APP_INSPECTOR_API + 'card/cost?uid=' + data.cardUid
       axios({ url: url, method: 'PATCH', data: { cost: data.budget } })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data)
@@ -164,9 +168,7 @@ const actions = {
   [CARD.CHANGE_CARD_COLOR]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'card/color?uid=' +
-        data.cardUid
+        process.env.VUE_APP_INSPECTOR_API + 'card/color?uid=' + data.cardUid
       axios({ url: url, method: 'PATCH', data: { color: data.color } })
         .then((resp) => {
           commit(CARD.CHANGE_CARD, resp.data.card)
@@ -255,9 +257,7 @@ const actions = {
   },
   [CARD.CHANGE_CARD_DATE_REMINDER]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'cards'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'cards'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           resolve(resp)
@@ -269,9 +269,7 @@ const actions = {
   },
   [CARD.CHANGE_CARD_UID_CLIENT]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
-      const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'cards'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'cards'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           resolve(resp)
@@ -286,11 +284,28 @@ const actions = {
 const mutations = {
   [CARD.BOARD_CARDS_REQUEST]: (state) => {
     state.cards = []
+    state.cardsMap = {}
     state.status = 'loading'
   },
-  [CARD.SELECT_CARD]: (state, card) => {
-    if (card) console.log('select card', card)
-    state.selectedCard = card
+  [CARD.SELECT_CARD]: (state, cardUid) => {
+    if (state.selectedCardUid !== cardUid) {
+      const cardsMap = state.cards.reduce((acc, stage) => {
+        stage.cards.forEach((card) => {
+          acc[card.uid] = card
+        })
+        return acc
+      }, {})
+      const card = cardsMap[cardUid]
+      if (card) console.log('select card', card)
+      //
+      sendInspectorMessage({
+        type: 'cardOnline',
+        uid_user: store.state.user.user.current_user_uid,
+        uid_board: store.state.boardUid,
+        uid_card: cardUid
+      })
+    }
+    state.selectedCardUid = cardUid
   },
   [CARD.BOARD_CARDS_SUCCESS]: (state, resp) => {
     console.log('cards ', resp)
@@ -438,9 +453,6 @@ const mutations = {
           return 0
         })
       }
-    }
-    if (state.selectedCard?.uid === card.uid) {
-      state.selectedCard = card
     }
   },
   AddStage: (state, stage) => {

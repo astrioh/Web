@@ -113,6 +113,7 @@ import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 
 import * as BOARD from '@/store/actions/boards'
+import * as CARD from '@/store/actions/cards'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
@@ -200,7 +201,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'board' })
       this.$store.commit(BOARD.SELECT_BOARD, this.board)
-      this.$store.state.cards.selectedCardUid = ''
+      this.$store.commit(CARD.SELECT_CARD, '')
     },
     clickDeleteBoard () {
       this.showDeleteBoard = true
