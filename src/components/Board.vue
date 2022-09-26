@@ -74,17 +74,17 @@
         <div
           v-if="isColumnVisible(column)"
           data-dragscroll
-          class="max-h-full flex flex-col flex-none bg-white rounded-xl overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
+          class="max-h-full flex flex-col flex-none bg-white rounded-[6px] overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
         >
           <!--заголовок -->
           <div
-            class="px-1 flex justify-between items-start"
+            class="pl-1 pr-[12px] flex justify-between items-start"
             :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
-              class="w-11/12"
+              class="w-[calc(100%-18px)] "
             >
               <BoardInputValue
                 v-if="showRenameColumn && column.UID === selectedColumn.UID"
@@ -158,6 +158,7 @@
                   <PopMenuItem
                     v-if="column.CanEditStage"
                     icon="delete"
+                    type="delete"
                     @click="clickDeleteColumn(column, $event)"
                   >
                     Удалить
@@ -290,6 +291,7 @@
             <BoardInputValue
               v-if="showAddCard && column.UID === selectedColumn.UID"
               :show="showAddCard && column.UID === selectedColumn.UID"
+              class="w-[254px]"
               @save="onAddNewCard"
               @cancel="showAddCard = false"
             />
@@ -380,6 +382,7 @@ import * as CARD from '@/store/actions/cards'
 import { sendInspectorMessage } from '@/inspector'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
 import BoardInputValue from './Board/BoardInputValue.vue'
+import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
 
 export default {
   directives: {
@@ -754,7 +757,11 @@ export default {
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)
       this.$store.commit(CARD.SELECT_CARD, card)
-      this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+
+      card.uid_client
+        ? this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, card.uid_client)
+        : this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+
       this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
       this.$store.dispatch('asidePropertiesToggle', true)
     },

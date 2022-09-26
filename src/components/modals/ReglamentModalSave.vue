@@ -9,7 +9,8 @@
   >
     <div class="flex flex-col">
       <div
-        class="flex gap-[10px] items-center cursor-pointer"
+        v-if="$store.state.reglaments.hideSaveParams === false"
+        class="flex gap-[10px] items-center cursor-pointer mb-4"
         @click="toggleEmployes"
       >
         <svg
@@ -53,51 +54,32 @@
             stroke-opacity="0.1"
           />
         </svg>
-        <div class="font-roboto text-[14px] leading-[20px] text-[#4c4c4d] cursor-pointer">
+        <div class="text-[14px] cursor-pointer">
           Очистить сотрудников прошедших регламент
         </div>
       </div>
-      <h2 class="mt-4 text-[14px]">
+      <h2 class="text-[14px] mt-[-5px]">
         Добавить комментарий к изменениям
       </h2>
-      <div
-        class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] ml-1 mt-2 max-w-[300px]"
+      <p
+        v-if="isError"
+        class="text-red-500 text-[10px]"
       >
-        <div
-          :id="23426 + 'input'"
-          :ref="432532 + 'input'"
-          :placeholder="'123'"
-          spellcheck="false"
-          class="font-[500] text-[14px] px-4 pt-4 leading-6 min-h-[60px] break-words"
-          :contenteditable="true"
-          @blur="false"
-          @input="50"
-          @keyup="false"
-          v-text="note"
-        />
-        <div class="flex justify-end items-end pb-2 pr-2">
-          <svg
-            class="right-0"
-            width="11"
-            height="11"
-            viewBox="0 0 11 11"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M9.5294 1.52941L1.5294 9.52935L0.46875 8.46869L8.46875 0.46875L9.5294 1.52941ZM10.5294 5.52935L5.52941 10.5294L4.46875 9.46869L9.46875 4.46869L10.5294 5.52935Z"
-              fill="#8C8CA2"
-            />
-          </svg>
-        </div>
-      </div>
+        Поле комментарий не должно быть пустым
+      </p>
+      <textarea
+        v-model="reglamentComment"
+        type="text"
+        class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] scroll-style ml-1 mt-2 w-[300px] font-[500] px-2 text-[14px] leading-6 break-words"
+        placeholder="Комментарий"
+        spellcheck="false"
+      />
     </div>
   </ModalBox>
 </template>
 <script>
 import ModalBox from '@/components/modals/ModalBox.vue'
+import * as REGLAMENTS from '@/store/actions/reglaments.js'
 export default {
   components: {
     ModalBox
@@ -106,12 +88,36 @@ export default {
   data () {
     return {
       note: '',
-      isClear: false
+      isClear: false,
+      isError: false,
+      reglamentComment: ''
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.state.user.user
     }
   },
   methods: {
+    dateToLabelFormat (calendarDate) {
+      const day = calendarDate.getDate()
+      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
+      return day + ' ' + month + ', ' + weekday
+    },
     onSave () {
-      this.$emit('onSave')
+      if (this.reglamentComment.trim()) {
+        this.$emit('onSave')
+        const data = {
+          uid_employee: this.user.current_user_uid,
+          uid_reglament: this.$route.params.id,
+          comment: this.reglamentComment,
+          comment_date: this.dateToLabelFormat(new Date())
+        }
+        this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_COMMENT, data)
+      } else {
+        this.isError = true
+      }
     },
     close () {
       this.$emit('close')

@@ -115,6 +115,7 @@
                     </PopMenuItem>
                     <PopMenuItem
                       v-if="isMyFile"
+                      type="delete"
                       @click="DeleteFile"
                     >
                       <div class="flex">
@@ -232,6 +233,7 @@
                   </PopMenuItem>
                   <PopMenuItem
                     v-if="isMyFile"
+                    type="delete"
                     @click="DeleteFile"
                   >
                     <div class="flex">

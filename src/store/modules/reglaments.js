@@ -8,7 +8,9 @@ const state = {
   reglamentQuestions: [], // вопросы по текущему регламенту
   contributors: [], // сотрудники, прошедшие текущий регламент
   questionsToDelete: [],
-  answersToDelete: []
+  answersToDelete: [],
+  hideSaveParams: false,
+  lastCommentDate: ''
 }
 
 const actions = {
@@ -144,6 +146,30 @@ const actions = {
         'usersPassedReglaments?uid_user=' +
         userUid
       axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [REGLAMENTS.GET_REGLAMENT_COMMENTS]: ({ commit, dispatch }, reglamentUid) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament_comments?uid_reglament=' + reglamentUid
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [REGLAMENTS.CREATE_REGLAMENT_COMMENT]: ({ commit, dispatch }, reglamentComment) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament_comments'
+      axios({ url: url, method: 'POST', data: reglamentComment })
         .then((resp) => {
           resolve(resp)
         })

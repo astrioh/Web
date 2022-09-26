@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-w-[252px] group bg-white rounded-[10px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
+    class="max-w-[252px] group bg-white rounded-[6px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
     :class="{ 'border-[rgba(0,0,0,0.1)]': !selected, 'border-[#ff9123]': selected }"
     @click="selectCard"
   >
@@ -107,6 +107,7 @@
             <PopMenuDivider />
             <PopMenuItem
               icon="delete"
+              type="delete"
               @click="clickDelete"
             >
               Удалить
@@ -116,7 +117,7 @@
       </div>
     </div>
     <div
-      v-if="showDate || cost || card.has_files || card.has_msgs || card.date_reminder || card.comment.length"
+      v-if="showDate || cost || card.has_files || card.has_msgs || card.date_reminder || card.comment.length || !!card.client_name"
       class="flex justify-between mt-[20px]"
     >
       <div class="flex flex-wrap gap-1">
@@ -442,7 +443,10 @@ export default {
     onlineUsers () {
       const onlineUsers = []
       for (const property in this.employees) {
-        if (this.employees[property].onlineCardUid === this.card.uid) {
+        if (
+          this.employees[property].onlineCardUid === this.card.uid &&
+          property !== this.$store.state.user.user.current_user_uid
+        ) {
           onlineUsers.push(this.employees[property])
         }
       }

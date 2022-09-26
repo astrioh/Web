@@ -44,6 +44,7 @@
         <PopMenuItem
           v-if="canDelete"
           icon="delete"
+          type="delete"
           @click="clickDeleteProject"
         >
           Удалить проект

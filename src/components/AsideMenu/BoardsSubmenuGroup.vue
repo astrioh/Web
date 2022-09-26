@@ -1,6 +1,7 @@
 <template>
   <AsideMenuListGroup
     :title="title"
+    class="flex flex-col gap-[6px]"
   >
     <router-link
       v-for="board in boards"

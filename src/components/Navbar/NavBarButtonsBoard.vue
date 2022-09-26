@@ -54,42 +54,47 @@
       <NavBarButtonIcon icon="menu" />
       <template #menu>
         <PopMenuItem
-          icon="edit"
+          icon="options"
           @click="clickEditBoard"
         >
           Свойства доски
         </PopMenuItem>
         <router-link :to="`/board/${selectedBoardUid}/stats`">
           <PopMenuItem
-            icon="check"
+            icon="stat"
           >
             Статистика доски
           </PopMenuItem>
         </router-link>
         <router-link :to="`/board/${selectedBoardUid}/form_settings`">
           <PopMenuItem
-            icon="add"
+            icon="board-form"
           >
             Форма сбора заявок
           </PopMenuItem>
         </router-link>
-        <router-link :to="archiveLink">
-          <PopMenuItem
-            icon="add"
-          >
-            {{ archiveText }}
-          </PopMenuItem>
-        </router-link>
         <PopMenuItem
           v-if="canEditBoard"
-          icon="add"
+          icon="create-subboard"
           @click="clickAddBoard"
         >
           Создать поддоску
         </PopMenuItem>
+        <router-link :to="archiveLink">
+          <PopMenuItem
+            icon="archive"
+          >
+            {{ archiveText }}
+          </PopMenuItem>
+        </router-link>
+        <div
+          v-if="canEditBoard"
+          class="w-full h-[1px] bg-[rgba(0,0,0,.1)] my-[5px]"
+        />
         <PopMenuItem
           v-if="canEditBoard"
           icon="delete"
+          type="delete"
           @click="clickDeleteBoard"
         >
           Удалить доску

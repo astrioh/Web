@@ -201,6 +201,10 @@ export default {
     name: {
       type: String,
       default: 'text'
+    },
+    reminder: {
+      type: Date,
+      default: new Date()
     }
   },
   emits: ['nextTask'],

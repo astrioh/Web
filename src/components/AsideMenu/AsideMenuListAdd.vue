@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex items-center h-[40px] cursor-pointer border hover:p-px hover:border-0 border-black/12 hover:bg-light-gray rounded-[6px]"
+    class="flex items-center h-[36px] cursor-pointer border hover:p-px hover:border-0 border-black/12 hover:bg-[#f4f5f7] rounded-[6px]"
   >
     <div class="text-center overflow-hidden w-full">
       <p
