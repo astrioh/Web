@@ -280,13 +280,7 @@ export default {
         this.errors.messages.push('Форма не сохранена')
         this.errors.messages.push('Поля должны быть обязательно заполнены')
         console.log(this.form.redirect_link.length)
-      } else if (this.validateRedirectLink() && this.form.redirect_link.length > 0) {
-        this.errors.messages.push('Поле "Ссылка для редеректа" должно содержать ссылку!')
       }
-    },
-    validateRedirectLink () {
-      const re = /(https?:\/\/[^\s]+)/g
-      return !re.test(this.form.redirect_link)
     },
     clickSaveForm () {
       this.validateForm()
