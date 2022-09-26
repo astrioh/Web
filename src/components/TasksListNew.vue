@@ -533,13 +533,15 @@ export default {
     },
     sortTaskChildren (task) {
       const sortedChildrens = []
-      for (let i = 0; i < this.storeTasks[task].children.length; i++) {
+      for (let i = 0; i < this.storeTasks[task]?.children.length; i++) {
         sortedChildrens.push(this.storeTasks[this.storeTasks[task].children[i]])
       }
       sortedChildrens.sort((a, b) => a.info.order_new - b.info.order_new)
       console.log(sortedChildrens, 'childs')
       console.log(this.$store.state.tasks.newtasks[task])
-      this.$store.state.tasks.newtasks[task].children = []
+      if (this.$store.state.tasks?.newtasks[task]?.children) {
+        this.$store.state.tasks.newtasks[task].children = []
+      }
       for (let i = 0; i < sortedChildrens.length; i++) {
         if (sortedChildrens[i]) {
           this.$store.state.tasks.newtasks[task].children.push(sortedChildrens[i].id)
