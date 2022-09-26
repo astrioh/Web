@@ -75,6 +75,9 @@
   />
 </template>
 <script>
+// письма с интегрированного email
+import * as IMAP from '@/store/actions/imap.js'
+
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
@@ -152,6 +155,7 @@ export default {
       }
     },
     showClientProperties (client) {
+      this.$store.dispatch(IMAP.IMAP_GET_USER_MSGS)
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
