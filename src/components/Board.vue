@@ -74,7 +74,7 @@
         <div
           v-if="isColumnVisible(column)"
           data-dragscroll
-          class="max-h-full flex flex-col flex-none bg-white rounded-xl overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
+          class="max-h-full flex flex-col flex-none bg-white rounded-[6px] overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
         >
