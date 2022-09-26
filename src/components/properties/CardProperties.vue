@@ -127,7 +127,7 @@
         @changeClient="onChangeClient"
       />
       <CardSetDate
-        :date-time="selectedCard.date_reminder"
+        :date-time="selectedCard?.date_reminder"
         :date-text="cardDateReminderText"
         @changeDates="onChangeDates"
       />
@@ -271,7 +271,7 @@ export default {
     employees () { return this.$store.state.employees.employees },
     orgEmployees () { return this.$store.state.navigator.navigator.emps.items },
     cardMessages () {
-      if (this.selectedCard.uid_client) {
+      if (this.selectedCard?.uid_client) {
         return this.$store.state.clientfilesandmessages.messages
       }
       return this.$store.state.cardfilesandmessages.messages
@@ -317,10 +317,10 @@ export default {
       return [...this.columnsUser, ...this.columnsArchive]
     },
     cardDateReminderText () {
-      if (!this.selectedCard.date_reminder) {
+      if (!this.selectedCard?.date_reminder) {
         return ''
       } else {
-        return this.dateToLabelFormat(new Date(this.selectedCard.date_reminder))
+        return this.dateToLabelFormat(new Date(this.selectedCard?.date_reminder))
       }
     }
   },
@@ -353,7 +353,7 @@ export default {
             name: formData
           }
           this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
-            this.selectedCard.has_files = true
+            if (this.selectedCard) this.selectedCard.has_files = true
             this.scrollDown()
           })
         }
@@ -580,7 +580,7 @@ export default {
       this.closeProperties()
       this.$store
         .dispatch(CARD.MOVE_ALL_CARDS, {
-          cards: [{ uid: this.selectedCard?.uid }], stageTo, boardTo: this.selectedCardBoard.uid
+          cards: [{ uid: this.selectedCard?.uid }], stageTo, boardTo: this.selectedCardBoard?.uid
         })
         .then((resp) => {
           console.log('Card is moved')
@@ -588,11 +588,14 @@ export default {
     },
     onChangeClient (payload) {
       const [uid, name] = payload
-      this.selectedCard.uid_client = uid
-      this.selectedCard.client_name = name
-      this.$store.dispatch(CHANGE_CARD_UID_CLIENT, this.selectedCard)
+      if (this.selectedCard) {
+        this.selectedCard.uid_client = uid
+        this.selectedCard.client_name = name
+        this.$store.dispatch(CHANGE_CARD_UID_CLIENT, this.selectedCard)
+      }
     },
     onChangeDates: function (dateTimeString) {
+      if (!this.selectedCard) return
       console.log(dateTimeString)
       if (!dateTimeString || dateTimeString === '0001-01-01T00:00:00') {
         this.selectedCard.date_reminder = null
