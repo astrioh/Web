@@ -25,7 +25,7 @@
             fill="currentColor"
           />
         </svg>
-        <span class="truncate">Клиент</span>
+        <span class="truncate">Контакт</span>
       </div>
       <div
         v-else
