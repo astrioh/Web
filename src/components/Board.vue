@@ -504,7 +504,7 @@ export default {
       immediate: true,
       handler: function (val) {
         this.$store.commit(BOARD.SELECT_BOARD, val)
-        this.$store.state.cards.selectedCardUid = ''
+        this.$store.commit(CARD.SELECT_CARD, '')
         this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
       }
     },
@@ -520,7 +520,7 @@ export default {
       immediate: true,
       handler: function (val) {
         if (!val) {
-          this.$store.state.cards.selectedCardUid = ''
+          this.$store.commit(CARD.SELECT_CARD, '')
         }
       }
     }
@@ -753,10 +753,9 @@ export default {
         uid_card: card.uid
       })
 
-      this.$store.state.cards.selectedCardUid = card.uid
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)
-      this.$store.commit(CARD.SELECT_CARD, card)
+      this.$store.commit(CARD.SELECT_CARD, card.uid)
 
       card.uid_client
         ? this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, card.uid_client)
@@ -766,9 +765,8 @@ export default {
       this.$store.dispatch('asidePropertiesToggle', true)
     },
     closeProperties () {
-      this.$store.state.cards.selectedCardUid = ''
       this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.commit(CARD.SELECT_CARD, false)
+      this.$store.commit(CARD.SELECT_CARD, '')
     },
     deleteCard (card) {
       this.showDeleteCard = true
