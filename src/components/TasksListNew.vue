@@ -1106,25 +1106,27 @@ export default {
 .icon-wrapper {
   padding: 0;
   min-width: 0;
-  flex-shrink: 0;
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: center;
-  width: 35px;
+  width: 20px;
+  height: 20px;
   position: absolute;
-  left: 0;
-  cursor: pointer;
+  left: 7px;
   z-index: 1;
-  top: 18px;
+  top: 14px;
+}
+
+.icon-wrapper svg.tree-node-closed,
+.icon-wrapper svg.tree-node-opened {
+  height: 20px;
+  width: 20px;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .input-wrapper {
   margin-left: .75em
-}
-
-.icon-wrapper svg {
-  height: 10px;
-  width: 10px;
 }
 
 .node-wrapper {

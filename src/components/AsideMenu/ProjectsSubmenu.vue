@@ -29,16 +29,15 @@
       >
         <AsideMenuListInput
           v-if="showAddProject"
-          class="mb-[16px]"
           :show="showAddProject"
           @cancel="showAddProject = false"
           @save="onAddNewProject"
         >
           <svg
             class="flex-none"
-            width="22"
-            height="22"
-            viewBox="0 0 20 20"
+            width="30"
+            height="30"
+            viewBox="0 0 30 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
