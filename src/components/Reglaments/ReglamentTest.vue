@@ -6,6 +6,7 @@
   />
   <div
     v-if="!isPassed"
+    ref="reglamentTestRef"
     class="bg-white pt-[55px] my-2 rounded-[28px]"
   >
     <div
@@ -113,6 +114,9 @@ export default {
     questions () {
       return this.$store?.state?.reglaments?.reglamentQuestions
     }
+  },
+  mounted () {
+    this.$refs.reglamentTestRef.scrollIntoView({ block: 'start' })
   },
   methods: {
     clickComplete () {
