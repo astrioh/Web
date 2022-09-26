@@ -291,6 +291,7 @@
             <BoardInputValue
               v-if="showAddCard && column.UID === selectedColumn.UID"
               :show="showAddCard && column.UID === selectedColumn.UID"
+              class="w-[254px]"
               @save="onAddNewCard"
               @cancel="showAddCard = false"
             />
