@@ -379,7 +379,6 @@ import BoardModalBoxCardMove from '@/components/Board/BoardModalBoxCardMove.vue'
 import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
-import { sendInspectorMessage } from '@/inspector'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
 import BoardInputValue from './Board/BoardInputValue.vue'
 import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
@@ -745,13 +744,6 @@ export default {
       if (this.$store.state.cards.selectedCardUid === card.uid) {
         return
       }
-
-      sendInspectorMessage({
-        type: 'cardOnline',
-        uid_user: this.user.current_user_uid,
-        uid_board: this.board.uid,
-        uid_card: card.uid
-      })
 
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)

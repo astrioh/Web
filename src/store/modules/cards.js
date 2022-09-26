@@ -297,6 +297,13 @@ const mutations = {
       }, {})
       const card = cardsMap[cardUid]
       console.log('select card', card)
+      //
+      sendInspectorMessage({
+        type: 'cardOnline',
+        uid_user: store.state.user.user.current_user_uid,
+        uid_board: store.state.boardUid,
+        uid_card: cardUid
+      })
     }
     state.selectedCardUid = cardUid
   },
