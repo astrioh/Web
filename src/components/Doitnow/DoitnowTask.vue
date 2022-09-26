@@ -42,7 +42,7 @@
           />
           <contenteditable
             v-model="name"
-            v-linkify:options="{ className: 'text-blue-600', tagName: 'a' }"
+            v-linkify:options="{ className: 'text-blue-600 mx-[5px]', tagName: 'a' }"
             tag="div"
             class="p-0.5 ring-0 outline-none max-w-7xl ml-[8px] flex overflow-x-hidden font-bold text-[18px] text-[#424242]"
             style="word-break: break-word"
