@@ -184,8 +184,8 @@ const actions = {
   [CARD.CHANGE_CARD_CLEAR_COVER]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url =
-        process.env.VUE_APP_LEADERTASK_API +
-        'api/v1/card/clearcover?uid=' +
+        process.env.VUE_APP_INSPECTOR_API +
+        'card/clearcover?uid=' +
         data.cardUid
       axios({ url: url, method: 'PATCH' })
         .then((resp) => {
