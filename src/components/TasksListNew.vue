@@ -387,7 +387,7 @@ export default {
       return this.$store.state.employees.employeesByEmail
     },
     currentUserEmail () {
-      return this.$store.state.user.user?.current_user_email ?? ''
+      return this.$store.state.user.user?.current_user_email.toLowerCase() ?? ''
     },
     currentUserUid () {
       return this.$store.state.user.user?.current_user_uid ?? ''
