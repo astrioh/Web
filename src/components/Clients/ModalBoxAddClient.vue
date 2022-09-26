@@ -75,6 +75,14 @@ export default {
       type: String,
       default: ''
     },
+    cardEmail: {
+      type: String,
+      default: ''
+    },
+    cardPhone: {
+      type: String,
+      default: ''
+    },
     show: {
       type: Boolean,
       default: false
@@ -116,6 +124,10 @@ export default {
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         )
     }
+  },
+  mounted () {
+    this.phone = this.cardPhone ? this.cardPhone : ''
+    this.email = this.cardEmail ? this.cardEmail : ''
   },
   methods: {
     onCancel () {
