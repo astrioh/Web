@@ -52,7 +52,7 @@
                 v-if="!isTesting"
                 class="flex items-center px-[10px] py-[5px]"
               >
-                Дата последнего изменения: {{ $store.state.reglaments.lastCommentDate }}
+                {{ lastCommentDate }}
               </ReglamentSmallButton>
             </router-link>
             <ReglamentSmallButton
@@ -390,6 +390,13 @@ export default {
     }
   },
   computed: {
+    lastCommentDate () {
+      if (this.$store.state.reglaments.lastCommentDate === '') {
+        return 'История изменений'
+      } else {
+        return 'Дата последнего изменения: ' + this.$store.state.reglaments.lastCommentDate
+      }
+    },
     allDepartments () {
       const deps = Object.values(this.$store.state.departments.deps)
       deps.sort((item1, item2) => {
