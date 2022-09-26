@@ -1,13 +1,16 @@
-import { getInspectorMessage, isKnownInspectorMessageType } from '@/inspector/message.js'
-import { showNotify } from '@/store/helpers/functions'
+import {
+  getInspectorMessage,
+  isKnownInspectorMessageType
+} from '@/inspector/message.js'
 import router from '@/router/index.js'
+import { showNotify } from '@/store/helpers/functions'
 import store from '@/store/index.js'
 import { createTaskMessage } from '@/websync/task_message.js'
 import { computed } from 'vue'
 
-import * as TYPES from '@/websync/types.js'
 import processCreate from '@/websync/create.js'
 import processRemove from '@/websync/remove.js'
+import * as TYPES from '@/websync/types.js'
 import processUpdate from '@/websync/update.js'
 
 /**
@@ -60,7 +63,10 @@ export function initInspectorSocket (force = false) {
     }
     socket.send(JSON.stringify(auth))
 
-    if (router.currentRoute.value.name === 'boardWithChildren' && router.currentRoute.value.params.board_id) {
+    if (
+      router.currentRoute.value.name === 'boardWithChildren' &&
+      router.currentRoute.value.params.board_id
+    ) {
       const data = {
         type: 'boardOnline',
         uid_user: store.state.user.user.current_user_uid,
@@ -70,7 +76,7 @@ export function initInspectorSocket (force = false) {
     }
   }
   socket.onmessage = function (event) {
-    if (process.env.VUE_APP_EXTENDED_LOGS) console.log('inspector obj', event.data)
+    if (process.env.VUE_APP_EXTENDED_LOGS) { console.log('inspector obj', event.data) }
     parseMessage(event.data)
   }
   socket.onclose = function () {
@@ -88,7 +94,9 @@ function parseMessage (data) {
     const parsedData = { ...JSON.parse(data) }
     if (parsedData?.uid_json) {
       createNotificationAndInspectorMessage(parsedData)
-    } else if (['userOnline', 'boardOnline', 'cardOnline'].includes(parsedData.type)) {
+    } else if (
+      ['userOnline', 'boardOnline', 'cardOnline'].includes(parsedData.type)
+    ) {
       updateOnlineMap(parsedData)
     } else {
       parseObject(parsedData)
@@ -101,13 +109,22 @@ function parseMessage (data) {
 function updateOnlineMap (message) {
   switch (message.type) {
     case 'userOnline':
-      store.commit('ChangeUserOnline', { uidUser: message.uid_user, online: message.online })
+      store.commit('ChangeUserOnline', {
+        uidUser: message.uid_user,
+        online: message.online
+      })
       break
     case 'boardOnline':
-      store.commit('ChangeUserOnlineBoard', { uidUser: message.uid_user, onlineBoardUid: message.uid_board })
+      store.commit('ChangeUserOnlineBoard', {
+        uidUser: message.uid_user,
+        onlineBoardUid: message.uid_board
+      })
       break
     case 'cardOnline':
-      store.commit('ChangeUserOnlineCard', { uidUser: message.uid_user, onlineCardUid: message.uid_card })
+      store.commit('ChangeUserOnlineCard', {
+        uidUser: message.uid_user,
+        onlineCardUid: message.uid_card
+      })
       break
   }
 }
@@ -143,5 +160,9 @@ export function disconnectInspectorSocket () {
 }
 
 export function sendInspectorMessage (message) {
-  socket.send(JSON.stringify(message))
+  try {
+    socket.send(JSON.stringify(message))
+  } catch (e) {
+    console.log('sendInspectorMessage error', e)
+  }
 }
