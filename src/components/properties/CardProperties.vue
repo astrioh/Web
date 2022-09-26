@@ -120,11 +120,14 @@
       <CardClient
         :client-uid="selectedCard?.uid_client"
         :client-name="selectedCard?.client_name"
+        :card-uid="selectedCard?.uid"
+        :card-name="selectedCard?.name"
+        :card-comment="selectedCard?.comment"
         :can-edit="canEdit"
         @changeClient="onChangeClient"
       />
       <CardSetDate
-        :date-time="selectedCard.date_reminder"
+        :date-time="selectedCard?.date_reminder"
         :date-text="cardDateReminderText"
         @changeDates="onChangeDates"
       />
@@ -261,13 +264,18 @@ export default {
   },
   computed: {
     status () { return this.$store.state.cardfilesandmessages.status },
-    selectedCard () { return this.$store.state.cards.selectedCard },
-    selectedCardUid () { return this.selectedCard?.uid },
+    selectedCard () { return this.$store.getters.selectedCard },
+    selectedCardUid () { return this.$store.state.cards.cards.selectedCardUid },
     user () { return this.$store.state.user.user },
     selectedCardBoard () { return this.$store.state.boards.boards[this.selectedCard?.uid_board] || null },
     employees () { return this.$store.state.employees.employees },
     orgEmployees () { return this.$store.state.navigator.navigator.emps.items },
-    cardMessages () { return this.$store.state.cardfilesandmessages.messages },
+    cardMessages () {
+      if (this.selectedCard?.uid_client) {
+        return this.$store.state.clientfilesandmessages.messages
+      }
+      return this.$store.state.cardfilesandmessages.messages
+    },
     canAddFiles () { return !this.$store.getters.isLicenseExpired },
     canEdit () { return this.selectedCardBoard && this.selectedCardBoard.type_access !== 0 },
     selectedColumnName () {
@@ -309,10 +317,10 @@ export default {
       return [...this.columnsUser, ...this.columnsArchive]
     },
     cardDateReminderText () {
-      if (!this.selectedCard.date_reminder) {
+      if (!this.selectedCard?.date_reminder) {
         return ''
       } else {
-        return this.dateToLabelFormat(new Date(this.selectedCard.date_reminder))
+        return this.dateToLabelFormat(new Date(this.selectedCard?.date_reminder))
       }
     }
   },
@@ -345,7 +353,7 @@ export default {
             name: formData
           }
           this.$store.dispatch(CREATE_FILES_REQUEST, data).then(() => {
-            this.selectedCard.has_files = true
+            if (this.selectedCard) this.selectedCard.has_files = true
             this.scrollDown()
           })
         }
@@ -572,7 +580,7 @@ export default {
       this.closeProperties()
       this.$store
         .dispatch(CARD.MOVE_ALL_CARDS, {
-          cards: [{ uid: this.selectedCard?.uid }], stageTo, boardTo: this.selectedCardBoard.uid
+          cards: [{ uid: this.selectedCard?.uid }], stageTo, boardTo: this.selectedCardBoard?.uid
         })
         .then((resp) => {
           console.log('Card is moved')
@@ -580,11 +588,14 @@ export default {
     },
     onChangeClient (payload) {
       const [uid, name] = payload
-      this.selectedCard.uid_client = uid
-      this.selectedCard.client_name = name
-      this.$store.dispatch(CHANGE_CARD_UID_CLIENT, this.selectedCard)
+      if (this.selectedCard) {
+        this.selectedCard.uid_client = uid
+        this.selectedCard.client_name = name
+        this.$store.dispatch(CHANGE_CARD_UID_CLIENT, this.selectedCard)
+      }
     },
     onChangeDates: function (dateTimeString) {
+      if (!this.selectedCard) return
       console.log(dateTimeString)
       if (!dateTimeString || dateTimeString === '0001-01-01T00:00:00') {
         this.selectedCard.date_reminder = null

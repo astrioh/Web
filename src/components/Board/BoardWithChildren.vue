@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen overflow-y-auto overflow-x-hidden">
+  <div class="h-screen overflow-hidden">
     <NavBarBoards
       class="pt-[8px]"
       :board-uid="boardUid"
@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { sendInspectorMessage } from '@/inspector'
 import NavBarBoards from '@/components/Navbar/NavBarBoards.vue'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
 import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
@@ -87,6 +88,13 @@ export default {
   },
   mounted () {
     this.loadBoard()
+  },
+  unmounted () {
+    sendInspectorMessage({
+      type: 'boardOnline',
+      uid_user: this.$store.state.user.user.current_user_uid,
+      uid_board: ''
+    })
   },
   methods: {
     canAddChild () {

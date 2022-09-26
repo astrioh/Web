@@ -101,6 +101,13 @@
         placeholder="Ссылка для редиректа"
         type="text"
       >
+      <input
+        v-model="form.privacy_policy_href"
+        class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto mb-3"
+        name="privacy_policy_href"
+        placeholder="Ссылка на политику конфиденциальности"
+        type="text"
+      >
       <template v-if="errors.messages">
         <p
           v-for="error in errors.messages"
@@ -215,7 +222,8 @@ export default {
           visible: true
         },
         button_text: '',
-        redirect_link: ''
+        redirect_link: '',
+        privacy_policy_href: ''
       },
       showParams: false,
       formIsLoaded: false,
@@ -280,13 +288,7 @@ export default {
         this.errors.messages.push('Форма не сохранена')
         this.errors.messages.push('Поля должны быть обязательно заполнены')
         console.log(this.form.redirect_link.length)
-      } else if (this.validateRedirectLink() && this.form.redirect_link.length > 0) {
-        this.errors.messages.push('Поле "Ссылка для редеректа" должно содержать ссылку!')
       }
-    },
-    validateRedirectLink () {
-      const re = /(https?:\/\/[^\s]+)/g
-      return !re.test(this.form.redirect_link)
     },
     clickSaveForm () {
       this.validateForm()

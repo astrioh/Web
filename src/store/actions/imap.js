@@ -1,0 +1,1 @@
+export const IMAP_GET_USER_MSGS = 'IMAP_GET_USER_MSGS'

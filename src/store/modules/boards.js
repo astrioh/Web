@@ -44,7 +44,7 @@ const actions = {
     const boardData = {
       uid: uuidv4(),
       name: data.name,
-      uid_parent: '00000000-0000-0000-0000-000000000000',
+      uid_parent: data?.parent || '00000000-0000-0000-0000-000000000000',
       email_creator: store.state.user.user.current_user_email,
       order: maxOrder + 1,
       collapsed: 0,

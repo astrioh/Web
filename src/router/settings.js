@@ -15,6 +15,11 @@ export default [
         component: () => import('@/components/Settings/Support.vue')
       },
       {
+        path: 'integrations',
+        name: 'integrations',
+        component: () => import('@/components/Settings/Integrations.vue')
+      },
+      {
         path: 'tarif',
         name: 'tarif',
         component: () => import('@/components/Settings/Tarif.vue')

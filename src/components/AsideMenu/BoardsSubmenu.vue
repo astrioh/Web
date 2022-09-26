@@ -36,6 +36,7 @@
           @save="onAddNewBoard"
         >
           <svg
+            class="flex-none"
             width="30"
             height="30"
             viewBox="0 0 30 30"

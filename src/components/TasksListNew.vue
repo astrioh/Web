@@ -387,7 +387,7 @@ export default {
       return this.$store.state.employees.employeesByEmail
     },
     currentUserEmail () {
-      return this.$store.state.user.user?.current_user_email ?? ''
+      return this.$store.state.user.user?.current_user_email.toLowerCase() ?? ''
     },
     currentUserUid () {
       return this.$store.state.user.user?.current_user_uid ?? ''
@@ -533,13 +533,15 @@ export default {
     },
     sortTaskChildren (task) {
       const sortedChildrens = []
-      for (let i = 0; i < this.storeTasks[task].children.length; i++) {
+      for (let i = 0; i < this.storeTasks[task]?.children.length; i++) {
         sortedChildrens.push(this.storeTasks[this.storeTasks[task].children[i]])
       }
       sortedChildrens.sort((a, b) => a.info.order_new - b.info.order_new)
       console.log(sortedChildrens, 'childs')
       console.log(this.$store.state.tasks.newtasks[task])
-      this.$store.state.tasks.newtasks[task].children = []
+      if (this.$store.state.tasks?.newtasks[task]?.children) {
+        this.$store.state.tasks.newtasks[task].children = []
+      }
       for (let i = 0; i < sortedChildrens.length; i++) {
         if (sortedChildrens[i]) {
           this.$store.state.tasks.newtasks[task].children.push(sortedChildrens[i].id)
@@ -1106,25 +1108,27 @@ export default {
 .icon-wrapper {
   padding: 0;
   min-width: 0;
-  flex-shrink: 0;
   display: flex;
-  align-items: start;
+  align-items: center;
   justify-content: center;
-  width: 35px;
+  width: 20px;
+  height: 20px;
   position: absolute;
-  left: 0;
-  cursor: pointer;
+  left: 7px;
   z-index: 1;
-  top: 18px;
+  top: 14px;
+}
+
+.icon-wrapper svg.tree-node-closed,
+.icon-wrapper svg.tree-node-opened {
+  height: 20px;
+  width: 20px;
+  padding: 5px;
+  cursor: pointer;
 }
 
 .input-wrapper {
   margin-left: .75em
-}
-
-.icon-wrapper svg {
-  height: 10px;
-  width: 10px;
 }
 
 .node-wrapper {

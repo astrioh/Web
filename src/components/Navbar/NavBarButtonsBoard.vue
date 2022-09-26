@@ -54,39 +54,43 @@
       <NavBarButtonIcon icon="menu" />
       <template #menu>
         <PopMenuItem
-          icon="edit"
+          icon="options"
           @click="clickEditBoard"
         >
           Свойства доски
         </PopMenuItem>
         <router-link :to="`/board/${selectedBoardUid}/stats`">
           <PopMenuItem
-            icon="check"
+            icon="stat"
           >
             Статистика доски
           </PopMenuItem>
         </router-link>
         <router-link :to="`/board/${selectedBoardUid}/form_settings`">
           <PopMenuItem
-            icon="add"
+            icon="board-form"
           >
             Форма сбора заявок
           </PopMenuItem>
         </router-link>
-        <router-link :to="archiveLink">
-          <PopMenuItem
-            icon="add"
-          >
-            {{ archiveText }}
-          </PopMenuItem>
-        </router-link>
         <PopMenuItem
           v-if="canEditBoard"
-          icon="add"
+          icon="create-subboard"
           @click="clickAddBoard"
         >
           Создать поддоску
         </PopMenuItem>
+        <router-link :to="archiveLink">
+          <PopMenuItem
+            icon="archive"
+          >
+            {{ archiveText }}
+          </PopMenuItem>
+        </router-link>
+        <div
+          v-if="canEditBoard"
+          class="w-full h-[1px] bg-[rgba(0,0,0,.1)] my-[5px]"
+        />
         <PopMenuItem
           v-if="canEditBoard"
           icon="delete"
@@ -109,6 +113,7 @@ import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 import BoardModalBoxRename from '@/components/Board/BoardModalBoxRename.vue'
 
 import * as BOARD from '@/store/actions/boards'
+import * as CARD from '@/store/actions/cards'
 import * as NAVIGATOR from '@/store/actions/navigator'
 
 import { NAVIGATOR_REMOVE_BOARD } from '@/store/actions/navigator'
@@ -196,7 +201,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'board' })
       this.$store.commit(BOARD.SELECT_BOARD, this.board)
-      this.$store.state.cards.selectedCardUid = ''
+      this.$store.commit(CARD.SELECT_CARD, '')
     },
     clickDeleteBoard () {
       this.showDeleteBoard = true
@@ -215,7 +220,8 @@ export default {
       if (title) {
         // добавляем новую доску и переходим в неё
         const boardData = {
-          name: title
+          name: title,
+          parent: this.board.uid
         }
         this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, boardData).then((res) => {
           const board = res.data

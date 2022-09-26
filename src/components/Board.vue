@@ -74,7 +74,7 @@
         <div
           v-if="isColumnVisible(column)"
           data-dragscroll
-          class="max-h-full flex flex-col flex-none bg-white rounded-xl overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
+          class="max-h-full flex flex-col flex-none bg-white rounded-[6px] overflow-x-hidden overflow-y-auto scroll-style pl-[13px] py-4 w-[280px] mr-[10px] stage-column"
           :style="{ background: column.Color }"
           :data-column-uid="column.UID"
         >
@@ -169,7 +169,7 @@
           </div>
           <!--под заголовок стат-колонки -->
           <div
-            class="px-1 text-[#7e7e80] font-['Roboto'] mt-[6px]"
+            class="pl-1 pr-[16px] text-[#7e7e80] font-['Roboto'] mt-[6px]"
             :style="{ color: getContrastYIQ(column.Color) }"
           >
             <div
@@ -291,6 +291,7 @@
             <BoardInputValue
               v-if="showAddCard && column.UID === selectedColumn.UID"
               :show="showAddCard && column.UID === selectedColumn.UID"
+              class="w-[254px]"
               @save="onAddNewCard"
               @cancel="showAddCard = false"
             />
@@ -378,9 +379,9 @@ import BoardModalBoxCardMove from '@/components/Board/BoardModalBoxCardMove.vue'
 import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
-import { sendInspectorMessage } from '@/inspector'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
 import BoardInputValue from './Board/BoardInputValue.vue'
+import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
 
 export default {
   directives: {
@@ -502,7 +503,7 @@ export default {
       immediate: true,
       handler: function (val) {
         this.$store.commit(BOARD.SELECT_BOARD, val)
-        this.$store.state.cards.selectedCardUid = ''
+        this.$store.commit(CARD.SELECT_CARD, '')
         this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
       }
     },
@@ -518,7 +519,7 @@ export default {
       immediate: true,
       handler: function (val) {
         if (!val) {
-          this.$store.state.cards.selectedCardUid = ''
+          this.$store.commit(CARD.SELECT_CARD, '')
         }
       }
     }
@@ -744,25 +745,20 @@ export default {
         return
       }
 
-      sendInspectorMessage({
-        type: 'cardOnline',
-        uid_user: this.user.current_user_uid,
-        uid_board: this.board.uid,
-        uid_card: card.uid
-      })
-
-      this.$store.state.cards.selectedCardUid = card.uid
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)
-      this.$store.commit(CARD.SELECT_CARD, card)
-      this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+      this.$store.commit(CARD.SELECT_CARD, card.uid)
+
+      card.uid_client
+        ? this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, card.uid_client)
+        : this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+
       this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
       this.$store.dispatch('asidePropertiesToggle', true)
     },
     closeProperties () {
-      this.$store.state.cards.selectedCardUid = ''
       this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.commit(CARD.SELECT_CARD, false)
+      this.$store.commit(CARD.SELECT_CARD, '')
     },
     deleteCard (card) {
       this.showDeleteCard = true

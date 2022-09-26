@@ -1,4 +1,12 @@
 <template>
+  <ModalBoxAddClient
+    v-if="showAddClient"
+    title="Добавить клиента"
+    :card-email="cardEmail"
+    :card-phone="cardPhone"
+    @cancel="showAddClient = false"
+    @save="onAddNewClient"
+  />
   <Popper
     class="light overflow-hidden"
     :disabled="!canEdit"
@@ -25,7 +33,7 @@
             fill="currentColor"
           />
         </svg>
-        <span class="truncate">Клиент</span>
+        <span class="truncate">Контакт</span>
       </div>
       <div
         v-else
@@ -95,7 +103,7 @@
       </div>
       <div
         v-if="clientsStatus === 'success'"
-        class="h-[156px] w-[300px] overflow-y-scroll scroll-style"
+        class="h-[156px] w-[300px] overflow-y-scroll scroll-style relative"
       >
         <div
           v-for="(client, index) in clients"
@@ -108,6 +116,13 @@
             <span class="truncate">{{ client.name }}</span>
           </div>
         </div>
+        <button
+          v-if="cardPhone || cardEmail"
+          class="focus:ring min-w-[90px] sticky bottom-0 mt-3 focus:outline-none inline-flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto disabled:opacity-70 disabled:cursor-default"
+          @click="showModalAddClient"
+        >
+          Добавить контакт
+        </button>
       </div>
     </template>
   </Popper>
@@ -117,10 +132,12 @@
 import * as CLIENTS from '@/store/actions/clients'
 import Popper from 'vue3-popper'
 import NavBarSearch from '@/components/Navbar/NavBarSearch.vue'
+import ModalBoxAddClient from '@/components/Clients/ModalBoxAddClient.vue'
 
 export default {
   components: {
     NavBarSearch,
+    ModalBoxAddClient,
     Popper
   },
   props: {
@@ -132,12 +149,29 @@ export default {
       type: String,
       default: ''
     },
+    cardUid: {
+      type: String,
+      default: ''
+    },
+    cardName: {
+      type: String,
+      default: ''
+    },
+    cardComment: {
+      type: String,
+      default: ''
+    },
     canEdit: {
       type: Boolean,
       default: false
     }
   },
   emits: ['changeClient'],
+  data () {
+    return {
+      showAddClient: false
+    }
+  },
   computed: {
     user () {
       return this.$store.state.user.user
@@ -150,6 +184,20 @@ export default {
     },
     isClientSet () {
       return this.clientUid && this.clientUid !== '00000000-0000-0000-0000-000000000000'
+    },
+    cardEmail () {
+      return this.checkIfEmailInString(this.cardName) || this.checkIfEmailInString(this.cardComment)
+    },
+    cardPhone () {
+      return this.checkIfPhoneInString(this.cardName) || this.checkIfPhoneInString(this.cardComment)
+    }
+  },
+  watch: {
+    cardUid: {
+      handler () {
+        this.requestClients()
+      },
+      immediate: true
     }
   },
   mounted () {
@@ -157,11 +205,13 @@ export default {
   },
   methods: {
     requestClients () {
-      const data = {
-        organization: this.user?.owner_email,
-        page: 1
+      if (this.cardEmail) {
+        this.searchClients(this.cardEmail)
+      } else if (this.cardPhone) {
+        this.searchClients(this.cardPhone)
+      } else {
+        this.$store.commit(CLIENTS.SET_CLIENTS, [])
       }
-      this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
     },
     searchClients (text) {
       const data = {
@@ -170,6 +220,31 @@ export default {
         search: text
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+    },
+    checkIfEmailInString (text) {
+      const regex = /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
+      return regex.exec(text) ? regex.exec(text)[0] : false
+    },
+    checkIfPhoneInString (text) {
+      const regex = /(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g
+      const exected = regex.exec(text)
+      return exected ? exected[0] : false
+    },
+    showModalAddClient () {
+      this.showAddClient = true
+    },
+    onAddNewClient (client) {
+      const clientToSend = {
+        uid: client.uid,
+        organization: this.user?.owner_email,
+        name: client.name,
+        email: client.email,
+        phone: client.phone,
+        comment: client.comment
+      }
+      this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
+      this.showAddClient = false
+      this.requestClients()
     }
   }
 }
