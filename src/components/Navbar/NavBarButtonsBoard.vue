@@ -219,7 +219,8 @@ export default {
       if (title) {
         // добавляем новую доску и переходим в неё
         const boardData = {
-          name: title
+          name: title,
+          parent: this.board.uid
         }
         this.$store.dispatch(BOARD.CREATE_BOARD_REQUEST, boardData).then((res) => {
           const board = res.data

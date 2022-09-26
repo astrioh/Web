@@ -169,7 +169,7 @@
           </div>
           <!--под заголовок стат-колонки -->
           <div
-            class="px-1 text-[#7e7e80] font-['Roboto'] mt-[6px]"
+            class="pl-1 pr-[16px] text-[#7e7e80] font-['Roboto'] mt-[6px]"
             :style="{ color: getContrastYIQ(column.Color) }"
           >
             <div

@@ -132,6 +132,18 @@ export default {
       type: String,
       default: ''
     },
+    cardUid: {
+      type: String,
+      default: ''
+    },
+    cardName: {
+      type: String,
+      default: ''
+    },
+    cardComment: {
+      type: String,
+      default: ''
+    },
     canEdit: {
       type: Boolean,
       default: false
@@ -150,6 +162,20 @@ export default {
     },
     isClientSet () {
       return this.clientUid && this.clientUid !== '00000000-0000-0000-0000-000000000000'
+    },
+    cardEmail () {
+      return this.checkIfEmailInString(this.cardName) || this.checkIfEmailInString(this.cardComment)
+    },
+    cardPhone () {
+      return this.checkIfPhoneInString(this.cardName) || this.checkIfPhoneInString(this.cardComment)
+    }
+  },
+  watch: {
+    cardUid: {
+      handler () {
+        this.requestClients()
+      },
+      immediate: true
     }
   },
   mounted () {
@@ -157,11 +183,13 @@ export default {
   },
   methods: {
     requestClients () {
-      const data = {
-        organization: this.user?.owner_email,
-        page: 1
+      if (this.cardEmail) {
+        this.searchClients(this.cardEmail)
+      } else if (this.cardPhone) {
+        this.searchClients(this.cardPhone)
+      } else {
+        this.$store.commit(CLIENTS.SET_CLIENTS, [])
       }
-      this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
     },
     searchClients (text) {
       const data = {
@@ -170,6 +198,15 @@ export default {
         search: text
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
+    },
+    checkIfEmailInString (text) {
+      const regex = /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
+      return regex.exec(text) ? regex.exec(text)[0] : false
+    },
+    checkIfPhoneInString (text) {
+      const regex = /(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g
+      const exected = regex.exec(text)
+      return exected ? exected[0] : false
     }
   }
 }
