@@ -139,6 +139,7 @@
       class="flex ml-[10px] flex-col min-w-[200px] items-center"
     >
       <DoitnowPostponeButton
+        v-if="!shouldShowAcceptButton"
         :task="task"
         :user="user"
         @postponeTask="postponeTask"
