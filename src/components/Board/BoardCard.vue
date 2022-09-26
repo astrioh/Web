@@ -566,7 +566,10 @@ export default {
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
-      return day + ' ' + month
+      const hours = String(calendarDate.getHours()).padStart(2, '0')
+      const minutes = String(calendarDate.getMinutes()).padStart(2, '0')
+      const time = hours === '00' && minutes === '00' ? '' : `${hours}:${minutes}`
+      return `${day} ${month} ${time}`
     },
     print (val) {
       console.log(val)
