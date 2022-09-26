@@ -106,7 +106,7 @@ export default {
       return day + ' ' + month + ', ' + weekday
     },
     onSave () {
-      if (this.reglamentComment) {
+      if (this.reglamentComment.trim()) {
         this.$emit('onSave')
         const data = {
           uid_employee: this.user.current_user_uid,
