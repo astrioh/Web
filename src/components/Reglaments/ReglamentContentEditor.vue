@@ -503,7 +503,10 @@ export default {
     this.currDep = this.reglamentDep
 
     this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
-      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1].comment_date
+      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1]?.comment_date
+      if (res.data.length === 0) {
+        this.$store.state.reglaments.lastCommentDate = ''
+      }
     })
   },
   methods: {
