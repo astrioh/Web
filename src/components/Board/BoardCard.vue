@@ -443,7 +443,10 @@ export default {
     onlineUsers () {
       const onlineUsers = []
       for (const property in this.employees) {
-        if (this.employees[property].onlineCardUid === this.card.uid) {
+        if (
+          this.employees[property].onlineCardUid === this.card.uid &&
+          property !== this.$store.state.user.user.current_user_uid
+        ) {
           onlineUsers.push(this.employees[property])
         }
       }
