@@ -296,7 +296,7 @@ const mutations = {
         return acc
       }, {})
       const card = cardsMap[cardUid]
-      console.log('select card', card)
+      if (card) console.log('select card', card)
       //
       sendInspectorMessage({
         type: 'cardOnline',
