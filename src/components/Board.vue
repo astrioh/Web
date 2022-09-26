@@ -169,7 +169,7 @@
           </div>
           <!--под заголовок стат-колонки -->
           <div
-            class="px-1 text-[#7e7e80] font-['Roboto'] mt-[6px]"
+            class="pl-1 pr-[16px] text-[#7e7e80] font-['Roboto'] mt-[6px]"
             :style="{ color: getContrastYIQ(column.Color) }"
           >
             <div
@@ -382,6 +382,7 @@ import * as CARD from '@/store/actions/cards'
 import { sendInspectorMessage } from '@/inspector'
 import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
 import BoardInputValue from './Board/BoardInputValue.vue'
+import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
 
 export default {
   directives: {
@@ -756,7 +757,11 @@ export default {
       this.$store.commit(REFRESH_MESSAGES)
       this.$store.commit(REFRESH_FILES)
       this.$store.commit(CARD.SELECT_CARD, card)
-      this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+
+      card.uid_client
+        ? this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, card.uid_client)
+        : this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
+
       this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
       this.$store.dispatch('asidePropertiesToggle', true)
     },

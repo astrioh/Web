@@ -66,6 +66,7 @@ const state = {
     leaves: [],
     openedIcon: {
       type: 'shape',
+      class: 'tree-node-opened',
       fill: '#6b7280',
       strokeWidth: 1,
       viewBox: '0 0 30 18',
@@ -73,6 +74,7 @@ const state = {
     },
     closedIcon: {
       type: 'shape',
+      class: 'tree-node-closed',
       fill: '#6b7280',
       strokeWidth: 1,
       viewBox: '0 0 18 30',

@@ -270,7 +270,12 @@ export default {
     selectedCardBoard () { return this.$store.state.boards.boards[this.selectedCard?.uid_board] || null },
     employees () { return this.$store.state.employees.employees },
     orgEmployees () { return this.$store.state.navigator.navigator.emps.items },
-    cardMessages () { return this.$store.state.cardfilesandmessages.messages },
+    cardMessages () {
+      if (this.selectedCard.uid_client) {
+        return this.$store.state.clientfilesandmessages.messages
+      }
+      return this.$store.state.cardfilesandmessages.messages
+    },
     canAddFiles () { return !this.$store.getters.isLicenseExpired },
     canEdit () { return this.selectedCardBoard && this.selectedCardBoard.type_access !== 0 },
     selectedColumnName () {

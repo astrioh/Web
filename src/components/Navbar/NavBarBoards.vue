@@ -55,16 +55,9 @@ export default {
       return this.$store.state.employees.employees
     },
     onlineUsers () {
-      const onlineUsers = []
-      for (const property in this.employees) {
-        if (
-          this.employees[property].onlineBoardUid === this.boardUid &&
-          property !== this.$store.state.user.user.current_user_uid
-        ) {
-          onlineUsers.push(this.employees[property])
-        }
-      }
-      onlineUsers.push(this.employees[this.$store.state.user.user.current_user_uid])
+      const currentUserUid = this.$store.state.user.user.current_user_uid
+      const onlineUsers = Object.values(this.employees).filter(emp => emp.onlineBoardUid === this.boardUid && emp.uid !== currentUserUid)
+      onlineUsers.push(this.employees[currentUserUid])
       return onlineUsers
     },
     boards () {

@@ -25,6 +25,10 @@
     </div>
   </div>
   <div class="mt-5 p-7 bg-white rounded-[28px] flex flex-col">
+    <span
+      v-if="reglamentComments.length < 1"
+      class="w-full text-center text-gray-500 text-[16px]"
+    >История изменений пуста</span>
     <template
       v-for="(comment, index) in reglamentComments"
       :key="index"

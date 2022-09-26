@@ -53,6 +53,14 @@
         >
           {{ item.buttonText }}
         </button>
+        <span class="mt-3 text-center text-gray-500 text-[14px]">Продолжая, вы соглашаетесь с условиями
+          <a
+            class="underline text-blue-500 hover:text-blue-800"
+            :href="item.privacyPolicyHref"
+            target="_blank"
+          >Политики обработки персональных данных
+          </a>
+        </span>
       </div>
     </div>
     <div
@@ -89,6 +97,7 @@ export default {
         title: '',
         buttonText: '',
         redirectLink: '',
+        privacyPolicyHref: '',
         inputs: {
           input1: '',
           input2: '',
@@ -121,6 +130,10 @@ export default {
       this.$store.state.boardforms.boardForm = data
       this.item.title = this.boardForm.info.title
       this.item.redirectLink = this.boardForm.info.redirect_link
+      this.item.privacyPolicyHref = this.boardForm.info.privacy_policy_href
+      if (this.item.privacyPolicyHref === '') {
+        this.item.privacyPolicyHref = 'https://www.leadertask.ru/privacy-policy'
+      }
       this.item.buttonText = this.boardForm.info.button_text
       this.item.inputs.input1 = this.boardForm.info?.name.text
       this.item.inputs.input2 = this.boardForm.info?.email.text
