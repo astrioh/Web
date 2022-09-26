@@ -44,6 +44,18 @@ const actions = {
         })
     })
   },
+  [CARD.INSPECTOR_CARD_REQUEST]: ({ commit }, cardUid) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'getcard?uid=' + cardUid
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   [CARD.ADD_CARD]: ({ commit }, data) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_INSPECTOR_API + 'card'
