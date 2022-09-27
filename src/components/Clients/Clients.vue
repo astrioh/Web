@@ -16,9 +16,9 @@
     @clickAddClient="clickAddClient"
   />
   <div
-    class="bg-white rounded-xl min-h-[80%] px-[40px] py-[20px]"
+    class="bg-white rounded-xl min-h-[80%] overflow-y-auto"
   >
-    <table>
+    <table class="p-[40px]">
       <tr>
         <th>Имя</th>
         <th>Номер телефона</th>
@@ -75,9 +75,6 @@
   />
 </template>
 <script>
-// письма с интегрированного email
-import * as YANDEX from '@/store/actions/yandexInt.js'
-
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
@@ -155,13 +152,13 @@ export default {
       }
     },
     showClientProperties (client) {
-      this.$store.dispatch(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL)
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
       this.$store.commit(CLIENTS.SELECT_CLIENT, client)
+      console.log('selected client', this.selectedClient)
     },
     clickAddClient () {
       this.showAddClient = true
@@ -173,7 +170,8 @@ export default {
         name: client.name,
         email: client.email,
         phone: client.phone,
-        comment: client.comment
+        comment: client.comment,
+        date_create: client.date_create
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false
@@ -189,7 +187,7 @@ export default {
 
 <style scoped>
 table {
-  @apply w-full mt-[20px] border-separate;
+  @apply w-full border-separate;
   border-spacing: 0;
 }
 

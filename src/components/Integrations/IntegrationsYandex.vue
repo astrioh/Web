@@ -3,7 +3,14 @@
     v-if="showIntegration"
     title="Интеграция с Яндекс.Почта"
     @cancel="changeShowIntegrationState(false)"
-    @save="changeShowIntegrationState(false)"
+    @onSave="emailIntegrate"
+  />
+  <ModalBoxDelete
+    v-if="removeIntegrationModal"
+    title="Разорвать интеграцию"
+    :text="'Вы уверены, что хотите разорвать интеграцию?'"
+    @cancel="showRemoveIntegration(false)"
+    @yes="removeIntegration"
   />
   <NavBar
     class="pt-[8px]"
@@ -14,15 +21,12 @@
   <div class="w-full px-10 py-5 h-auto bg-white rounded-[8px]">
     <div class="py-3">
       <button
-        :class="{ 'bg-[#F5F5F5]': isScreenCorpo }"
         class="p-2 px-4 rounded-[5px] bg-[#FFFAFA] border-[1px] border-black"
-        @click="changeCurrentScreen('corpo')"
       >
         Корпоративная
       </button>
     </div>
     <div
-      v-if="isScreenCorpo"
       class="flex w-[450px] justify-center flex-col"
     >
       <div class="flex items-center">
@@ -33,11 +37,28 @@
         <span class="ml-[10px] font-[500]">Корпоративная интеграция через Яндекс.Почта</span>
       </div>
       <button
-        class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300 "
+        v-if="!isOrganizationIntegrated"
+        class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300"
         @click="changeShowIntegrationState(true)"
       >
         Интеграция
       </button>
+      <div
+        v-else
+        class="flex flex-col"
+      >
+        <button
+          class="mt-[10px] rounded-[10px] h-[40px] text-white bg-[#44944A]"
+        >
+          Уже интегрированно
+        </button>
+        <button
+          class="mt-[10px] rounded-[10px] h-[40px] text-white bg-[#CD5C5C]"
+          @click="showRemoveIntegration(true)"
+        >
+          Разорвать интеграцию
+        </button>
+      </div>
     </div>
     <article class="mt-[30px]">
       <p class="font-[500]">
@@ -108,31 +129,57 @@
   </div>
 </template>
 <script>
+import * as YANDEX from '@/store/actions/yandexInt.js'
+
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
+import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import NavBar from '../Navbar/NavBar.vue'
 
 export default {
   components: {
     NavBar,
-    IntegrationsModalBoxYandex
+    IntegrationsModalBoxYandex,
+    ModalBoxDelete
   },
   data () {
     return {
       showIntegration: false,
-      currentScreen: 'corpo'
+      currentScreen: 'corpo',
+      removeIntegrationModal: false
     }
   },
   computed: {
-    isScreenCorpo () {
-      return this.currentScreen === 'corpo'
+    user () {
+      return this.$store.state.user.user
+    },
+    isOrganizationIntegrated () {
+      return this.$store.state.integrations.integrations.yandex.isIntegrated
     }
+  },
+  mounted () {
+    this.$store.dispatch(YANDEX.GET_ORGANIZATION_INTEGRATION, this.user.owner_email)
   },
   methods: {
     changeShowIntegrationState (value) {
       this.showIntegration = value
     },
-    changeCurrentScreen (screen) {
-      this.currentScreen = screen
+    showRemoveIntegration (value) {
+      this.removeIntegrationModal = value
+    },
+    emailIntegrate (login, password) {
+      this.$store.dispatch(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL, {
+        ya_login: login,
+        ya_password: password,
+        organization_email: this.user.owner_email
+      }).then(() => {
+        this.changeShowIntegrationState(false)
+      })
+    },
+    removeIntegration () {
+      this.$store.dispatch(YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION, this.user.owner_email)
+        .then(() => {
+          this.showRemoveIntegration(false)
+        })
     }
   }
 }

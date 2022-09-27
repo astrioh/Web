@@ -10,14 +10,12 @@ const state = {
       isIntegrated: false,
       msgs: []
     }
-  },
-  isOrganizationIntegratedYandex: false
+  }
 }
 
 const actions = {
-  [YANDEX.GET_ORGANIZATION_INTEGRATION]: ({ commit, dispatch }) => {
+  [YANDEX.GET_ORGANIZATION_INTEGRATION]: ({ commit, dispatch }, organization) => {
     return new Promise((resolve, reject) => {
-      const organization = 'nikita.talykh@leadertask.com'
       const url = process.env.VUE_APP_INSPECTOR_API + 'isOrganizationIntegrated?organization=' + organization
       axios({ url: url, method: 'GET' })
         .then((resp) => {
@@ -30,14 +28,24 @@ const actions = {
         })
     })
   },
-  [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: ({ commit, dispatch }) => {
+  [YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION]: ({ commit, dispatch }, organization) => {
     return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'removeIntegration?organization=' + organization
+      axios({ url: url, method: 'DELETE' })
+        .then((resp) => {
+          commit(YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      console.log(data)
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexMailMsgs'
-      const userData = {
-        userEmail: 'cesarhalyrez',
-        userPassword: 'djincaxfuizwlcqe'
-      }
-      axios({ url: url, method: 'POST', data: userData })
+      axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
           commit(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL, resp.data)
@@ -54,11 +62,15 @@ const actions = {
 const mutations = {
   [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: (state, data) => {
     state.integrations.yandex.msgs = data
+    state.integrations.yandex.isIntegrated = true
   },
   [YANDEX.GET_ORGANIZATION_INTEGRATION]: (state, data) => {
     if (data.length) {
-      state.isOrganizationIntegratedYandex = true
+      state.integrations.yandex.isIntegrated = true
     }
+  },
+  [YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION]: (state) => {
+    state.integrations.yandex.isIntegrated = false
   }
 }
 

@@ -44,14 +44,24 @@ const mutations = {
         let data = {}
         try {
           data = JSON.parse(localStorage.getItem('slides'))
-          data[value.name] = value.visible
+          data[value.name].visible = value.visible
         } catch (e) {
           data = {
-            welcome: true,
-            addAvatar: true,
-            addEmployees: true,
-            addReglaments: true,
-            delegateTasks: true
+            welcome: {
+              visible: true
+            },
+            addAvatar: {
+              visible: true
+            },
+            addEmployees: {
+              visible: true
+            },
+            addReglaments: {
+              visible: true
+            },
+            delegateTasks: {
+              visible: true
+            }
           }
           data[value.name] = value.visible
         }

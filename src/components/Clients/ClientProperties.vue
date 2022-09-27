@@ -11,6 +11,12 @@
     <PopMenu>
       <PropsButtonMenu />
       <template #menu>
+        <PopMenuHeader
+          v-if="selectedClient.date_create"
+          title="Дата добавления:"
+        >
+          {{ selectedClient.date_create }}
+        </PopMenuHeader>
         <PopMenuItem
           icon="delete"
           type="delete"
@@ -33,7 +39,7 @@
       type="text"
       maxlength="50"
       placeholder="Имя"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
@@ -46,7 +52,7 @@
       type="text"
       maxlength="50"
       placeholder="Телефон"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
@@ -59,7 +65,7 @@
       type="text"
       maxlength="50"
       placeholder="Email"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
@@ -72,7 +78,7 @@
       type="text"
       maxlength="50"
       placeholder="Комментарий"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
   </div>
@@ -109,6 +115,7 @@
 </template>
 <script>
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
+import PopMenuHeader from '@/components/Common/PopMenuHeader.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
@@ -126,6 +133,7 @@ export default {
     PropsButtonClose,
     PopMenuItem,
     PropsButtonMenu,
+    PopMenuHeader,
     ModalBoxDelete,
     PopMenu,
     ClientChat,
@@ -149,7 +157,7 @@ export default {
   },
   computed: {
     selectedClient () {
-      return this.$store.state.clients.selectedClient
+      return this.$store.state.clients.selectedClient ?? ''
     },
     status () { return this.$store.state.clientfilesandmessages.status },
     user () { return this.$store.state.user.user },

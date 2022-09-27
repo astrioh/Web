@@ -279,24 +279,19 @@ export default {
       this.$store.dispatch(AUTH_REQUEST, uri)
         .then(() => {
           this.$router.push('/doitnow')
-          const slides = {
-            addAvatar: {
+          const slideNames = [
+            'addAvatar',
+            'addEmployees',
+            'addReglaments',
+            'delegateTasks',
+            'welcome'
+          ]
+          slideNames.forEach(slideName => {
+            this.$store.commit(slideNames.CHANGE_VISIBLE, {
+              name: slideName,
               visible: false
-            },
-            addEmployees: {
-              visible: false
-            },
-            addReglaments: {
-              visible: false
-            },
-            delegateTasks: {
-              visible: false
-            },
-            welcome: {
-              visible: false
-            }
-          }
-          localStorage.setItem('slides', JSON.stringify(slides))
+            })
+          })
         })
         .catch(() => {
           this.form.showError = true
@@ -324,29 +319,19 @@ export default {
           window.ym(89796698, 'reachGoal', 'signup-new-web')
           localStorage.removeItem('slides')
           this.$router.push('/doitnow')
-          const slides = {
-            addAvatar: {
-              visible: true,
-              reminder: new Date()
-            },
-            addEmployees: {
-              visible: true,
-              reminder: new Date()
-            },
-            addReglaments: {
-              visible: true,
-              reminder: new Date()
-            },
-            delegateTasks: {
-              visible: true,
-              reminder: new Date()
-            },
-            welcome: {
-              visible: true,
-              reminder: new Date()
-            }
-          }
-          localStorage.setItem('slides', JSON.stringify(slides))
+          const slideNames = [
+            'addAvatar',
+            'addEmployees',
+            'addReglaments',
+            'delegateTasks',
+            'welcome'
+          ]
+          slideNames.forEach(slideName => {
+            this.$store.commit(slideNames.CHANGE_VISIBLE, {
+              name: slideName,
+              visible: true
+            })
+          })
           this.$store.dispatch(USER_START_ONBOARDING)
         })
         .catch(() => {

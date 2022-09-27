@@ -156,7 +156,8 @@ export default {
           name: this.name,
           phone: this.phone,
           email: this.email,
-          comment: this.comment
+          comment: this.comment,
+          date_create: new Date().toLocaleString()
         }
         this.$emit('save', data)
       }
