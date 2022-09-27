@@ -496,15 +496,23 @@ export default {
     },
     user () {
       return this.$store.state.user.user
+    },
+    boardUid () {
+      return this.board?.uid || ''
     }
   },
   watch: {
+    boardUid: {
+      immediate: true,
+      handler: function (val) {
+        this.$store.commit(CARD.SELECT_CARD, '')
+        this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
+      }
+    },
     board: {
       immediate: true,
       handler: function (val) {
         this.$store.commit(BOARD.SELECT_BOARD, val)
-        this.$store.commit(CARD.SELECT_CARD, '')
-        this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
       }
     },
     storeCards: {
@@ -623,7 +631,7 @@ export default {
       if (title) {
         this.$store
           .dispatch(BOARD.ADD_STAGE_BOARD_REQUEST, {
-            boardUid: this.board.uid,
+            boardUid: this.boardUid,
             newStageTitle: title
           })
           .then((resp) => {
@@ -642,7 +650,7 @@ export default {
       if (title) {
         this.$store
           .dispatch(BOARD.RENAME_STAGE_BOARD_REQUEST, {
-            boardUid: this.board.uid,
+            boardUid: this.boardUid,
             stageUid: this.selectedColumn.UID,
             newStageTitle: title
           })
@@ -659,7 +667,7 @@ export default {
       this.showDeleteColumn = false
       if (this.selectedColumn) {
         const data = {
-          boardUid: this.board.uid,
+          boardUid: this.boardUid,
           stageUid: this.selectedColumn.UID
         }
         this.$store
@@ -678,7 +686,7 @@ export default {
       if (this.selectedColumn) {
         this.$store
           .dispatch(BOARD.CHANGE_COLOR_STAGE_BOARD_REQUEST, {
-            boardUid: this.board.uid,
+            boardUid: this.boardUid,
             stageUid: this.selectedColumn.UID,
             newColor: color
           })
@@ -700,7 +708,7 @@ export default {
     changeColumnOrder (columnUid, newOrder) {
       this.$store
         .dispatch(BOARD.CHANGE_ORDER_STAGE_BOARD_REQUEST, {
-          boardUid: this.board.uid,
+          boardUid: this.boardUid,
           stageUid: columnUid,
           newOrder: newOrder
         })
@@ -724,7 +732,7 @@ export default {
           .dispatch(CARD.ADD_CARD, {
             name: title,
             comment: '',
-            uid_board: this.board.uid,
+            uid_board: this.boardUid,
             uid_stage: this.selectedColumn.UID
           })
           .then((resp) => {
