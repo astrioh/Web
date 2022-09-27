@@ -63,6 +63,7 @@ const actions = {
 const mutations = {
   [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: (state, data) => {
     state.integrations.yandex.msgs = data
+    state.integrations.isOrganizationIntegratedYandex = true
   },
   [YANDEX.GET_ORGANIZATION_INTEGRATION]: (state, data) => {
     if (data.length) {
