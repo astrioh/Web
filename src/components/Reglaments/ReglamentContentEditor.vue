@@ -737,6 +737,7 @@ export default {
         this.$store.dispatch('asidePropertiesToggle', false)
         this.$store.commit(NAVIGATOR_REMOVE_REGLAMENT, reglamentCopy)
         this.buttonDisabled = false
+        this.$store.state.navigator.submenu.status = false
         this.$router.push('/reglaments')
       })
     },
