@@ -162,6 +162,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
       this.$store.commit(CLIENTS.SELECT_CLIENT, client)
+      console.log(this.selectedClient)
     },
     clickAddClient () {
       this.showAddClient = true
@@ -173,7 +174,8 @@ export default {
         name: client.name,
         email: client.email,
         phone: client.phone,
-        comment: client.comment
+        comment: client.comment,
+        date_create: client.date_create
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false

@@ -11,6 +11,12 @@
     <PopMenu>
       <PropsButtonMenu />
       <template #menu>
+        <PopMenuHeader
+          v-if="selectedClient.date_create"
+          title="Дата добавления:"
+        >
+          {{ selectedClient.date_create }}
+        </PopMenuHeader>
         <PopMenuItem
           icon="delete"
           type="delete"
@@ -109,6 +115,7 @@
 </template>
 <script>
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
+import PopMenuHeader from '@/components/Common/PopMenuHeader.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
@@ -126,6 +133,7 @@ export default {
     PropsButtonClose,
     PopMenuItem,
     PropsButtonMenu,
+    PopMenuHeader,
     ModalBoxDelete,
     PopMenu,
     ClientChat,
