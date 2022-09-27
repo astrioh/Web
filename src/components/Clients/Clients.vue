@@ -16,9 +16,9 @@
     @clickAddClient="clickAddClient"
   />
   <div
-    class="bg-white rounded-xl min-h-[80%] px-[40px] py-[20px]"
+    class="bg-white rounded-xl min-h-[80%] overflow-y-auto"
   >
-    <table>
+    <table class="p-[40px]">
       <tr>
         <th>Имя</th>
         <th>Номер телефона</th>
@@ -189,7 +189,7 @@ export default {
 
 <style scoped>
 table {
-  @apply w-full mt-[20px] border-separate;
+  @apply w-full border-separate;
   border-spacing: 0;
 }
 
