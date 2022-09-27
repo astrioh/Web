@@ -1,4 +1,10 @@
 <template>
+  <IntegrationsModalBoxYandex
+    v-if="showIntegration"
+    title="Интеграция с Яндекс.Почта"
+    @cancel="showIntegration = false"
+    @save="showIntegration = false"
+  />
   <NavBar
     class="pt-[8px]"
     title="Интеграции"
@@ -90,8 +96,17 @@
   </div>
 </template>
 <script>
+import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import NavBar from '../Navbar/NavBar.vue'
 export default {
-  components: { NavBar }
+  components: {
+    NavBar,
+    IntegrationsModalBoxYandex
+  },
+  data () {
+    return {
+      showIntegration: false
+    }
+  }
 }
 </script>
