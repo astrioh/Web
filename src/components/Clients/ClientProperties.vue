@@ -157,7 +157,7 @@ export default {
   },
   computed: {
     selectedClient () {
-      return this.$store.state.clients.selectedClient
+      return this.$store.state.clients.selectedClient ?? ''
     },
     status () { return this.$store.state.clientfilesandmessages.status },
     user () { return this.$store.state.user.user },

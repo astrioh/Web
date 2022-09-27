@@ -24,29 +24,49 @@
           v-model="modelInput1"
           :placeholder="item.inputs.input1"
           type="text"
+          name="name"
           class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="inputsValidateError && modelInput1.length < 1 ? 'border-red-500' : 'border-[#4c4c4d]'"
         >
         <input
           v-if="showInput2"
           v-model="modelInput2"
           :placeholder="item.inputs.input2"
           type="text"
+          name="email"
           class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="inputsValidateError && modelInput2.length < 1 ? 'border-red-500' : 'border-[#4c4c4d]'"
         >
         <input
           v-if="showInput3"
           v-model="modelInput3"
           :placeholder="item.inputs.input3"
           type="text"
+          name="phone"
           class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="inputsValidateError && modelInput3.length < 1 ? 'border-red-500' : 'border-[#4c4c4d]'"
         >
         <input
           v-if="showInput4"
           v-model="modelInput4"
           :placeholder="item.inputs.input4"
           type="text"
-          class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          name="comment"
+          class="bg-[#f4f5f7]/50 rounded-[6px] border focus:border-[#ff9123] w-full mb-3 px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+          :class="inputsValidateError && modelInput4.length < 1 ? 'border-red-500' : 'border-[#4c4c4d]'"
         >
+        <template v-if="inputsValidateError">
+          <p
+            class="text-red-500 text-xs mb-3"
+          >
+            Форма не сохранена
+          </p>
+          <p
+            class="text-red-500 text-xs mb-3"
+          >
+            Поля должны быть обязательно заполнены
+          </p>
+        </template>
         <button
           class="focus:ring min-w-[90px] focus:outline-none inline-flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto"
           @click="submitForm"
@@ -105,7 +125,9 @@ export default {
           input4: ''
         }
       },
-      formIsLoaded: false
+      formIsLoaded: false,
+      errors: [],
+      inputsValidateError: false
     }
   },
   computed: {
@@ -149,6 +171,8 @@ export default {
   },
   methods: {
     submitForm () {
+      this.validateForm()
+      if (this.inputsValidateError) return
       const data = {
         board_uid: this.$route.params.board_id,
         title: this.modelInput1,
@@ -170,6 +194,12 @@ export default {
           this.showFormSended = true
         }
       })
+    },
+    validateForm () {
+      this.inputsValidateError = false
+      if (this.modelInput1.length < 1 || this.modelInput2.length < 1 || this.modelInput3.length < 1 || this.modelInput4.length < 1) {
+        this.inputsValidateError = true
+      }
     }
   }
 }
