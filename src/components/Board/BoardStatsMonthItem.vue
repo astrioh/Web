@@ -2,84 +2,17 @@
   <tr>
     <td>
       <div class="content flex items-center">
-        Январь
+        {{ month.month }}
       </div>
     </td>
-  </tr>
-  <tr>
     <td>
       <div class="content flex items-center">
-        Февраль
+        {{ month.success }}
       </div>
     </td>
-  </tr>
-  <tr>
     <td>
       <div class="content flex items-center">
-        Март
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Апрель
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Май
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Июнь
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Июль
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Август
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Сентябрь
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Октябрь
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Ноябрь
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <div class="content flex items-center">
-        Декабрь
+        {{ month.reject }}
       </div>
     </td>
   </tr>
@@ -89,14 +22,9 @@
 
 export default {
   props: {
-    member: {
+    month: {
       type: Object,
       default: () => {}
-    }
-  },
-  computed: {
-    boardCards () {
-      return this.$store.state.cards.cards
     }
   }
 }
