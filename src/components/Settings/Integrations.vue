@@ -28,7 +28,6 @@
 </template>
 <script>
 import NavBar from '@/components/Navbar/NavBar'
-import { setLocalStorageItem } from '@/store/helpers/functions'
 import ListBlocItem from '../Common/ListBlocItem.vue'
 
 export default {
@@ -46,18 +45,6 @@ export default {
         }
       ]
     }
-  },
-  computed: {
-    isGridView () {
-      setLocalStorageItem('isGridView', true)
-      return this.$store.state.isGridView
-    },
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
-    }
-  },
-  created () {
-    setLocalStorageItem('isGridView', true)
   }
 }
 </script>

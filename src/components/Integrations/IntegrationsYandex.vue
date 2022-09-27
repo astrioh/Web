@@ -11,6 +11,12 @@
     route="/settings/integrations"
     :breadcrumbs="[{ name: 'Яндекс почта', selected: true }]"
   />
+  <IntegrationsModalBox
+    v-if="showIntegration"
+    title="Интеграция с Яндекс.Почта"
+    @cancel="showIntegration = false"
+    @save="showIntegration = false"
+  />
   <div class="w-full px-10 py-5 h-auto bg-white rounded-[8px]">
     <div class="flex w-[300px] justify-center flex-col">
       <div class="flex items-center">
@@ -98,6 +104,7 @@
 <script>
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import NavBar from '../Navbar/NavBar.vue'
+
 export default {
   components: {
     NavBar,
