@@ -20,13 +20,6 @@
       >
         Корпоративная
       </button>
-      <button
-        :class="{ 'bg-[#F5F5F5]': !isScreenCorpo }"
-        class="ml-[10px] p-2 px-4 rounded-[5px] bg-[#FFFAFA] border-[1px] border-black"
-        @click="changeCurrentScreen('personal')"
-      >
-        Персональная
-      </button>
     </div>
     <div
       v-if="isScreenCorpo"
@@ -38,24 +31,6 @@
           src="@/assets/images/yPochta.png"
         >
         <span class="ml-[10px] font-[500]">Корпоративная интеграция через Яндекс.Почта</span>
-      </div>
-      <button
-        class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300 "
-        @click="changeShowIntegrationState(true)"
-      >
-        Интеграция
-      </button>
-    </div>
-    <div
-      v-if="!isScreenCorpo"
-      class="flex w-[450px] justify-center flex-col"
-    >
-      <div class="flex items-center">
-        <img
-          class="h-[30px] w-[30px]"
-          src="@/assets/images/yPochta.png"
-        >
-        <span class="ml-[10px] font-[500]">Персональная интеграция через Яндекс.Почта</span>
       </div>
       <button
         class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300 "
