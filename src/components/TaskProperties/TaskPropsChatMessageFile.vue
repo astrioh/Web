@@ -46,9 +46,11 @@
               :src="isAudio ? fileUrl : null"
               :download="fileName"
               class="flex max-w-[250px] truncate font-bold text-[#4C4C4D] text-[13px] leading-[15px]"
-              style="word-break: break-word"
+              :class="!isAudio ? 'pr-[15px]' : 'pr-[9px]'"
             >
-              {{ fileName }}
+              <span class="whitespace-nowrap overflow-hidden text-ellipsis">
+                {{ fileName }}
+              </span>
             </a>
             <div
               v-if="time && size"
