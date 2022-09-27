@@ -58,7 +58,17 @@ const actions = {
     commit(CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS, {})
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: ({ commit, dispatch }, data) => {
-    commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data)
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clientsfiles?uid_client=' + data.uid_client
+      axios({ url: url, method: 'POST', data: data.name })
+        .then((resp) => {
+          // commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   },
   [CLIENT_FILES_AND_MESSAGES.FILE_REQUEST]: ({ commit, dispatch }, fileUid) => {
     return new Promise((resolve, reject) => {

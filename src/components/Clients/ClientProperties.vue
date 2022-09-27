@@ -223,6 +223,10 @@ export default {
       const asideRight = document.getElementById('aside-right')
       asideRight.scroll({ top: asideRight.scrollHeight + 100000 })
     },
+    isFilePreloadable (fileExtension) {
+      const preloadableFiles = ['jpg', 'png', 'jpeg', 'git', 'bmp', 'gif', 'mov', 'mp4', 'mp3', 'wav']
+      return preloadableFiles.includes(fileExtension)
+    },
     createClientFile (event) {
       if (event === false) {
         this.showMessagesLimit = true
@@ -265,7 +269,8 @@ export default {
         uid_client: this.selectedClient?.uid,
         name: formData
       }
-      this.$store.commit('addClientMessages', uploadingFiles)
+      console.log(data)
+      // this.$store.commit('addClientMessages', uploadingFiles)
       this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data).then(() => {
         if (this.selectedClient) this.selectedClient.has_files = true
         this.scrollDown()
