@@ -26,6 +26,11 @@ export default [
             path: 'history',
             name: 'reglamentHistory',
             component: () => import('@/components/Reglaments/ReglamentHistoryChanges.vue')
+          },
+          {
+            path: 'edit',
+            name: 'reglamentEditing',
+            component: () => import('@/components/Reglaments/ReglamentContentEditor.vue')
           }
         ]
       }

@@ -27,36 +27,34 @@
             >
           </div>
           <div class="flex justify-end gap-[8px] mr-3">
-            <ReglamentSmallButton
-              v-if="!isTesting"
-              class="flex items-center px-[10px] py-[5px]"
-              @click="getBack()"
-            >
-              <svg
-                class="mr-1.5"
-                width="14"
-                height="8"
-                viewBox="0 0 14 8"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M5.23531 6.86625L2.99406 4.625H13.8516V3.375H2.99406L5.23531 1.13375L4.35156 0.25L0.601562 4L4.35156 7.75L5.23531 6.86625Z"
-                  fill="#4C4C4D"
-                />
-              </svg>
-              Назад
-            </ReglamentSmallButton>
-            <router-link :to="$route.params.id + '/history'">
+            <router-link :to="'/reglaments/' + $route.params.id">
               <ReglamentSmallButton
-                v-if="!isTesting"
+                class="flex items-center px-[10px] py-[5px]"
+              >
+                <svg
+                  class="mr-1.5"
+                  width="14"
+                  height="8"
+                  viewBox="0 0 14 8"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5.23531 6.86625L2.99406 4.625H13.8516V3.375H2.99406L5.23531 1.13375L4.35156 0.25L0.601562 4L4.35156 7.75L5.23531 6.86625Z"
+                    fill="#4C4C4D"
+                  />
+                </svg>
+                Назад
+              </ReglamentSmallButton>
+            </router-link>
+            <router-link :to="'/reglaments/' + $route.params.id + '/history'">
+              <ReglamentSmallButton
                 class="flex items-center px-[10px] py-[5px]"
               >
                 {{ lastCommentDate }}
               </ReglamentSmallButton>
             </router-link>
             <ReglamentSmallButton
-              v-if="!isTesting"
               class="flex items-center px-[10px] py-[5px]"
               :disabled="disabledButtons"
               @click="showConfirm=true"
@@ -277,7 +275,7 @@
       </div>
     </div>
     <div
-      v-if="!isTesting && contributors.length"
+      v-if="contributors.length"
       class="mt-5"
     >
       <button
@@ -367,20 +365,13 @@ export default {
     EmployeeProfile,
     ReglamentModalSave
   },
-  props: {
-    reglament: {
-      type: Object,
-      default: () => {}
-    }
-  },
-  emits: ['exitEditMode'],
   data () {
     return {
       currEditors: [],
       currName: '',
       currDep: '',
       showConfirm: false,
-      currText: this.$store.state.reglaments.reglaments[this.reglament?.uid].content ?? '',
+      currText: this.$store.state.reglaments.reglaments[this.$route.params.id].content ?? '',
       saveContentStatus: 1, // 1 - is saved, 2 error, 0 request processing
       buttonSaveReglament: 1, // то же самое что и saveContentStatus, сделано для того, чтобы 2 кнопки не принимали 1 статус
       isFormInvalid: false,
@@ -416,8 +407,11 @@ export default {
     questions () {
       return this.$store?.state?.reglaments?.reglamentQuestions
     },
+    reglament () {
+      return this.currReglament
+    },
     currReglament () {
-      return this.$store.state.reglaments.reglaments[this.reglament?.uid]
+      return this.$store.state.reglaments.reglaments[this.$route.params.id]
     },
     editorsCanEdit () {
       return this.currReglament?.editors?.includes(this.$store.state.user.user.current_user_email)
@@ -673,7 +667,7 @@ export default {
         const index = reglaments.items.findIndex(item => item.uid === reglament.uid)
         if (index !== -1) reglaments.items[index] = reglament
         if (this.$store.state.reglaments.hideSaveParams === false) {
-          this.getBack()
+          this.$router.push('/reglaments/' + this.$route.params.id)
         } else {
           this.showSaveModal = false
         }
@@ -687,9 +681,6 @@ export default {
       const month = calendarDate.toLocaleString('default', { month: 'short' })
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
-    },
-    getBack () {
-      this.$emit('exitEditMode')
     },
     validateReglamentQuestions () {
       for (const question of this.questions) {
