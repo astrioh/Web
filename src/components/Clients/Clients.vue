@@ -158,7 +158,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
       this.$store.commit(CLIENTS.SELECT_CLIENT, client)
-      console.log(this.selectedClient)
+      console.log('selected client', this.selectedClient)
     },
     clickAddClient () {
       this.showAddClient = true

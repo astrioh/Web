@@ -39,7 +39,7 @@
       type="text"
       maxlength="50"
       placeholder="Имя"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
@@ -52,7 +52,7 @@
       type="text"
       maxlength="50"
       placeholder="Телефон"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
@@ -65,7 +65,7 @@
       type="text"
       maxlength="50"
       placeholder="Email"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
@@ -78,7 +78,7 @@
       type="text"
       maxlength="50"
       placeholder="Комментарий"
-      class="mt-[25px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
   </div>
@@ -157,7 +157,7 @@ export default {
   },
   computed: {
     selectedClient () {
-      return this.$store.state.clients.selectedClient
+      return this.$store.state.clients.selectedClient ?? ''
     },
     status () { return this.$store.state.clientfilesandmessages.status },
     user () { return this.$store.state.user.user },
