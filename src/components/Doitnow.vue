@@ -1,15 +1,21 @@
 <template>
-  <div class="w-full">
+  <div class="w-full h-full relative overflow-x-hidden">
     <NavBar
       class="pt-[8px]"
       title="Очередь"
     />
-    <div
-      v-if="!isLoading && !showLimitMessage"
-      class="flex justify-between gap-[20px]"
+    <transition
+      v-if="!isLoading && !showLimitMessage && tasksCount"
+      name="slide-in-fade-out"
     >
-      <transition :name="taskTransition">
-        <div class="ml-0 grow">
+      <div
+        v-if="!isLoading && !showLimitMessage"
+        :key="firstTask.uid"
+        class="flex justify-between gap-[20px]"
+      >
+        <div
+          class="ml-0 grow"
+        >
           <DoitnowTask
             v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
             :key="firstTask.uid"
@@ -35,52 +41,52 @@
             :uid="firstTask.uid"
           />
         </div>
-      </transition>
-      <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
-      <div
-        v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
-
-        class="flex mb-5 justify-end z-[1]"
-      >
-        <PopMenu>
-          <button
-            class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
-          >
-            <span class="pr-2">Отложить</span>
-          </button>
-          <template #menu>
-            <div class="h-[155px] overflow-y-auto w-[220px] scroll-style">
-              <PopMenuItem
-                v-for="item in timeArr"
-                :key="item.index"
-                @click="postponeTask(firstTask.reminder, firstTask.reminder, item)"
+        <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
+        <div
+          v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
+          class="flex mb-5 justify-end z-[1]"
+        >
+          <PopMenu>
+            <button
+              class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
+            >
+              <span class="pr-2">Отложить</span>
+            </button>
+            <template #menu>
+              <div
+                class="h-[155px] overflow-y-auto w-[220px] scroll-style"
               >
-                <div class="flex justify-between w-full items-center">
-                  <span
-                    class="truncate"
-                  >
-                    {{ item.name }}
-                  </span>
-                </div>
-              </PopMenuItem>
-              <PopMenuItem
-                @click.stop
-              >
-                <SetDate
-                  class="hover:cursor-pointer"
-                  :name="'Назначить срок'"
-                  :date-begin="new Date()"
-                  :date-end="new Date()"
-                  :date-text="'Сегодня'"
-                  @changeDates="changeSlideReminder"
-                />
-              </PopMenuItem>
-            </div>
-          </template>
-        </PopMenu>
-        <!-- header -->
+                <PopMenuItem
+                  v-for="item in timeArr"
+                  :key="item.index"
+                  @click="postponeTask(firstTask.reminder, firstTask.reminder, item)"
+                >
+                  <div class="flex justify-between w-full items-center">
+                    <span
+                      class="truncate"
+                    >
+                      {{ item.name }}
+                    </span>
+                  </div>
+                </PopMenuItem>
+                <PopMenuItem
+                  @click.stop
+                >
+                  <SetDate
+                    class="hover:cursor-pointer"
+                    :name="'Назначить срок'"
+                    :date-begin="new Date()"
+                    :date-end="new Date()"
+                    :date-text="'Сегодня'"
+                    @changeDates="changeSlideReminder"
+                  />
+                </PopMenuItem>
+              </div>
+            </template>
+          </PopMenu>
+        </div>
       </div>
-    </div>
+    </transition>
     <DoitnowLimit
       v-if="showLimitMessage && !displayModal && !isLoading"
     />
@@ -230,9 +236,6 @@ export default {
     },
     subTasks () {
       return this.$store.state.tasks.subtasks.tasks
-    },
-    taskTransition () {
-      return this.tasksLoaded ? 'slide-in-fade-out' : ''
     },
     displayModal () {
       return !this.$store.state.onboarding?.visitedModals?.includes('doitnow') && this.$store.state.onboarding?.showModals
@@ -417,6 +420,10 @@ export default {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
     },
     nextTask: function () {
+      // Удаляем поппер 'Отложить', т.к из-за него ломается анимация
+      console.log('this.$refs.postponePopMenu -->', this.$refs.postponePopMenu)
+      document.querySelectorAll('.popper').forEach(popper => popper.remove())
+
       if (this.slidesCopy.length && this.justRegistered) {
         this.slidesCopy.shift()
         return
