@@ -1,5 +1,5 @@
 import axios from 'axios'
-import * as IMAP from '@/store/actions/imap.js'
+import * as YANDEX from '@/store/actions/yandexInt.js'
 
 const state = {
   integrations: {
@@ -10,13 +10,29 @@ const state = {
       isIntegrated: false,
       msgs: []
     }
-  }
+  },
+  isOrganizationIntegratedYandex: false
 }
 
 const actions = {
-  [IMAP.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: ({ commit, dispatch }) => {
+  [YANDEX.GET_ORGANIZATION_INTEGRATION]: ({ commit, dispatch }) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'imapProtocol'
+      const organization = 'nikita.talykh@leadertask.com'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'isOrganizationIntegrated?organization=' + organization
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          commit(YANDEX.GET_ORGANIZATION_INTEGRATION, resp.data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          console.log('ошибка при запросе организации')
+          reject(err)
+        })
+    })
+  },
+  [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: ({ commit, dispatch }) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexMailMsgs'
       const userData = {
         userEmail: 'cesarhalyrez',
         userPassword: 'djincaxfuizwlcqe'
@@ -24,7 +40,7 @@ const actions = {
       axios({ url: url, method: 'POST', data: userData })
         .then((resp) => {
           console.log('imap msgs get successfully')
-          commit(IMAP.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL, resp.data)
+          commit(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -36,8 +52,13 @@ const actions = {
 }
 
 const mutations = {
-  [IMAP.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: (state, data) => {
+  [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: (state, data) => {
     state.integrations.yandex.msgs = data
+  },
+  [YANDEX.GET_ORGANIZATION_INTEGRATION]: (state, data) => {
+    if (data.length) {
+      state.isOrganizationIntegratedYandex = true
+    }
   }
 }
 
