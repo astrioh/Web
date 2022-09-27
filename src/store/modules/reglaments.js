@@ -17,10 +17,7 @@ const actions = {
   // получить вопросы регламента
   [REGLAMENTS.REGLAMENT_REQUEST]: ({ commit, dispatch }, uidReglament) => {
     return new Promise((resolve, reject) => {
-      const url =
-        process.env.VUE_APP_INSPECTOR_API +
-        'reglament?uid_reglament=' +
-        uidReglament
+      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament/' + uidReglament
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           commit(REGLAMENTS.REGLAMENT_SUCCESS, resp.data)

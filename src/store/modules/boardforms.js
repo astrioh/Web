@@ -30,7 +30,7 @@ const state = {
 const actions = {
   [BOARD_FORMS.GET_BOARD_FORM_REQUEST]: ({ commit, dispatch }, uidBoard) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'board_forms?uid_board=' + uidBoard
+      const url = process.env.VUE_APP_INSPECTOR_API + 'board_forms/' + uidBoard
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           resolve(resp)
