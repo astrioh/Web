@@ -17,14 +17,15 @@
         @closeMenu="closeMenu"
       />
       <ProjectsSubMenuGroup
-        v-if="depProjects.length"
-        :title="currentUserDepTitle"
-        :projects="depProjects"
+        v-for="dep in depProjects"
+        :key="dep.uid"
+        :title="dep.title"
+        :projects="dep.projects"
         @closeMenu="closeMenu"
       />
       <ProjectsSubMenuGroup
         title="Мои проекты"
-        :projects="privateProjects"
+        :projects="sortedPrivateProjects"
         @closeMenu="closeMenu"
       >
         <AsideMenuListInput
@@ -57,9 +58,9 @@
         />
       </ProjectsSubMenuGroup>
       <ProjectsSubMenuGroup
-        v-if="commonProjects.length"
+        v-if="sortedCommonProjects.length"
         title="Общие проекты"
-        :projects="commonProjects"
+        :projects="sortedCommonProjects"
         @closeMenu="closeMenu"
       />
     </div>
@@ -102,6 +103,13 @@ export default {
     status () {
       return this.$store.state.navigator.status
     },
+    privateProjectsWithoutMyDep () {
+      console.log(this.privateProjects)
+      // for (const proj in privateProjects) {
+
+      // }
+      return this.privateProjects
+    },
     storeNavigator () {
       return this.$store.state.navigator.navigator
     },
@@ -127,18 +135,44 @@ export default {
       if (this.currentUserDepUid === '00000000-0000-0000-0000-000000000000') return
       return this.$store.state.departments.deps[this.currentUserDepUid].name || ''
     },
+    sortedPrivateProjects () {
+      return this.privateProjects.filter(proj => this.depProjectsMap[proj.uid] === undefined)
+    },
+    sortedCommonProjects () {
+      return this.commonProjects.filter(proj => this.depProjectsMap[proj.uid] === undefined)
+    },
+    depProjectsMap () {
+      return this.depProjects.reduce((access, dep) => {
+        dep.projects.forEach(proj => {
+          access[proj.uid] = dep
+        })
+        return access
+      }, {})
+    },
     depProjects () {
-      if (!this.currentUserDepUid || !this.currentUserDepTitle) return []
-
       const projects = Object.values(this.$store.state.projects.projects)
-      const departmentProjects = projects.filter(proj => {
-        if (!proj?.deps) return []
-        return proj?.deps.includes(this.currentUserDepUid)
-      })
-      departmentProjects.sort((proj1, proj2) => {
-        return proj1.name.localeCompare(proj2.name)
-      })
-      return departmentProjects
+      const departmentsMap = projects.reduce((access, project) => {
+        project.deps.forEach(depUid => {
+          if (access[depUid] === undefined) access[depUid] = []
+          access[depUid].push(project)
+        })
+        return access
+      }, {})
+      const allDeps = this.$store.getters.sortedDepartments
+      return allDeps.reduce((access, dep) => {
+        if (departmentsMap[dep.uid] && dep.name) {
+          const depGroup = {
+            uid: dep.uid,
+            title: dep.name,
+            projects: departmentsMap[dep.uid]
+          }
+          depGroup.projects.sort((project1, project2) => {
+            return project1.name.localeCompare(project2.name)
+          })
+          access.push(depGroup)
+        }
+        return access
+      }, [])
     }
   },
   methods: {

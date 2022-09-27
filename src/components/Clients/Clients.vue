@@ -16,9 +16,9 @@
     @clickAddClient="clickAddClient"
   />
   <div
-    class="bg-white rounded-xl min-h-[80%] px-[40px] py-[20px]"
+    class="bg-white rounded-xl min-h-[80%] overflow-y-auto"
   >
-    <table>
+    <table class="p-[40px]">
       <tr>
         <th>Имя</th>
         <th>Номер телефона</th>
@@ -158,6 +158,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
       this.$store.commit(CLIENTS.SELECT_CLIENT, client)
+      console.log(this.selectedClient)
     },
     clickAddClient () {
       this.showAddClient = true
@@ -169,7 +170,8 @@ export default {
         name: client.name,
         email: client.email,
         phone: client.phone,
-        comment: client.comment
+        comment: client.comment,
+        date_create: client.date_create
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false
@@ -185,7 +187,7 @@ export default {
 
 <style scoped>
 table {
-  @apply w-full mt-[20px] border-separate;
+  @apply w-full border-separate;
   border-spacing: 0;
 }
 
