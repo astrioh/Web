@@ -22,10 +22,6 @@ const getters = {
       if (item1.name < item2.name) return -1
       return 0
     })
-    deps.unshift({
-      uid: '00000000-0000-0000-0000-000000000000',
-      name: 'Вне отдела'
-    })
     return deps
   }
 }
