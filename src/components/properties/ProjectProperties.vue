@@ -213,19 +213,19 @@
       status="Владелец"
       disabled
     />
-    <ProjectPropsDepButton
-      v-for="dep in depsProject"
-      :key="dep.uid"
-      :name="dep.name"
-      :disabled="!isCanEdit"
-      @delete="deleteDepartment(dep.uid)"
-    />
     <ProjectPropsUserButton
       v-for="user in usersBoard"
       :key="user.email"
       :user-email="user.email"
       :disabled="!isCanEdit"
       @delete="deleteMember(user.email)"
+    />
+    <ProjectPropsDepButton
+      v-for="dep in depsProject"
+      :key="dep.uid"
+      :name="dep.name"
+      :disabled="!isCanEdit"
+      @delete="deleteDepartment(dep.uid)"
     />
   </div>
 </template>

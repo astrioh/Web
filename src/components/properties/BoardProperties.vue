@@ -207,17 +207,6 @@
       status="Владелец"
       disabled
     />
-    <BoardPropsDepButton
-      v-for="dep in depsBoard"
-      :key="dep.uid"
-      :name="dep.name"
-      :status="dep.status"
-      :disabled="!isCanEdit"
-      @delete="deleteDepartment(dep.uid)"
-      @setAdmin="setDepartmentStatus(dep.uid,1)"
-      @setReader="setDepartmentStatus(dep.uid,0)"
-      @setWriter="setDepartmentStatus(dep.uid,2)"
-    />
     <BoardPropsUserButton
       v-for="user in usersBoard"
       :key="user.email"
@@ -228,6 +217,17 @@
       @admin="setMemberStatus(user.uid, 1)"
       @reader="setMemberStatus(user.uid, 0)"
       @writer="setMemberStatus(user.uid, 2)"
+    />
+    <BoardPropsDepButton
+      v-for="dep in depsBoard"
+      :key="dep.uid"
+      :name="dep.name"
+      :status="dep.status"
+      :disabled="!isCanEdit"
+      @delete="deleteDepartment(dep.uid)"
+      @setAdmin="setDepartmentStatus(dep.uid,1)"
+      @setReader="setDepartmentStatus(dep.uid,0)"
+      @setWriter="setDepartmentStatus(dep.uid,2)"
     />
   </div>
 
