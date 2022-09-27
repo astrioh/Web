@@ -152,7 +152,10 @@ export default {
       const data = {
         board_uid: this.$route.params.board_id,
         title: this.modelInput1,
-        comment: this.modelInput2 + ', ' + this.modelInput3 + ', ' + this.modelInput4
+        comment:
+        this.modelInput2 + `${this.modelInput2.length > 0 ? ', ' : ''}` +
+        this.modelInput3 + `${this.modelInput3.length > 0 ? ', ' : ''}` +
+        this.modelInput4
       }
       this.$store.dispatch(BOARD.SEND_BOARD_FORM_REQUEST, data).then(() => {
         console.log('send success')

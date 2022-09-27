@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex items-center h-[36px] cursor-pointer border hover:p-px hover:border-0 border-black/12 hover:bg-[#f4f5f7] rounded-[6px]"
+    class="flex items-center h-[36px] cursor-pointer w-full bg-[#F2B679] px-3 rounded-[6px] hover:bg-slate-200"
   >
     <div class="text-center overflow-hidden w-full">
       <p
-        class="font-roboto text-[13px] leading-[15px] truncate text-[#383838]"
+        class="font-roboto text-[13px] leading-[15px] truncate text-[#111111]"
       >
         {{ title }}
       </p>
