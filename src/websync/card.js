@@ -8,6 +8,7 @@ import store from '@/store/index.js'
 import { computed } from 'vue'
 
 const selectedCardUid = computed(() => store.state.cards.selectedCardUid)
+const selectedCard = computed(() => store.getters.selectedCard)
 
 export function createCard (obj) {
   obj.obj.uid_client = ''
@@ -36,7 +37,17 @@ export function updateCard (obj) {
       obj.obj.client_name = resp.data.client_name
       obj.obj.date_reminder = resp.data.date_reminder
     }
-
+    // закрываем свойства карточки
+    // если переменстили в другую доску или колонку
+    if (obj.obj.uid === selectedCardUid.value) {
+      if (
+        selectedCard.value.uid_board !== obj.obj.uid_board ||
+        selectedCard.value.uid_stage !== obj.obj.uid_stage
+      ) {
+        store.dispatch('asidePropertiesToggle', false)
+        store.commit(CARD.SELECT_CARD, '')
+      }
+    }
     store.commit(CHANGE_CARD, obj.obj)
   })
 }

@@ -207,17 +207,6 @@
       status="Владелец"
       disabled
     />
-    <BoardPropsDepButton
-      v-for="dep in depsBoard"
-      :key="dep.uid"
-      :name="dep.name"
-      :status="dep.status"
-      :disabled="!isCanEdit"
-      @delete="deleteDepartment(dep.uid)"
-      @setAdmin="setDepartmentStatus(dep.uid,1)"
-      @setReader="setDepartmentStatus(dep.uid,0)"
-      @setWriter="setDepartmentStatus(dep.uid,2)"
-    />
     <BoardPropsUserButton
       v-for="user in usersBoard"
       :key="user.email"
@@ -228,6 +217,17 @@
       @admin="setMemberStatus(user.uid, 1)"
       @reader="setMemberStatus(user.uid, 0)"
       @writer="setMemberStatus(user.uid, 2)"
+    />
+    <BoardPropsDepButton
+      v-for="dep in depsBoard"
+      :key="dep.uid"
+      :name="dep.name"
+      :status="dep.status"
+      :disabled="!isCanEdit"
+      @delete="deleteDepartment(dep.uid)"
+      @setAdmin="setDepartmentStatus(dep.uid,1)"
+      @setReader="setDepartmentStatus(dep.uid,0)"
+      @setWriter="setDepartmentStatus(dep.uid,2)"
     />
   </div>
 
@@ -407,17 +407,7 @@ export default {
       return allDeps
     },
     allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
-      return deps
+      return this.$store.getters.sortedDepartments
     }
   },
   watch: {

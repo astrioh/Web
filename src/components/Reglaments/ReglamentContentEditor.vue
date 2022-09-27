@@ -398,16 +398,7 @@ export default {
       }
     },
     allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
+      const deps = this.$store.getters.sortedDepartments
       if (this.showAllReglaments) return deps
       const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
       return deps.filter(dep => dep.emails.find(email => email.toLowerCase() === currentUserEmail))

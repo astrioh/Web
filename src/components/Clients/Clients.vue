@@ -76,7 +76,7 @@
 </template>
 <script>
 // письма с интегрированного email
-import * as IMAP from '@/store/actions/imap.js'
+import * as YANDEX from '@/store/actions/yandexInt.js'
 
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
@@ -155,7 +155,7 @@ export default {
       }
     },
     showClientProperties (client) {
-      this.$store.dispatch(IMAP.IMAP_GET_USER_MSGS)
+      this.$store.dispatch(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL)
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)

@@ -2,33 +2,39 @@
   <IntegrationsModalBoxYandex
     v-if="showIntegration"
     title="Интеграция с Яндекс.Почта"
-    @cancel="showIntegration = false"
-    @save="showIntegration = false"
+    @cancel="changeShowIntegrationState(false)"
+    @save="changeShowIntegrationState(false)"
   />
   <NavBar
     class="pt-[8px]"
     title="Интеграции"
     route="/settings/integrations"
-    :breadcrumbs="[{ name: 'Яндекс почта', selected: true }]"
-  />
-  <IntegrationsModalBox
-    v-if="showIntegration"
-    title="Интеграция с Яндекс.Почта"
-    @cancel="showIntegration = false"
-    @save="showIntegration = false"
+    :breadcrumbs="[{ name: 'Яндекс.Почта', selected: true }]"
   />
   <div class="w-full px-10 py-5 h-auto bg-white rounded-[8px]">
-    <div class="flex w-[300px] justify-center flex-col">
+    <div class="py-3">
+      <button
+        :class="{ 'bg-[#F5F5F5]': isScreenCorpo }"
+        class="p-2 px-4 rounded-[5px] bg-[#FFFAFA] border-[1px] border-black"
+        @click="changeCurrentScreen('corpo')"
+      >
+        Корпоративная
+      </button>
+    </div>
+    <div
+      v-if="isScreenCorpo"
+      class="flex w-[450px] justify-center flex-col"
+    >
       <div class="flex items-center">
         <img
           class="h-[30px] w-[30px]"
           src="@/assets/images/yPochta.png"
         >
-        <span class="ml-[10px] font-[500]">Интеграция через Яндекс.Почта</span>
+        <span class="ml-[10px] font-[500]">Корпоративная интеграция через Яндекс.Почта</span>
       </div>
       <button
         class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300 "
-        @click="showIntegration = true"
+        @click="changeShowIntegrationState(true)"
       >
         Интеграция
       </button>
@@ -112,7 +118,21 @@ export default {
   },
   data () {
     return {
-      showIntegration: false
+      showIntegration: false,
+      currentScreen: 'corpo'
+    }
+  },
+  computed: {
+    isScreenCorpo () {
+      return this.currentScreen === 'corpo'
+    }
+  },
+  methods: {
+    changeShowIntegrationState (value) {
+      this.showIntegration = value
+    },
+    changeCurrentScreen (screen) {
+      this.currentScreen = screen
     }
   }
 }

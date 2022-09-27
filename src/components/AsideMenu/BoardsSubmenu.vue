@@ -18,9 +18,10 @@
       />
 
       <BoardsSubmenuGroup
-        v-if="depBoards.length"
-        :title="currentUserDepTitle"
-        :boards="depBoards"
+        v-for="dep in depBoards"
+        :key="dep.uid"
+        :title="dep.title"
+        :boards="dep.boards"
         @goto="closeMenu"
       />
 
@@ -131,24 +132,43 @@ export default {
       return arrFavBoards
     },
     privateBoards () {
-      return this.storeNavigator?.new_private_boards[0]?.items ?? []
+      const boards = this.storeNavigator?.new_private_boards[0]?.items ?? []
+      return boards.filter(board => this.depBoardsMap[board.uid] === undefined)
     },
     commonBoards () {
-      return this.storeNavigator?.new_private_boards[1]?.items ?? []
+      const boards = this.storeNavigator?.new_private_boards[1]?.items ?? []
+      return boards.filter(board => this.depBoardsMap[board.uid] === undefined)
     },
-    currentUserDepUid () {
-      return this.employees[this.user.current_user_uid]?.uid_dep || ''
-    },
-    currentUserDepTitle () {
-      return this.$store.state.departments.deps[this.currentUserDepUid]?.name || ''
+    depBoardsMap () {
+      return this.depBoards.reduce((acc, dep) => {
+        dep.boards.forEach(board => {
+          acc[board.uid] = dep
+        })
+        return acc
+      }, {})
     },
     depBoards () {
-      if (!this.currentUserDepUid || !this.currentUserDepTitle) return []
-      //
       const boards = Object.values(this.$store.state.boards.boards)
-      const arrDepBoards = boards.filter(board => board.deps[this.currentUserDepUid] !== undefined)
-      arrDepBoards.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
-      return arrDepBoards
+      const depsMap = boards.reduce((acc, board) => {
+        Object.keys(board.deps).forEach(depUid => {
+          if (acc[depUid] === undefined) acc[depUid] = []
+          acc[depUid].push(board)
+        })
+        return acc
+      }, {})
+      const allDeps = this.$store.getters.sortedDepartments
+      return allDeps.reduce((acc, dep) => {
+        if (depsMap[dep.uid] && dep.name) {
+          const depGroup = {
+            uid: dep.uid,
+            title: dep.name,
+            boards: depsMap[dep.uid]
+          }
+          depGroup.boards.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
+          acc.push(depGroup)
+        }
+        return acc
+      }, [])
     }
   },
   methods: {

@@ -1,7 +1,7 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 import { darkModeKey } from '@/config.js'
-import imap from './modules/imap'
+import integrations from './modules/integrations'
 import auth from './modules/auth'
 import navigator from './modules/navigator'
 import calendar from './modules/calendar'
@@ -148,7 +148,7 @@ export default createStore({
     user,
     tasks,
     slides,
-    imap,
+    integrations,
     taskfilesandmessages,
     cardfilesandmessages,
     employees,
