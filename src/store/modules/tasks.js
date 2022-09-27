@@ -1244,7 +1244,7 @@ const mutations = {
       state.newConfig.roots = uidToOrder
         .sort(
           (a, b) => {
-            if (a.customer !== b.performer) return -1
+            if (a.customer !== a.performer && b.customer === b.performer) return -1
             return 0
           }
         )
