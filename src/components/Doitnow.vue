@@ -421,7 +421,6 @@ export default {
     },
     nextTask: function () {
       // Удаляем поппер 'Отложить', т.к из-за него ломается анимация
-      console.log('this.$refs.postponePopMenu -->', this.$refs.postponePopMenu)
       document.querySelectorAll('.popper').forEach(popper => popper.remove())
 
       if (this.slidesCopy.length && this.justRegistered) {
