@@ -85,7 +85,9 @@
           <DoitnowDaysInfo
             v-if="dateClearWords"
             :date-clear-words="dateClearWords"
-            :get-time="getTime"
+          />
+          <DoitnowCreateDateInfo
+            :create-date="createTaskDate"
           />
           <DoitnowOverdueInfo
             v-if="isTaskHaveOverdueTime"
@@ -207,6 +209,7 @@ import DoitnowPerformerInfo from '@/components/Doitnow/DoitnowPerformerInfo.vue'
 import DoitnowDaysInfo from '@/components/Doitnow/DoitnowDaysInfo.vue'
 import DoitnowOverdueInfo from '@/components/Doitnow/DoitnowOverdueInfo.vue'
 import DoitnowProjectInfo from '@/components/Doitnow/DoitnowProjectInfo.vue'
+import DoitnowCreateDateInfo from '@/components/Doitnow/DoitnowCreateDateInfo'
 
 import * as INSPECTOR from '@/store/actions/inspector.js'
 import * as TASK from '@/store/actions/tasks'
@@ -215,6 +218,7 @@ import * as FILES from '@/store/actions/taskfiles.js'
 
 export default {
   components: {
+    DoitnowCreateDateInfo,
     TaskPropsCommentEditor,
     DoitnowTaskButtonDots,
     PerformButton,
@@ -308,24 +312,6 @@ export default {
     isCustomer () {
       return this.task.uid_customer === this.user?.current_user_uid
     },
-    getTime () {
-      let time
-      if (this.isCustomer) {
-        time = new Date(this.task.date_end)
-      } else {
-        time = new Date(this.task.customer_date_end)
-      }
-      let hours = String(time.getHours())
-      const minutes = String(time.getMinutes()).padStart(2, '0')
-      if (hours === '0') {
-        hours += '0'
-      }
-      if (!this.task.customer_date_end.includes('23:59:59')) {
-        return '(' + hours + ':' + minutes + ')'
-      } else {
-        return ''
-      }
-    },
     dateClearWords () {
       let time
       if (this.isCustomer) {
@@ -336,10 +322,14 @@ export default {
       if (time === '0001-01-01T00:00:00') {
         return false
       }
-      const month = new Date(time).getMonth() + 1
-      const months = [' Января ', ' Февраля ', ' Марта ', ' Апреля ', ' Мая ', ' Июня ', ' Июля ', ' Августа ', ' Сентября ', ' Октября ', ' Ноября ', ' Декабря ']
-      const date = new Date(time).getDate() + months[month - 1] + (new Date().getFullYear() === new Date(time).getUTCFullYear() ? '' : new Date(time).getUTCFullYear())
-      return date
+      return this.getDate(time, !this.task.customer_date_end.includes('23:59:59'))
+    },
+    createTaskDate () {
+      const time = this.task.date_create
+      if (time === '0001-01-01T00:00:00' || !time) {
+        return false
+      }
+      return this.getDate(time, true)
     },
     isPropertiesMobileExpanded () {
       return this.$store.state.isPropertiesMobileExpanded
@@ -860,6 +850,20 @@ export default {
         this.showStatusModal = false
         this.$emit('nextTask')
       })
+    },
+    getDate (time, withHours) {
+      const month = new Date(time).getMonth() + 1
+      const months = [' Января ', ' Февраля ', ' Марта ', ' Апреля ', ' Мая ', ' Июня ', ' Июля ', ' Августа ', ' Сентября ', ' Октября ', ' Ноября ', ' Декабря ']
+
+      let fullDate = new Date(time).getDate() + months[month - 1] + (new Date().getFullYear() === new Date(time).getUTCFullYear() ? '' : new Date(time).getUTCFullYear())
+
+      if (withHours) {
+        const minutes = new Date(time).getMinutes().toString()
+        const fullTime = withHours ? new Date(time).getHours() + ':' + (minutes.length === 1 ? '0' + minutes : minutes) : ''
+        fullDate += `(${fullTime})`
+      }
+
+      return fullDate
     }
   }
 }

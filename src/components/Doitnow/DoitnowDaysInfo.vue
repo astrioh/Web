@@ -10,7 +10,7 @@
     <div
       class="flex"
     >
-      <span class="text-[#4C4C4D] text-[13px] font-medium">{{ dateClearWords + getTime }}</span>
+      <span class="text-[#4C4C4D] text-[13px] font-medium">{{ dateClearWords }}</span>
     </div>
   </div>
 </template>
@@ -18,10 +18,6 @@
 export default {
   props: {
     dateClearWords: {
-      type: String,
-      default: ''
-    },
-    getTime: {
       type: String,
       default: ''
     }
