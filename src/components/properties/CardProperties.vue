@@ -24,7 +24,10 @@
     :files="tooBigFiles"
     @cancel="showFileSizeLimit = false"
   />
-  <div class="relative min-h-full">
+  <div
+    v-if="selectedCard"
+    class="relative min-h-full"
+  >
     <div class="flex items-center justify-between mb-[10px]">
       <CardOptions
         :date-create="selectedCard?.date_create"
@@ -177,6 +180,16 @@
         @createCardFile="createCardFile"
         @onPaste="onPasteEvent"
       />
+    </div>
+  </div>
+  <div v-else>
+    <div class="flex justify-end items-center">
+      <PropsButtonClose @click="closeProperties" />
+    </div>
+    <div
+      class="mt-[25px] w-full font-roboto font-[18px] leading-[21px] text-[#424242] overflow-hidden text-ellipsis whitespace-nowrap"
+    >
+      Карточка не найдена
     </div>
   </div>
 </template>
