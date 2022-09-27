@@ -153,7 +153,7 @@ export default {
       return this.$store.state.user.user
     },
     isOrganizationIntegrated () {
-      return this.$store.state.integrations.isOrganizationIntegratedYandex
+      return this.$store.state.integrations.integrations.yandex.isIntegrated
     }
   },
   mounted () {

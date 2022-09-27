@@ -10,8 +10,7 @@ const state = {
       isIntegrated: false,
       msgs: []
     }
-  },
-  isOrganizationIntegratedYandex: false
+  }
 }
 
 const actions = {
@@ -63,15 +62,15 @@ const actions = {
 const mutations = {
   [YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL]: (state, data) => {
     state.integrations.yandex.msgs = data
-    state.integrations.isOrganizationIntegratedYandex = true
+    state.integrations.yandex.isIntegrated = true
   },
   [YANDEX.GET_ORGANIZATION_INTEGRATION]: (state, data) => {
     if (data.length) {
-      state.isOrganizationIntegratedYandex = true
+      state.integrations.yandex.isIntegrated = true
     }
   },
   [YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION]: (state) => {
-    state.isOrganizationIntegratedYandex = false
+    state.integrations.yandex.isIntegrated = false
   }
 }
 
