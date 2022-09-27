@@ -35,15 +35,9 @@ export default {
     NavBar,
     ListBlocItem
   },
-  data () {
-    return {
-      integrations: [
-        {
-          id: 1,
-          name: 'Яндекс.Почта',
-          path: 'yandex'
-        }
-      ]
+  computed: {
+    integrations () {
+      return this.$store.state.integrations.integrations
     }
   }
 }

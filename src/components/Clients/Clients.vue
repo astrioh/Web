@@ -155,7 +155,7 @@ export default {
       }
     },
     showClientProperties (client) {
-      this.$store.dispatch(IMAP.IMAP_GET_USER_MSGS)
+      this.$store.dispatch(IMAP.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL)
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
