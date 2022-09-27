@@ -840,9 +840,11 @@ export default {
       let fullDate = new Date(time).getDate() + months[month - 1] + (new Date().getFullYear() === new Date(time).getUTCFullYear() ? '' : new Date(time).getUTCFullYear())
 
       if (withHours) {
-        const minutes = new Date(time).getMinutes().toString()
-        const fullTime = withHours ? new Date(time).getHours() + ':' + (minutes.length === 1 ? '0' + minutes : minutes) : ''
-        fullDate += `(${fullTime})`
+        const date = new Date(time)
+        const hours = String(date.getHours()).padStart(2, '0')
+        const minutes = String(date.getMinutes()).padStart(2, '0')
+
+        fullDate += `(${hours}:${minutes})`
       }
 
       return fullDate
