@@ -2,7 +2,7 @@
   <div class="flex flex-row mt-3 justify-between">
     <span class="bg-[#f4f5f7] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none">История изменений</span>
     <div class="flex justify-end">
-      <router-link :to="'/reglaments/' + $route.params.id">
+      <router-link :to="'/reglaments/' + $route.params.id + '/edit'">
         <ReglamentSmallButton
           class="flex items-center px-[10px] py-[5px]"
         >

@@ -6,7 +6,6 @@ import router from '@/router'
 export function createReglament (obj) {
   store.commit(NAVIGATOR.NAVIGATOR_PUSH_REGLAMENT, obj.obj)
   store.commit(REGLAMENTS.CHANGE_REGLAMENT, obj.obj)
-  console.log(router)
 }
 
 export function deleteReglament (obj) {

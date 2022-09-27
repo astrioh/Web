@@ -1237,10 +1237,17 @@ const mutations = {
       state.newtasks[task.uid].info = task
       const uidToOrder = state.newConfig.roots.map((taskUid) => ({
         uid: taskUid,
-        order: state.newtasks[taskUid].info.order_new
+        order: state.newtasks[taskUid].info.order_new,
+        customer: state.newtasks[taskUid].info.email_customer,
+        performer: state.newtasks[taskUid].info.email_performer
       }))
       state.newConfig.roots = uidToOrder
-        .sort((a, b) => a.order - b.order)
+        .sort(
+          (a, b) => {
+            if (a.customer !== b.performer) return -1
+            return 0
+          }
+        )
         .map((x) => x.uid)
     }
     if (state.selectedTask?.uid === task.uid) {

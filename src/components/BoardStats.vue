@@ -35,22 +35,17 @@
       </template>
     </table>
   </div>
-  <div class="bg-white rounded-xl min-h-[75%] p-[20px]">
-    <table>
-      <tr>
-        <th>Месяц</th>
-        <th>Заявок в успехе</th>
-        <th>Заявок в отказе</th>
-      </tr>
-      <BoardStatsSkeleton v-if="!isLoaded" />
-      <BoardStatsMonthItem />
-    </table>
+  <div class="bg-white rounded-xl min-h-[75%] p-[20px] mt-5">
+    <BoardStatsMonth
+      :is-loaded="isLoaded"
+      :board-cards="boardCards"
+    />
   </div>
 </template>
 
 <script>
 import BoardStatsItem from '@/components/Board/BoardStatsItem.vue'
-import BoardStatsMonthItem from '@/components/Board/BoardStatsMonthItem.vue'
+import BoardStatsMonth from '@/components/Board/BoardStatsMonth.vue'
 import NavBar from '@/components/Navbar/NavBar'
 import BoardSmallButton from '@/components/Board/BoardSmallButton.vue'
 import * as CARD from '@/store/actions/cards'
@@ -63,7 +58,7 @@ export default {
     NavBar,
     BoardStatsItem,
     BoardSmallButton,
-    BoardStatsMonthItem
+    BoardStatsMonth
   },
   data () {
     return {

@@ -250,20 +250,13 @@ export default {
       return userAdmin && this.selectedEmployeeType !== userType && this.selectedEmployeeType !== 1 && !this.isSelectedEmployeeCurrentUser
     },
     allDepartments () {
-      const deps = Object.values(this.$store.state.departments.deps)
-      deps.sort((item1, item2) => {
-        // сначала по порядку
-        if (item1.order > item2.order) return 1
-        if (item1.order < item2.order) return -1
-        // если одинаковый, то по имени
-        if (item1.name > item2.name) return 1
-        if (item1.name < item2.name) return -1
-        return 0
-      })
-      deps.unshift({
-        uid: '00000000-0000-0000-0000-000000000000',
-        name: 'Вне отдела'
-      })
+      const deps = [
+        {
+          uid: '00000000-0000-0000-0000-000000000000',
+          name: 'Вне отдела'
+        },
+        ...this.$store.getters.sortedDepartments
+      ]
       return deps
     },
     openedReglaments () {

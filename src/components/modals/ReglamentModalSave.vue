@@ -103,7 +103,11 @@ export default {
       const day = calendarDate.getDate()
       const month = calendarDate.toLocaleString('default', { month: 'short' })
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
-      return day + ' ' + month + ', ' + weekday
+      const hours = String(calendarDate.getHours()).padStart(2, '0')
+      const minutes = String(calendarDate.getMinutes()).padStart(2, '0')
+      const seconds = String(calendarDate.getSeconds()).padStart(2, '0')
+
+      return `${day} ${month}, ${weekday}, ${hours}:${minutes}:${seconds}`
     },
     onSave () {
       if (this.reglamentComment.trim()) {

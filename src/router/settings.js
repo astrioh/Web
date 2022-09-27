@@ -20,6 +20,16 @@ export default [
         component: () => import('@/components/Settings/Integrations.vue')
       },
       {
+        path: ':integrations_name',
+        children: [
+          {
+            path: 'yandex',
+            name: 'yandex',
+            component: () => import('@/components/Integrations/IntegrationsYandex.vue')
+          }
+        ]
+      },
+      {
         path: 'tarif',
         name: 'tarif',
         component: () => import('@/components/Settings/Tarif.vue')

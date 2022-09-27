@@ -254,7 +254,9 @@ export default {
         this.$emit('setLink', [fileURL, true])
         this.isAudioLoaded = true
         this.audioSrc = fileURL
-        document.getElementById('audio_' + uid).setAttribute('download', filename)
+        if (document.getElementById('audio_' + uid)) {
+          document.getElementById('audio_' + uid).setAttribute('download', filename)
+        }
       })
     },
     getDocUrl (uid, extension, filename) {
