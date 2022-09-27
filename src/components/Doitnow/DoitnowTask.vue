@@ -57,12 +57,6 @@
             @keydown.enter="updateTask($event, task)"
           />
         </div>
-        <DoitnowTaskButtonDots
-          :date-create="selectedTask?.date_create"
-          :only-files="showOnlyFiles"
-          @copyUrl="copyUrl(task)"
-          @toggleFiles="showOnlyFiles = !showOnlyFiles"
-        />
       </div>
       <div class="flex text-sm text-left justify-between w-[400px]">
         <div class="flex flex-col font-normal w-[720px]">
@@ -184,7 +178,6 @@
 </template>
 
 <script>
-import { copyText } from 'vue3-clipboard'
 import { uuidv4 } from '@/helpers/functions'
 import { TASK_STATUS } from '@/constants'
 import contenteditable from 'vue-contenteditable'
@@ -196,7 +189,6 @@ import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
 import SlideBody from '@/components/Doitnow/SlideBody.vue'
-import DoitnowTaskButtonDots from '@/components/Doitnow/DoitnowTaskButtonDots.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
 import DoitnowChatMessages from '@/components/Doitnow/DoitnowChatMessages.vue'
 import DoitnowPostponeButton from '@/components/Doitnow/DoitnowPostponeButton.vue'
@@ -220,7 +212,6 @@ export default {
   components: {
     DoitnowCreateDateInfo,
     TaskPropsCommentEditor,
-    DoitnowTaskButtonDots,
     PerformButton,
     DoitnowCustomerInfo,
     DoitnowPerformerInfo,
@@ -548,15 +539,6 @@ export default {
     },
     _linkify (text) {
       return text.replace(/(lt?:\/\/[^\s]+)/g, '<a href="$1">$1</a>')
-    },
-    copyUrl (task) {
-      copyText(`${window.location.origin}/task/${task.uid}`, undefined, (error, event) => {
-        if (error) {
-          console.log(error)
-        } else {
-          console.log(event)
-        }
-      })
     },
     removeTask (uid) {
       if (this.isPropertiesMobileExpanded) {
