@@ -1,10 +1,4 @@
 <template>
-  <IntegrationsModalBox
-    v-if="showIntegration"
-    title="Интеграция с Яндекс.Почта"
-    @cancel="showIntegration = false"
-    @save="showIntegration = false"
-  />
   <NavBar
     class="pt-[8px]"
     title="Интеграции"
@@ -34,19 +28,15 @@
 </template>
 <script>
 import NavBar from '@/components/Navbar/NavBar'
-import IntegrationsModalBox from '../Integrations/IntegrationsModalBox.vue'
-import { setLocalStorageItem } from '@/store/helpers/functions'
 import ListBlocItem from '../Common/ListBlocItem.vue'
 
 export default {
   components: {
     NavBar,
-    IntegrationsModalBox,
     ListBlocItem
   },
   data () {
     return {
-      showIntegration: false,
       integrations: [
         {
           id: 1,
@@ -55,18 +45,6 @@ export default {
         }
       ]
     }
-  },
-  computed: {
-    isGridView () {
-      setLocalStorageItem('isGridView', true)
-      return this.$store.state.isGridView
-    },
-    isPropertiesMobileExpanded () {
-      return this.$store.state.isPropertiesMobileExpanded
-    }
-  },
-  created () {
-    setLocalStorageItem('isGridView', true)
   }
 }
 </script>
