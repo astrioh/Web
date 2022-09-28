@@ -35,7 +35,7 @@
       </template>
     </table>
   </div>
-  <div class="bg-white rounded-xl min-h-[75%] p-[20px] mt-5">
+  <div class="bg-white rounded-xl min-h-[75%] p-[20px] mt-5 mb-[25px]">
     <BoardStatsMonth
       :is-loaded="isLoaded"
       :board-cards="boardCards"
