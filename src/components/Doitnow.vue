@@ -44,22 +44,24 @@
         <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
         <div
           v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
-          class="flex mb-5 justify-end z-[1]"
+          class="flex mb-5 justify-end items-center self-start z-[1]"
         >
+          <button
+            class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[120px] h-[40px] bg-white justify-center text-[#424242]"
+            @click="!postponeDate ? postponeTask(firstTask.reminder, firstTask.reminder, timeArr[postponeIndex]) : changeSlideReminder(postponeDate)"
+          >
+            Отложить
+          </button>
           <PopMenu>
-            <button
-              class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
-            >
-              <span class="pr-2">Отложить</span>
-            </button>
+            <span class="inline-block cursor-pointer w-[100px] text-center">на {{ !postponeDate ? timeArr[postponeIndex].name : transformPostponeDate }}</span>
             <template #menu>
               <div
                 class="h-[155px] overflow-y-auto w-[220px] scroll-style"
               >
                 <PopMenuItem
-                  v-for="item in timeArr"
+                  v-for="(item, index) in timeArr"
                   :key="item.index"
-                  @click="postponeTask(firstTask.reminder, firstTask.reminder, item)"
+                  @click="changePostponeIndex(index)"
                 >
                   <div class="flex justify-between w-full items-center">
                     <span
@@ -78,7 +80,7 @@
                     :date-begin="new Date()"
                     :date-end="new Date()"
                     :date-text="'Сегодня'"
-                    @changeDates="changeSlideReminder"
+                    @changeDates="setPostponeDate"
                   />
                 </PopMenuItem>
               </div>
@@ -160,7 +162,9 @@ export default {
       notifiesCopy: [],
       tasksLoaded: false,
       childrens: [],
-      isTaskMessagesLoading: false
+      isTaskMessagesLoading: false,
+      postponeIndex: 0,
+      postponeDate: ''
     }
   },
   computed: {
@@ -253,10 +257,18 @@ export default {
     showLimitMessage () {
       const tarif = this.$store.state.user.user.tarif
       return (tarif !== 'alpha' && tarif !== 'trial') || this.$store.getters.isLicenseExpired
+    },
+    transformPostponeDate () {
+      const date = new Date(this.postponeDate)
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      return `${day}.${month}.${date.getFullYear()}`
     }
   },
   watch: {
     firstTask (newtask) {
+      this.postponeDate = ''
+      this.postponeIndex = 0
       if (newtask && newtask.uid && !this.isNotify) {
         this.isTaskMessagesLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
@@ -400,7 +412,10 @@ export default {
       this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
       this.nextTask()
     },
-    changeSlideReminder (dateBegin, dateEnd) {
+    setPostponeDate (dateBegin, dateEnd) {
+      this.postponeDate = dateEnd
+    },
+    changeSlideReminder (dateEnd) {
       const slide = {
         name: this.firstTask.name,
         visible: this.firstTask.visible,
@@ -457,6 +472,10 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    changePostponeIndex (index) {
+      this.postponeDate = ''
+      this.postponeIndex = index
     }
   }
 }

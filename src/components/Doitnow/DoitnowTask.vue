@@ -138,9 +138,13 @@
         v-if="shouldShowAcceptButton && selectedTask.status !== 5"
         :task="task"
         :user="user"
+        :postpone-date="postponeDate"
+        :postpone-index="postponeIndex"
         @postponeTask="postponeTask"
         @changeDateEditingStatus="changeDateEditingStatus"
         @changeDates="onChangeDates"
+        @changePostponeIndex="changePostponeIndex"
+        @changePostponeDate="changePostponeDate"
       />
       <DoitnowAcceptButton
         v-if="shouldShowAcceptButton"
@@ -284,7 +288,12 @@ export default {
       isloading: false,
       showOnlyFiles: false,
       dateIsNotEditingNow: false,
-      TASK_STATUS
+      TASK_STATUS,
+      postponeIndex: 0,
+      postponeDate: {
+        start: '',
+        end: ''
+      }
     }
   },
   computed: {
@@ -848,6 +857,17 @@ export default {
       }
 
       return fullDate
+    },
+    changePostponeIndex (index) {
+      this.postponeDate = {
+        start: '',
+        end: ''
+      }
+      this.postponeIndex = index
+    },
+    changePostponeDate (dateBegin, dateEnd) {
+      this.postponeDate.start = dateBegin
+      this.postponeDate.end = dateEnd
     }
   }
 }
