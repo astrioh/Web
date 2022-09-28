@@ -80,6 +80,8 @@
     >
       <div class="flex items-center justify-between w-[300px]">
         <NavBarSearch
+          :is-full="true"
+          :is-loading="clientsStatus === 'loading'"
           @search="searchClients"
           @eraseSearch="requestClients"
         />
@@ -110,7 +112,7 @@
           :key="index"
         >
           <div
-            class="flex items-center text-[#4C4C4D] font-[400] text-[13px] leading-[14px] px-[6px] py-[4px] hover:bg-[#F4F5F7] rounded-[6px] cursor-pointer"
+            class="flex items-center text-[#4C4C4D] font-[400] text-[13px] leading-[14px] px-[6px] py-[9px] hover:bg-[#F4F5F7] rounded-[6px] cursor-pointer"
             @click="$emit('changeClient', [client.uid, client.name]), close()"
           >
             <span class="truncate">{{ client.name }}</span>
