@@ -40,50 +40,37 @@
         @cancel="showProjectsLimit = false"
         @ok="showProjectsLimit = false"
       />
-      <div
-        v-for="(value, index) in items"
-        :key="index"
-      >
-        <div
-          class="flex items-center w-full"
-          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
-        >
-          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-            {{ value.dep }}
-          </p>
-        </div>
-        <div
-          class="grid gap-2 mt-3 grid-cols-1"
-          :class="{
-            'md:grid-cols-2 lg:grid-cols-4': isGridView,
-            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-          }"
-        >
-          <template
-            v-for="project in value.items"
-            :key="project.uid"
-          >
-            <router-link
-              :to="'/project/' + project.uid"
-            >
-              <ProjectBlocItem
-                class="text-[#4C4C4D]"
-                :project="project"
-              />
-            </router-link>
-          </template>
-          <InputValue
-            v-if="showAddProject && index === 0"
-            @save="onAddNewProject"
-            @cancel="showAddProject = false"
-          />
-          <ListBlocAdd
-            v-else-if="index == 0"
-            @click.stop="clickAddProject"
-          />
-        </div>
+      <div class="flex flex-col gap-[15px]">
+        <ProjectChildrenGroup
+          v-if="favoriteProjects.length"
+          title="Избранные доски"
+          :projects="favoriteProjects"
+        />
+        <ProjectChildrenGroup
+          v-for="dep in depProjects"
+          :key="dep.uid"
+          :title="dep.title"
+          :projects="dep.projects"
+        />
+        <ProjectChildrenGroup
+          title="Мои проекты"
+          :projects="sortedPrivateProjects"
+        />
+        <InputValue
+          v-if="showAddProject && index === 0"
+          @save="onAddNewProject"
+          @cancel="showAddProject = false"
+        />
+        <ListBlocAdd
+          v-else-if="index == 0"
+          @click.stop="clickAddProject"
+        />
+        <ProjectChildrenGroup
+          v-if="sortedCommonProjects.length"
+          title="Общие проекты"
+          :projects="sortedCommonProjects"
+        />
       </div>
-
       <EmptyTasksListPics v-if="isEmpty" />
     </div>
     <div
@@ -124,7 +111,6 @@
 import Icon from '@/components/Icon.vue'
 import ProjectModalBoxProjectsLimit from '@/components/ProjectModalBoxProjectsLimit.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
-import ProjectBlocItem from '@/components/Projects/ProjectBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import EmptyTasksListPics from '@/components/TasksList/EmptyTasksListPics'
 import NavBar from '@/components/Navbar/NavBar.vue'
@@ -138,17 +124,19 @@ import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import InputValue from '@/components/InputValue'
 import { uuidv4 } from '@/helpers/functions'
 import OnBoardingButton from './onBoarding/onBoardingButton.vue'
+import { mapGetters } from 'vuex'
+import ProjectChildrenGroup from './Projects/ProjectChildrenGroup.vue'
 
 export default {
   components: {
     InputValue,
     Icon,
-    ProjectBlocItem,
     ListBlocAdd,
     ProjectModalBoxProjectsLimit,
     EmptyTasksListPics,
     NavBar,
-    OnBoardingButton
+    OnBoardingButton,
+    ProjectChildrenGroup
   },
   data () {
     return {
@@ -159,6 +147,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'favoriteProjects',
+      'privateProjects',
+      'commonProjects',
+      'departmentsProjects'
+    ]),
     items () {
       return this.$store.getters.sortedNavigator.new_private_projects
     },
@@ -174,6 +168,45 @@ export default {
     },
     displayModal () {
       return !this.$store.state.onboarding.visitedModals?.includes('project') && this.$store.state.onboarding.showModals
+    },
+    sortedPrivateProjects () {
+      return this.privateProjects.filter(proj => this.depProjectsMap[proj.uid] === undefined)
+    },
+    sortedCommonProjects () {
+      return this.commonProjects.filter(proj => this.depProjectsMap[proj.uid] === undefined)
+    },
+    depProjectsMap () {
+      return this.depProjects.reduce((access, dep) => {
+        dep.projects.forEach(proj => {
+          access[proj.uid] = dep
+        })
+        return access
+      }, {})
+    },
+    depProjects () {
+      const projects = Object.values(this.$store.state.projects.projects)
+      const departmentsMap = projects.reduce((access, project) => {
+        project.deps.forEach(depUid => {
+          if (access[depUid] === undefined) access[depUid] = []
+          access[depUid].push(project)
+        })
+        return access
+      }, {})
+      const allDeps = this.$store.getters.sortedDepartments
+      return allDeps.reduce((access, dep) => {
+        if (departmentsMap[dep.uid] && dep.name) {
+          const depGroup = {
+            uid: dep.uid,
+            title: dep.name,
+            projects: departmentsMap[dep.uid]
+          }
+          depGroup.projects.sort((project1, project2) => {
+            return project1.name.localeCompare(project2.name)
+          })
+          access.push(depGroup)
+        }
+        return access
+      }, [])
     }
   },
   created () {

@@ -109,6 +109,7 @@ const actions = {
           if (resp.data.emps.items) {
             for (const employee of resp.data.emps.items) {
               employee.parentID = resp.data.emps.uid
+              employee.email = employee.email.toLowerCase()
               commit(PUSH_EMPLOYEE, employee)
               commit(PUSH_EMPLOYEE_BY_EMAIL, employee)
             }

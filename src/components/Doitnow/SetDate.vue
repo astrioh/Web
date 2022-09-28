@@ -25,6 +25,7 @@
             <button
               class="btn-save-popover"
               @click="onSave"
+              @click.stop="close"
             >
               Сохранить
             </button>

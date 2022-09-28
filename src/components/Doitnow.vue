@@ -4,20 +4,41 @@
       class="pt-[8px]"
       title="Очередь"
     />
+    <DoitnowSkeleton
+      v-if="isLoading"
+      class="ml-0 pt-[15px] z-[2] grow"
+    />
+    <DoitnowOnboarding
+      v-else-if="displayModal"
+      @okToModal="okToModal"
+    />
+    <DoitnowLimit
+      v-else-if="showLimitMessage"
+    />
     <transition
-      v-if="!isLoading && !showLimitMessage && tasksCount"
+      v-else-if="tasksCount"
       name="slide-in-fade-out"
     >
       <div
-        v-if="!isLoading && !showLimitMessage"
         :key="firstTask.uid"
         class="flex justify-between gap-[20px]"
       >
-        <div
-          class="ml-0 grow"
-        >
+        <div class="grow overflow-hidden">
+          <DoitnowSlide
+            v-if="isSlide"
+            :name="firstTask.name"
+            :reminder="firstTask.reminder"
+            @nextTask="nextTask"
+          />
+          <DoitnowReglament
+            v-else-if="isNotify"
+            :name="firstTask.name"
+            :uid="firstTask.uid"
+            :date="firstTask.lastDate"
+            :last-change="firstTask.lastComment"
+          />
           <DoitnowTask
-            v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
+            v-else
             :key="firstTask.uid"
             :task="firstTask"
             :childrens="childrens"
@@ -35,31 +56,27 @@
             @changeValue="changeValue"
             @readTask="readTask"
           />
-          <DoitnowNotificationTasks
-            v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
-            :name="firstTask.name"
-            :uid="firstTask.uid"
-          />
         </div>
-        <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
         <div
-          v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
-          class="flex mb-5 justify-end z-[1]"
+          v-if="isNotify || isSlide"
+          class="flex-none flex mb-5 justify-end items-center self-start z-[1]"
         >
+          <button
+            class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[120px] h-[40px] bg-white justify-center text-[#424242]"
+            @click="!postponeDate ? postponeTask(firstTask.reminder, firstTask.reminder, timeArr[postponeIndex]) : changeSlideReminder(postponeDate)"
+          >
+            Отложить
+          </button>
           <PopMenu>
-            <button
-              class="py-3 px-4 rounded-lg mr-5 hover:bg-gray-300 text-sm bg-opacity-70 font-medium flex w-[221px] h-[40px] items-center bg-white justify-center text-[#424242]"
-            >
-              <span class="pr-2">Отложить</span>
-            </button>
+            <span class="inline-block cursor-pointer w-[100px] text-center">на {{ !postponeDate ? timeArr[postponeIndex].name : transformPostponeDate }}</span>
             <template #menu>
               <div
                 class="h-[155px] overflow-y-auto w-[220px] scroll-style"
               >
                 <PopMenuItem
-                  v-for="item in timeArr"
+                  v-for="(item, index) in timeArr"
                   :key="item.index"
-                  @click="postponeTask(firstTask.reminder, firstTask.reminder, item)"
+                  @click="changePostponeIndex(index)"
                 >
                   <div class="flex justify-between w-full items-center">
                     <span
@@ -78,7 +95,7 @@
                     :date-begin="new Date()"
                     :date-end="new Date()"
                     :date-text="'Сегодня'"
-                    @changeDates="changeSlideReminder"
+                    @changeDates="setPostponeDate"
                   />
                 </PopMenuItem>
               </div>
@@ -87,25 +104,10 @@
         </div>
       </div>
     </transition>
-    <DoitnowLimit
-      v-if="showLimitMessage && !displayModal && !isLoading"
-    />
-    <DoitnowSkeleton
-      v-if="isLoading"
-      class="ml-0 pt-[15px] z-[2] grow"
-    />
     <DoitnowEmpty
-      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage) && !displayModal"
+      v-else
       class="ml-0 pt-[15px] z-[2] grow"
     />
-    <div
-      v-if="displayModal && !isLoading"
-      class="max-w-xl mx-auto flex-center flex-col items-center justify-center"
-    >
-      <DoitnowOnboarding
-        @okToModal="okToModal"
-      />
-    </div>
   </div>
 </template>
 
@@ -115,6 +117,7 @@ import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 import * as SLIDES from '@/store/actions/slides.js'
 
+import DoitnowSlide from '@/components/Doitnow/DoitnowSlide.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
@@ -127,17 +130,18 @@ import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { TASK_STATUS } from '@/constants'
 
-import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
+import DoitnowReglament from './Doitnow/DoitnowReglament.vue'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit'
 import DoitnowOnboarding from './Doitnow/DoitnowOnboarding.vue'
 
 export default {
   components: {
+    DoitnowSlide,
     DoitnowLimit,
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
-    DoitnowNotificationTasks,
+    DoitnowReglament,
     NavBar,
     DoitnowOnboarding,
     PopMenu,
@@ -160,7 +164,9 @@ export default {
       notifiesCopy: [],
       tasksLoaded: false,
       childrens: [],
-      isTaskMessagesLoading: false
+      isTaskMessagesLoading: false,
+      postponeIndex: 0,
+      postponeDate: ''
     }
   },
   computed: {
@@ -244,8 +250,11 @@ export default {
       this.setNotifiesCopy(this.$store.state.notificationtasks.notificationtasks)
       return this.$store.state.notificationtasks.notificationtasks
     },
+    isSlide () {
+      return this.firstTask?.mode === 'slide'
+    },
     isNotify () {
-      return !!this.firstTask.notify
+      return !!this.firstTask?.notify
     },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
@@ -253,10 +262,18 @@ export default {
     showLimitMessage () {
       const tarif = this.$store.state.user.user.tarif
       return (tarif !== 'alpha' && tarif !== 'trial') || this.$store.getters.isLicenseExpired
+    },
+    transformPostponeDate () {
+      const date = new Date(this.postponeDate)
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      return `${day}.${month}.${date.getFullYear()}`
     }
   },
   watch: {
     firstTask (newtask) {
+      this.postponeDate = ''
+      this.postponeIndex = 0
       if (newtask && newtask.uid && !this.isNotify) {
         this.isTaskMessagesLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
@@ -400,7 +417,10 @@ export default {
       this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
       this.nextTask()
     },
-    changeSlideReminder (dateBegin, dateEnd) {
+    setPostponeDate (dateBegin, dateEnd) {
+      this.postponeDate = dateEnd
+    },
+    changeSlideReminder (dateEnd) {
       const slide = {
         name: this.firstTask.name,
         visible: this.firstTask.visible,
@@ -457,6 +477,10 @@ export default {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
+    },
+    changePostponeIndex (index) {
+      this.postponeDate = ''
+      this.postponeIndex = index
     }
   }
 }

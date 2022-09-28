@@ -1,16 +1,18 @@
 <template>
   <ModalBox
     :title="title"
-    ok="Сохранить"
-    @ok="onSave"
     @cancel="onCancel"
   >
-    <div class="flex flex-col w-full">
-      <div class="mb-3">
+    <form
+      class="flex flex-col w-full gap-[12px]"
+      @submit.prevent="onSave"
+    >
+      <p>
         <span class="mb-1">Имя</span>
         <input
           ref="inputValue"
           v-model="name"
+          name="name"
           type="text"
           :maxLength="maxLengthInput"
           class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
@@ -20,12 +22,13 @@
           v-if="!validationInputs.name"
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
-      </div>
-      <div class="mb-3">
+      </p>
+      <p>
         <span class="mb-1">Телефон</span>
         <input
           v-model="phone"
           type="text"
+          name="phone"
           :maxLength="maxLengthInput"
           class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
           :class="onValidateField('phone')"
@@ -34,12 +37,13 @@
           v-if="!validationInputs.phone"
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
-      </div>
-      <div class="mb-3">
+      </p>
+      <p>
         <span class="mb-1">Email</span>
         <input
           v-model="email"
           type="text"
+          name="email"
           class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto border"
           :class="onValidateField('email')"
         >
@@ -47,14 +51,22 @@
           v-if="!validationInputs.email"
           class="text-[11px] text-[#dc2626]"
         >Обязательное для заполнения</span>
-      </div>
-      <span class="mb-1">Комментарий</span>
+      </p>
+      <p>
+        <span class="mb-1">Комментарий</span>
+        <input
+          v-model="comment"
+          name="comment"
+          type="text"
+          class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        >
+      </p>
       <input
-        v-model="comment"
-        type="text"
-        class="bg-[#f4f5f7]/50 rounded-[6px] focus:ring-0 border border-[#4c4c4d] focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
+        value="Сохранить"
+        type="submit"
+        class="focus:ring min-w-[90px] focus:outline-none inline-flex cursor-pointer whitespace-nowrap justify-center items-center duration-150 px-[12px] py-[10px] rounded-md bg-[#ff9123] text-white text-[13px] leading-[15px] font-medium font-roboto disabled:opacity-70 disabled:cursor-default"
       >
-    </div>
+    </form>
   </ModalBox>
 </template>
 

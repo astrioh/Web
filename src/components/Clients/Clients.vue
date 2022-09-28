@@ -175,8 +175,7 @@ export default {
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false
-      if (Number(this.$route.query.page) === this.paging.pages) await this.requestClients()
-      await this.$router.push({ path: '/clients', query: { page: this.paging.pages } })
+      if (Number(this.$route.query.page) === 1) await this.requestClients()
     },
     changePage () {
       this.$router.push({ path: '/clients', query: { page: this.currentPage } })
@@ -222,14 +221,6 @@ tr:not(:first-child) {
 
 tr:not(:first-child) td {
   @apply border-b-2 border-[#e6e6e6] pl-[14px] font-normal text-[13px] max-w-[400px]
-}
-
-tr:not(:first-child) td:first-child {
-  @apply rounded-l-[6px]
-}
-
-tr:not(:first-child) td:last-child {
-  @apply rounded-r-[6px]
 }
 
 .content {

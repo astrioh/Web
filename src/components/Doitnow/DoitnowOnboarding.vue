@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col"
+    class="flex flex-col max-w-xl mx-auto"
   >
     <img
       class="mx-auto mt-10"
@@ -24,6 +24,7 @@
       </li>
     </ul>
     <OnBoardingButton
+      class="mb-[30px]"
       @okToModal="okToModal"
     />
   </div>

@@ -11,6 +11,9 @@ export function createProject (obj) {
 export function removeProject (obj) {
   if (router.currentRoute.value.fullPath === `/project/${obj.uid}`) {
     router.push('/doitnow')
+    if (store.state.navigator.submenu.status === true) {
+      store.state.navigator.submenu.status = false
+    }
   }
   store.commit(NAVIGATOR.NAVIGATOR_REMOVE_PROJECT, { uid_parent: '', uid: obj.uid })
 }

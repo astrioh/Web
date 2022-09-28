@@ -191,6 +191,7 @@
         :comment="selectedTask?.comment ?? ''"
         :can-edit="canEditComment"
         @changeComment="onChangeComment"
+        @onPasteFile="onPasteEvent"
       />
       <!-- Show all -->
       <!-- Chat messages -->
@@ -711,7 +712,9 @@ export default {
       }
       this.$store.dispatch(TASK.CHANGE_TASK_REDELEGATE, data).then(
         resp => {
-          this.$store.dispatch(TASK.ADD_SUBTASK, resp.data)
+          this.$store.dispatch(TASK.ADD_SUBTASK, resp.data).then((response) => {
+            this.gotoParentNode(resp.data.uid)
+          })
         }
       )
     },

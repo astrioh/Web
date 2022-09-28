@@ -14,7 +14,7 @@
     @close-window="changeAvatar = false"
     @nextTask="nextTask"
   />
-  <div class="flex items-center justify-center text-center flex-col">
+  <div class="flex items-center justify-center text-center flex-col pt-[45px] pb-6 px-5 w-full bg-white rounded-lg">
     <!-- welcome -->
     <div
       v-if="name === 'welcome'"

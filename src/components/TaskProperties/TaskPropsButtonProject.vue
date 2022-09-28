@@ -95,7 +95,7 @@
       </div>
     </template>
     <div
-      v-if="selectedProject !== '00000000-0000-0000-0000-000000000000'"
+      v-if="isSelectedPrivateProject"
       class="mt-3 tags-custom-project dark:bg-gray-800 dark:text-gray-100 project-hover-close"
       :class="{ 'cursor-pointer': canEdit, 'cursor-default': !canEdit }"
     >
@@ -201,6 +201,9 @@ export default {
       'commonProjects',
       'departmentsProjects'
     ]),
+    isSelectedPrivateProject () {
+      return this.selectedProject !== '00000000-0000-0000-0000-000000000000' && this.projects[this.selectedProject]?.name
+    },
     projects () {
       return this.$store.state.projects.projects
     },

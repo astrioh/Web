@@ -32,6 +32,9 @@ export function removeBoard (obj) {
   // Переносим на роут doitnow, если находились в доске, когда нас удалили из доступа к ней
   if (router.currentRoute.value.fullPath === `/board/${obj.uid}`) {
     router.push('/doitnow')
+    if (store.state.navigator.submenu.status === true) {
+      store.state.navigator.submenu.status = false
+    }
   }
 }
 

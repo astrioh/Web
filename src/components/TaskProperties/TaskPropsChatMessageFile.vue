@@ -169,7 +169,7 @@
             @setLink="setLink"
           />
 
-          <span class="max-w-[180px] truncate">{{ fileName }}</span>
+          <span class="max-w-[180px] truncate block overflow-hidden text-ellipsis whitespace-nowrap">{{ fileName }}</span>
           <div
             v-if="time && size"
             class="group flex justify-between w-full text-[#7E7E80] dark:text-gray-300 "

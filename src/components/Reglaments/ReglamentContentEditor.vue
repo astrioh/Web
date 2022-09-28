@@ -47,13 +47,6 @@
                 Назад
               </ReglamentSmallButton>
             </router-link>
-            <router-link :to="'/reglaments/' + $route.params.id + '/history'">
-              <ReglamentSmallButton
-                class="flex items-center px-[10px] py-[5px]"
-              >
-                {{ lastCommentDate }}
-              </ReglamentSmallButton>
-            </router-link>
             <ReglamentSmallButton
               class="flex items-center px-[10px] py-[5px]"
               :disabled="disabledButtons"
@@ -381,13 +374,6 @@ export default {
     }
   },
   computed: {
-    lastCommentDate () {
-      if (this.$store.state.reglaments.lastCommentDate === '') {
-        return 'История изменений'
-      } else {
-        return 'Дата последнего изменения: ' + this.$store.state.reglaments.lastCommentDate
-      }
-    },
     allDepartments () {
       const deps = this.$store.getters.sortedDepartments
       if (this.showAllReglaments) return deps
@@ -486,13 +472,6 @@ export default {
     this.currName = this.reglamentTitle
     this.currEditors = [...this.reglamentEditors]
     this.currDep = this.reglamentDep
-
-    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
-      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1]?.comment_date
-      if (res.data.length === 0) {
-        this.$store.state.reglaments.lastCommentDate = ''
-      }
-    })
   },
   methods: {
     onDeleteQuestion (uid) {
