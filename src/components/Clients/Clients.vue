@@ -77,9 +77,7 @@
 <script>
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
-import * as YANDEX from '@/store/actions/yandexInt.js'
 
-import { uuidv4 } from '@/helpers/functions'
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
 import ClientsSkeleton from '@/components/Clients/ClientsSkeleton.vue'
@@ -157,28 +155,6 @@ export default {
     showClientProperties (client) {
       console.log(client)
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
-        .then(() => {
-          this.$store.dispatch(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL, {
-            ya_login: 'cesarhalyrez',
-            ya_password: 'djincaxfuizwlcqe',
-            organization_email: this.user.owner_email
-          })
-            .then((resp) => {
-              console.log(resp)
-              for (let i = 0; i < resp.data.length; i++) {
-                const msg = {
-                  uid_message: uuidv4(),
-                  date_create: resp.data[i].date,
-                  uid_creator: client.uid,
-                  uid_client: client.uid,
-                  organization: client.email,
-                  deleted: 0,
-                  msg: resp.data[i].text
-                }
-                this.$store.state.clientfilesandmessages.messages.push(msg)
-              }
-            })
-        })
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
