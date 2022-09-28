@@ -35,7 +35,7 @@
             @changeValue="changeValue"
             @readTask="readTask"
           />
-          <DoitnowNotificationTasks
+          <DoitnowReglament
             v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
             :name="firstTask.name"
             :uid="firstTask.uid"
@@ -129,7 +129,7 @@ import { PUSH_COLOR } from '@/store/actions/colors'
 import { USER_VIEWED_MODAL } from '@/store/actions/onboarding.js'
 import { TASK_STATUS } from '@/constants'
 
-import DoitnowNotificationTasks from './Doitnow/DoitnowNotificationTasks.vue'
+import DoitnowReglament from './Doitnow/DoitnowReglament.vue'
 import DoitnowLimit from '@/components/Doitnow/DoitnowLimit'
 import DoitnowOnboarding from './Doitnow/DoitnowOnboarding.vue'
 
@@ -139,7 +139,7 @@ export default {
     DoitnowEmpty,
     DoitnowSkeleton,
     DoitnowTask,
-    DoitnowNotificationTasks,
+    DoitnowReglament,
     NavBar,
     DoitnowOnboarding,
     PopMenu,

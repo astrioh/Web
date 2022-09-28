@@ -1,6 +1,6 @@
 <template>
   <div class="w-full">
-    <div class="flex items-center justify-between w-full]">
+    <div class="flex items-center justify-between w-full">
       <NavBar
         class="w-full pt-[8px]"
         title="Доски"
@@ -40,34 +40,22 @@
         @cancel="showBoardsLimit = false"
         @ok="showBoardsLimit = false"
       />
-      <div
-        v-for="(value, index) in boards"
-        :key="index"
-      >
-        <div
-          class="flex items-center w-full"
-          :class="{ 'justify-between': index == 0, 'mt-[28px]': index == 1 }"
+      <div class="flex flex-col gap-[15px]">
+        <BoardChildrenGroup
+          v-if="favoriteBoards.length"
+          title="Избранные доски"
+          :boards="favoriteBoards"
+        />
+        <BoardChildrenGroup
+          v-for="dep in depBoards"
+          :key="dep.uid"
+          :title="dep.title"
+          :boards="dep.boards"
+        />
+        <BoardChildrenGroup
+          title="Мои доски"
+          :boards="privateBoards"
         >
-          <p class="font-['Roboto'] text-[#424242] text-[19px] leading-[22px] font-bold">
-            {{ value.dep }}
-          </p>
-        </div>
-        <div
-          class="grid gap-2 mt-3 grid-cols-1"
-          :class="{
-            'md:grid-cols-2 lg:grid-cols-4': isGridView,
-            'lg:grid-cols-2': isPropertiesMobileExpanded && isGridView
-          }"
-        >
-          <template
-            v-for="board in value.items"
-            :key="board.uid"
-          >
-            <BoardBlocItem
-              :board="board"
-              @click.stop="gotoChildren(board)"
-            />
-          </template>
           <BoardInputValue
             v-if="showAddBoard && index == 0"
             :show="showAddBoard"
@@ -79,7 +67,13 @@
             v-else-if="index == 0"
             @click.stop="clickAddBoard"
           />
-        </div>
+        </BoardChildrenGroup>
+        <BoardChildrenGroup
+          v-if="commonBoards.length"
+          title="Общие доски"
+          :boards="commonBoards"
+          @goto="closeMenu"
+        />
       </div>
     </div>
     <div
@@ -120,7 +114,6 @@
 import Icon from '@/components/Icon.vue'
 import { setLocalStorageItem } from '@/store/helpers/functions'
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
-import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
 import ListBlocAdd from '@/components/Common/ListBlocAdd.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as NAVIGATOR from '@/store/actions/navigator'
@@ -132,16 +125,17 @@ import BoardInputValue from './Board/BoardInputValue.vue'
 
 import NavBar from '@/components/Navbar/NavBar.vue'
 import OnBoardingButton from './onBoarding/onBoardingButton.vue'
+import BoardChildrenGroup from './Board/BoardChildrenGroup.vue'
 
 export default {
   components: {
     Icon,
     BoardModalBoxBoardsLimit,
-    BoardBlocItem,
     ListBlocAdd,
     BoardInputValue,
     NavBar,
-    OnBoardingButton
+    OnBoardingButton,
+    BoardChildrenGroup
   },
   data () {
     return {
@@ -161,8 +155,56 @@ export default {
     displayModal () {
       return !this.$store.state.onboarding?.visitedModals?.includes('boards') && this.$store.state?.onboarding?.showModals
     },
+    storeNavigator () {
+      return this.$store.state.navigator.navigator
+    },
     boards () {
       return this.$store.getters.sortedNavigator.new_private_boards
+    },
+    favoriteBoards () {
+      const boards = Object.values(this.$store.state.boards.boards)
+      const arrFavBoards = boards.filter(board => board.favorite === 1)
+      arrFavBoards.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
+      return arrFavBoards
+    },
+    privateBoards () {
+      const boards = this.storeNavigator?.new_private_boards[0]?.items ?? []
+      return boards.filter(board => this.depBoardsMap[board.uid] === undefined)
+    },
+    commonBoards () {
+      const boards = this.storeNavigator?.new_private_boards[1]?.items ?? []
+      return boards.filter(board => this.depBoardsMap[board.uid] === undefined)
+    },
+    depBoardsMap () {
+      return this.depBoards.reduce((acc, dep) => {
+        dep.boards.forEach(board => {
+          acc[board.uid] = dep
+        })
+        return acc
+      }, {})
+    },
+    depBoards () {
+      const boards = Object.values(this.$store.state.boards.boards)
+      const depsMap = boards.reduce((acc, board) => {
+        Object.keys(board.deps).forEach(depUid => {
+          if (acc[depUid] === undefined) acc[depUid] = []
+          acc[depUid].push(board)
+        })
+        return acc
+      }, {})
+      const allDeps = this.$store.getters.sortedDepartments
+      return allDeps.reduce((acc, dep) => {
+        if (depsMap[dep.uid] && dep.name) {
+          const depGroup = {
+            uid: dep.uid,
+            title: dep.name,
+            boards: depsMap[dep.uid]
+          }
+          depGroup.boards.sort((board1, board2) => { return board1.name.localeCompare(board2.name) })
+          acc.push(depGroup)
+        }
+        return acc
+      }, [])
     }
   },
   methods: {

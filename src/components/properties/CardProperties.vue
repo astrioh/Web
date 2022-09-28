@@ -148,6 +148,7 @@
       :comment="selectedCard?.comment"
       :can-edit="canEdit"
       @changeComment="changeComment"
+      @onPasteFile="onPasteEvent"
     />
 
     <!-- Chat skeleton -->
