@@ -51,19 +51,28 @@
       v-if="!isTesting"
       class="p-7 bg-white rounded-[28px]"
     >
-      <div class="flex justify-start leading-[30px] text-[13px] text-[#424242]">
-        <div
-          class="pr-2 border-r border-gray-200 overflow-y-auto scroll-style max-w-[200px] truncate"
-        >
-          <span class="font-medium pr-3">Отдел:</span>
-          <span class="text-[12px] ">{{ reglamentDep }}</span>
+      <div class="flex flex-row justify-between leading-[30px] text-[13px] text-[#424242]">
+        <div class="flex justify-start">
+          <div
+            class="pr-2 border-r border-gray-200 overflow-y-auto scroll-style max-w-[200px] truncate"
+          >
+            <span class="font-medium pr-3">Отдел:</span>
+            <span class="text-[12px] ">{{ reglamentDep }}</span>
+          </div>
+          <div class="ml-2 flex">
+            <span class="font-medium pr-3">Автор:</span>
+            <EmployeeProfile
+              :photo="creatorFoto"
+              :name="creatorName"
+            />
+          </div>
         </div>
-        <div class="ml-2 flex">
-          <span class="font-medium pr-3">Автор:</span>
-          <EmployeeProfile
-            :photo="creatorFoto"
-            :name="creatorName"
-          />
+        <div>
+          <router-link :to="'/reglaments/' + $route.params.id + '/history'">
+            <a class="ml-2 hover:underline font-medium">
+              {{ lastCommentDate }}
+            </a>
+          </router-link>
         </div>
       </div>
       <div
@@ -206,6 +215,13 @@ export default {
     }
   },
   computed: {
+    lastCommentDate () {
+      if (this.$store.state.reglaments.lastCommentDate === '') {
+        return 'История изменений'
+      } else {
+        return 'Дата последнего изменения: ' + this.$store.state.reglaments.lastCommentDate
+      }
+    },
     reglament () {
       return this.currReglament
     },
@@ -329,6 +345,13 @@ export default {
         document.querySelector('div.ql-toolbar').remove()
       }
     } catch (e) {}
+
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
+      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1]?.comment_date
+      if (res.data.length === 0) {
+        this.$store.state.reglaments.lastCommentDate = ''
+      }
+    })
   },
   methods: {
     setEdit () {
