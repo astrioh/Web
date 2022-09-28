@@ -4,20 +4,28 @@
       class="pt-[8px]"
       title="Очередь"
     />
+    <DoitnowSkeleton
+      v-if="isLoading"
+      class="ml-0 pt-[15px] z-[2] grow"
+    />
+    <DoitnowOnboarding
+      v-else-if="displayModal"
+      @okToModal="okToModal"
+    />
+    <DoitnowLimit
+      v-else-if="showLimitMessage"
+    />
     <transition
-      v-if="!isLoading && !showLimitMessage && tasksCount"
+      v-else-if="tasksCount"
       name="slide-in-fade-out"
     >
       <div
-        v-if="!isLoading && !showLimitMessage"
         :key="firstTask.uid"
         class="flex justify-between gap-[20px]"
       >
-        <div
-          class="ml-0 grow"
-        >
+        <div class="grow overflow-hidden">
           <DoitnowTask
-            v-if="!displayModal && tasksCount && !isLoading && !isNotify && isNotifiesLoaded"
+            v-if="!isNotify"
             :key="firstTask.uid"
             :task="firstTask"
             :childrens="childrens"
@@ -36,15 +44,17 @@
             @readTask="readTask"
           />
           <DoitnowReglament
-            v-if="!displayModal && tasksCount && !isLoading && isNotify && isNotifiesLoaded"
+            v-if="isNotify"
             :name="firstTask.name"
             :uid="firstTask.uid"
+            :date="firstTask.lastDate"
+            :last-change="firstTask.lastComment"
           />
         </div>
         <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
         <div
-          v-if="!displayModal && tasksCount && !isLoading && isNotifiesLoaded && (notifiesCopy.length || slidesCopy.length)"
-          class="flex mb-5 justify-end items-center self-start z-[1]"
+          v-if="(notifiesCopy.length || slidesCopy.length)"
+          class="flex-none flex mb-5 justify-end items-center self-start z-[1]"
         >
           <button
             class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[120px] h-[40px] bg-white justify-center text-[#424242]"
@@ -89,25 +99,10 @@
         </div>
       </div>
     </transition>
-    <DoitnowLimit
-      v-if="showLimitMessage && !displayModal && !isLoading"
-    />
-    <DoitnowSkeleton
-      v-if="isLoading"
-      class="ml-0 pt-[15px] z-[2] grow"
-    />
     <DoitnowEmpty
-      v-if="(tasksCount === 0 && !isLoading && isNotifiesLoaded && !showLimitMessage) && !displayModal"
+      v-else
       class="ml-0 pt-[15px] z-[2] grow"
     />
-    <div
-      v-if="displayModal && !isLoading"
-      class="max-w-xl mx-auto flex-center flex-col items-center justify-center"
-    >
-      <DoitnowOnboarding
-        @okToModal="okToModal"
-      />
-    </div>
   </div>
 </template>
 

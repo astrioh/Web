@@ -1,36 +1,57 @@
 <template>
-  <div class="flex justify-between items-center">
-    <div class="flex flex-col justify-center items-center py-6 px-5 bg-white rounded-lg text-[25px] font-bold grow">
-      <div
-        class="taskName ring-0 outline-none max-w-7xl mt-0.5 text-center text-[#424242]"
-      >
-        Пройти регламент "{{ name }}"
-      </div>
-      <button
-        class="w-xl-1/6 font-[500] mt-[35px] w-[238px] h-[40px] justify-center cursor-pointer bg-[#F2B679] text-[#2E2E2E] text-[14px] px-10 rounded-md hover:bg-slate-200  font-medium"
-        @click="gotoReglamentContent"
-      >
-        Пройти регламент
-      </button>
+  <div class="w-full flex flex-col py-6 px-[20px] bg-white rounded-[8px]">
+    <div class="font-roboto text-center text-[#424242] text-[25px] font-bold">
+      Пройти регламент "{{ name }}"
     </div>
+    <div
+      v-if="date"
+      class="flex gap-[4px] mt-[12px]"
+    >
+      <div class="flex-none font-roboto text-[#7E7E80] text-[13px]">
+        Последнее изменение {{ dateCommon }}
+      </div>
+      <div
+        v-if="lastChange"
+        class="grow font-roboto text-[#7E7E80] text-[13px] truncate"
+      >
+        {{ lastChange }}
+      </div>
+    </div>
+    <button
+      class="place-self-center mt-[35px] w-[238px] h-[40px] cursor-pointer px-[40px] rounded-[6px] bg-[#F2B679] hover:bg-slate-200"
+      @click="gotoReglamentContent"
+    >
+      <div class="font-roboto text-[#2E2E2E] text-[14px] font-medium">
+        Пройти регламент
+      </div>
+    </button>
   </div>
 </template>
 
 <script>
 export default {
   props: {
-    name: {
-      type: String,
-      default: null
-    },
     uid: {
       type: String,
-      default: null
+      default: ''
+    },
+    name: {
+      type: String,
+      default: ''
+    },
+    date: {
+      type: String,
+      default: ''
+    },
+    lastChange: {
+      type: String,
+      default: ''
     }
   },
   computed: {
-    storeNavigator () {
-      return this.$store.state.navigator.navigator
+    dateCommon () {
+      if (this.lastChange) return `${this.date}:`
+      return this.date
     }
   },
   methods: {

@@ -1,5 +1,6 @@
-import * as NOTIFICATION_TASKS from '../actions/notification_tasks'
+import * as REGLAMENTS from '@/store/actions/reglaments.js'
 import store from '@/store/index.js'
+import * as NOTIFICATION_TASKS from '../actions/notification_tasks'
 
 const state = {
   notificationtasks: [],
@@ -7,25 +8,41 @@ const state = {
 }
 
 const actions = {
-  [NOTIFICATION_TASKS.NOTIFICATION_TASKS_GENERATE]: ({ commit, dispatch }) => {
+  [NOTIFICATION_TASKS.NOTIFICATION_TASKS_GENERATE]: async ({
+    commit,
+    dispatch
+  }) => {
     const userUid = store.state.user.user.current_user_uid
     const userDep = store.state.employees.employees[userUid]?.uid_dep
-    const reglaments = Object.values(store.state.reglaments.reglaments).filter(reglament => {
-      return (reglament.department_uid === userDep ||
-        reglament.department_uid === '') &&
-        !reglament.is_passed
-    })
-
-    reglaments.forEach(reglament => {
-      if (reglament.has_questions) {
+    const reglaments = Object.values(store.state.reglaments.reglaments).filter(
+      (reglament) => {
+        return (
+          (reglament.department_uid === userDep ||
+            reglament.department_uid === '') &&
+          !reglament.is_passed &&
+          reglament.has_questions
+        )
+      }
+    )
+    for (const reglament of reglaments) {
+      try {
+        const res = await dispatch(
+          REGLAMENTS.GET_REGLAMENT_COMMENTS,
+          reglament.uid
+        )
+        const lastComment = res?.data ? res.data[res.data.length - 1] : null
         const notifyElem = {
           uid: reglament.uid,
           name: reglament.name,
-          notify: true
+          notify: true,
+          lastDate: lastComment?.comment_date || '',
+          lastComment: lastComment?.comment || ''
         }
         commit(NOTIFICATION_TASKS.NOTIFICATION_TASKS_PUSH, notifyElem)
+      } catch (error) {
+        console.log('Error get reglament comment', error)
       }
-    })
+    }
     commit(NOTIFICATION_TASKS.NOTIFICATION_TASKS_STATUS_SET, 'success')
   },
   [NOTIFICATION_TASKS.NOTIFICATION_TASKS_CLEAR]: ({ commit }) => {
