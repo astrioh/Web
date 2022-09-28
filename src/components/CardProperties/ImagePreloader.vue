@@ -64,6 +64,7 @@
 </template>
 <script>
 import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
+import { FILE_REQUEST as clientFileRequest } from '@/store/actions/clientfilesandmessages'
 import { writeCache } from '@/store/helpers/functions'
 
 import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
@@ -124,7 +125,12 @@ export default {
     },
 
     loadImageFromInternet () {
-      this.$store.dispatch(FILE_REQUEST, this.fileUid).then((resp) => {
+      let action = FILE_REQUEST
+      console.log(this.$route.name)
+      if (this.$route.name === 'clients') {
+        action = clientFileRequest
+      }
+      this.$store.dispatch(action, this.fileUid).then((resp) => {
         const imageBlob = new Blob([resp.data], { type: 'image/' + this.fileExtension })
         writeCache(this.fileUid, imageBlob)
         const urlCreator = window.URL || window.webkitURL
