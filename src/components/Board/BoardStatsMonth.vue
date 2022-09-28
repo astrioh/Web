@@ -77,7 +77,9 @@ export default {
         if (cardGroup.cards && (cardGroup.UID === CARD_STAGE.ARCHIVE_SUCCESS || cardGroup.UID === CARD_STAGE.ARCHIVE_REJECT)) {
           cardGroup.cards.forEach((card) => {
             if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS && new Date(card.date_move).getFullYear() === year) {
-              this.incrementMonth(card, 'success')
+              setTimeout(() => {
+                this.incrementMonth(card, 'success')
+              }, 500)
             } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT && new Date(card.date_move).getFullYear() === year) {
               this.incrementMonth(card, 'reject')
             }
