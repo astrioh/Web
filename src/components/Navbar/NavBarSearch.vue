@@ -6,6 +6,7 @@
   <div
     v-if="!showSearchBar"
     class="flex-none flex gap-[5px] p-[8px] cursor-pointer text-[#7e7e80] hover:text-[#7e7e80]/75"
+    :class="getInputWidthFull"
     @click="onShowSearchBar"
   >
     <svg
@@ -29,7 +30,8 @@
   </div>
   <div
     v-if="showSearchBar"
-    class="flex-none flex gap-[5px] items-center h-[40px] w-[160px] overflow-hidden px-[8px] text-[#7e7e80] bg-white rounded-[10px]"
+    class="flex-none flex gap-[5px] items-center h-[40px] overflow-hidden px-[8px] text-[#7e7e80] bg-white rounded-[10px]"
+    :class="getInputLoadingWidth"
   >
     <svg
       class="flex-none"
@@ -87,12 +89,37 @@ export default {
   components: {
     NavbarSearchLimit
   },
+  props: {
+    isFull: {
+      type: Boolean,
+      default: false
+    },
+    isLoading: {
+      type: Boolean,
+      default: false
+    }
+  },
   emits: ['search', 'change', 'eraseSearch'],
   data: () => ({
     showSearchBar: false,
     showFreeModal: false,
     searchText: ''
   }),
+  computed: {
+    getInputWidthFull () {
+      if (this.isLoading && this.isFull) {
+        return 'w-[calc(100%_-_30px)]'
+      }
+      return this.isFull ? 'w-full' : ''
+    },
+
+    getInputLoadingWidth () {
+      if (this.isLoading && this.isFull) {
+        return 'w-[calc(100%_-_30px)]'
+      }
+      return this.isFull ? 'w-full' : 'w-[160px]'
+    }
+  },
   watch: {
     searchText () {
       this.$emit('change', this.searchText)
