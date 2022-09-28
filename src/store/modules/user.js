@@ -36,6 +36,7 @@ const actions = {
       const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/account/info'
       axios({ url: url, method: 'GET' })
         .then((resp) => {
+          resp.data.current_user_email = resp.data.current_user_email.toLowerCase()
           commit('ChangeCurrentUserObj', resp.data)
           commit(USER_SUCCESS, resp)
           if (state.user.current_user_email !== state.user.owner_email) {

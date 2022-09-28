@@ -172,7 +172,7 @@
               <div
                 v-if="emp.uid !== currentUserUid"
                 class="list-employee-access"
-                @click="changePerformer(emp.email.toLowerCase())"
+                @click="changePerformer(emp.email)"
               >
                 <img
                   v-if="emp.fotolink"
