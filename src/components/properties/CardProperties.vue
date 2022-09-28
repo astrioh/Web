@@ -474,7 +474,20 @@ export default {
       this.$store.dispatch(DELETE_MESSAGE_REQUEST, uid)
     },
     deleteCardFileMessage (uid) {
-      this.$store.dispatch(DELETE_FILE_REQUEST, uid)
+      const messages = this.$store.state.cardfilesandmessages.messages
+      let hasMessage = false
+
+      this.$store.dispatch(DELETE_FILE_REQUEST, uid).then(() => {
+        for (let i = 0; i < messages.length; i++) {
+          if (messages[i].uid_file) {
+            hasMessage = true
+            break
+          }
+        }
+        if (!hasMessage) {
+          this.selectedCard.has_files = hasMessage
+        }
+      })
     },
     createCardMessage () {
       // если лицензия истекла
