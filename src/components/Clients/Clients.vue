@@ -224,14 +224,6 @@ tr:not(:first-child) td {
   @apply border-b-2 border-[#e6e6e6] pl-[14px] font-normal text-[13px] max-w-[400px]
 }
 
-tr:not(:first-child) td:first-child {
-  @apply rounded-l-[6px]
-}
-
-tr:not(:first-child) td:last-child {
-  @apply rounded-r-[6px]
-}
-
 .content {
   @apply min-h-[48px] flex items-center
 }
