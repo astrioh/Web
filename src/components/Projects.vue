@@ -40,7 +40,7 @@
         @cancel="showProjectsLimit = false"
         @ok="showProjectsLimit = false"
       />
-      <div class="flex flex-col gap-[25px]">
+      <div class="flex flex-col gap-[15px]">
         <ProjectChildrenGroup
           v-if="favoriteProjects.length"
           title="Избранные доски"

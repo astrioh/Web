@@ -175,8 +175,7 @@ export default {
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false
-      if (Number(this.$route.query.page) === this.paging.pages) await this.requestClients()
-      await this.$router.push({ path: '/clients', query: { page: this.paging.pages } })
+      if (Number(this.$route.query.page) === 1) await this.requestClients()
     },
     changePage () {
       this.$router.push({ path: '/clients', query: { page: this.currentPage } })
