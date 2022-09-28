@@ -102,6 +102,7 @@
         :comment="task.comment"
         :can-edit="task.uid_customer === user?.current_user_uid"
         @changeComment="onChangeComment"
+        @onPasteFile="onPasteEvent"
       />
       <Checklist
         v-if="shouldShowChecklist"
