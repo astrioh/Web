@@ -833,7 +833,7 @@ export default {
       this.selectedTask.comment = text
     },
     gotoParentNode (uid) {
-      document.getElementById(uid).parentNode.click({ preventScroll: false })
+      this.$store.dispatch(TASK.SELECT_TASK, this.tasks[uid].info)
     },
     onAnswerMessage (uid) {
       this.currentAnswerMessageUid = uid
