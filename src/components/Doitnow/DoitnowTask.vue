@@ -17,17 +17,6 @@
     />
 
     <div
-      v-if="shouldShowSlidebody"
-      class="pt-[45px] pb-6 px-5 w-full bg-white rounded-lg"
-    >
-      <SlideBody
-        :name="task.name"
-        :reminder="task.reminder"
-        @nextTask="nextTask"
-      />
-    </div>
-    <div
-      v-else
       class="py-6 px-5 w-[85%] bg-white rounded-lg mr-[10px]"
     >
       <div
@@ -193,7 +182,6 @@ import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 // Doitnow components
 import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
-import SlideBody from '@/components/Doitnow/SlideBody.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
 import DoitnowChatMessages from '@/components/Doitnow/DoitnowChatMessages.vue'
 import DoitnowPostponeButton from '@/components/Doitnow/DoitnowPostponeButton.vue'
@@ -232,7 +220,6 @@ export default {
     DoitnowStatusModal,
     contenteditable,
     TaskStatus,
-    SlideBody,
     DoitnowChatMessages
   },
   directives: {
@@ -379,9 +366,6 @@ export default {
     // состояния для v-if
     shouldShowCustomer () {
       return this.task?.type !== 1
-    },
-    shouldShowSlidebody () {
-      return this.task?.mode === 'slide' && this.task?.visible
     },
     shouldShowAccessLabel () {
       return this.task?.uid && this.task?.emails.includes(this.user?.current_user_email) && this.task?.uid_performer !== this.user?.current_user_uid

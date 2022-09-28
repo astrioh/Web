@@ -24,8 +24,21 @@
         class="flex justify-between gap-[20px]"
       >
         <div class="grow overflow-hidden">
+          <DoitnowSlide
+            v-if="isSlide"
+            :name="firstTask.name"
+            :reminder="firstTask.reminder"
+            @nextTask="nextTask"
+          />
+          <DoitnowReglament
+            v-else-if="isNotify"
+            :name="firstTask.name"
+            :uid="firstTask.uid"
+            :date="firstTask.lastDate"
+            :last-change="firstTask.lastComment"
+          />
           <DoitnowTask
-            v-if="!isNotify"
+            v-else
             :key="firstTask.uid"
             :task="firstTask"
             :childrens="childrens"
@@ -43,17 +56,9 @@
             @changeValue="changeValue"
             @readTask="readTask"
           />
-          <DoitnowReglament
-            v-if="isNotify"
-            :name="firstTask.name"
-            :uid="firstTask.uid"
-            :date="firstTask.lastDate"
-            :last-change="firstTask.lastComment"
-          />
         </div>
-        <!-- если сейчас есть нотифай слайды или приветственные слайды  -->
         <div
-          v-if="(notifiesCopy.length || slidesCopy.length)"
+          v-if="isNotify || isSlide"
           class="flex-none flex mb-5 justify-end items-center self-start z-[1]"
         >
           <button
@@ -112,6 +117,7 @@ import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 import * as SLIDES from '@/store/actions/slides.js'
 
+import DoitnowSlide from '@/components/Doitnow/DoitnowSlide.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
 import DoitnowSkeleton from '@/components/Doitnow/DoitnowSkeleton.vue'
@@ -130,6 +136,7 @@ import DoitnowOnboarding from './Doitnow/DoitnowOnboarding.vue'
 
 export default {
   components: {
+    DoitnowSlide,
     DoitnowLimit,
     DoitnowEmpty,
     DoitnowSkeleton,
@@ -243,8 +250,11 @@ export default {
       this.setNotifiesCopy(this.$store.state.notificationtasks.notificationtasks)
       return this.$store.state.notificationtasks.notificationtasks
     },
+    isSlide () {
+      return this.firstTask?.mode === 'slide'
+    },
     isNotify () {
-      return !!this.firstTask.notify
+      return !!this.firstTask?.notify
     },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
