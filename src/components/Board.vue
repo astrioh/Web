@@ -834,7 +834,12 @@ export default {
         boardTo: position.boardUid,
         stageTo: position.stageUid
       }
-      this.$store.dispatch(CARD.MOVE_ALL_CARDS, data)
+      this.$store.dispatch(CARD.MOVE_ALL_CARDS, data).then(res => {
+        if (this.boardUid !== position.boardUid) {
+          this.closeProperties()
+          this.$store.state.cards.selectedCardUid = null
+        }
+      })
     },
     onChangeAllCardsPosition (position) {
       this.showMoveAllCards = false
