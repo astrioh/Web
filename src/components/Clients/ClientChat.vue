@@ -38,6 +38,13 @@
         @onDeleteMessage="onDeleteMessage"
         @onQuoteMessage="setCurrentQuote"
       />
+      <ClientChatSelfFileMessage
+        v-if="message.isMyMessage && message.isFile"
+        :message="message"
+        :employee="employees[message.uid_creator]"
+        @onQuoteMessage="setCurrentQuote"
+        @onDeleteFile="deleteFile"
+      />
     </div>
   </div>
 </template>
@@ -47,12 +54,14 @@ import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import ClientChatQuoteMessage from '@/components/Clients/ClientChatQuoteMessage.vue'
 import ClientChatInterlocutorMessage from '@/components/Clients/ClientChatInterlocutorMessage.vue'
 import ClientChatSelfMessage from '@/components/Clients/ClientChatSelfMessage.vue'
+import ClientChatSelfFileMessage from '@/components/Clients/ClientChatSelfFileMessage.vue'
 
 export default {
   components: {
     ClientChatInterlocutorMessage,
     ClientChatSelfMessage,
-    ClientChatQuoteMessage
+    ClientChatQuoteMessage,
+    ClientChatSelfFileMessage
   },
   props: {
     key: {
@@ -80,7 +89,13 @@ export default {
   computed: {
     clientMessages () {
       return this.messages.map((message) => ({
-        ...message
+        ...message,
+        isFile: !!message.uid_file,
+        isMessage: !message.uid_file && message.uid_creator !== 'inspector',
+        hasQuote: message.uid_quote && message.uid_quote !== '00000000-0000-0000-0000-000000000000' && message.deleted !== 1,
+        quoteMessage: this.getMessageByUid(message?.uid_quote),
+        isInspectorMessage: message.uid_creator === 'inspector',
+        isMyMessage: message.uid_creator === this.currentUserUid
       }))
     },
     user () {

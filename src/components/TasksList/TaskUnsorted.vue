@@ -7,12 +7,10 @@
       @reload="reload"
     />
     <TasksListNew />
-    <PropertiesRight />
   </div>
 </template>
 <script>
 import TasksListNew from '../TasksListNew.vue'
-import PropertiesRight from '../PropertiesRight.vue'
 import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 import * as TASK from '@/store/actions/tasks'
@@ -20,7 +18,6 @@ import * as TASK from '@/store/actions/tasks'
 export default {
   components: {
     TasksListNew,
-    PropertiesRight,
     NavBarTasks
   },
   mounted () {

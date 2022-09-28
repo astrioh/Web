@@ -54,15 +54,26 @@ const actions = {
     })
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: ({ commit, dispatch }, clientUid) => {
-    commit(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST)
-    commit(CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS, {})
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clientfiles?uid_client=' + clientUid
+      commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST)
+      axios({ url: url, method: 'GET' })
+        .then(resp => {
+          console.log('msgs', resp)
+          commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
+          commit(CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS, resp)
+          resolve(resp)
+        }).catch(err => {
+          reject(err)
+        })
+    })
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'clientsfiles?uid_client=' + data.uid_client
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clientsfiles?uid_client=' + data.uid_client + '&uid_creator=' + data.uid_creator
       axios({ url: url, method: 'POST', data: data.name })
         .then((resp) => {
-          // commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data)
+          commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data)
           resolve(resp)
         })
         .catch((err) => {
@@ -72,7 +83,7 @@ const actions = {
   },
   [CLIENT_FILES_AND_MESSAGES.FILE_REQUEST]: ({ commit, dispatch }, fileUid) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_LEADERTASK_API + 'api/v1/cardsfiles/file?uid=' + fileUid
+      const url = process.env.VUE_APP_INSPECTOR_API + 'clientfiles/file?uid=' + fileUid
       axios({ url: url, method: 'GET', responseType: 'blob' })
         .then(resp => {
           resolve(resp)
@@ -85,11 +96,11 @@ const actions = {
     const data = { uid: fileUid, key: 'deleted', value: 1 }
     commit(CLIENT_FILES_AND_MESSAGES.REMOVE_MESSAGE_LOCALLY, data)
   },
-  [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, claentUid) => {
+  [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, clientUid) => {
     commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST)
 
-    const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, claentUid)
-    const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, claentUid)
+    const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, clientUid)
+    const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, clientUid)
 
     return Promise.all([messages, files])
       .then(() => {
@@ -115,6 +126,9 @@ const mutations = {
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {
     state.messages.push(data)
+  },
+  [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: (state, data) => {
+    state.messages.push(data.success)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {
     state.status = 'loading'

@@ -276,10 +276,12 @@ export default {
       }
       const data = {
         uid_client: this.selectedClient?.uid,
+        // к сожалению не могу найти пользователя по token'y
+        uid_creator: this.user.current_user_uid,
         name: formData
       }
       console.log(data)
-      // this.$store.commit('addClientMessages', uploadingFiles)
+      this.$store.commit('addClientMessages', uploadingFiles)
       this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data).then(() => {
         if (this.selectedClient) this.selectedClient.has_files = true
         this.scrollDown()
