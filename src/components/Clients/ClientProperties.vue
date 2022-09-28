@@ -163,7 +163,8 @@ export default {
     user () { return this.$store.state.user.user },
     employees () { return this.$store.state.employees.employees },
     canAddFiles () { return !this.$store.getters.isLicenseExpired },
-    clientMessages () { return this.$store.state.clientfilesandmessages.messages }
+    clientMessages () { return this.$store.state.clientfilesandmessages.messages },
+    integratedMsgs () { return this.$store.state.integrations.integrations.yandex.msgs }
   },
   watch: {
     selectedClient (newval) {
