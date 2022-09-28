@@ -9,19 +9,16 @@
     <TasksListNew
       :new-task-props="newTaskProps"
     />
-    <PropertiesRight />
   </div>
 </template>
 
 <script>
 import TasksListNew from '../TasksListNew.vue'
-import PropertiesRight from '../PropertiesRight.vue'
 import NavBarTasks from '@/components/Navbar/NavBarTasks.vue'
 
 export default {
   components: {
     TasksListNew,
-    PropertiesRight,
     NavBarTasks
   },
   data () {
