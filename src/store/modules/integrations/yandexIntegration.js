@@ -51,14 +51,40 @@ const actions = {
         })
     })
   },
-  [YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, data) => {
+  [YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
     return new Promise((resolve, reject) => {
-      console.log(data)
+      const data = {
+        ya_login: state.login,
+        ya_password: state.password,
+        reciever_email: emails.clientEmail,
+        organization_email: emails.organizationEmail
+      }
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexMsgsSentFromUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
           commit(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, resp.data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          console.log('ошибка при запросе imap')
+          reject(err)
+        })
+    })
+  },
+  [YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
+    return new Promise((resolve, reject) => {
+      const data = {
+        ya_login: state.login,
+        ya_password: state.password,
+        sender_email: emails.clientEmail,
+        organization_email: emails.organizationEmail
+      }
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexMsgsSentToUs'
+      axios({ url: url, method: 'POST', data: data })
+        .then((resp) => {
+          console.log('imap msgs get successfully')
+          commit(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -74,8 +100,10 @@ const mutations = {
     state.isIntegrated = true
   },
   [YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US]: (state, data) => {
-    state.msgs = data
-    state.isIntegrated = true
+    state.sentFromUs = data
+  },
+  [YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US]: (state, data) => {
+    state.sentToUs = data
   },
   [YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: (state, data) => {
     if (data.length) {

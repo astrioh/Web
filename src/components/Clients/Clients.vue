@@ -153,7 +153,6 @@ export default {
       }
     },
     showClientProperties (client) {
-      console.log(client)
       this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
