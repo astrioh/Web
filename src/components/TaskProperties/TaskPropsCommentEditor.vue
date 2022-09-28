@@ -39,7 +39,7 @@ export default {
       default: ''
     }
   },
-  emits: ['changeComment'],
+  emits: ['changeComment', 'onPasteFile'],
   data: () => ({
     isEditable: false,
     currHtmlText: '',
@@ -62,14 +62,13 @@ export default {
   },
   methods: {
     onPasteComment (e) {
-      let text = ''
       if (e.originalEvent && e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) {
         e.preventDefault()
-        text = e.originalEvent.clipboardData.getData('text/plain')
+        const text = e.originalEvent.clipboardData.getData('text/plain')
         window.document.execCommand('insertText', false, text)
       } else if (e.clipboardData && e.clipboardData.getData) {
         e.preventDefault()
-        text = e.clipboardData.getData('text/plain')
+        const text = e.clipboardData.getData('text/plain')
         window.document.execCommand('insertText', false, text)
       } else if (window.clipboardData && window.clipboardData.getData) {
         if (!this.onPaste_StripFormatting_IEPaste) {
@@ -78,6 +77,16 @@ export default {
           window.document.execCommand('ms-pasteTextOnly', false)
         }
         this.onPaste_StripFormatting_IEPaste = false
+      }
+      // файлы
+      const items = (e.clipboardData || e.originalEvent.clipboardData)?.items
+      if (items) {
+        for (const item of items) {
+          if (item.kind === 'file') {
+            this.$emit('onPasteFile', e)
+            break
+          }
+        }
       }
     },
     /**

@@ -191,6 +191,7 @@
         :comment="selectedTask?.comment ?? ''"
         :can-edit="canEditComment"
         @changeComment="onChangeComment"
+        @onPasteFile="onPasteEvent"
       />
       <!-- Show all -->
       <!-- Chat messages -->
