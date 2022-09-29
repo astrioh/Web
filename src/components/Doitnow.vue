@@ -118,6 +118,7 @@ import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
 import * as SLIDES from '@/store/actions/slides.js'
+import * as REGLAMENTS from '@/store/actions/reglaments.js'
 
 import DoitnowSlide from '@/components/Doitnow/DoitnowSlide.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
@@ -405,21 +406,33 @@ export default {
         }
       }
 
-      const month = this.pad2(dateEnd.getMonth() + 1)
-      const day = this.pad2(dateEnd.getDate())
-      const year = dateEnd.getFullYear()
-      const hours = this.pad2(dateEnd.getHours())
-      const minutes = this.pad2(dateEnd.getMinutes())
-      const seconds = this.pad2(dateEnd.getSeconds())
-      const newDateEnd = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+      const month = this.pad2(dateEnd.getUTCMonth() + 1)
+      const day = this.pad2(dateEnd.getUTCDate())
+      const year = dateEnd.getUTCFullYear()
+      const hours = this.pad2(dateEnd.getUTCHours())
+      const minutes = this.pad2(dateEnd.getUTCMinutes())
+      const seconds = this.pad2(dateEnd.getUTCSeconds())
+      const newDateEnd = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`
 
-      const slide = {
-        name: this.firstTask.name,
-        visible: this.firstTask.visible,
-        reminder: newDateEnd
+      if (this.isReglament) {
+        const reglamentReminder = {
+          uid_user: this.user?.current_user_uid,
+          uid_reglament: this.firstTask.uid,
+          reminder_date: newDateEnd
+        }
+        this.$store.dispatch(REGLAMENTS.SET_REGLAMENT_REMINDER, reglamentReminder)
+        this.nextTask()
+        return
       }
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
-      this.nextTask()
+      if (this.isSlide) {
+        const slide = {
+          name: this.firstTask.name,
+          visible: this.firstTask.visible,
+          reminder: newDateEnd
+        }
+        this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
+        this.nextTask()
+      }
     },
     setPostponeDate (date) {
       this.postponeDate = date

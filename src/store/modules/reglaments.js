@@ -192,6 +192,21 @@ const actions = {
           reject(err)
         })
     })
+  },
+  [REGLAMENTS.SET_REGLAMENT_REMINDER]: (
+    { commit, dispatch },
+    reglamentReminder
+  ) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'reglamentReminder'
+      axios({ url: url, method: 'POST', data: reglamentReminder })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
   }
 }
 
