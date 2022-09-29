@@ -40,9 +40,18 @@
         <th>Всего в архиве</th>
       </tr>
       <BoardStatsSkeleton
-        v-if="!isLoaded"
+        v-if="!isLoaded || isCalculating"
         :count="3"
       />
+      <tr
+        v-else-if="!membersSortedByCardsCount.length"
+      >
+        <td colspan="4">
+          <div class="my-[8px] text-[#424242] font-['Roboto'] text-center text-[15px]">
+            Нет данных
+          </div>
+        </td>
+      </tr>
       <template
         v-for="member in membersSortedByCardsCount"
         v-else
@@ -78,6 +87,8 @@ export default {
   },
   data () {
     return {
+      timerId: 0,
+      isCalculating: false,
       membersWithCards: {},
       years: [new Date().getFullYear(), new Date().getFullYear() - 1, new Date().getFullYear() - 2],
       selectedYear: new Date().getFullYear(),
@@ -156,10 +167,10 @@ export default {
   },
   watch: {
     selectedYear (newVal) {
-      this.setCardsByMonthAndYear()
+      this.delayedReload()
     },
     selectedMonth (newVal) {
-      this.setCardsByMonthAndYear()
+      this.delayedReload()
     },
     isLoaded (newVal) {
       if (newVal) this.setCardsByMonthAndYear()
@@ -169,6 +180,15 @@ export default {
     if (this.isLoaded) this.setCardsByMonthAndYear()
   },
   methods: {
+    delayedReload () {
+      this.isCalculating = true
+      if (this.timerId) clearTimeout(this.timerId)
+      this.timerId = setTimeout(() => {
+        this.setCardsByMonthAndYear()
+        this.timerId = 0
+        this.isCalculating = false
+      }, 500)
+    },
     setCardsByMonthAndYear () {
       this.membersWithCards = {}
       this.boardCards.forEach((cardGroup) => {
