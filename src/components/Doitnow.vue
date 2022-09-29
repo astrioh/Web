@@ -389,7 +389,7 @@ export default {
       return (n < 10 ? '0' : '') + n
     },
     postponeTask (end, item) {
-      const dateEnd = new Date(end)
+      const dateEnd = end ? new Date(end) : new Date()
       if (item) {
         switch (item.name) {
           case '10 минут':
