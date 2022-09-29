@@ -420,7 +420,10 @@ export default {
           uid_reglament: this.firstTask.uid,
           reminder_date: newDateEnd
         }
-        this.$store.dispatch(REGLAMENTS.SET_REGLAMENT_REMINDER, reglamentReminder)
+        this.$store.dispatch(REGLAMENTS.SET_REGLAMENT_REMINDER, reglamentReminder).then((resp) => {
+          const reglament = this.$store.state.reglaments.reglaments[reglamentReminder.uid_reglament]
+          if (reglament) reglament.reminder = reglamentReminder.reminder_date
+        })
         this.nextTask()
         return
       }
