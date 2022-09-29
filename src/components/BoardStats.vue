@@ -142,7 +142,7 @@ export default {
     },
     getMemberByUser (user) {
       if (!user) return null
-      const member = this.membersWithCards[user]
+      const member = this.membersWithCards[user.toLowerCase()]
       if (!member) {
         const newMember = {
           email: user,
@@ -164,7 +164,7 @@ export default {
             cost: 0
           }
         }
-        this.membersWithCards[user] = newMember
+        this.membersWithCards[user.toLowerCase()] = newMember
         return newMember
       }
       return member
