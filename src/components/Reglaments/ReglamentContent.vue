@@ -347,9 +347,10 @@ export default {
     } catch (e) {}
 
     this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
-      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1]?.comment_date
       if (res.data.length === 0) {
         this.$store.state.reglaments.lastCommentDate = ''
+      } else {
+        this.$store.state.reglaments.lastCommentDate = res.data[0].comment_date
       }
     })
   },
