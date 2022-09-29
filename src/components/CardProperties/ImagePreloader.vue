@@ -11,9 +11,10 @@
   >
     <img
       v-if="imageLoaded"
+      id="imageFromCardChat"
       class="rounded-[8px] max-h-[250px]"
       :src="imageSrc"
-      alt="chat image "
+      alt="chat image"
     >
   </a>
   <a
@@ -31,10 +32,12 @@
     {{ fileDateCreate }}
   </p>
   <div class="group-hover:flex hidden justify-end">
-    <card-chat-message-options-pop-menu
+    <CardChatMessageOptionsPopMenu
       :can-delete="canDelete"
-      @onQuoteMessage="$emit('onQuoteMessage')"
-      @onDeleteMessage="$emit('onDeleteMessage')"
+      :is-show-new-cover="true"
+      @onQuoteMessage="onQuoteMessage"
+      @onDeleteMessage="onDeleteMessage"
+      @onNewCardCover="onNewCardCover"
     >
       <div class="min-w-[30px] mt-[5px] min-h-[16px] flex cursor-pointer items-end justify-center">
         <svg
@@ -59,7 +62,7 @@
           />
         </svg>
       </div>
-    </card-chat-message-options-pop-menu>
+    </CardChatMessageOptionsPopMenu>
   </div>
 </template>
 <script>
@@ -68,6 +71,7 @@ import { FILE_REQUEST as clientFileRequest } from '@/store/actions/clientfilesan
 import { writeCache } from '@/store/helpers/functions'
 
 import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
+import * as CARDS from '@/store/actions/cards'
 
 export default {
   components: {
@@ -81,6 +85,10 @@ export default {
     fileName: {
       type: String,
       default: ''
+    },
+    fileSize: {
+      type: Number,
+      default: null
     },
     fileExtension: {
       type: String,
@@ -100,13 +108,19 @@ export default {
     }
   },
 
-  emits: ['onQuoteMessage', 'onDeleteMessage'],
+  emits: ['onQuoteMessage', 'onDeleteMessage', 'onNewCardCover'],
 
   data () {
     return {
       imageLoaded: false,
-      imageSrc: ''
+      imageSrc: '',
+      blobImageForm: ''
     }
+  },
+  computed: {
+    selectedCardUid () { return this.$store.state.cards.cards.selectedCardUid },
+    selectedCard () { return this.$store.getters.selectedCard }
+
   },
   mounted () {
     if (this.isFileInCache()) {
@@ -123,6 +137,26 @@ export default {
     b64toBlob (base64) {
       return fetch(base64).then(res => res.blob())
     },
+    onQuoteMessage () {
+      this.$emit('onQuoteMessage')
+    },
+    onDeleteMessage () {
+      this.$emit('onDeleteMessage')
+    },
+    onNewCardCover () {
+      const formData = new FormData()
+      formData.append('files[0]', this.blobImageForm)
+      const data = {
+        cardUid: this.selectedCard?.uid,
+        file: formData
+      }
+      this.$store.dispatch(CARDS.CHANGE_CARD_COVER, data).then((resp) => {
+        if (this.selectedCard) {
+          this.selectedCard.cover_link = resp.data.card.cover_link
+          this.selectedCard.cover_color = resp.data.card.cover_color
+        }
+      })
+    },
 
     loadImageFromInternet () {
       let action = FILE_REQUEST
@@ -132,6 +166,7 @@ export default {
       }
       this.$store.dispatch(action, this.fileUid).then((resp) => {
         const imageBlob = new Blob([resp.data], { type: 'image/' + this.fileExtension })
+        this.blobImageForm = imageBlob
         writeCache(this.fileUid, imageBlob)
         const urlCreator = window.URL || window.webkitURL
         const imageURL = urlCreator.createObjectURL(imageBlob)
@@ -145,6 +180,7 @@ export default {
       this.b64toBlob(cachedImageBase64).then(imageBlob => {
         const urlCreator = window.URL || window.webkitURL
         const imageURL = urlCreator.createObjectURL(imageBlob)
+        this.blobImageForm = imageBlob
         this.imageSrc = imageURL
         this.imageLoaded = true
       })
