@@ -153,7 +153,7 @@ export default {
       }
     },
     showClientProperties (client) {
-      this.$store.dispatch(CLIENTS_CHAT.MESSAGES_REQUEST, client.uid)
+      this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, client.uid)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }

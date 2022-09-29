@@ -77,6 +77,7 @@ export default {
       :file-extension="fileExtension"
       :file-name="message.file_name"
       :file-date-create="getMessageTimeString(message.date_create)"
+      :file-action="'CLIENT_FILE_REQUEST'"
       preloader-color="#F4F5F7"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"

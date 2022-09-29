@@ -67,7 +67,6 @@
 </template>
 <script>
 import { FILE_REQUEST } from '@/store/actions/cardfilesandmessages'
-import { FILE_REQUEST as clientFileRequest } from '@/store/actions/clientfilesandmessages'
 import { writeCache } from '@/store/helpers/functions'
 
 import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
@@ -105,6 +104,10 @@ export default {
     canDelete: {
       type: Boolean,
       default: true
+    },
+    fileAction: {
+      type: String,
+      default: FILE_REQUEST
     }
   },
 
@@ -159,12 +162,7 @@ export default {
     },
 
     loadImageFromInternet () {
-      let action = FILE_REQUEST
-      console.log(this.$route.name)
-      if (this.$route.name === 'clients') {
-        action = clientFileRequest
-      }
-      this.$store.dispatch(action, this.fileUid).then((resp) => {
+      this.$store.dispatch(this.fileAction, this.fileUid).then((resp) => {
         const imageBlob = new Blob([resp.data], { type: 'image/' + this.fileExtension })
         this.blobImageForm = imageBlob
         writeCache(this.fileUid, imageBlob)
