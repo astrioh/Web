@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+// import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
 
 import MainMenu from '@/components/AsideMenu/MainMenu.vue'
 import SubMenu from '@/components/AsideMenu/SubMenu.vue'
