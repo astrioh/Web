@@ -213,7 +213,7 @@ export default {
       }
     },
     getIntegrations () {
-      this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
+      // this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
     },
     setShouldShowModalValue (value) {
       setLocalStorageItem('shouldShowModal', value)
