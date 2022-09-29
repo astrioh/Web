@@ -138,7 +138,7 @@ const mutations = {
     state.status = 'success'
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS]: (state, resp) => {
-    state.files = resp.data.files
+    state.files = resp.data
     state.status = 'success'
   },
   [CLIENT_FILES_AND_MESSAGES.CHANGE_MESSAGE]: (state, data) => {
