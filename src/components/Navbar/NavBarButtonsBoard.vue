@@ -87,6 +87,18 @@
             {{ archiveText }}
           </PopMenuItem>
         </router-link>
+        <PopMenuItem
+          v-if="isBoardPublic === false"
+          @click="setPublicBoard"
+        >
+          Сделать доску публичной
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="isBoardPublic === true"
+          @click="removePublicBoard"
+        >
+          Сделать доску приватной
+        </PopMenuItem>
         <div
           v-if="canEditBoard"
           class="w-full h-[1px] bg-[rgba(0,0,0,.1)] my-[5px]"
@@ -138,7 +150,8 @@ export default {
     return {
       showDeleteBoard: false,
       showBoardsLimit: false,
-      showAddBoard: false
+      showAddBoard: false,
+      isBoardPublic: false
     }
   },
   computed: {
@@ -213,6 +226,22 @@ export default {
         return
       }
       this.showAddBoard = true
+    },
+    setPublicBoard () {
+      const data = {
+        uid: this.board.uid,
+        publiclinkstatus: 1
+      }
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
+      this.isBoardPublic = true
+    },
+    removePublicBoard () {
+      const data = {
+        uid: this.board.uid,
+        publiclinkstatus: 0
+      }
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
+      this.isBoardPublic = false
     },
     onAddNewBoard (name) {
       this.showAddBoard = false
