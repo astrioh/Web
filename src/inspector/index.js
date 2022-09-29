@@ -32,9 +32,6 @@ function isNotificationSoundOn () {
 
 function parseObject (obj) {
   switch (obj.operation) {
-    case TYPES.TYPE_OBJECT_REGLAMENT:
-      processCreate(obj)
-      break
     case TYPES.TYPE_OPERATION_CREATE:
       processCreate(obj)
       break
