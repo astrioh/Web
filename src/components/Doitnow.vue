@@ -62,13 +62,15 @@
           class="flex-none flex mb-5 justify-end items-center self-start z-[1]"
         >
           <button
-            class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[120px] h-[40px] bg-white justify-center text-[#424242]"
+            class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[200px] h-[40px] bg-white justify-center text-[#424242]"
             @click="!postponeDate ? postponeTask(firstTask.reminder, firstTask.reminder, timeArr[postponeIndex]) : changeSlideReminder(postponeDate)"
           >
-            Отложить
+            Отложить на {{ !postponeDate ? timeArr[postponeIndex].name : transformPostponeDate }}
           </button>
           <PopMenu>
-            <span class="inline-block cursor-pointer w-[100px] text-center">на {{ !postponeDate ? timeArr[postponeIndex].name : transformPostponeDate }}</span>
+            <span class="inline-block cursor-pointer w-[20px] text-center">
+              ▼
+            </span>
             <template #menu>
               <div
                 class="h-[155px] overflow-y-auto w-[220px] scroll-style"
