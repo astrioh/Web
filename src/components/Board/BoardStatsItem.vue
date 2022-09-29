@@ -30,28 +30,45 @@
         {{ member.username }}
       </div>
     </td>
-    <td>
+    <td
+      v-if="member.activeCards"
+    >
       <BoardStatsItemValue
         class="content"
         :quantity="member.activeCards.quantity"
         :cost="member.activeCards.cost"
       />
     </td>
-    <td>
+    <td
+      v-if="member.successfulCards"
+    >
       <BoardStatsItemValue
         class="content"
         :quantity="member.successfulCards.quantity"
         :cost="member.successfulCards.cost"
       />
     </td>
-    <td>
+    <td
+      v-if="member.rejectedCards"
+    >
       <BoardStatsItemValue
         class="content"
         :quantity="member.rejectedCards.quantity"
         :cost="member.rejectedCards.cost"
       />
     </td>
-    <td>
+    <td
+      v-if="member.archiveCards"
+    >
+      <BoardStatsItemValue
+        class="content"
+        :quantity="member.archiveCards.quantity"
+        :cost="member.archiveCards.cost"
+      />
+    </td>
+    <td
+      v-if="member.allCards"
+    >
       <BoardStatsItemValue
         class="content"
         :quantity="member.allCards.quantity"
