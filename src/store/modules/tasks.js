@@ -1239,11 +1239,16 @@ const mutations = {
         uid: taskUid,
         order: state.newtasks[taskUid].info.order_new,
         customer: state.newtasks[taskUid].info.email_customer,
-        performer: state.newtasks[taskUid].info.email_performer
+        performer: state.newtasks[taskUid].info.email_performer,
+        uid_parent: state.newtasks[taskUid].info.uid_parent
       }))
       state.newConfig.roots = uidToOrder
         .sort(
           (a, b) => {
+            if (
+              a.uid_parent !== '00000000-0000-0000-0000-000000000000' &&
+              b.uid_parent === '00000000-0000-0000-0000-000000000000'
+            ) return -1
             if (a.customer !== a.performer && b.customer === b.performer) return -1
             return 0
           }
