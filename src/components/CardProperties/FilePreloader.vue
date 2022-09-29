@@ -136,6 +136,10 @@ export default {
     canDelete: {
       type: Boolean,
       default: true
+    },
+    fileAction: {
+      type: String,
+      default: FILE_REQUEST
     }
   },
 
@@ -151,7 +155,7 @@ export default {
 
   methods: {
     loadFileFromInternet () {
-      this.$store.dispatch(FILE_REQUEST, this.fileUid).then((resp) => {
+      this.$store.dispatch(this.fileAction, this.fileUid).then((resp) => {
         const imageBlob = new Blob([resp.data], { type: 'text/plain' })
         const urlCreator = window.URL || window.webkitURL
         this.fileURL = urlCreator.createObjectURL(imageBlob)

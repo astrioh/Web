@@ -16,6 +16,7 @@ export function removeProject (obj) {
     }
   }
   store.commit(NAVIGATOR.NAVIGATOR_REMOVE_PROJECT, { uid_parent: '', uid: obj.uid })
+  store.commit(PROJECT.REMOVE_PROJECT_REQUEST, obj.uid)
 }
 
 export function updateProject (obj) {

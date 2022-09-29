@@ -3,7 +3,7 @@
     class="pt-[8px]"
     title="Тариф"
   />
-  <form class="px-5 text-lg bg-white p-2 rounded-xl pb-[150px]">
+  <form class="px-5 text-lg bg-white p-2 rounded-xl h-[85%]">
     <div class="font-medium text-[roboto] mb-4 text-base landing-[19px] text-[#4C4C4D]">
       Тип аккаунта
     </div>

@@ -1,47 +1,70 @@
 <template>
-  <select
-    ref="selectedYear"
-    v-model="selectedYear"
-    class="form-control form-control-select-repeat ml-5"
-  >
-    <template
-      v-for="(option, index) in options"
-      :key="index"
-    >
-      <option
-        :value="option"
+  <div>
+    <div class="flex">
+      <select
+        v-model="selectedMonth"
+        class="form-control form-control-select-repeat ml-5"
       >
-        {{ option }}
-      </option>
-    </template>
-  </select>
-  <table>
-    <tr>
-      <th>Месяц</th>
-      <th>Заявок в успехе</th>
-      <th>Заявок в отказе</th>
-    </tr>
-    <template
-      v-for="(month, index) in itemsByMonth"
-      :key="index"
-    >
-      <BoardStatsMonthItem
-        :month="month"
+        <template
+          v-for="month in months"
+          :key="month.month"
+        >
+          <option
+            :value="month.month"
+          >
+            {{ month.title }}
+          </option>
+        </template>
+      </select>
+      <select
+        v-model="selectedYear"
+        class="form-control form-control-select-repeat ml-5"
+      >
+        <template
+          v-for="(year, index) in years"
+          :key="index"
+        >
+          <option
+            :value="year"
+          >
+            {{ year }}
+          </option>
+        </template>
+      </select>
+    </div>
+    <table>
+      <tr>
+        <th>Сотрудник</th>
+        <th>Заявок в успехе</th>
+        <th>Заявок в отказе</th>
+        <th>Всего в архиве</th>
+      </tr>
+      <BoardStatsSkeleton
+        v-if="!isLoaded"
+        :count="3"
       />
-    </template>
-    <BoardStatsSkeleton v-if="!isLoaded" />
-  </table>
+      <template
+        v-for="member in membersSortedByCardsCount"
+        v-else
+        :key="member.email"
+      >
+        <BoardStatsItem
+          :member="member"
+        />
+      </template>
+    </table>
+  </div>
 </template>
 
 <script>
 import BoardStatsSkeleton from '@/components/Board/BoardStatsSkeleton'
-import BoardStatsMonthItem from './BoardStatsMonthItem.vue'
+import BoardStatsItem from '@/components/Board/BoardStatsItem.vue'
 import { CARD_STAGE } from '@/constants'
 
 export default {
   components: {
     BoardStatsSkeleton,
-    BoardStatsMonthItem
+    BoardStatsItem
   },
   props: {
     isLoaded: {
@@ -55,111 +78,158 @@ export default {
   },
   data () {
     return {
-      itemsByMonth: [],
-      options: [],
-      selectedYear: 2022
+      membersWithCards: {},
+      years: [new Date().getFullYear(), new Date().getFullYear() - 1, new Date().getFullYear() - 2],
+      selectedYear: new Date().getFullYear(),
+      selectedMonth: new Date().getMonth(),
+      months: [
+        {
+          title: 'Январь',
+          month: 0
+        },
+        {
+          title: 'Февраль',
+          month: 1
+        },
+        {
+          title: 'Март',
+          month: 2
+        },
+        {
+          title: 'Апрель',
+          month: 3
+        },
+        {
+          title: 'Май',
+          month: 4
+        },
+        {
+          title: 'Июнь',
+          month: 5
+        },
+        {
+          title: 'Июль',
+          month: 6
+        },
+        {
+          title: 'Август',
+          month: 7
+        },
+        {
+          title: 'Сентябрь',
+          month: 8
+        },
+        {
+          title: 'Октябрь',
+          month: 9
+        },
+        {
+          title: 'Ноябрь',
+          month: 10
+        },
+        {
+          title: 'Декабрь',
+          month: 11
+        }
+      ]
+    }
+  },
+  computed: {
+    employeesByEmail () {
+      return this.$store.state.employees.employeesByEmail
+    },
+    membersSortedByCardsCount () {
+      const members = Object.values(this.membersWithCards)
+      members.sort((member1, member2) => {
+        // сначала по количеству карточек
+        const allCards1 = member1.rejectedCards.quantity + member1.successfulCards.quantity
+        const allCards2 = member2.rejectedCards.quantity + member2.successfulCards.quantity
+        if (allCards1 > allCards2) return -1
+        if (allCards1 < allCards2) return 1
+        // если одинаковый, то по email`у
+        if (member1.email > member2.email) return -1
+        if (member1.email < member2.email) return 1
+        return 0
+      })
+      return members
     }
   },
   watch: {
     selectedYear (newVal) {
-      this.setDefaultItemsByMonth()
-      this.setCardsByMonthAndYear(newVal)
+      this.setCardsByMonthAndYear()
+    },
+    selectedMonth (newVal) {
+      this.setCardsByMonthAndYear()
+    },
+    isLoaded (newVal) {
+      if (newVal) this.setCardsByMonthAndYear()
     }
   },
   mounted () {
-    this.setDefaultItemsByMonth()
-    this.setCardsByMonthAndYear(this.selectedYear)
-    this.setOptionsYears()
+    if (this.isLoaded) this.setCardsByMonthAndYear()
   },
   methods: {
-    setCardsByMonthAndYear (year) {
+    setCardsByMonthAndYear () {
+      this.membersWithCards = {}
       this.boardCards.forEach((cardGroup) => {
-        if (cardGroup.cards && (cardGroup.UID === CARD_STAGE.ARCHIVE_SUCCESS || cardGroup.UID === CARD_STAGE.ARCHIVE_REJECT)) {
+        if (cardGroup.cards) {
           cardGroup.cards.forEach((card) => {
-            if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS && new Date(card.date_move).getFullYear() === year) {
-              setTimeout(() => {
-                this.incrementMonth(card, 'success')
-              }, 500)
-            } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT && new Date(card.date_move).getFullYear() === year) {
-              this.incrementMonth(card, 'reject')
+            const dateMove = new Date(card.date_move)
+            if (dateMove.getFullYear() === this.selectedYear && dateMove.getMonth() === this.selectedMonth) {
+              if (card.uid_stage === CARD_STAGE.ARCHIVE_SUCCESS) {
+                const member = this.getMemberByUser(card.user)
+                if (member) {
+                  member.successfulCards = {
+                    quantity: member.successfulCards.quantity + 1,
+                    cost: member.successfulCards.cost + card.cost
+                  }
+                  member.archiveCards = {
+                    quantity: member.archiveCards.quantity + 1,
+                    cost: member.archiveCards.cost + card.cost
+                  }
+                }
+              } else if (card.uid_stage === CARD_STAGE.ARCHIVE_REJECT) {
+                const member = this.getMemberByUser(card.user)
+                if (member) {
+                  member.rejectedCards = {
+                    quantity: member.rejectedCards.quantity + 1,
+                    cost: member.rejectedCards.cost + card.cost
+                  }
+                  member.archiveCards = {
+                    quantity: member.archiveCards.quantity + 1,
+                    cost: member.archiveCards.cost + card.cost
+                  }
+                }
+              }
             }
           })
         }
       })
     },
-    incrementMonth (card, type) {
-      const cardDate = new Date(card.date_move)
-      const cardMonth = cardDate.getMonth()
-      this.itemsByMonth[cardMonth][type] += 1
-    },
-    setOptionsYears () {
-      for (let i = new Date().getFullYear(); i >= 2020; i--) {
-        this.options.push(i)
-      }
-    },
-    setDefaultItemsByMonth () {
-      this.itemsByMonth = [
-        {
-          month: 'Январь',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Февраль',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Март',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Апрель',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Май',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Июнь',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Июль',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Август',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Сентябрь',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Октябрь',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Ноябрь',
-          success: 0,
-          reject: 0
-        },
-        {
-          month: 'Декабрь',
-          success: 0,
-          reject: 0
+    getMemberByUser (user) {
+      if (!user) return null
+      const member = this.membersWithCards[user.toLowerCase()]
+      if (!member) {
+        const newMember = {
+          email: user,
+          username: this.employeesByEmail[user.toLowerCase()]?.name || user,
+          successfulCards: {
+            quantity: 0,
+            cost: 0
+          },
+          rejectedCards: {
+            quantity: 0,
+            cost: 0
+          },
+          archiveCards: {
+            quantity: 0,
+            cost: 0
+          }
         }
-      ]
+        this.membersWithCards[user.toLowerCase()] = newMember
+        return newMember
+      }
+      return member
     }
   }
 }

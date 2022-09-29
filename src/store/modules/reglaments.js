@@ -1,3 +1,4 @@
+import store from '@/store/index.js'
 import axios from 'axios'
 import * as REGLAMENTS from '../actions/reglaments'
 
@@ -17,7 +18,8 @@ const actions = {
   // получить вопросы регламента
   [REGLAMENTS.REGLAMENT_REQUEST]: ({ commit, dispatch }, uidReglament) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament/' + uidReglament
+      const url =
+        process.env.VUE_APP_INSPECTOR_API + 'reglament/' + uidReglament
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           commit(REGLAMENTS.REGLAMENT_SUCCESS, resp.data)
@@ -49,7 +51,12 @@ const actions = {
   },
   [REGLAMENTS.CREATE_REGLAMENT_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'reglaments'
+      const userUid = store.state.user.user.current_user_uid
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'reglaments' +
+        '?user_uid=' +
+        userUid
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           commit(REGLAMENTS.REGLAMENT_CHANGE_REGLAMENTS, [data])
@@ -62,7 +69,12 @@ const actions = {
   },
   [REGLAMENTS.UPDATE_REGLAMENT_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'reglaments'
+      const userUid = store.state.user.user.current_user_uid
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'reglaments' +
+        '?user_uid=' +
+        userUid
       axios({ url: url, method: 'PATCH', data: data })
         .then((resp) => {
           commit(REGLAMENTS.REGLAMENT_CHANGE_REGLAMENTS, [data])
@@ -153,7 +165,10 @@ const actions = {
   },
   [REGLAMENTS.GET_REGLAMENT_COMMENTS]: ({ commit, dispatch }, reglamentUid) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'reglament_comments?uid_reglament=' + reglamentUid
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'reglament_comments?uid_reglament=' +
+        reglamentUid
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           resolve(resp)
@@ -163,10 +178,28 @@ const actions = {
         })
     })
   },
-  [REGLAMENTS.CREATE_REGLAMENT_COMMENT]: ({ commit, dispatch }, reglamentComment) => {
+  [REGLAMENTS.CREATE_REGLAMENT_COMMENT]: (
+    { commit, dispatch },
+    reglamentComment
+  ) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_INSPECTOR_API + 'reglament_comments'
       axios({ url: url, method: 'POST', data: reglamentComment })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [REGLAMENTS.SET_REGLAMENT_REMINDER]: (
+    { commit, dispatch },
+    reglamentReminder
+  ) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_INSPECTOR_API + 'reglamentReminder'
+      axios({ url: url, method: 'POST', data: reglamentReminder })
         .then((resp) => {
           resolve(resp)
         })
@@ -179,8 +212,8 @@ const actions = {
 
 const mutations = {
   [REGLAMENTS.REGLAMENT_SUCCESS]: (state, data) => {
-    state.reglamentQuestions = data.map(reglamentQuestion => {
-      const answers = reglamentQuestion.answers?.map(answer => {
+    state.reglamentQuestions = data.map((reglamentQuestion) => {
+      const answers = reglamentQuestion.answers?.map((answer) => {
         return {
           ...answer,
           needToCreate: false,

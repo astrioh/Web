@@ -1,62 +1,3 @@
-<template>
-  <div
-    class="bg-[#F4F5F7] py-[10px] px-[12px] rounded-t-[12px] rounded-bl-[12px] mb-[5px] float-right relative max-w-[300px] group"
-  >
-    <card-chat-deleted-message-content v-if="message.deleted" />
-    <image-preloader
-      v-else-if="FileIsImage"
-      :file-uid="message.uid"
-      :file-size="message.file_size"
-      :file-extension="fileExtension"
-      :file-name="message.file_name"
-      :file-date-create="getMessageTimeString(message.date_create)"
-      preloader-color="#F4F5F7"
-      @onQuoteMessage="setCurrentQuote"
-      @onDeleteMessage="deleteFile"
-    />
-    <audio-preloader
-      v-else-if="FileIsAudio"
-      :file-uid="message.uid"
-      :file-extension="fileExtension"
-      :file-name="message.file_name"
-      :file-date-create="getMessageTimeString(message.date_create)"
-      @onQuoteMessage="setCurrentQuote"
-      @onDeleteMessage="deleteFile"
-    />
-    <doc-preloader
-      v-else-if="FileIsDoc"
-      :file-uid="message.uid"
-      :file-name="message.file_name"
-      :file-extension="fileExtension"
-      :file-size="formatBytes(message.file_size)"
-      :file-date-create="getMessageTimeString(message.date_create)"
-      :is-file-uploading="message.is_uploading"
-      @onQuoteMessage="setCurrentQuote"
-      @onDeleteMessage="deleteFile"
-    />
-    <movie-preloader
-      v-else-if="FileIsMovie"
-      :file-uid="message.uid"
-      :file-extension="fileExtension"
-      :file-name="message.file_name"
-      :file-size="formatBytes(message.file_size)"
-      :file-date-create="getMessageTimeString(message.date_create)"
-      @onQuoteMessage="setCurrentQuote"
-      @onDeleteMessage="deleteFile"
-    />
-    <file-preloader
-      v-else
-      :file-uid="message.uid"
-      :file-extension="fileExtension"
-      :file-name="message.file_name"
-      :file-size="formatBytes(message.file_size)"
-      :file-date-create="getMessageTimeString(message.date_create)"
-      :is-file-uploading="message.is_uploading"
-      @onQuoteMessage="setCurrentQuote"
-      @onDeleteMessage="deleteFile"
-    />
-  </div>
-</template>
 <script>
 
 import ImagePreloader from '@/components/CardProperties/ImagePreloader.vue'
@@ -125,3 +66,62 @@ export default {
   }
 }
 </script>
+<template>
+  <div
+    class="bg-[#F4F5F7] py-[10px] px-[12px] rounded-t-[12px] rounded-bl-[12px] mb-[5px] float-right relative max-w-[300px] group"
+  >
+    <card-chat-deleted-message-content v-if="message.deleted" />
+    <image-preloader
+      v-else-if="FileIsImage"
+      :file-uid="message.uid"
+      :file-extension="fileExtension"
+      :file-name="message.file_name"
+      :file-date-create="getMessageTimeString(message.date_create)"
+      :file-action="'CLIENT_FILE_REQUEST'"
+      preloader-color="#F4F5F7"
+      @onQuoteMessage="setCurrentQuote"
+      @onDeleteMessage="deleteFile"
+    />
+    <audio-preloader
+      v-else-if="FileIsAudio"
+      :file-uid="message.uid"
+      :file-extension="fileExtension"
+      :file-name="message.file_name"
+      :file-date-create="getMessageTimeString(message.date_create)"
+      @onQuoteMessage="setCurrentQuote"
+      @onDeleteMessage="deleteFile"
+    />
+    <doc-preloader
+      v-else-if="FileIsDoc"
+      :file-uid="message.uid"
+      :file-name="message.file_name"
+      :file-extension="fileExtension"
+      :file-size="formatBytes(message.file_size)"
+      :file-date-create="getMessageTimeString(message.date_create)"
+      :is-file-uploading="message.is_uploading"
+      @onQuoteMessage="setCurrentQuote"
+      @onDeleteMessage="deleteFile"
+    />
+    <movie-preloader
+      v-else-if="FileIsMovie"
+      :file-uid="message.uid"
+      :file-extension="fileExtension"
+      :file-name="message.file_name"
+      :file-size="formatBytes(message.file_size)"
+      :file-date-create="getMessageTimeString(message.date_create)"
+      @onQuoteMessage="setCurrentQuote"
+      @onDeleteMessage="deleteFile"
+    />
+    <file-preloader
+      v-else
+      :file-uid="message.uid"
+      :file-extension="fileExtension"
+      :file-name="message.file_name"
+      :file-size="formatBytes(message.file_size)"
+      :file-date-create="getMessageTimeString(message.date_create)"
+      :is-file-uploading="message.is_uploading"
+      @onQuoteMessage="setCurrentQuote"
+      @onDeleteMessage="deleteFile"
+    />
+  </div>
+</template>

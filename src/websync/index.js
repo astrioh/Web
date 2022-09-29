@@ -73,6 +73,7 @@ export function initWebSync () {
         const obj = { ...JSON.parse(str) }
         if (process.env.VUE_APP_EXTENDED_LOGS) console.log('websync obj', obj)
 
+        // TODO: если это карточка - проксировать инспектору, инспектор должен добавить дополнительные поля. Пихать в parseObject не нужно
         parseObject(obj)
       } catch (e) {
         console.log('websync onReceive catch error', e)

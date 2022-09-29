@@ -195,6 +195,7 @@ import { USER_START_ONBOARDING } from '@/store/actions/onboarding.js'
 import { AUTH_REQUEST, GOOGLE_AUTH_REQUEST, AUTH_REGISTER } from '@/store/actions/auth'
 // import { decodeCredential } from 'vue3-google-login'
 import { maska } from 'maska'
+import * as SLIDES from '@/store/actions/slides.js'
 
 export default {
   directives: {
@@ -279,7 +280,7 @@ export default {
             'welcome'
           ]
           slideNames.forEach(slideName => {
-            this.$store.commit(slideNames.CHANGE_VISIBLE, {
+            this.$store.commit(SLIDES.CHANGE_VISIBLE, {
               name: slideName,
               visible: false
             })
@@ -319,7 +320,7 @@ export default {
             'welcome'
           ]
           slideNames.forEach(slideName => {
-            this.$store.commit(slideNames.CHANGE_VISIBLE, {
+            this.$store.commit(SLIDES.CHANGE_VISIBLE, {
               name: slideName,
               visible: true
             })

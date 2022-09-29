@@ -14,13 +14,18 @@ const actions = {
   }) => {
     const userUid = store.state.user.user.current_user_uid
     const userDep = store.state.employees.employees[userUid]?.uid_dep
+    const dateNow = new Date()
     const reglaments = Object.values(store.state.reglaments.reglaments).filter(
       (reglament) => {
+        const reglamentReminder = reglament.reminder
+          ? new Date(reglament.reminder)
+          : dateNow
         return (
           (reglament.department_uid === userDep ||
             reglament.department_uid === '') &&
           !reglament.is_passed &&
-          reglament.has_questions
+          reglament.has_questions &&
+          reglamentReminder <= dateNow
         )
       }
     )

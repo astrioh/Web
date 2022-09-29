@@ -7,7 +7,7 @@
     <div class="flex gap-[15px]">
       <template
         v-for="int in integrations"
-        :key="int.id"
+        :key="int.path"
       >
         <router-link
           :to="'/settings/integrations/' + int.path"
@@ -37,7 +37,12 @@ export default {
   },
   computed: {
     integrations () {
-      return this.$store.state.integrations.integrations
+      return [
+        {
+          path: 'yandex',
+          name: 'Яндекс.Почта'
+        }
+      ]
     }
   }
 }

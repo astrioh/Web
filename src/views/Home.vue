@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+
 import MainMenu from '@/components/AsideMenu/MainMenu.vue'
 import SubMenu from '@/components/AsideMenu/SubMenu.vue'
 import Overlay from '@/components/modals/Overlay.vue'
@@ -123,6 +125,9 @@ export default {
   computed: {
     isSubMenuActive () {
       return this.$store.state.navigator.submenu.status
+    },
+    user () {
+      return this.$store.state.user.user
     },
     isAsideLgActive () {
       return this.$store.state.isAsideLgActive
@@ -180,6 +185,7 @@ export default {
       this.$store.dispatch(USER_REQUEST)
         .then(resp => {
           this.getNavigator()
+          this.getIntegrations()
         })
     },
     getNavigator () {
@@ -205,6 +211,9 @@ export default {
           })
         })
       }
+    },
+    getIntegrations () {
+      this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
     },
     setShouldShowModalValue (value) {
       setLocalStorageItem('shouldShowModal', value)

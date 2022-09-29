@@ -472,6 +472,8 @@ export default {
     this.currName = this.reglamentTitle
     this.currEditors = [...this.reglamentEditors]
     this.currDep = this.reglamentDep
+    this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
+    this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
   },
   methods: {
     onDeleteQuestion (uid) {

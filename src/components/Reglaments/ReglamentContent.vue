@@ -347,9 +347,10 @@ export default {
     } catch (e) {}
 
     this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
-      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1]?.comment_date
       if (res.data.length === 0) {
         this.$store.state.reglaments.lastCommentDate = ''
+      } else {
+        this.$store.state.reglaments.lastCommentDate = res.data[0].comment_date
       }
     })
   },
@@ -385,89 +386,3 @@ export default {
   }
 }
 </script>
-<style>
-.ql-snow * {
-  font-family: "Roboto", sans-serif;
-}
-
-.ql-snow.ql-container {
-  border: none;
-}
-.ql-snow .ql-tooltip {
-  @apply z-30 ml-[150px]
-}
-.ql-snow .ql-tooltip[data-mode=link]::before {
-  content: "Введите ссылку:";
-}
-.ql-snow .ql-tooltip[data-mode=video]::before {
-  content: "Введите ссылку:";
-}
-
-.ql-snow.ql-container:not(.ql-disabled) {
-  background: #f4f5f7;
-}
-
-.ql-snow .ql-editor h1,
-.ql-snow .ql-editor h2,
-.ql-snow .ql-editor h3,
-.ql-snow .ql-editor h4 {
-  font-weight: bold;
-  line-height: 140%;
-  color: #424242;
-}
-
-.ql-snow .ql-editor h1 {
-  font-size: 25px;
-}
-
-.ql-snow .ql-editor h2 {
-  font-size: 22px;
-}
-
-.ql-snow .ql-editor h3 {
-  font-size: 19px;
-}
-
-.ql-snow .ql-editor h4 {
-  font-size: 16px;
-}
-
-.ql-snow .ql-editor p,
-.ql-snow .ql-editor ol {
-  line-height: 155%;
-  font-weight: 400;
-  font-size: 16px;
-  color: #4C4C4D;
-}
-
-.ql-snow .ql-editor a {
-  font-weight: 700;
-  font-size: 16px;
-  text-decoration: underline;
-}
-
-.ql-snow a {
-  color: #007BE5;
-}
-
-.ql-toolbar.ql-snow {
-  position: sticky;
-  top: 83px;
-  padding: 20px 0;
-  z-index: 1;
-  background: #f4f5f7;
-  border: none;
-}
-
-.ql-editor[contenteditable="true"] {
-  border-top-left-radius: 28px;
-  border-top-right-radius: 28px;
-  border-top: 28px solid white;
-  background: #fff;
-}
-
-.ql-editor > * {
-  word-break: break-word;
-  overflow: hidden;
-}
-</style>

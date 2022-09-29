@@ -491,7 +491,7 @@ export default {
 
       const month = this.pad2(dateEnd.getMonth() + 1)
       const day = this.pad2(dateEnd.getDate())
-      const year = dateEnd.getFullYear()
+      const year = String(dateEnd.getFullYear()).padStart(4, '0')
       const hours = this.pad2(dateEnd.getHours())
       const minutes = this.pad2(dateEnd.getMinutes())
       const seconds = this.pad2(dateEnd.getSeconds())

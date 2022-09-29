@@ -129,7 +129,7 @@
   </div>
 </template>
 <script>
-import * as YANDEX from '@/store/actions/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
 
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
@@ -153,11 +153,11 @@ export default {
       return this.$store.state.user.user
     },
     isOrganizationIntegrated () {
-      return this.$store.state.integrations.integrations.yandex.isIntegrated
+      return this.$store.state.yandexIntegration.isIntegrated
     }
   },
   mounted () {
-    this.$store.dispatch(YANDEX.GET_ORGANIZATION_INTEGRATION, this.user.owner_email)
+    this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
   },
   methods: {
     changeShowIntegrationState (value) {
@@ -167,7 +167,7 @@ export default {
       this.removeIntegrationModal = value
     },
     emailIntegrate (login, password) {
-      this.$store.dispatch(YANDEX.IMAP_GET_ORGANIZATION_MSGS_YANDEX_MAIL, {
+      this.$store.dispatch(YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION, {
         ya_login: login,
         ya_password: password,
         organization_email: this.user.owner_email
