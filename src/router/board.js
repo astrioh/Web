@@ -3,6 +3,11 @@ import Home from '@/views/Home'
 
 export default [
   {
+    path: '/board/:board_id/public',
+    name: 'publicBoardWithChildren',
+    component: () => import('@/components/Board/PublicBoardWithChildren.vue')
+  },
+  {
     meta: {
       layout: Home
     },

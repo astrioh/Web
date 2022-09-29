@@ -232,16 +232,18 @@ export default {
         uid: this.board.uid,
         publiclinkstatus: 1
       }
-      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
-      this.isBoardPublic = true
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
+        this.isBoardPublic = true
+      })
     },
     removePublicBoard () {
       const data = {
         uid: this.board.uid,
         publiclinkstatus: 0
       }
-      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
-      this.isBoardPublic = false
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
+        this.isBoardPublic = false
+      })
     },
     onAddNewBoard (name) {
       this.showAddBoard = false
