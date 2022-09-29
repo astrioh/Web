@@ -9,12 +9,12 @@
   <div class="flex mb-[15px]">
     <div
       class="border border-transparent bg-[#F4F5F7] rounded-[8px] min-h-[51px] grow flex items-center p-[15px]"
-      :class="{ '!bg-[#f1f9f4] !border-[#c6e8d1]': ((rightAnswer || answer.is_right) && isEditing), 'cursor-pointer': !isEditing }"
+      :class="{'!bg-white border-[#e0e0e0]': inFocus && !(rightAnswer || answer.is_right), '!bg-[#f1f9f4] !border-[#c6e8d1]': rightAnswer || answer.is_right}"
       @click="onSelectAnswer"
     >
       <div
         class="h-[20px] w-[20px] shrink-0 mr-[12px] flex items-center justify-center rounded-[5px]"
-        :class="rightAnswer || answer.is_right ? 'bg-[#1CA345]' : 'border-[rgba(0,0,0,.2)] bg-white'"
+        :class="rightAnswer || answer.is_right ? 'bg-[#1CA345]' : 'border border-[#cccccc] bg-white'"
         @click="setRightAnswer(!rightAnswer)"
       >
         <svg
@@ -37,9 +37,10 @@
         :placeholder="answerPlaceholder(answer)"
         spellcheck="false"
         class="font-[500] text-[14px] text-[#4C4C4D] leading-[25px] font-['Roboto'] break-words"
-        :class="{'cursor-editing': isEditing, 'invalid': answer.invalid, 'text-[#7E7E80]': !((rightAnswer || answer.is_right) && isEditing) }"
+        :class="{'cursor-editing': isEditing, 'invalid': answer.invalid, 'text-[#7E7E80]': !((rightAnswer || answer.is_right) && isEditing)}"
         :contenteditable="isEditing"
-        @blur="false"
+        @focus="inFocus = true"
+        @blur="inFocus = false"
         @input="maxAnswerLength"
         @keyup="false"
         @keydown.enter.exact.prevent="$emit('addAnswer')"
@@ -89,7 +90,8 @@ export default {
     return {
       name: '',
       showDeleteAnswer: false,
-      rightAnswer: false
+      rightAnswer: false,
+      inFocus: false
     }
   },
   methods: {

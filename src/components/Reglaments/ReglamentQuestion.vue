@@ -19,7 +19,7 @@
         {{ question.errorText }}
       </div>
       <div class="w-[550px] mb-2">
-        <span class="text-[#424242] font-[700] ml-2 text-[15px]">Текст вопроса</span>
+        <span class="text-[#424242] font-[700] text-[15px]">Текст вопроса</span>
       </div>
       <div class="flex justify-between items-center group">
         <div class="rounded-[8px] grow border border-[rgba(0,0,0,.12)]">
@@ -58,21 +58,21 @@
       <div class="mt-4 mb-2">
         <span
           v-if="rightAnswersAmount(question) === 1"
-          class="text-[#424242] font-[700] ml-2 text-[15px]"
+          class="text-[#424242] font-[700] text-[15px]"
         >
           В данном вопросе один правильный ответ.
         </span>
         <span
           v-if="rightAnswersAmount(question) > 1"
-          class="text-[#424242] font-[700] ml-2 text-[15px]"
+          class="text-[#424242] font-[700] text-[15px]"
         >
           В данном вопросе более одного правильного ответа.
         </span>
         <span
           v-if="rightAnswersAmount(question) === 0"
-          class="text-[#424242] font-[700] ml-2 text-[15px]"
+          class="text-[#424242] font-[700] text-[15px]"
         >
-          Добавьте правильный ответ
+          Добавьте вариант ответа
         </span>
       </div>
       <template
