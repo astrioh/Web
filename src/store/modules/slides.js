@@ -63,7 +63,7 @@ const mutations = {
               visible: true
             }
           }
-          data[value.name] = value.visible
+          data[value.name].visible = value.visible
         }
         state.slides[i].visible = value.visible
         state.slides[i].reminder = value.reminder ?? new Date()
