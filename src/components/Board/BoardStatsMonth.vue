@@ -39,7 +39,10 @@
         <th>Заявок в отказе</th>
         <th>Всего в архиве</th>
       </tr>
-      <BoardStatsSkeleton v-if="!isLoaded" />
+      <BoardStatsSkeleton
+        v-if="!isLoaded"
+        :count="3"
+      />
       <template
         v-for="member in membersSortedByCardsCount"
         v-else

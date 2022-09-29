@@ -1,6 +1,6 @@
 <template>
   <template
-    v-for="i in 10"
+    v-for="i in 3"
     :key="i"
   >
     <tr class="h-[48px]">
@@ -14,7 +14,7 @@
         </div>
       </td>
       <td
-        v-for="j in 4"
+        v-for="j in count"
         :key="j"
         class="pl-[14px]"
       >
@@ -29,6 +29,12 @@
 
 <script>
 export default {
+  props: {
+    count: {
+      type: Number,
+      default: 4
+    }
+  },
   methods: {
     getRandomNumber (min, max) {
       return Math.random() * (max - min) + min
