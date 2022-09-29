@@ -18,11 +18,27 @@
       >
         {{ question.errorText }}
       </div>
-      <div class="flex justify-between w-[550px] mb-2">
+      <div class="w-[550px] mb-2">
         <span class="text-[#424242] font-[700] ml-2 text-[15px]">Текст вопроса</span>
+      </div>
+      <div class="flex justify-between items-center group">
+        <div class="rounded-[8px] grow border border-[rgba(0,0,0,.12)]">
+          <div
+            :id="question.uid + 'input'"
+            :ref="question.uid + 'input'"
+            placeholder="Текст вопроса"
+            spellcheck="false"
+            class="font-[500] text-[14px] text-[#4C4C4D] mx-4 mt-4 leading-6 min-h-[81px] break-words"
+            :contenteditable="isEditing && canEdit"
+            @blur="changeQuestionName($event)"
+            @keydown.enter.exact.prevent="$emit('addQuestion')"
+            @input="maxQuestionLength"
+            v-text="question.name"
+          />
+        </div>
         <div
           v-if="isEditing && canEdit"
-          class="flex flex-row items-center cursor-pointer mr-1 hover:transition hover:opacity-[0.8]"
+          class="cursor-pointer mr-1 hover:transition hover:opacity-[0.8] ml-[20px]"
           @click="showDeleteQuestion = true"
         >
           <svg
@@ -37,42 +53,6 @@
               fill="#7E7E80"
             />
           </svg>
-          <span class="ml-[5px] text-[12px] font-[400] text-[#4C4C4D] font-roboto">
-            Удалить
-          </span>
-        </div>
-      </div>
-      <div class="px-1 flex justify-between items-center group">
-        <div class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] min-w-[550px]">
-          <div
-            :id="question.uid + 'input'"
-            :ref="question.uid + 'input'"
-            placeholder="Текст вопроса"
-            spellcheck="false"
-            class="font-[500] text-[14px] mx-4 mt-4 leading-6 min-h-[60px] break-words"
-            :contenteditable="isEditing && canEdit"
-            @blur="changeQuestionName($event)"
-            @keydown.enter.exact.prevent="$emit('addQuestion')"
-            @input="maxQuestionLength"
-            v-text="question.name"
-          />
-          <div class="flex justify-end items-end pb-2 pr-2">
-            <svg
-              class="right-0"
-              width="11"
-              height="11"
-              viewBox="0 0 11 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M9.5294 1.52941L1.5294 9.52935L0.46875 8.46869L8.46875 0.46875L9.5294 1.52941ZM10.5294 5.52935L5.52941 10.5294L4.46875 9.46869L9.46875 4.46869L10.5294 5.52935Z"
-                fill="#8C8CA2"
-              />
-            </svg>
-          </div>
         </div>
       </div>
       <div class="mt-4 mb-2">
@@ -92,7 +72,7 @@
           v-if="rightAnswersAmount(question) === 0"
           class="text-[#424242] font-[700] ml-2 text-[15px]"
         >
-          Добавьте вариант ответа.
+          Добавьте правильный ответ
         </span>
       </div>
       <template
@@ -111,9 +91,9 @@
           @update-answer-name="updateAnswerName"
         />
       </template>
-      <div
+      <button
         v-if="canEdit && isEditing"
-        class="flex flex-row min-w-[550px] items-center justify-center ml-[5px] mt-2 font-[300] text-[14px] bg-[#F4F5F7] p-1 px-3 rounded-[6px] hover:cursor-pointer transition hover:opacity-[0.8]"
+        class="flex grow-0 border border-[rgba(0,0,0,.1)] px-[15px] py-[9px] items-center justify-center mt-2 font-[400] text-[13px] rounded-[6px] hover:cursor-pointer transition hover:opacity-[0.8]"
         @click.stop="onAddAnswer"
       >
         <svg
@@ -128,8 +108,8 @@
             fill="#4C4C4D"
           />
         </svg>
-        <span class="ml-2 text-[13px] font-[500] text-[#4C4C4D] font-roboto">Добавить еще ответ</span>
-      </div>
+        <span class="ml-2 text-[13px] text-[#4C4C4D] font-roboto">Добавить еще ответ</span>
+      </button>
     </div>
   </div>
 </template>

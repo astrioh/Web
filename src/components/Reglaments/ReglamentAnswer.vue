@@ -6,93 +6,49 @@
     @cancel="showDeleteAnswer = false"
     @yes="deleteAnswer"
   />
-  <div
-    class="bg-[#F4F5F7] rounded-[6px] min-h-[81px] min-w-[550px] ml-1"
-    :class="{ 'bg-[#e8faee]': ((rightAnswer || answer.is_right) && isEditing), 'bg-slate-200': selected, 'cursor-pointer': !isEditing }"
-    @click="onSelectAnswer"
-  >
+  <div class="flex mb-[15px]">
     <div
-      :id="answer.uid + 'input'"
-      :ref="answer.uid + 'input'"
-      :placeholder="answerPlaceholder(answer)"
-      spellcheck="false"
-      class="font-[500] text-[14px] text-[#4C4C4D] leading-[25px] font-['Roboto'] px-4 pt-4 min-h-[60px] break-words"
-      :class="{'cursor-editing': isEditing, 'invalid': answer.invalid }"
-      :contenteditable="isEditing"
-      @blur="false"
-      @input="maxAnswerLength"
-      @keyup="false"
-      @keydown.enter.exact.prevent="$emit('addAnswer')"
-      @focusout="updateAnswerName"
-      v-text="answer.name"
-    />
-    <div class="flex justify-end items-end pb-2 pr-2">
-      <svg
-        class="right-0"
-        width="11"
-        height="11"
-        viewBox="0 0 11 11"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="M9.5294 1.52941L1.5294 9.52935L0.46875 8.46869L8.46875 0.46875L9.5294 1.52941ZM10.5294 5.52935L5.52941 10.5294L4.46875 9.46869L9.46875 4.46869L10.5294 5.52935Z"
-          fill="#8C8CA2"
-        />
-      </svg>
-    </div>
-  </div>
-  <div
-    v-if="isEditing"
-    class="flex justify-between w-[550px] mb-4"
-  >
-    <div
-      v-if="!answer.is_right"
-      class="bg-[#E3F4E8] cursor-pointer flex flex-row mt-2 items-center px-2 py-1 rounded-[6px] ml-1 hover:transition hover:opacity-[0.8]"
-      @click="setRightAnswer(true)"
+      class="border border-transparent bg-[#F4F5F7] rounded-[8px] min-h-[51px] grow flex items-center p-[15px]"
+      :class="{ '!bg-[#f1f9f4] !border-[#c6e8d1]': ((rightAnswer || answer.is_right) && isEditing), 'cursor-pointer': !isEditing }"
+      @click="onSelectAnswer"
     >
-      <svg
-        width="14"
-        height="10"
-        viewBox="0 0 14 10"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+      <div
+        class="h-[20px] w-[20px] shrink-0 mr-[12px] flex items-center justify-center rounded-[5px]"
+        :class="rightAnswer || answer.is_right ? 'bg-[#1CA345]' : 'border-[rgba(0,0,0,.2)] bg-white'"
+        @click="setRightAnswer(!rightAnswer)"
       >
-        <path
-          d="M12.3346 1L5.0013 8.33333L1.66797 5"
-          stroke="#7E7E80"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        />
-      </svg>
-      <span class="ml-2 text-[12px] font-[400] font-roboto text-[#4C4C4D]">Отметить как правильный</span>
+        <svg
+          v-if="rightAnswer || answer.is_right"
+          width="13"
+          height="9"
+          viewBox="0 0 13 9"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.02655 8.66537C4.79903 8.66537 4.57153 8.56513 4.34401 8.4649L0.590007 5.95904C0.134976 5.65834 0.021222 4.95669 0.362495 4.55576C0.703768 4.15482 1.50006 4.05458 1.9551 4.35528L4.9128 6.25974L10.7144 0.64661C11.1695 0.245672 11.852 0.245674 12.307 0.546377C12.7621 0.947315 12.7621 1.54872 12.4208 1.94966L5.93661 8.16419C5.7091 8.56513 5.36782 8.66537 5.02655 8.66537Z"
+            fill="white"
+          />
+        </svg>
+      </div>
+      <div
+        :id="answer.uid + 'input'"
+        :ref="answer.uid + 'input'"
+        :placeholder="answerPlaceholder(answer)"
+        spellcheck="false"
+        class="font-[500] text-[14px] text-[#4C4C4D] leading-[25px] font-['Roboto'] break-words"
+        :class="{'cursor-editing': isEditing, 'invalid': answer.invalid, 'text-[#7E7E80]': !((rightAnswer || answer.is_right) && isEditing) }"
+        :contenteditable="isEditing"
+        @blur="false"
+        @input="maxAnswerLength"
+        @keyup="false"
+        @keydown.enter.exact.prevent="$emit('addAnswer')"
+        @focusout="updateAnswerName"
+        v-text="answer.name"
+      />
     </div>
     <div
-      v-if="answer.is_right"
-      class="bg-[#FFEDED] cursor-pointer flex flex-row mt-2 items-center px-2 py-1 rounded-[6px] ml-1 hover:transition hover:opacity-[0.8]"
-      @click="setRightAnswer(false)"
-    >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 16 16"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M9.17387 7.99929L12.7537 4.42723C12.9105 4.27044 12.9986 4.05779 12.9986 3.83605C12.9986 3.61432 12.9105 3.40167 12.7537 3.24487C12.597 3.08808 12.3843 3 12.1626 3C11.9409 3 11.7283 3.08808 11.5715 3.24487L8 6.82526L4.42845 3.24487C4.27168 3.08808 4.05906 3 3.83736 3C3.61565 3 3.40303 3.08808 3.24626 3.24487C3.08949 3.40167 3.00142 3.61432 3.00142 3.83605C3.00142 4.05779 3.08949 4.27044 3.24626 4.42723L6.82613 7.99929L3.24626 11.5713C3.16823 11.6488 3.10629 11.7408 3.06403 11.8423C3.02176 11.9438 3 12.0526 3 12.1625C3 12.2724 3.02176 12.3813 3.06403 12.4827C3.10629 12.5842 3.16823 12.6763 3.24626 12.7537C3.32365 12.8317 3.41573 12.8937 3.51718 12.936C3.61864 12.9782 3.72745 13 3.83736 13C3.94726 13 4.05608 12.9782 4.15753 12.936C4.25898 12.8937 4.35106 12.8317 4.42845 12.7537L8 9.17332L11.5715 12.7537C11.6489 12.8317 11.741 12.8937 11.8425 12.936C11.9439 12.9782 12.0527 13 12.1626 13C12.2725 13 12.3814 12.9782 12.4828 12.936C12.5843 12.8937 12.6763 12.8317 12.7537 12.7537C12.8318 12.6763 12.8937 12.5842 12.936 12.4827C12.9782 12.3813 13 12.2724 13 12.1625C13 12.0526 12.9782 11.9438 12.936 11.8423C12.8937 11.7408 12.8318 11.6488 12.7537 11.5713L9.17387 7.99929Z"
-          fill="#4C4C4D"
-        />
-      </svg>
-
-      <span class="ml-2 text-[12px] font-[400] font-roboto text-[#4C4C4D]">Cбросить</span>
-    </div>
-    <div
-      v-if="isEditing"
-      class="flex flex-row items-center cursor-pointer mr-1 mt-2 hover:transition hover:opacity-[0.8]"
+      class="flex flex-row items-center cursor-pointer mr-1 mt-2 hover:transition hover:opacity-[0.8] ml-[20px]"
       @click="deleteAnswer()"
     >
       <svg
@@ -107,9 +63,6 @@
           fill="#7E7E80"
         />
       </svg>
-      <span class="ml-[5px] text-[12px] font-[400] text-[#4C4C4D] font-roboto">
-        Удалить
-      </span>
     </div>
   </div>
 </template>
@@ -137,11 +90,6 @@ export default {
       name: '',
       showDeleteAnswer: false,
       rightAnswer: false
-    }
-  },
-  computed: {
-    selected () {
-      return this.answer.selected
     }
   },
   methods: {
