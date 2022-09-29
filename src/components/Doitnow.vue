@@ -31,7 +31,7 @@
             @nextTask="nextTask"
           />
           <DoitnowReglament
-            v-else-if="isNotify"
+            v-else-if="isReglament"
             :name="firstTask.name"
             :uid="firstTask.uid"
             :date="firstTask.lastDate"
@@ -58,12 +58,12 @@
           />
         </div>
         <div
-          v-if="isNotify || isSlide"
+          v-if="isReglament || isSlide"
           class="flex-none flex mb-5 justify-end items-center self-start z-[1]"
         >
           <button
             class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[200px] h-[40px] bg-white justify-center text-[#424242]"
-            @click="!postponeDate ? postponeTask(firstTask.reminder, firstTask.reminder, timeArr[postponeIndex]) : changeSlideReminder(postponeDate)"
+            @click="!postponeDate ? postponeTask(firstTask.reminder, timeArr[postponeIndex]) : postponeTask(postponeDate)"
           >
             Отложить на {{ !postponeDate ? timeArr[postponeIndex].name : transformPostponeDate }}
           </button>
@@ -255,7 +255,7 @@ export default {
     isSlide () {
       return this.firstTask?.mode === 'slide'
     },
-    isNotify () {
+    isReglament () {
       return !!this.firstTask?.notify
     },
     justRegistered () {
@@ -276,7 +276,7 @@ export default {
     firstTask (newtask) {
       this.postponeDate = ''
       this.postponeIndex = 0
-      if (newtask && newtask.uid && !this.isNotify) {
+      if (newtask && newtask.uid && !this.isReglament) {
         this.isTaskMessagesLoading = true
         this.$store.dispatch(TASK.GET_TASK_CHILDRENS, newtask.uid)
           .then((resp) => {
@@ -388,19 +388,21 @@ export default {
     pad2 (n) {
       return (n < 10 ? '0' : '') + n
     },
-    postponeTask (begin, end, item) {
+    postponeTask (end, item) {
       const dateEnd = new Date(end)
-      switch (item.name) {
-        case '10 минут':
-          dateEnd.setMinutes(dateEnd.getMinutes() + item.value)
-          break
-        case '1 час':
-        case '3 часа':
-          dateEnd.setHours(dateEnd.getHours() + item.value)
-          break
-        case 'Завтра':
-          dateEnd.setDate(dateEnd.getDate() + item.value)
-          break
+      if (item) {
+        switch (item.name) {
+          case '10 минут':
+            dateEnd.setMinutes(dateEnd.getMinutes() + item.value)
+            break
+          case '1 час':
+          case '3 часа':
+            dateEnd.setHours(dateEnd.getHours() + item.value)
+            break
+          case 'Завтра':
+            dateEnd.setDate(dateEnd.getDate() + item.value)
+            break
+        }
       }
 
       const month = this.pad2(dateEnd.getMonth() + 1)
@@ -419,17 +421,8 @@ export default {
       this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
       this.nextTask()
     },
-    setPostponeDate (dateBegin, dateEnd) {
-      this.postponeDate = dateEnd
-    },
-    changeSlideReminder (dateEnd) {
-      const slide = {
-        name: this.firstTask.name,
-        visible: this.firstTask.visible,
-        reminder: dateEnd
-      }
-      this.$store.commit(SLIDES.CHANGE_VISIBLE, slide)
-      this.nextTask()
+    setPostponeDate (date) {
+      this.postponeDate = date
     },
     setNotifiesCopy () {
       this.notifiesCopy = this.notifies
