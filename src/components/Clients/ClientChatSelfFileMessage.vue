@@ -111,7 +111,7 @@ export default {
       :file-name="message.file_name"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
-      :file-action="'CLIENT_FILE_REQUEST'"
+      :route-file-name="'clientfile'"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />

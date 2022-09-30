@@ -43,7 +43,7 @@
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
       :can-delete="false"
-      :file-action="'CLIENT_FILE_REQUEST'"
+      :route-file-name="'clientfile'"
       @onQuoteMessage="setCurrentQuote"
     />
     <FilePreloader
