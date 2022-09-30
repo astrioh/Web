@@ -52,7 +52,7 @@
                 v-if="!isTesting"
                 class="flex items-center px-[10px] py-[5px]"
               >
-                История изменений
+                Дата последнего изменения: {{ $store.state.reglaments.lastCommentDate }}
               </ReglamentSmallButton>
             </router-link>
             <ReglamentSmallButton
@@ -494,6 +494,10 @@ export default {
     this.currName = this.reglamentTitle
     this.currEditors = [...this.reglamentEditors]
     this.currDep = this.reglamentDep
+
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
+      this.$store.state.reglaments.lastCommentDate = res.data[res?.data.length - 1].comment_date
+    })
   },
   methods: {
     onDeleteQuestion (uid) {
@@ -672,9 +676,16 @@ export default {
         } else {
           this.showSaveModal = false
         }
+        this.$store.state.reglaments.lastCommentDate = this.dateToLabelFormat(new Date())
       }).catch(() => {
         this.saveContentStatus = 2
       })
+    },
+    dateToLabelFormat (calendarDate) {
+      const day = calendarDate.getDate()
+      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
+      return day + ' ' + month + ', ' + weekday
     },
     getBack () {
       this.$emit('exitEditMode')

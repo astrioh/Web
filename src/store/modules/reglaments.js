@@ -9,7 +9,8 @@ const state = {
   contributors: [], // сотрудники, прошедшие текущий регламент
   questionsToDelete: [],
   answersToDelete: [],
-  hideSaveParams: false
+  hideSaveParams: false,
+  lastCommentDate: ''
 }
 
 const actions = {
