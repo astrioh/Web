@@ -88,8 +88,8 @@
       class="h-full flex items-center justify-center max-w-[600px] mx-auto"
     >
       <div class="flex justify-center items-center flex-col w-full rounded-[8px] bg-[#F9F9F9] p-[25px] shadow-2xl">
-        <span>Форма успешно отправлена</span>
-        <span v-if="item.redirectLink">{{ !linkIsText ? 'Через несколько секунд произойдет редирект' : item.redirectLink }}</span>
+        <span>Форма успешно отправлена!</span>
+        <span v-if="item.redirectLink">Сейчас Вы будете перенаправлены.</span>
       </div>
     </div>
   </div>
