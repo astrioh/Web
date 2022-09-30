@@ -16,13 +16,17 @@
         {{ message.msg }}
       </span>
       <p
-        class="text-right font-[700] leading-[14px] text-[11px] self-end group-hover:hidden min-w-[30px]"
+        :class="{ 'group-hover:hidden' : shouldShowOptions }"
+        class="text-right font-[700] leading-[14px] text-[11px] self-end min-w-[30px]"
         style="color: rgba(0, 0, 0, 0.4);"
       >
         {{ getMessageTimeString(message.date_create) }}
       </p>
-      <div class="self-end group-hover:flex hidden">
+      <div
+        class="self-end group-hover:flex hidden"
+      >
         <ClientChatMessageOptionsPopMenu
+          v-if="shouldShowOptions"
           :can-delete="false"
           @onQuoteMessage="onQuoteMessage"
         >
@@ -68,6 +72,10 @@ export default {
     message: {
       type: Object,
       default: () => {}
+    },
+    shouldShowOptions: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['onQuoteMessage'],

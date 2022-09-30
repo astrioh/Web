@@ -21,6 +21,15 @@
           {{ employees[message.uid_creator].name }}
         </span>
       </div>
+
+      <div
+        v-if="message.emailSender"
+        class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
+        :class="{ 'text-left': !isMyEmailIntegrated(message), 'text-right': isMyEmailIntegrated(message) }"
+      >
+        <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">{{ message.emailSender }}</span>
+      </div>
+
       <ClientChatQuoteMessage
         v-if="message.hasQuote"
         :quote-message-uid="message.uid_quote"
@@ -28,6 +37,7 @@
       <ClientChatInterlocutorMessage
         v-if="!message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
+        :should-show-options="shouldShowOptions(message)"
         :employee="employees[message.uid_creator]"
         @onQuoteMessage="setCurrentQuote"
       />
@@ -42,6 +52,7 @@
         v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
         :employee="employees[message.uid_creator]"
+        :should-show-options="shouldShowOptions(message)"
         @onDeleteMessage="onDeleteMessage"
         @onQuoteMessage="setCurrentQuote"
       />
@@ -104,11 +115,14 @@ export default {
         hasQuote: message.uid_quote && message.uid_quote !== '00000000-0000-0000-0000-000000000000' && message.deleted !== 1,
         quoteMessage: this.getMessageByUid(message?.uid_quote),
         isInspectorMessage: message.uid_creator === 'inspector',
-        isMyMessage: (message.uid_creator === this.currentUserUid) || message.organization === this.user.owner_email
+        isMyMessage: (message.uid_creator === this.currentUserUid) || message.emailSender.includes(this.yandexIntegrations.login)
       }))
     },
     user () {
       return this.$store.state.user.user
+    },
+    yandexIntegrations () {
+      return this.$store.state.yandexIntegration
     }
   },
   methods: {
@@ -123,6 +137,12 @@ export default {
     },
     isMyMessage (msg) {
       return msg.uid_creator === this.currentUserUid
+    },
+    shouldShowOptions (msg) {
+      return !msg.isYandex
+    },
+    isMyEmailIntegrated (msg) {
+      return msg.emailSender.includes(this.yandexIntegrations.login)
     },
     isChangedDate (index) {
       if (index === 0) return true

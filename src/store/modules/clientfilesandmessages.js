@@ -142,7 +142,8 @@ const mutations = {
         date_create: data[i].date,
         msg: data[i].text,
         emailSender: data[i].from.value[0].address,
-        uid_message: uuidv4()
+        uid_message: uuidv4(),
+        isYandex: true
       })
     }
   },
