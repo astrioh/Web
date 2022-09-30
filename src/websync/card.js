@@ -1,3 +1,4 @@
+import router from '@/router/index.js'
 import * as CARD from '@/store/actions/cards'
 import {
   CHANGE_CARD,
@@ -5,7 +6,6 @@ import {
   INSPECTOR_CARD_REQUEST
 } from '@/store/actions/cards'
 import store from '@/store/index.js'
-import router from '@/router/index.js'
 import { computed } from 'vue'
 
 const selectedCardUid = computed(() => store.state.cards.selectedCardUid)
@@ -29,7 +29,12 @@ export function removeCard (uid) {
 
 export function updateCard (obj) {
   if (router.currentRoute.value.name !== 'boardWithChildren') return
-  if (router.currentRoute.value.params.board_id !== obj.obj.uid_board) return
+  if (
+    !store.getters.cardsMap[obj.obj.uid] &&
+    router.currentRoute.value.params.board_id !== obj.obj.uid_board
+  ) {
+    return
+  }
 
   store.dispatch(INSPECTOR_CARD_REQUEST, obj.obj.uid).then((resp) => {
     obj.obj.uid_client = ''

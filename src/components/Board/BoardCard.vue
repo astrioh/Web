@@ -35,7 +35,7 @@
 &nbsp;
       </div>
     </div>
-    <div class="flex items-start justify-between relative">
+    <div class="flex items-start justify-between">
       <div class="w-full">
         <p
           class="text-[#424242] font-['Roboto'] text-[14px] leading-[18px] font-medium tracking-[.02em] break-words"
@@ -43,25 +43,22 @@
           {{ card.name }}
         </p>
       </div>
-      <!-- кнопка три точки -->
-
       <div
         v-show="!readOnly"
-        class="absolute right-0 z-10"
+        class="ml-[-20px] flex-none"
       >
         <div
           :ref="`card-icon-${card.uid}`"
-          class="board-card-dots flex-none h-[18px] w-[18px] overflow-hidden cursor-pointer invisible group-hover:visible transition-colors"
+          class="w-[20px] h-[20px] overflow-hidden cursor-pointer invisible group-hover:visible transition-colors bg-[#ffffff8e] hover:bg-[#fffffff8] rounded"
           :style="getDotsStyle"
           @click.stop=""
         >
           <PopMenu
-            placement="top"
             @openMenu="lockVisibility(card.uid)"
             @closeMenu="unlockVisibility(card.uid)"
           >
             <div
-              class=""
+              class="flex items-center justify-center w-[20px] h-[20px]"
             >
               <svg
                 width="18"

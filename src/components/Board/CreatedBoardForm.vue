@@ -89,7 +89,7 @@
     >
       <div class="flex justify-center items-center flex-col w-full rounded-[8px] bg-[#F9F9F9] p-[25px] shadow-2xl">
         <span>Форма успешно отправлена!</span>
-        <span v-if="item.redirectLink">Сейчас Вы будете перенаправлены.</span>
+        <span v-if="item.redirectLink && !isFrame">{{ !linkIsText ? 'Сейчас Вы будете перенаправлены.' : item.redirectLink }}</span>
       </div>
     </div>
   </div>
@@ -173,19 +173,17 @@ export default {
     submitForm () {
       this.validateForm()
       if (this.inputsValidateError) return
+      const comment = `${this.item.inputs.input2}: ${this.modelInput2}\n ${this.item.inputs.input3}: ${this.modelInput3}\n ${this.item.inputs.input4}: ${this.modelInput4}`
       const data = {
         board_uid: this.$route.params.board_id,
         title: this.modelInput1,
-        comment:
-        this.modelInput2 + `${this.modelInput2.length > 0 ? ', ' : ''}` +
-        this.modelInput3 + `${this.modelInput3.length > 0 ? ', ' : ''}` +
-        this.modelInput4
+        comment
       }
       this.$store.dispatch(BOARD.SEND_BOARD_FORM_REQUEST, data).then(() => {
         console.log('send success')
         if (this.item.redirectLink.length > 0) {
           this.showFormSended = true
-          if (!this.linkIsText) {
+          if (!this.linkIsText && !this.isFrame) {
             setTimeout(() => {
               window.location.href = this.item.redirectLink
             }, 5000)
@@ -197,7 +195,19 @@ export default {
     },
     validateForm () {
       this.inputsValidateError = false
-      if (this.modelInput1.length < 1 || this.modelInput2.length < 1 || this.modelInput3.length < 1 || this.modelInput4.length < 1) {
+      if (this.modelInput1.length < 1 && this.boardForm.info?.name.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput2.length < 1 && this.boardForm.info?.email.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput3.length < 1 && this.boardForm.info?.phone.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput4.length < 1 && this.boardForm.info?.comment.visible === true) {
         this.inputsValidateError = true
       }
     }

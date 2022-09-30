@@ -88,6 +88,7 @@ export default {
       :file-extension="fileExtension"
       :file-name="message.file_name"
       :file-date-create="getMessageTimeString(message.date_create)"
+      :file-action="'CLIENT_FILE_REQUEST'"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />
@@ -99,6 +100,7 @@ export default {
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
       :is-file-uploading="message.is_uploading"
+      :file-action="'CLIENT_FILE_REQUEST'"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />
@@ -109,6 +111,7 @@ export default {
       :file-name="message.file_name"
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
+      :route-file-name="'clientfile'"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />
@@ -120,6 +123,7 @@ export default {
       :file-size="formatBytes(message.file_size)"
       :file-date-create="getMessageTimeString(message.date_create)"
       :is-file-uploading="message.is_uploading"
+      :file-action="'CLIENT_FILE_REQUEST'"
       @onQuoteMessage="setCurrentQuote"
       @onDeleteMessage="deleteFile"
     />

@@ -4,9 +4,7 @@ import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
 const state = {
   login: '',
   password: '',
-  isIntegrated: false,
-  sentFromUs: [],
-  sentToUs: []
+  isIntegrated: false
 }
 
 const actions = {
@@ -63,7 +61,6 @@ const actions = {
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
-          commit(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -84,7 +81,6 @@ const actions = {
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
-          commit(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -97,13 +93,7 @@ const actions = {
 
 const mutations = {
   [YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION]: (state, data) => {
-    state.isIntegrated = true
-  },
-  [YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US]: (state, data) => {
-    state.sentFromUs = data
-  },
-  [YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US]: (state, data) => {
-    state.sentToUs = data
+    state.isIntegrated = data
   },
   [YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: (state, data) => {
     if (data.length) {

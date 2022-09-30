@@ -10,6 +10,7 @@ import authRouter from './auth'
 
 import Doitnow from '@/components/Doitnow.vue'
 import CardFile from '@/views/CardFile'
+import ClientFile from '@/views/ClientFile'
 import Home from '@/views/Home'
 import TaskFile from '@/views/TaskFile'
 
@@ -43,6 +44,15 @@ const routes = [
     path: '/cardfile/:id',
     name: 'cardfile',
     component: CardFile,
+    beforeEnter: shouldRedirectToLogin
+  },
+  {
+    meta: {
+      title: 'Client file'
+    },
+    path: '/clientfile/:id',
+    name: 'clientfile',
+    component: ClientFile,
     beforeEnter: shouldRedirectToLogin
   },
   {
