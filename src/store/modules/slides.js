@@ -30,7 +30,7 @@ const state = {
       name: 'delegateTasks',
       mode: 'slide',
       visible: JSON.parse(localStorage.getItem('slides'))?.delegateTasks?.visible ?? true,
-      reminder: JSON.parse(localStorage.getItem('slides'))?.delegateTasks?.reminder ?? new Date()
+      reminder: JSON.parse(localStorage.getItem('slides'))?.delegateTasks?.reminder
     }
   ]
 }
