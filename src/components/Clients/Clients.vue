@@ -5,7 +5,7 @@
   />
   <ModalBoxAddClient
     v-if="showAddClient"
-    title="Добавить клиента"
+    title="Добавить контакт"
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
