@@ -97,6 +97,18 @@ const actions = {
         })
     })
   },
+  [BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST]: ({ commit, dispatch }, data) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_LEADERTASK_API + '/api/v1/board/publiclinkstatus?uid=' + data.uid
+      axios({ url: url, method: 'PATCH', data: data })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   [BOARD.QUIT_BOARD_REQUEST]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const url =

@@ -1,7 +1,8 @@
 <template>
   <div
-    class="max-w-[252px] group bg-white rounded-[6px] border px-[18px] py-[20px] transition-colors hover:bg-[rgba(0,0,0,.05)] hover:cursor-pointer"
+    class="board-card max-w-[252px] group bg-white rounded-[6px] border px-[18px] py-[20px] transition-colors hover:cursor-pointer"
     :class="{ 'border-[rgba(0,0,0,0.1)]': !selected, 'border-[#ff9123]': selected }"
+    :style="getCardStyle"
     @click="selectCard"
   >
     <div
@@ -35,85 +36,94 @@
       </div>
     </div>
     <div class="flex items-start justify-between">
-      <div class="width100without18">
+      <div class="w-full">
         <p
           class="text-[#424242] font-['Roboto'] text-[14px] leading-[18px] font-medium tracking-[.02em] break-words"
         >
           {{ card.name }}
         </p>
       </div>
-      <!-- кнопка три точки -->
-
       <div
-        v-if="!readOnly"
-        :ref="`card-icon-${card.uid}`"
-        class="flex-none h-[18px] w-[18px] overflow-hidden cursor-pointer invisible group-hover:visible"
-        @click.stop=""
+        v-show="!readOnly"
+        class="ml-[-20px] flex-none"
       >
-        <PopMenu
-          @openMenu="lockVisibility(card.uid)"
-          @closeMenu="unlockVisibility(card.uid)"
+        <div
+          :ref="`card-icon-${card.uid}`"
+          class="w-[20px] h-[20px] overflow-hidden cursor-pointer invisible group-hover:visible transition-colors bg-[#ffffff8e] hover:bg-[#fffffff8] rounded"
+          :style="getDotsStyle"
+          @click.stop=""
         >
-          <div
-            class="hover:-m-px hover:border hover:rounded-sm border-[#7e7e80]"
+          <PopMenu
+            @openMenu="lockVisibility(card.uid)"
+            @closeMenu="unlockVisibility(card.uid)"
           >
-            <svg
-              width="18"
-              height="18"
-              viewBox="0 0 18 18"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+            <div
+              class="flex items-center justify-center w-[20px] h-[20px]"
             >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M9.35524 16.1055C8.37421 16.1055 7.57892 15.3102 7.57892 14.3291C7.57892 13.3481 8.37421 12.5528 9.35524 12.5528C10.3363 12.5528 11.1316 13.3481 11.1316 14.3291C11.1316 15.3102 10.3363 16.1055 9.35524 16.1055ZM9.35524 10.7765C8.37421 10.7765 7.57892 9.9812 7.57892 9.00016C7.57892 8.01912 8.37421 7.22383 9.35524 7.22383C10.3363 7.22383 11.1316 8.01912 11.1316 9.00016C11.1316 9.9812 10.3363 10.7765 9.35524 10.7765ZM7.57892 3.67118C7.57892 4.65222 8.37421 5.4475 9.35524 5.4475C10.3363 5.4475 11.1316 4.65222 11.1316 3.67118C11.1316 2.69015 10.3363 1.89486 9.35524 1.89486C8.37421 1.89486 7.57892 2.69015 7.57892 3.67118Z"
-                fill="#7e7e80"
-              />
-            </svg>
-          </div>
-          <template #menu>
-            <PopMenuItem
-              icon="move"
-              @click="clickMove"
-            >
-              Переместить
-            </PopMenuItem>
-            <PopMenuItem
-              v-if="!isArchive"
-              @click="clickMoveToTop"
-            >
-              В начало колонки
-            </PopMenuItem>
-            <PopMenuItem
-              v-if="!isArchive"
-              @click="clickMoveToBottom"
-            >
-              В конец колонки
-            </PopMenuItem>
-            <PopMenuDivider v-if="!isArchive" />
-            <PopMenuItem
-              v-if="!isArchive"
-              @click="clickSuccess"
-            >
-              Архивировать: Успех
-            </PopMenuItem>
-            <PopMenuItem
-              v-if="!isArchive"
-              @click="clickReject"
-            >
-              Архивировать: Отказ
-            </PopMenuItem>
-            <PopMenuDivider />
-            <PopMenuItem
-              icon="delete"
-              type="delete"
-              @click="clickDelete"
-            >
-              Удалить
-            </PopMenuItem>
-          </template>
-        </PopMenu>
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 18 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M9.35524 16.1055C8.37421 16.1055 7.57892 15.3102 7.57892 14.3291C7.57892 13.3481 8.37421 12.5528 9.35524 12.5528C10.3363 12.5528 11.1316 13.3481 11.1316 14.3291C11.1316 15.3102 10.3363 16.1055 9.35524 16.1055ZM9.35524 10.7765C8.37421 10.7765 7.57892 9.9812 7.57892 9.00016C7.57892 8.01912 8.37421 7.22383 9.35524 7.22383C10.3363 7.22383 11.1316 8.01912 11.1316 9.00016C11.1316 9.9812 10.3363 10.7765 9.35524 10.7765ZM7.57892 3.67118C7.57892 4.65222 8.37421 5.4475 9.35524 5.4475C10.3363 5.4475 11.1316 4.65222 11.1316 3.67118C11.1316 2.69015 10.3363 1.89486 9.35524 1.89486C8.37421 1.89486 7.57892 2.69015 7.57892 3.67118Z"
+                  fill="#7e7e80"
+                />
+              </svg>
+            </div>
+            <template #menu>
+              <PopMenuItem
+                class="min-w-[150px]"
+                icon="move"
+                @click="clickMove"
+              >
+                Переместить
+              </PopMenuItem>
+              <PopMenuItem
+                v-if="!isArchive"
+                class="min-w-[150px]"
+                @click="clickMoveToTop"
+              >
+                В начало колонки
+              </PopMenuItem>
+              <PopMenuItem
+                v-if="!isArchive"
+                class="min-w-[150px]"
+                @click="clickMoveToBottom"
+              >
+                В конец колонки
+              </PopMenuItem>
+              <PopMenuDivider v-if="!isArchive" />
+              <PopMenuItem
+                v-if="!isArchive"
+                class="min-w-[150px]"
+                @click="clickSuccess"
+              >
+                Архивировать: Успех
+              </PopMenuItem>
+              <PopMenuItem
+                v-if="!isArchive"
+                class="min-w-[150px]"
+                @click="clickReject"
+              >
+                Архивировать: Отказ
+              </PopMenuItem>
+              <PopMenuDivider />
+              <PopMenuItem
+                class="min-w-[150px]"
+                icon="delete"
+                type="delete"
+                @click="clickDelete"
+              >
+                Удалить
+              </PopMenuItem>
+            </template>
+          </PopMenu>
+        </div>
       </div>
     </div>
     <div
@@ -424,10 +434,37 @@ export default {
     selected: {
       type: Boolean,
       default: false
+    },
+    color: {
+      type: String,
+      required: true
+    },
+    colorDots: {
+      type: String,
+      required: true
     }
   },
   emits: ['select', 'moveSuccess', 'moveReject', 'moveColumn', 'delete', 'moveCardToTop', 'moveCardToBottom'],
+  data () {
+    return {
+      isCardShow: false
+    }
+  },
   computed: {
+    getCardStyle () {
+      return this.isCardShow
+        ? {
+            background: this.color
+          }
+        : {
+            '--card-background-hover': this.color
+          }
+    },
+    getDotsStyle () {
+      return {
+        '--dots-background': this.colorDots
+      }
+    },
     isArchive () {
       return (
         this.card.uid_stage === 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67' ||
@@ -586,10 +623,12 @@ export default {
     lockVisibility (cardUid) {
       const icon = this.$refs[`card-icon-${cardUid}`]
       icon.style.visibility = 'visible'
+      this.isCardShow = true
     },
     unlockVisibility (cardUid) {
       const icon = this.$refs[`card-icon-${cardUid}`]
       icon.style.visibility = null
+      this.isCardShow = false
     },
     clickSuccess () {
       this.$emit('moveSuccess')
@@ -614,9 +653,6 @@ export default {
 </script>
 
 <style scoped>
-.width100without18 {
-  width: calc(100% - 18px);
-}
 .light {
   --popper-theme-background-color: #ffffff;
   --popper-theme-background-color-hover: #ffffff;
@@ -627,5 +663,11 @@ export default {
   --popper-theme-border-radius: 10px;
   --popper-theme-padding: 17px 15px;
   --popper-theme-box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.25);
+}
+.board-card:hover {
+  background: var(--card-background-hover);
+}
+.board-card-dots {
+  background: var(--dots-background);
 }
 </style>

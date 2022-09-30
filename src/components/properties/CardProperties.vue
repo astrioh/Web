@@ -123,7 +123,6 @@
       <CardClient
         :client-uid="selectedCard?.uid_client"
         :client-name="selectedCard?.client_name"
-        :card-uid="selectedCard?.uid"
         :card-name="selectedCard?.name"
         :card-comment="selectedCard?.comment"
         :can-edit="canEdit"
@@ -382,13 +381,11 @@ export default {
       messageInput.focus()
     },
     changeResponsible (userEmail) {
+      if (this.selectedCard) this.selectedCard.user = userEmail
       this.$store
         .dispatch(CHANGE_CARD_RESPONSIBLE_USER, {
           cardUid: this.selectedCard?.uid,
           email: userEmail
-        })
-        .then(() => {
-          if (this.selectedCard) this.selectedCard.user = userEmail
         })
     },
     changeName (arg) {

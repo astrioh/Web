@@ -28,6 +28,10 @@ export default {
     canDelete: {
       type: Boolean,
       default: true
+    },
+    routeFileName: {
+      type: String,
+      default: 'cardfile'
     }
   },
 
@@ -43,7 +47,7 @@ export default {
   <div class="flex space-x-[11px]">
     <router-link
       class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
-      :to="{ name: 'cardfile', params: { id: fileUid }, query: { type: 'video', format: fileExtension }}"
+      :to="{ name: routeFileName, params: { id: fileUid }, query: { type: 'video', format: fileExtension } }"
       target="_blank"
     >
       <svg
@@ -66,7 +70,7 @@ export default {
     <div class="flex flex-col space-y-[2px]">
       <router-link
         class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
-        :to="{ name: 'cardfile', params: { id: fileUid }, query: { type: 'video', format: fileExtension }}"
+        :to="{ name: routeFileName, params: { id: fileUid }, query: { type: 'video', format: fileExtension } }"
         target="_blank"
       >
         {{ fileName }}

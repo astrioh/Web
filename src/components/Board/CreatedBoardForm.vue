@@ -88,8 +88,8 @@
       class="h-full flex items-center justify-center max-w-[600px] mx-auto"
     >
       <div class="flex justify-center items-center flex-col w-full rounded-[8px] bg-[#F9F9F9] p-[25px] shadow-2xl">
-        <span>Форма успешно отправлена</span>
-        <span v-if="item.redirectLink">{{ !linkIsText ? 'Через несколько секунд произойдет редирект' : item.redirectLink }}</span>
+        <span>Форма успешно отправлена!</span>
+        <span v-if="item.redirectLink">Сейчас Вы будете перенаправлены.</span>
       </div>
     </div>
   </div>
@@ -185,7 +185,7 @@ export default {
         console.log('send success')
         if (this.item.redirectLink.length > 0) {
           this.showFormSended = true
-          if (!this.linkIsText) {
+          if (!this.linkIsText && this.isFrame === false) {
             setTimeout(() => {
               window.location.href = this.item.redirectLink
             }, 5000)
@@ -197,7 +197,19 @@ export default {
     },
     validateForm () {
       this.inputsValidateError = false
-      if (this.modelInput1.length < 1 || this.modelInput2.length < 1 || this.modelInput3.length < 1 || this.modelInput4.length < 1) {
+      if (this.modelInput1.length < 1 && this.boardForm.info?.name.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput2.length < 1 && this.boardForm.info?.email.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput3.length < 1 && this.boardForm.info?.phone.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput4.length < 1 && this.boardForm.info?.comment.visible === true) {
         this.inputsValidateError = true
       }
     }

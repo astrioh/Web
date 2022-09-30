@@ -14,6 +14,14 @@
       @cancel="showAddBoard = false"
       @save="onAddNewBoard"
     />
+    <BoardModalBoxDelete
+      v-if="showConfirmQuit"
+      :show="showConfirmQuit"
+      title="Покинуть доску"
+      :text="quitBoardMessage"
+      @cancel="showConfirmQuit = false"
+      @yes="quitBoard"
+    />
     <PopMenu>
       <NavBarButtonIcon
         icon="filter"
@@ -87,6 +95,18 @@
             {{ archiveText }}
           </PopMenuItem>
         </router-link>
+        <PopMenuItem
+          v-if="isBoardPublic === false"
+          @click="setPublicBoard"
+        >
+          Сделать доску публичной
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="isBoardPublic === true"
+          @click="removePublicBoard"
+        >
+          Сделать доску приватной
+        </PopMenuItem>
         <div
           v-if="canEditBoard"
           class="w-full h-[1px] bg-[rgba(0,0,0,.1)] my-[5px]"
@@ -98,6 +118,14 @@
           @click="clickDeleteBoard"
         >
           Удалить доску
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="!canEditBoard"
+          icon="delete"
+          type="delete"
+          @click="clickQuitBoard"
+        >
+          Покинуть доску
         </PopMenuItem>
       </template>
     </PopMenu>
@@ -138,15 +166,20 @@ export default {
     return {
       showDeleteBoard: false,
       showBoardsLimit: false,
-      showAddBoard: false
+      showConfirmQuit: false,
+      showAddBoard: false,
+      isBoardPublic: false
     }
   },
   computed: {
     deleteMessage () {
       if (this.board.children.length !== 0) {
-        return 'Вы действительно хотите удалить доску? \n\n Внимание! Все дочерние доски будут удалены.'
+        return `Вы действительно хотите удалить доску ${this.selectedBoard.name}? \n\n Внимание! Все дочерние доски будут удалены.`
       }
-      return 'Вы действительно хотите удалить доску?'
+      return `Вы действительно хотите удалить доску ${this.selectedBoard.name}?`
+    },
+    quitBoardMessage () {
+      return `Вы действительно хотите покинуть доску ${this.selectedBoard.name}? Обратно можно попасть, только если владелец доски опять вас добавит.`
     },
     archiveLink () {
       if (this.$route.name === 'boardArchive') {
@@ -206,6 +239,9 @@ export default {
     clickDeleteBoard () {
       this.showDeleteBoard = true
     },
+    clickQuitBoard () {
+      this.showConfirmQuit = true
+    },
     clickAddBoard () {
       // если лицензия истекла
       if (Object.keys(this.$store.state.boards.boards).length >= 3 && this.$store.getters.isLicenseExpired) {
@@ -213,6 +249,24 @@ export default {
         return
       }
       this.showAddBoard = true
+    },
+    setPublicBoard () {
+      const data = {
+        uid: this.board.uid,
+        public_link_status: 1
+      }
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
+        this.isBoardPublic = true
+      })
+    },
+    removePublicBoard () {
+      const data = {
+        uid: this.board.uid,
+        public_link_status: 0
+      }
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
+        this.isBoardPublic = false
+      })
     },
     onAddNewBoard (name) {
       this.showAddBoard = false
@@ -264,6 +318,20 @@ export default {
     },
     clickBoardFilterClear () {
       this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
+    },
+    quitBoard () {
+      this.showConfirmQuit = false
+
+      this.$store.dispatch(BOARD.QUIT_BOARD_REQUEST, {
+        uid: this.selectedBoardUid,
+        uid_user: this.$store.state.user.user.current_user_uid
+      })
+        .then((resp) => {
+          this.$store.dispatch('asidePropertiesToggle', false)
+          this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
+          // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
+          this.$router.push('/board')
+        })
     }
   }
 }

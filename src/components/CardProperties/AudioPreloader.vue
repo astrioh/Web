@@ -106,6 +106,10 @@ export default {
     canDelete: {
       type: Boolean,
       default: true
+    },
+    fileAction: {
+      type: String,
+      default: FILE_REQUEST
     }
   },
   emits: ['onQuoteMessage', 'onDeleteMessage'],
@@ -121,7 +125,7 @@ export default {
   },
   methods: {
     loadAudioFromInternet () {
-      this.$store.dispatch(FILE_REQUEST, this.fileUid).then((resp) => {
+      this.$store.dispatch(this.fileAction, this.fileUid).then((resp) => {
         const imageBlob = new Blob([resp.data], { type: 'audio/' + this.fileExtension })
         writeCache(this.fileUid, imageBlob)
         const urlCreator = window.URL || window.webkitURL

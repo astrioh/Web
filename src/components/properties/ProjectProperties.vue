@@ -5,41 +5,7 @@
       @cancel="showAccessLimit = false"
       @ok="showAccessLimit = false"
     />
-    <ModalBoxDelete
-      v-if="showConfirm"
-      title="Удалить проект"
-      :text="`Вы действительно хотите удалить проект ${selectedProjectName}?`"
-      @cancel="showConfirm = false"
-      @yes="removeProject"
-    />
-    <ModalBoxDelete
-      v-if="showConfirmQuit"
-      title="Покинуть проект"
-      :text="`Вы действительно хотите покинуть проект ${selectedProjectName}? Обратно можно попасть, только если владелец проекта опять вас добавит.`"
-      @cancel="showConfirmQuit = false"
-      @yes="quitProject"
-    />
-    <div class="flex justify-between items-center">
-      <PopMenu>
-        <PropsButtonMenu />
-        <template #menu>
-          <PopMenuItem
-            v-if="isCanDelete"
-            icon="delete"
-            type="delete"
-            @click="showConfirm = true"
-          >
-            Удалить
-          </PopMenuItem>
-          <PopMenuItem
-            v-else
-            icon="delete"
-            @click="showConfirmQuit = true"
-          >
-            Покинуть проект
-          </PopMenuItem>
-        </template>
-      </PopMenu>
+    <div class="flex justify-end items-center">
       <PropsButtonClose @click="closeProperties" />
     </div>
     <input
@@ -47,7 +13,7 @@
       v-model="currName"
       type="text"
       placeholder="Наименование"
-      class="mt-[25px] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="changeProjectName"
     >
     <div
@@ -233,30 +199,23 @@
 <script>
 import ProjectPropsUserButton from '@/components/Projects/ProjectPropsUserButton.vue'
 import ProjectPropsMenuItemUser from '@/components/Projects/ProjectPropsMenuItemUser.vue'
-import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import PropsColorBoxItem from '@/components/Common/PropsColorBoxItem.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
-import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
-import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 import TaskPropsAccessLimitModalBox from '@/components/properties/TaskPropsAccessLimitModalBox.vue'
 
 import * as PROJECT from '@/store/actions/projects'
-import { NAVIGATOR_REMOVE_PROJECT } from '@/store/actions/navigator'
 import ProjectPropsMenuItemDeps from '../Projects/ProjectPropsMenuItemDeps.vue'
 import ProjectPropsDepButton from '../Projects/ProjectPropsDepButton.vue'
 
 export default {
   components: {
-    ModalBoxDelete,
     TaskPropsAccessLimitModalBox,
     ProjectPropsUserButton,
     ProjectPropsMenuItemUser,
     PropsColorBoxItem,
     PopMenu,
-    PopMenuItem,
     PropsButtonClose,
-    PropsButtonMenu,
     ProjectPropsMenuItemDeps,
     ProjectPropsDepButton
   },
@@ -264,7 +223,6 @@ export default {
     return {
       showConfirm: false,
       showAccessLimit: false,
-      showConfirmQuit: false,
       currName: ''
     }
   },
@@ -414,18 +372,6 @@ export default {
     print (msg, param) {
       console.log(msg, param)
     },
-    removeProject () {
-      this.showConfirm = false
-
-      this.$store
-        .dispatch(PROJECT.REMOVE_PROJECT_REQUEST, this.selectedProjectUid)
-        .then((resp) => {
-          console.log('removeProject', resp)
-          this.$store.dispatch('asidePropertiesToggle', false)
-          this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.selectedProject)
-          this.$router.push('/project')
-        })
-    },
     setDepartment (depUid) {
       if (this.isCanEdit &&
         !this.selectedProjectDeps.includes(depUid)
@@ -449,20 +395,6 @@ export default {
           newDeps: filteredDeps
         })
       }
-    },
-    quitProject () {
-      this.showConfirmQuit = false
-
-      this.$store.dispatch(PROJECT.QUIT_PROJECT_REQUEST, {
-        uid: this.selectedProjectUid,
-        value: this.$store.state.user.user.current_user_email
-      })
-        .then((resp) => {
-          console.log('quitProject', resp)
-          this.$store.dispatch('asidePropertiesToggle', false)
-          this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.selectedProject)
-          this.$router.push('/project')
-        })
     },
     favoriteToggle () {
       if (!this.isFavorite) {

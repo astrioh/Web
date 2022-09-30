@@ -30,7 +30,7 @@
   </div>
   <div class="flex flex-col">
     <div
-      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+      class="md:mt-[15px] xl:mt-[20px] 2xl:mt-[30px] font-roboto xl:text-[13px] 2xl:text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
     >
       Имя
     </div>
@@ -39,11 +39,11 @@
       type="text"
       maxlength="50"
       placeholder="Имя"
-      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="md:mt-[8px] xl:mt-[10px] 2xl:mt-[15px] p-0 font-roboto font-bold xl:text-[15px] 2xl:text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
-      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+      class="md:mt-[15px] xl:mt-[20px] 2xl:mt-[30px] font-roboto xl:text-[13px] 2xl:text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
     >
       Телефон
     </div>
@@ -52,11 +52,11 @@
       type="text"
       maxlength="50"
       placeholder="Телефон"
-      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="md:mt-[8px] xl:mt-[10px] 2xl:mt-[15px] p-0 font-roboto font-bold xl:text-[15px] 2xl:text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
-      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+      class="md:mt-[15px] xl:mt-[20px] 2xl:mt-[30px] font-roboto xl:text-[13px] 2xl:text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
     >
       Email
     </div>
@@ -65,11 +65,11 @@
       type="text"
       maxlength="50"
       placeholder="Email"
-      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="md:mt-[8px] xl:mt-[10px] 2xl:mt-[15px] p-0 font-roboto font-bold xl:text-[15px] 2xl:text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
     <div
-      class="mt-[30px] font-roboto text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
+      class="md:mt-[15px] xl:mt-[20px] 2xl:mt-[30px] font-roboto xl:text-[13px] 2xl:text-[16px] leading-[19px] font-medium text-[#4c4c4d]"
     >
       Комментарий
     </div>
@@ -78,7 +78,7 @@
       type="text"
       maxlength="50"
       placeholder="Комментарий"
-      class="mt-[15px] p-0 font-roboto font-bold text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="md:mt-[8px] xl:mt-[10px] 2xl:mt-[15px] p-0 font-roboto font-bold xl:text-[15px] 2xl:text-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="updateClient"
     >
   </div>
@@ -296,7 +296,8 @@ export default {
           formData.append('files', blob)
           const data = {
             uid_client: this.selectedClient?.uid,
-            name: formData
+            name: formData,
+            uid_creator: this.user.current_user_uid
           }
           this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data).then(() => {
             this.selectedClient.has_files = true

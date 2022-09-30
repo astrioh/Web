@@ -96,11 +96,14 @@
       >
       <input
         v-model="form.redirect_link"
-        class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto mb-3"
+        class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto"
         name="redirect_link"
         placeholder="Ссылка для редиректа"
         type="text"
       >
+      <p class="text-gray-500 text-[11px] mb-3">
+        * если ввести ссылку (начинается с http), то вместо вывода уведомления будет произведён редирект
+      </p>
       <input
         v-model="form.privacy_policy_href"
         class="bg-[#f4f5f7]/50 rounded-[6px] border border-[#4c4c4d] focus:ring-0 focus:border-[#ff9123] w-full px-[14px] py-[11px] text-[14px] leading-[16px] text-[#4c4c4d] font-roboto mb-3"

@@ -41,7 +41,7 @@ export default {
     },
     isShowNewCover: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   emits: ['onQuoteMessage', 'onDeleteMessage', 'onNewCardCover'],

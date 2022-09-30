@@ -1,12 +1,7 @@
 <template>
-  <NavbarSearchLimit
-    v-if="showFreeModal"
-    @cancel="showFreeModal = false"
-  />
   <div
     v-if="!showSearchBar"
-    class="flex-none flex gap-[5px] p-[8px] cursor-pointer text-[#7e7e80] hover:text-[#7e7e80]/75"
-    :class="getInputWidthFull"
+    class="w-full flex gap-[5px] h-[40px] px-[8px] items-center cursor-pointer text-[#7e7e80] hover:text-[#7e7e80]/75"
     @click="onShowSearchBar"
   >
     <svg
@@ -29,9 +24,8 @@
     </p>
   </div>
   <div
-    v-if="showSearchBar"
-    class="flex-none flex gap-[5px] items-center h-[40px] overflow-hidden px-[8px] text-[#7e7e80] bg-white rounded-[10px]"
-    :class="getInputLoadingWidth"
+    v-else
+    class="w-full flex gap-[5px] items-center h-[40px] overflow-hidden px-[8px] text-[#4c4c4d] bg-white rounded-[10px]"
   >
     <svg
       class="flex-none"
@@ -55,6 +49,7 @@
       type="text"
       class="w-full font-roboto text-[14px] leading-[16px] border-0 focus:ring-0 p-0"
       @keyup.enter="sendSearchRequest"
+      @keydown.esc.stop
       @keyup.esc="closeSearch"
       @blur="onBlurSearchInput"
     >
@@ -69,13 +64,11 @@
         viewBox="0 0 16 16"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        data-v-1ded894d=""
       >
         <path
           d="M14.8486 2.84858C15.3172 2.37995 15.3172 1.62015 14.8486 1.15152C14.3799 0.682892 13.6202 0.682892 13.1515 1.15152L8.00005 6.30299L2.84858 1.15152C2.37995 0.682892 1.62015 0.682892 1.15152 1.15152C0.682891 1.62015 0.682891 2.37995 1.15152 2.84858L6.30299 8.00005L1.15152 13.1515C0.682891 13.6202 0.682891 14.3799 1.15152 14.8486C1.62015 15.3172 2.37995 15.3172 2.84858 14.8486L8.00005 9.69711L13.1515 14.8486C13.6202 15.3172 14.3799 15.3172 14.8486 14.8486C15.3172 14.3799 15.3172 13.6202 14.8486 13.1515L9.69711 8.00005L14.8486 2.84858Z"
           fill="black"
           fill-opacity="0.5"
-          data-v-1ded894d=""
         />
       </svg>
     </div>
@@ -83,77 +76,26 @@
 </template>
 
 <script>
-import NavbarSearchLimit from '@/components/Navbar/NavbarSearchLimit.vue'
-
 export default {
-  components: {
-    NavbarSearchLimit
-  },
-  props: {
-    isFull: {
-      type: Boolean,
-      default: false
-    },
-    isLoading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['search', 'change', 'eraseSearch'],
+  emits: ['search', 'eraseSearch'],
   data: () => ({
     showSearchBar: false,
-    showFreeModal: false,
     searchText: ''
   }),
-  computed: {
-    getInputWidthFull () {
-      if (this.isLoading && this.isFull) {
-        return 'w-[calc(100%_-_30px)]'
-      }
-      return this.isFull ? 'w-full' : ''
-    },
-
-    getInputLoadingWidth () {
-      if (this.isLoading && this.isFull) {
-        return 'w-[calc(100%_-_30px)]'
-      }
-      return this.isFull ? 'w-full' : 'w-[160px]'
-    },
-
-    getSearchValue () {
-      return this.$route.query.search || ''
-    }
-  },
-  watch: {
-    searchText () {
-      this.$emit('change', this.searchText)
-    },
-
-    getSearchValue (searchValue) {
-      if (!searchValue) {
-        this.searchText = ''
-      }
-    }
-  },
   methods: {
     sendSearchRequest () {
-      if (!this.searchText || this.searchText === this.$route.query.search) {
-        this.showSearchBar = false
+      if (!this.searchText) {
+        this.closeSearch()
         return
       }
       this.$emit('search', this.searchText)
-      this.showSearchBar = false
     },
     onBlurSearchInput () {
       if (!this.searchText) {
-        this.showSearchBar = false
+        this.closeSearch()
       }
     },
     onShowSearchBar () {
-      if (this.$store.state.user.user.tarif === 'free' || this.$store.getters.isLicenseExpired) {
-        this.showFreeModal = true
-        return
-      }
       this.showSearchBar = true
       this.$nextTick(function () {
         this.$refs.searchInput.focus({ preventScroll: false })
@@ -164,11 +106,11 @@ export default {
       this.$nextTick(function () {
         this.$refs.searchInput.focus({ preventScroll: false })
       })
-      this.$emit('eraseSearch')
     },
     closeSearch () {
       this.searchText = ''
       this.showSearchBar = false
+      this.$emit('eraseSearch')
     }
   }
 }

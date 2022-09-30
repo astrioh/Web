@@ -1,4 +1,8 @@
+import { uuidv4 } from '@/helpers/functions'
+
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
+import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+
 import axios from 'axios'
 import store from '@/store/index.js'
 
@@ -18,7 +22,6 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then(resp => {
           console.log('msgs', resp)
-          commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
           commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_SUCCESS, resp)
           resolve(resp)
         }).catch(err => {
@@ -60,7 +63,6 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then(resp => {
           console.log('msgs', resp)
-          commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
           commit(CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS, resp)
           resolve(resp)
         }).catch(err => {
@@ -73,7 +75,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'clientsfiles?uid_client=' + data.uid_client + '&uid_creator=' + data.uid_creator
       axios({ url: url, method: 'POST', data: data.name })
         .then((resp) => {
-          commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data)
+          commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, ...resp.data.success)
           resolve(resp)
         })
         .catch((err) => {
@@ -96,14 +98,27 @@ const actions = {
     const data = { uid: fileUid, key: 'deleted', value: 1 }
     commit(CLIENT_FILES_AND_MESSAGES.REMOVE_MESSAGE_LOCALLY, data)
   },
-  [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, clientUid) => {
+  [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, data) => {
     commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST)
 
-    const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, clientUid)
-    const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, clientUid)
+    const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, data.clientUid)
+    const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, data.clientUid)
 
-    return Promise.all([messages, files])
-      .then(() => {
+    const promises = [messages, files]
+
+    if (data.yandexInt) {
+      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, data)
+      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, data)
+      promises.push(yandexMsgsSentFromUs)
+      promises.push(yandexMsgsSentToUs)
+    }
+
+    return Promise.all(promises)
+      .then((resp) => {
+        if (data.yandexInt) {
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
+        }
         commit(CLIENT_FILES_AND_MESSAGES.MERGE_FILES_AND_MESSAGES)
       })
   }
@@ -113,9 +128,6 @@ const mutations = {
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST]: state => {
     state.status = 'loading'
   },
-  [CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES]: (state, data) => {
-    state.messages = [...data]
-  },
   [CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST]: (state, messageUid) => {
     for (let i = 0; i < state.messages.length; i++) {
       if (state.messages[i].uid_message === messageUid) {
@@ -124,11 +136,22 @@ const mutations = {
       }
     }
   },
+  [CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL]: (state, data) => {
+    for (let i = 0; i < data.length; i++) {
+      state.messages.push({
+        date_create: data[i].date,
+        msg: data[i].text,
+        emailSender: data[i].from.value[0].address,
+        uid_message: uuidv4(),
+        isYandex: true
+      })
+    }
+  },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {
     state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: (state, data) => {
-    state.messages.push(data.success)
+    state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {
     state.status = 'loading'
@@ -138,7 +161,7 @@ const mutations = {
     state.status = 'success'
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS]: (state, resp) => {
-    state.files = resp.data.files
+    state.files = resp.data
     state.status = 'success'
   },
   [CLIENT_FILES_AND_MESSAGES.CHANGE_MESSAGE]: (state, data) => {

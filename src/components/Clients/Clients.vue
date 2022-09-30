@@ -5,74 +5,78 @@
   />
   <ModalBoxAddClient
     v-if="showAddClient"
-    title="Добавить клиента"
+    title="Добавить контакт"
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
-  <NavBarClients
-    title="Контакты"
-    class="pt-[8px]"
-    @search="requestClients"
-    @clickAddClient="clickAddClient"
-  />
-  <div
-    class="bg-white rounded-xl min-h-[80%] overflow-y-auto"
-  >
-    <table class="p-[40px]">
-      <tr>
-        <th>Имя</th>
-        <th>Номер телефона</th>
-        <th>Email</th>
-        <th>Комментарий</th>
-      </tr>
-      <ClientsSkeleton v-if="status === 'loading'" />
-      <template v-if="status === 'success'">
-        <tr
-          v-for="client in clients"
-          :key="client?.uid"
-          :class="client?.uid === selectedClient?.uid ? 'bg-[#F4F5F7]' : ''"
-          @click.stop="showClientProperties(client)"
-        >
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.name }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.phone }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.email }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.comment }}
-              </span>
-            </div>
-          </td>
-        </tr>
-      </template>
-    </table>
+  <div class="flex flex-col h-full">
+    <NavBarClients
+      title="Контакты"
+      class="pt-[8px]"
+      @search="requestClients"
+      @clickAddClient="clickAddClient"
+    />
+    <div class="h-[calc(100%-120px)] bg-white rounded-xl">
+      <div
+        class="my-[40px] h-[calc(100%-60px)] overflow-y-auto grow scroll-style"
+      >
+        <table class="pb-[40px] px-[20px] relative">
+          <tr class="table-header">
+            <th>Имя</th>
+            <th>Номер телефона</th>
+            <th>Email</th>
+            <th>Комментарий</th>
+          </tr>
+          <ClientsSkeleton v-if="status === 'loading'" />
+          <template v-if="status === 'success'">
+            <tr
+              v-for="client in clients"
+              :key="client?.uid"
+              :class="client?.uid === selectedClient?.uid ? 'bg-[#F4F5F7]' : ''"
+              @click.stop="showClientProperties(client)"
+            >
+              <td>
+                <div class="content max-w-[150px] xl:max-w-[250px]">
+                  <span class="truncate">
+                    {{ client.name }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="content max-w-[150px] xl:max-w-[250px]">
+                  <span class="truncate">
+                    {{ client.phone }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="content max-w-[150px] xl:max-w-[250px]">
+                  <span class="truncate">
+                    {{ client.email }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="content max-w-[150px] xl:max-w-[250px]">
+                  <span class="truncate">
+                    {{ client.comment }}
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </template>
+        </table>
+      </div>
+      <Pagination
+        v-model="currentPage"
+        class="my-3 flex justify-center shrink-0"
+        :disabled="status === 'loading'"
+        :total="paging.pages"
+        :max-visible-buttons="6"
+        @update:modelValue="changePage"
+      />
+    </div>
   </div>
-  <Pagination
-    v-model="currentPage"
-    class="my-3 flex justify-center"
-    :disabled="status === 'loading'"
-    :total="paging.pages"
-    :max-visible-buttons="6"
-    @update:modelValue="changePage"
-  />
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
@@ -115,6 +119,12 @@ export default {
     },
     currentPageRouter () {
       return Number(this.$route.query.page) || 1
+    },
+    searchValue () {
+      return this.$route.query.search || ''
+    },
+    isYandexIntegrated () {
+      return this.$store.state.yandexIntegration.isIntegrated
     }
   },
   watch: {
@@ -127,6 +137,11 @@ export default {
     },
     currentPageRouter () {
       this.requestClients()
+    },
+    searchValue (searchValue) {
+      if (!searchValue) {
+        this.requestClients()
+      }
     }
   },
   mounted () {
@@ -153,7 +168,16 @@ export default {
       }
     },
     showClientProperties (client) {
-      this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, client.uid)
+      this.$store.commit(CLIENTS_CHAT.REFRESH_MESSAGES)
+      this.$store.commit(CLIENTS_CHAT.REFRESH_FILES)
+
+      const data = {
+        clientUid: client.uid,
+        clientEmail: client.email,
+        organizationEmail: this.user.owner_email,
+        yandexInt: this.isYandexIntegrated
+      }
+      this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, data)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
@@ -236,5 +260,9 @@ tr:nth-child(2) {
 /*Стили наведения курсора мыши*/
 tr:not(:first-child):hover {
   @apply bg-[#f4f5f7] cursor-pointer
+}
+
+.table-header > th {
+  @apply sticky top-0 bg-white
 }
 </style>

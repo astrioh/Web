@@ -270,6 +270,8 @@
                   :show-date="board?.show_date !== 0 ?? false"
                   :read-only="isReadOnlyBoard"
                   :selected="$store.state.cards.selectedCardUid === element.uid"
+                  :color="colorCard(column.Color)"
+                  :color-dots="colorCard(column.Color, 0.8)"
                   class="mt-2"
                   @select="selectCard(element)"
                   @delete="deleteCard(element)"
@@ -555,6 +557,33 @@ export default {
       const b = parseInt(hexcolor.substr(4, 2), 16)
       const yiq = (r * 299 + g * 587 + b * 114) / 1000
       return yiq >= 128 ? 'black' : 'white'
+    },
+    hexToRgb (hex, shift = 0, opacity) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return `rgba(${parseInt(result[1], 16) - shift}, ${parseInt(result[2], 16) - shift}, ${parseInt(result[3], 16) - shift}, ${opacity})`
+    },
+    colorCard (color, opacity = 1) {
+      const allColors = {
+        '': '#ffffff',
+        '#7fc870': '#7fc870',
+        '#69c494': '#69c494',
+        '#dff2e1': '#dff2e1',
+        '#ffaf40': '#ffaf40',
+        '#ffd7a0': '#ffd7a0',
+        '#5ba4cf': '#5ba4cf',
+        '#9eedff': '#9eedff',
+        '#b381b3': '#b381b3',
+        '#e5e5e5': '#e5e5e5',
+        '#ddd1c2': '#ddd1c2',
+        '#ef7665': '#ef7665',
+        '#ffc6b5': '#ffc6b5',
+        '#ff8ed4': '#ff8ed4',
+        '#f5dbf5': '#f5dbf5',
+        '#6a7077': '#6a7077',
+        '#f6dd29': '#f6dd29',
+        '#f5f547': '#f5f547'
+      }
+      return this.hexToRgb(allColors[color], 20, opacity)
     },
     isColumnVisible (column) {
       if (this.showArchive) {
