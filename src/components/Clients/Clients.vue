@@ -120,6 +120,9 @@ export default {
     },
     searchValue () {
       return this.$route.query.search || ''
+    },
+    isYandexIntegrated () {
+      return this.$store.state.yandexIntegration.isIntegrated
     }
   },
   watch: {
@@ -169,7 +172,8 @@ export default {
       const data = {
         clientUid: client.uid,
         clientEmail: client.email,
-        organizationEmail: this.user.owner_email
+        organizationEmail: this.user.owner_email,
+        yandexInt: this.isYandexIntegrated
       }
       this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, data)
       if (!this.isPropertiesMobileExpanded) {
