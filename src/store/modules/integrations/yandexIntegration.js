@@ -97,7 +97,7 @@ const actions = {
 
 const mutations = {
   [YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION]: (state, data) => {
-    state.isIntegrated = true
+    state.isIntegrated = data
   },
   [YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US]: (state, data) => {
     state.sentFromUs = data
