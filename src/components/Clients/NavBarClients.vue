@@ -2,6 +2,8 @@
   <NavBar
     id="NavBarClients"
     title="Контакты"
+    route="/clients"
+    :breadcrumbs="getBreadCrumbs"
   >
     <ReglamentSmallButton
       v-if="!isTesting"
@@ -45,6 +47,17 @@ export default {
     }
   },
   emits: ['search', 'clickAddClient'],
+  computed: {
+    getBreadCrumbs () {
+      const searchValue = this.$route.query.search || ''
+      return searchValue
+        ? [{
+            name: searchValue,
+            selected: true
+          }]
+        : []
+    }
+  },
   methods: {
     async onSearch (text) {
       await this.$router.push({ path: '/clients', query: { search: text } })

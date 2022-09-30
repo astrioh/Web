@@ -117,6 +117,9 @@ export default {
     },
     currentPageRouter () {
       return Number(this.$route.query.page) || 1
+    },
+    searchValue () {
+      return this.$route.query.search || ''
     }
   },
   watch: {
@@ -129,6 +132,11 @@ export default {
     },
     currentPageRouter () {
       this.requestClients()
+    },
+    searchValue (searchValue) {
+      if (!searchValue) {
+        this.requestClients()
+      }
     }
   },
   mounted () {
