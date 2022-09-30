@@ -197,7 +197,19 @@ export default {
     },
     validateForm () {
       this.inputsValidateError = false
-      if (this.modelInput1.length < 1 || this.modelInput2.length < 1 || this.modelInput3.length < 1 || this.modelInput4.length < 1) {
+      if (this.modelInput1.length < 1 && this.boardForm.info?.name.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput2.length < 1 && this.boardForm.info?.email.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput3.length < 1 && this.boardForm.info?.phone.visible === true) {
+        this.inputsValidateError = true
+        return
+      }
+      if (this.modelInput4.length < 1 && this.boardForm.info?.comment.visible === true) {
         this.inputsValidateError = true
       }
     }
