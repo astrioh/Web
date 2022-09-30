@@ -89,7 +89,7 @@
     >
       <div class="flex justify-center items-center flex-col w-full rounded-[8px] bg-[#F9F9F9] p-[25px] shadow-2xl">
         <span>Форма успешно отправлена!</span>
-        <span v-if="item.redirectLink">Сейчас Вы будете перенаправлены.</span>
+        <span v-if="item.redirectLink && !isFrame">{{ !linkIsText ? 'Сейчас Вы будете перенаправлены.' : item.redirectLink }}</span>
       </div>
     </div>
   </div>
@@ -183,7 +183,7 @@ export default {
         console.log('send success')
         if (this.item.redirectLink.length > 0) {
           this.showFormSended = true
-          if (!this.linkIsText && this.isFrame === false) {
+          if (!this.linkIsText && !this.isFrame) {
             setTimeout(() => {
               window.location.href = this.item.redirectLink
             }, 5000)
