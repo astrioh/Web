@@ -1,48 +1,16 @@
 <template>
   <div v-if="selectedBoard">
-    <ModalBoxDelete
-      v-if="showConfirm"
-      title="Удалить доску"
-      :text="`Вы действительно хотите удалить доску ${selectedBoardName}?`"
-      @cancel="showConfirm = false"
-      @yes="removeBoard"
-    />
-    <ModalBoxDelete
-      v-if="showConfirmQuit"
-      title="Покинуть доску"
-      :text="`Вы действительно хотите покинуть доску ${selectedBoardName}? Обратно можно попасть, только если владелец доски опять вас добавит.`"
-      @cancel="showConfirmQuit = false"
-      @yes="quitBoard"
-    />
-    <div class="flex justify-between items-center">
-      <PopMenu>
-        <PropsButtonMenu />
-        <template #menu>
-          <PopMenuItem
-            v-if="isCanDelete"
-            icon="delete"
-            type="delete"
-            @click="showConfirm = true"
-          >
-            Удалить
-          </PopMenuItem>
-          <PopMenuItem
-            v-else
-            icon="delete"
-            @click="showConfirmQuit = true"
-          >
-            Покинуть доску
-          </PopMenuItem>
-        </template>
-      </PopMenu>
-      <PropsButtonClose @click="closeProperties" />
+    <div class="flex justify-end items-center">
+      <PropsButtonClose
+        @click="closeProperties"
+      />
     </div>
     <input
       v-if="isCanEdit"
       v-model="currName"
       type="text"
       placeholder="Наименование"
-      class="mt-[25px] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
+      class="mt-[15px] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none focus:ring-0 focus:outline-none"
       @blur="changeBoardName"
     >
     <div
@@ -244,12 +212,9 @@
 </template>
 
 <script>
-import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
 import PropsColorBoxItem from '@/components/Common/PropsColorBoxItem.vue'
 import PopMenu from '@/components/Common/PopMenu.vue'
-import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
-import PropsButtonMenu from '@/components/Common/PropsButtonMenu.vue'
 import BoardPropsUserButton from '@/components/Board/BoardPropsUserButton.vue'
 import BoardPropsMenuItemUser from '@/components/Board/BoardPropsMenuItemUser.vue'
 
@@ -260,11 +225,8 @@ import BoardPropsDepButton from '../Board/BoardPropsDepButton.vue'
 
 export default {
   components: {
-    ModalBoxDelete,
     PropsColorBoxItem,
     PopMenu,
-    PopMenuItem,
-    PropsButtonMenu,
     PropsButtonClose,
     BoardPropsUserButton,
     BoardPropsMenuItemUser,
