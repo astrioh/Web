@@ -305,7 +305,6 @@ const actions = {
 const mutations = {
   [CARD.BOARD_CARDS_REQUEST]: (state) => {
     state.cards = []
-    state.cardsMap = {}
     state.status = 'loading'
   },
   [CARD.SELECT_CARD]: (state, cardUid) => {

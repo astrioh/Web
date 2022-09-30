@@ -22,17 +22,24 @@
         </span>
       </div>
       <ClientChatQuoteMessage
-        v-if="message.uid_quote?.length"
+        v-if="message.hasQuote"
         :quote-message-uid="message.uid_quote"
       />
       <ClientChatInterlocutorMessage
-        v-if="!isMyMessage(message)"
+        v-if="!message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
         :employee="employees[message.uid_creator]"
         @onQuoteMessage="setCurrentQuote"
       />
+      <ClientChatInterlocutorFileMessage
+        v-if="!message.isMyMessage && message.isFile"
+        :message="message"
+        :employee="employees[message.uid_creator]"
+        @onQuoteMessage="setCurrentQuote"
+      />
+
       <ClientChatSelfMessage
-        v-if="isMyMessage(message)"
+        v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
         :employee="employees[message.uid_creator]"
         @onDeleteMessage="onDeleteMessage"
@@ -53,12 +60,14 @@
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import ClientChatQuoteMessage from '@/components/Clients/ClientChatQuoteMessage.vue'
 import ClientChatInterlocutorMessage from '@/components/Clients/ClientChatInterlocutorMessage.vue'
+import ClientChatInterlocutorFileMessage from '@/components/Clients/ClientChatInterlocutorFileMessage.vue'
 import ClientChatSelfMessage from '@/components/Clients/ClientChatSelfMessage.vue'
 import ClientChatSelfFileMessage from '@/components/Clients/ClientChatSelfFileMessage.vue'
 
 export default {
   components: {
     ClientChatInterlocutorMessage,
+    ClientChatInterlocutorFileMessage,
     ClientChatSelfMessage,
     ClientChatQuoteMessage,
     ClientChatSelfFileMessage
@@ -108,7 +117,7 @@ export default {
     },
     getMessageByUid (uid) {
       for (const message of this.messages) {
-        if (message.uid === uid) return message
+        if (message?.uid === uid) return message
       }
       return false
     },

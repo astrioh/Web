@@ -47,11 +47,11 @@
 
       <div
         v-show="!readOnly"
-        class="absolute right-0 z-10"
+        class="absolute right-[-5px] top-[-5px] z-10 p-1"
       >
         <div
           :ref="`card-icon-${card.uid}`"
-          class="board-card-dots flex-none h-[18px] w-[18px] overflow-hidden cursor-pointer invisible group-hover:visible transition-colors"
+          class="bg-[#ffffff8e] flex-none h-[20px] w-[18px] overflow-hidden cursor-pointer invisible group-hover:visible transition-colors hover:bg-[#fffffff8] rounded"
           :style="getDotsStyle"
           @click.stop=""
         >

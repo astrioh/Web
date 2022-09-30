@@ -5,7 +5,7 @@
   />
   <ModalBoxAddClient
     v-if="showAddClient"
-    title="Добавить клиента"
+    title="Добавить контакт"
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
@@ -19,7 +19,7 @@
     <div
       class="bg-white rounded-xl h-[calc(100%-120px)] overflow-y-auto grow scroll-style"
     >
-      <table class="p-[40px] relative">
+      <table class="py-[40px] px-[20px] relative">
         <tr class="table-header">
           <th>Имя</th>
           <th>Номер телефона</th>
@@ -163,6 +163,9 @@ export default {
       }
     },
     showClientProperties (client) {
+      this.$store.commit(CLIENTS_CHAT.REFRESH_MESSAGES)
+      this.$store.commit(CLIENTS_CHAT.REFRESH_FILES)
+
       const data = {
         clientUid: client.uid,
         clientEmail: client.email,
