@@ -29,7 +29,7 @@
         </PopMenuItem>
         <PopMenuDivider />
         <PopMenuItem
-          icon="edit"
+          icon="options"
           @click="clickEditProject"
         >
           Свойства проекта
