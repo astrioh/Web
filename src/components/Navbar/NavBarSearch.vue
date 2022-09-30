@@ -118,11 +118,21 @@ export default {
         return 'w-[calc(100%_-_30px)]'
       }
       return this.isFull ? 'w-full' : 'w-[160px]'
+    },
+
+    getSearchValue () {
+      return this.$route.query.search || ''
     }
   },
   watch: {
     searchText () {
       this.$emit('change', this.searchText)
+    },
+
+    getSearchValue (searchValue) {
+      if (!searchValue) {
+        this.searchText = ''
+      }
     }
   },
   methods: {
