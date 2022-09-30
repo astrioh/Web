@@ -185,7 +185,7 @@ export default {
         console.log('send success')
         if (this.item.redirectLink.length > 0) {
           this.showFormSended = true
-          if (!this.linkIsText) {
+          if (!this.linkIsText && this.isFrame === false) {
             setTimeout(() => {
               window.location.href = this.item.redirectLink
             }, 5000)

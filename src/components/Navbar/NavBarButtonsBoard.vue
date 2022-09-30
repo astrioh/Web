@@ -230,7 +230,7 @@ export default {
     setPublicBoard () {
       const data = {
         uid: this.board.uid,
-        publiclinkstatus: 1
+        public_link_status: 1
       }
       this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
         this.isBoardPublic = true
@@ -239,7 +239,7 @@ export default {
     removePublicBoard () {
       const data = {
         uid: this.board.uid,
-        publiclinkstatus: 0
+        public_link_status: 0
       }
       this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
         this.isBoardPublic = false
