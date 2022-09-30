@@ -245,6 +245,7 @@ export default {
           console.log('quitProject', resp)
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.project)
+          this.$store.commit(PROJECT.REMOVE_PROJECT_REQUEST, this.project.uid)
           this.$router.push('/project')
         })
     }
