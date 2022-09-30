@@ -73,7 +73,9 @@ export function initInspectorSocket (force = false) {
     }
   }
   socket.onmessage = function (event) {
-    if (process.env.VUE_APP_EXTENDED_LOGS) { console.log('inspector obj', event.data) }
+    if (process.env.VUE_APP_EXTENDED_LOGS) {
+      console.log('inspector obj', event.data)
+    }
     parseMessage(event.data)
   }
   socket.onclose = function () {
@@ -158,8 +160,9 @@ export function disconnectInspectorSocket () {
 
 export function sendInspectorMessage (message) {
   try {
+    // if (socket?.readyState === 1)
     socket.send(JSON.stringify(message))
   } catch (e) {
-    console.log('sendInspectorMessage error', e)
+    console.log('sendInspectorMessage error', e, message)
   }
 }
