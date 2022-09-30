@@ -62,7 +62,7 @@
           class="flex-none flex mb-5 justify-end items-center self-start z-[1]"
         >
           <button
-            class="py-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[200px] h-[40px] bg-white justify-center text-[#424242]"
+            class="pt-[10px] pb-3 px-4 rounded-lg mr-2 hover:bg-gray-300 text-sm bg-opacity-70 font-medium text-center w-[200px] h-[40px] bg-white justify-center text-[#424242]"
             @click="!postponeDate ? postponeTask(firstTask.reminder, timeArr[postponeIndex]) : postponeTask(postponeDate)"
           >
             Отложить на {{ !postponeDate ? timeArr[postponeIndex].name : transformPostponeDate }}

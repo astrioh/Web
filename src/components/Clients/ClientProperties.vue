@@ -296,7 +296,8 @@ export default {
           formData.append('files', blob)
           const data = {
             uid_client: this.selectedClient?.uid,
-            name: formData
+            name: formData,
+            uid_creator: this.user.current_user_uid
           }
           this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data).then(() => {
             this.selectedClient.has_files = true

@@ -19,6 +19,13 @@
       @cancel="showDeleteProject = false"
       @yes="onDeleteProject"
     />
+    <BoardModalBoxDelete
+      v-if="showConfirmQuit"
+      title="Покинуть проект"
+      :text="quitMessage"
+      @cancel="showConfirmQuit = false"
+      @yes="quitProject"
+    />
     <PopMenu>
       <NavBarButtonIcon icon="menu" />
       <template #menu>
@@ -48,6 +55,14 @@
           @click="clickDeleteProject"
         >
           Удалить проект
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="!canDelete"
+          icon="delete"
+          type="delete"
+          @click="clickQuitProject"
+        >
+          Покинуть проект
         </PopMenuItem>
       </template>
     </PopMenu>
@@ -96,15 +111,25 @@ export default {
     return {
       showDeleteProject: false,
       showAdd: false,
+      showConfirmQuit: false,
       showProjectsLimit: false
     }
   },
   computed: {
     deleteMessage () {
       if (this.project.children.length !== 0) {
-        return 'Вы действительно хотите удалить проект? \n\n Внимание! Все дочерние проекты будут удалены.'
+        return `Вы действительно хотите удалить проект ${this.project.name}? \n\n Внимание! Все дочерние проекты будут удалены.`
       }
-      return 'Вы действительно хотите удалить проект?'
+      return `Вы действительно хотите удалить проект ${this.project.name}?`
+    },
+    quitMessage () {
+      return `Вы действительно хотите покинуть проект ${this.project.name}? Обратно можно попасть, только если владелец проекта опять вас добавит.`
+    },
+    selectedProject () {
+      return this.$store.state.projects.selectedProject
+    },
+    selectedProjectUid () {
+      return this.selectedProject?.uid || ''
     },
     project () {
       return this.$store.state.projects.projects[this.projectUid]
@@ -127,6 +152,9 @@ export default {
     },
     clickDeleteProject () {
       this.showDeleteProject = true
+    },
+    clickQuitProject () {
+      this.showConfirmQuit = true
     },
     clickAddProject () {
       // если лицензия истекла
@@ -206,6 +234,19 @@ export default {
     },
     clickCompletedTasks () {
       this.$emit('toggleCompletedTasks')
+    },
+    quitProject () {
+      this.showConfirmQuit = false
+      this.$store.dispatch(PROJECT.QUIT_PROJECT_REQUEST, {
+        uid: this.projectUid,
+        value: this.$store.state.user.user.current_user_email
+      })
+        .then((resp) => {
+          console.log('quitProject', resp)
+          this.$store.dispatch('asidePropertiesToggle', false)
+          this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.project)
+          this.$router.push('/project')
+        })
     }
   }
 }

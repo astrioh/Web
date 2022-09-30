@@ -14,6 +14,14 @@
       @cancel="showAddBoard = false"
       @save="onAddNewBoard"
     />
+    <BoardModalBoxDelete
+      v-if="showConfirmQuit"
+      :show="showConfirmQuit"
+      title="Покинуть доску"
+      :text="quitBoardMessage"
+      @cancel="showConfirmQuit = false"
+      @yes="quitBoard"
+    />
     <PopMenu>
       <NavBarButtonIcon
         icon="filter"
@@ -111,6 +119,14 @@
         >
           Удалить доску
         </PopMenuItem>
+        <PopMenuItem
+          v-if="!canEditBoard"
+          icon="delete"
+          type="delete"
+          @click="clickQuitBoard"
+        >
+          Покинуть доску
+        </PopMenuItem>
       </template>
     </PopMenu>
   </div>
@@ -150,6 +166,7 @@ export default {
     return {
       showDeleteBoard: false,
       showBoardsLimit: false,
+      showConfirmQuit: false,
       showAddBoard: false,
       isBoardPublic: false
     }
@@ -157,9 +174,12 @@ export default {
   computed: {
     deleteMessage () {
       if (this.board.children.length !== 0) {
-        return 'Вы действительно хотите удалить доску? \n\n Внимание! Все дочерние доски будут удалены.'
+        return `Вы действительно хотите удалить доску ${this.selectedBoard.name}? \n\n Внимание! Все дочерние доски будут удалены.`
       }
-      return 'Вы действительно хотите удалить доску?'
+      return `Вы действительно хотите удалить доску ${this.selectedBoard.name}?`
+    },
+    quitBoardMessage () {
+      return `Вы действительно хотите покинуть доску ${this.selectedBoard.name}? Обратно можно попасть, только если владелец доски опять вас добавит.`
     },
     archiveLink () {
       if (this.$route.name === 'boardArchive') {
@@ -218,6 +238,9 @@ export default {
     },
     clickDeleteBoard () {
       this.showDeleteBoard = true
+    },
+    clickQuitBoard () {
+      this.showConfirmQuit = true
     },
     clickAddBoard () {
       // если лицензия истекла
@@ -295,6 +318,20 @@ export default {
     },
     clickBoardFilterClear () {
       this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
+    },
+    quitBoard () {
+      this.showConfirmQuit = false
+
+      this.$store.dispatch(BOARD.QUIT_BOARD_REQUEST, {
+        uid: this.selectedBoardUid,
+        uid_user: this.$store.state.user.user.current_user_uid
+      })
+        .then((resp) => {
+          this.$store.dispatch('asidePropertiesToggle', false)
+          this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
+          // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
+          this.$router.push('/board')
+        })
     }
   }
 }

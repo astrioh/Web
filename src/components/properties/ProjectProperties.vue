@@ -205,7 +205,6 @@ import PropsButtonClose from '@/components/Common/PropsButtonClose.vue'
 import TaskPropsAccessLimitModalBox from '@/components/properties/TaskPropsAccessLimitModalBox.vue'
 
 import * as PROJECT from '@/store/actions/projects'
-import { NAVIGATOR_REMOVE_PROJECT } from '@/store/actions/navigator'
 import ProjectPropsMenuItemDeps from '../Projects/ProjectPropsMenuItemDeps.vue'
 import ProjectPropsDepButton from '../Projects/ProjectPropsDepButton.vue'
 
@@ -224,7 +223,6 @@ export default {
     return {
       showConfirm: false,
       showAccessLimit: false,
-      showConfirmQuit: false,
       currName: ''
     }
   },
@@ -374,18 +372,6 @@ export default {
     print (msg, param) {
       console.log(msg, param)
     },
-    removeProject () {
-      this.showConfirm = false
-
-      this.$store
-        .dispatch(PROJECT.REMOVE_PROJECT_REQUEST, this.selectedProjectUid)
-        .then((resp) => {
-          console.log('removeProject', resp)
-          this.$store.dispatch('asidePropertiesToggle', false)
-          this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.selectedProject)
-          this.$router.push('/project')
-        })
-    },
     setDepartment (depUid) {
       if (this.isCanEdit &&
         !this.selectedProjectDeps.includes(depUid)
@@ -409,20 +395,6 @@ export default {
           newDeps: filteredDeps
         })
       }
-    },
-    quitProject () {
-      this.showConfirmQuit = false
-
-      this.$store.dispatch(PROJECT.QUIT_PROJECT_REQUEST, {
-        uid: this.selectedProjectUid,
-        value: this.$store.state.user.user.current_user_email
-      })
-        .then((resp) => {
-          console.log('quitProject', resp)
-          this.$store.dispatch('asidePropertiesToggle', false)
-          this.$store.commit(NAVIGATOR_REMOVE_PROJECT, this.selectedProject)
-          this.$router.push('/project')
-        })
     },
     favoriteToggle () {
       if (!this.isFavorite) {

@@ -75,7 +75,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'clientsfiles?uid_client=' + data.uid_client + '&uid_creator=' + data.uid_creator
       axios({ url: url, method: 'POST', data: data.name })
         .then((resp) => {
-          commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, data)
+          commit(CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST, ...resp.data.success)
           resolve(resp)
         })
         .catch((err) => {
@@ -151,7 +151,7 @@ const mutations = {
     state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: (state, data) => {
-    state.messages.push(data.success)
+    state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {
     state.status = 'loading'
