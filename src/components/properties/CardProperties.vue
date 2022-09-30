@@ -123,7 +123,6 @@
       <CardClient
         :client-uid="selectedCard?.uid_client"
         :client-name="selectedCard?.client_name"
-        :card-uid="selectedCard?.uid"
         :card-name="selectedCard?.name"
         :card-comment="selectedCard?.comment"
         :can-edit="canEdit"
