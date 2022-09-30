@@ -31,6 +31,13 @@
         :employee="employees[message.uid_creator]"
         @onQuoteMessage="setCurrentQuote"
       />
+      <ClientChatInterlocutorFileMessage
+        v-if="!message.isMyMessage && message.isFile"
+        :message="message"
+        :employee="employees[message.uid_creator]"
+        @onQuoteMessage="setCurrentQuote"
+      />
+
       <ClientChatSelfMessage
         v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
         :message="message"
@@ -53,12 +60,14 @@
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
 import ClientChatQuoteMessage from '@/components/Clients/ClientChatQuoteMessage.vue'
 import ClientChatInterlocutorMessage from '@/components/Clients/ClientChatInterlocutorMessage.vue'
+import ClientChatInterlocutorFileMessage from '@/components/Clients/ClientChatInterlocutorFileMessage.vue'
 import ClientChatSelfMessage from '@/components/Clients/ClientChatSelfMessage.vue'
 import ClientChatSelfFileMessage from '@/components/Clients/ClientChatSelfFileMessage.vue'
 
 export default {
   components: {
     ClientChatInterlocutorMessage,
+    ClientChatInterlocutorFileMessage,
     ClientChatSelfMessage,
     ClientChatQuoteMessage,
     ClientChatSelfFileMessage
