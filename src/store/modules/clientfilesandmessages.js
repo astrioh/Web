@@ -1,7 +1,7 @@
 import { uuidv4 } from '@/helpers/functions'
 
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
-// import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
 
 import axios from 'axios'
 import store from '@/store/index.js'
@@ -104,20 +104,21 @@ const actions = {
     const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, data.clientUid)
     const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, data.clientUid)
 
-    // const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, data)
-    // const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, data)
-
     const promises = [messages, files]
 
-    // if (data.yandexInt) {
-    //   promises.push(yandexMsgsSentFromUs)
-    //   promises.push(yandexMsgsSentToUs)
-    // }
+    if (data.yandexInt) {
+      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, data)
+      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, data)
+      promises.push(yandexMsgsSentFromUs)
+      promises.push(yandexMsgsSentToUs)
+    }
 
     return Promise.all(promises)
       .then((resp) => {
-        // commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
-        // commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
+        if (data.yandexInt) {
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
+        }
         commit(CLIENT_FILES_AND_MESSAGES.MERGE_FILES_AND_MESSAGES)
       })
   }
