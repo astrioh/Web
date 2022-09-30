@@ -9,70 +9,72 @@
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
-  <NavBarClients
-    title="Контакты"
-    class="pt-[8px]"
-    @search="requestClients"
-    @clickAddClient="clickAddClient"
-  />
-  <div
-    class="bg-white rounded-xl min-h-[80%] overflow-y-auto"
-  >
-    <table class="p-[40px]">
-      <tr>
-        <th>Имя</th>
-        <th>Номер телефона</th>
-        <th>Email</th>
-        <th>Комментарий</th>
-      </tr>
-      <ClientsSkeleton v-if="status === 'loading'" />
-      <template v-if="status === 'success'">
-        <tr
-          v-for="client in clients"
-          :key="client?.uid"
-          :class="client?.uid === selectedClient?.uid ? 'bg-[#F4F5F7]' : ''"
-          @click.stop="showClientProperties(client)"
-        >
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.name }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.phone }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.email }}
-              </span>
-            </div>
-          </td>
-          <td>
-            <div class="content max-w-[150px] xl:max-w-[250px]">
-              <span class="truncate">
-                {{ client.comment }}
-              </span>
-            </div>
-          </td>
+  <div class="flex flex-col h-full">
+    <NavBarClients
+      title="Контакты"
+      class="pt-[8px]"
+      @search="requestClients"
+      @clickAddClient="clickAddClient"
+    />
+    <div
+      class="bg-white rounded-xl h-[calc(100%-120px)] overflow-y-auto grow scroll-style"
+    >
+      <table class="p-[40px] relative">
+        <tr class="table-header">
+          <th>Имя</th>
+          <th>Номер телефона</th>
+          <th>Email</th>
+          <th>Комментарий</th>
         </tr>
-      </template>
-    </table>
+        <ClientsSkeleton v-if="status === 'loading'" />
+        <template v-if="status === 'success'">
+          <tr
+            v-for="client in clients"
+            :key="client?.uid"
+            :class="client?.uid === selectedClient?.uid ? 'bg-[#F4F5F7]' : ''"
+            @click.stop="showClientProperties(client)"
+          >
+            <td>
+              <div class="content max-w-[150px] xl:max-w-[250px]">
+                <span class="truncate">
+                  {{ client.name }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="content max-w-[150px] xl:max-w-[250px]">
+                <span class="truncate">
+                  {{ client.phone }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="content max-w-[150px] xl:max-w-[250px]">
+                <span class="truncate">
+                  {{ client.email }}
+                </span>
+              </div>
+            </td>
+            <td>
+              <div class="content max-w-[150px] xl:max-w-[250px]">
+                <span class="truncate">
+                  {{ client.comment }}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </template>
+      </table>
+    </div>
+    <Pagination
+      v-model="currentPage"
+      class="my-3 flex justify-center shrink-0"
+      :disabled="status === 'loading'"
+      :total="paging.pages"
+      :max-visible-buttons="6"
+      @update:modelValue="changePage"
+    />
   </div>
-  <Pagination
-    v-model="currentPage"
-    class="my-3 flex justify-center"
-    :disabled="status === 'loading'"
-    :total="paging.pages"
-    :max-visible-buttons="6"
-    @update:modelValue="changePage"
-  />
 </template>
 <script>
 import * as CLIENTS from '@/store/actions/clients'
@@ -236,5 +238,9 @@ tr:nth-child(2) {
 /*Стили наведения курсора мыши*/
 tr:not(:first-child):hover {
   @apply bg-[#f4f5f7] cursor-pointer
+}
+
+.table-header > th {
+  @apply sticky top-0 bg-white
 }
 </style>
