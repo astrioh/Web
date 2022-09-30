@@ -36,7 +36,7 @@
       </div>
     </div>
     <div class="flex items-start justify-between">
-      <div class="w-[calc(100%-20px)]">
+      <div class="w-full">
         <p
           class="text-[#424242] font-['Roboto'] text-[14px] leading-[18px] font-medium tracking-[.02em] break-words"
         >
@@ -45,7 +45,7 @@
       </div>
       <div
         v-show="!readOnly"
-        class="flex-none"
+        class="ml-[-20px] flex-none"
       >
         <div
           :ref="`card-icon-${card.uid}`"
