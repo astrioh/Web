@@ -1,4 +1,8 @@
+import { uuidv4 } from '@/helpers/functions'
+
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
+import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+
 import axios from 'axios'
 import store from '@/store/index.js'
 
@@ -18,7 +22,6 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then(resp => {
           console.log('msgs', resp)
-          commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
           commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_SUCCESS, resp)
           resolve(resp)
         }).catch(err => {
@@ -60,7 +63,6 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then(resp => {
           console.log('msgs', resp)
-          commit(CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES, resp.data)
           commit(CLIENT_FILES_AND_MESSAGES.FILES_SUCCESS, resp)
           resolve(resp)
         }).catch(err => {
@@ -96,14 +98,19 @@ const actions = {
     const data = { uid: fileUid, key: 'deleted', value: 1 }
     commit(CLIENT_FILES_AND_MESSAGES.REMOVE_MESSAGE_LOCALLY, data)
   },
-  [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, clientUid) => {
+  [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, data) => {
     commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST)
 
-    const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, clientUid)
-    const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, clientUid)
+    const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, data.clientUid)
+    const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, data.clientUid)
 
-    return Promise.all([messages, files])
-      .then(() => {
+    const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, data)
+    const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, data)
+
+    return Promise.all([messages, files, yandexMsgsSentFromUs, yandexMsgsSentToUs])
+      .then((resp) => {
+        commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
+        commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
         commit(CLIENT_FILES_AND_MESSAGES.MERGE_FILES_AND_MESSAGES)
       })
   }
@@ -113,15 +120,22 @@ const mutations = {
   [CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST]: state => {
     state.status = 'loading'
   },
-  [CLIENT_FILES_AND_MESSAGES.FILL_MESSAGES]: (state, data) => {
-    state.messages = [...data]
-  },
   [CLIENT_FILES_AND_MESSAGES.DELETE_MESSAGE_REQUEST]: (state, messageUid) => {
     for (let i = 0; i < state.messages.length; i++) {
       if (state.messages[i].uid_message === messageUid) {
         state.messages[i].deleted = 1
         return
       }
+    }
+  },
+  [CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL]: (state, data) => {
+    for (let i = 0; i < data.length; i++) {
+      state.messages.push({
+        date_create: data[i].date,
+        msg: data[i].text,
+        emailSender: data[i].from.value[0].address,
+        uid_message: uuidv4()
+      })
     }
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_MESSAGE_REQUEST]: (state, data) => {

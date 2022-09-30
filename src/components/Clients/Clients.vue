@@ -163,7 +163,12 @@ export default {
       }
     },
     showClientProperties (client) {
-      this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, client.uid)
+      const data = {
+        clientUid: client.uid,
+        clientEmail: client.email,
+        organizationEmail: this.user.owner_email
+      }
+      this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, data)
       if (!this.isPropertiesMobileExpanded) {
         this.$store.dispatch('asidePropertiesToggle', true)
       }
