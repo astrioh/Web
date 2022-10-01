@@ -256,7 +256,7 @@
               :move="checkMoveDragCard"
               :fallback-tolerance="1"
               :force-fallback="true"
-              :animation="180"
+              :animation="380"
               :scroll-sensitivity="250"
               @start="startDragCard"
               @end="endDragCard"
