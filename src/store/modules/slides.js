@@ -6,25 +6,25 @@ const state = {
       name: 'welcome',
       mode: 'slide',
       visible: JSON.parse(localStorage.getItem('slides'))?.welcome?.visible ?? true,
-      reminder: JSON.parse(localStorage.getItem('slides'))?.welcome?.reminder
+      reminder: JSON.parse(localStorage.getItem('slides'))?.welcome?.reminder ?? new Date()
     },
     {
       name: 'addAvatar',
       mode: 'slide',
       visible: JSON.parse(localStorage.getItem('slides'))?.addAvatar?.visible ?? true,
-      reminder: JSON.parse(localStorage.getItem('slides'))?.addAvatar?.reminder
+      reminder: JSON.parse(localStorage.getItem('slides'))?.addAvatar?.reminder ?? new Date()
     },
     {
       name: 'addEmployees',
       mode: 'slide',
       visible: JSON.parse(localStorage.getItem('slides'))?.addEmployees?.visible ?? true,
-      reminder: JSON.parse(localStorage.getItem('slides'))?.addEmployees?.reminder
+      reminder: JSON.parse(localStorage.getItem('slides'))?.addEmployees?.reminder ?? new Date()
     },
     {
       name: 'addReglaments',
       mode: 'slide',
       visible: JSON.parse(localStorage.getItem('slides'))?.addReglaments?.visible ?? true,
-      reminder: JSON.parse(localStorage.getItem('slides'))?.addReglaments?.reminder
+      reminder: JSON.parse(localStorage.getItem('slides'))?.addReglaments?.reminder ?? new Date()
     },
     {
       name: 'delegateTasks',
@@ -45,6 +45,7 @@ const mutations = {
         try {
           data = JSON.parse(localStorage.getItem('slides'))
           data[value.name].visible = value.visible
+          data[value.name].reminder = value.reminder
         } catch (e) {
           data = {
             welcome: {
@@ -64,6 +65,7 @@ const mutations = {
             }
           }
           data[value.name].visible = value.visible
+          data[value.name].reminder = value.reminder
         }
         state.slides[i].visible = value.visible
         state.slides[i].reminder = value.reminder ?? new Date()

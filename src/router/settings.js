@@ -23,9 +23,14 @@ export default [
         path: ':integrations_name',
         children: [
           {
-            path: 'yandex',
-            name: 'yandex',
-            component: () => import('@/components/Integrations/IntegrationsYandex.vue')
+            path: 'corporationYandexMail',
+            name: 'corporationYandexMail',
+            component: () => import('@/components/Integrations/CorpoIntegrationsYandex.vue')
+          },
+          {
+            path: 'personalYandexMail',
+            name: 'personalYandexMail',
+            component: () => import('@/components/Integrations/PersonalIntegrationsYandex.vue')
           }
         ]
       },

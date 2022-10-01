@@ -123,8 +123,8 @@ export default {
     searchValue () {
       return this.$route.query.search || ''
     },
-    isYandexIntegrated () {
-      return this.$store.state.yandexIntegration.isIntegrated
+    isCorpYandexIntegrated () {
+      return this.$store.state.corpYandexIntegration.isIntegrated
     }
   },
   watch: {

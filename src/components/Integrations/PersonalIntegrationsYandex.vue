@@ -19,13 +19,6 @@
     :breadcrumbs="[{ name: 'Яндекс.Почта', selected: true }]"
   />
   <div class="w-full px-10 py-5 h-auto bg-white rounded-[8px]">
-    <div class="py-3">
-      <button
-        class="p-2 px-4 rounded-[5px] bg-[#FFFAFA] border-[1px] border-black"
-      >
-        Корпоративная
-      </button>
-    </div>
     <div
       class="flex w-[450px] justify-center flex-col"
     >
@@ -34,12 +27,12 @@
           class="h-[30px] w-[30px]"
           src="@/assets/images/yPochta.png"
         >
-        <span class="ml-[10px] font-[500]">Корпоративная интеграция через Яндекс.Почта</span>
+        <span class="ml-[10px] font-[500]">Персональная интеграция через Яндекс.Почта</span>
       </div>
+      <!-- @click="changeShowIntegrationState(true)" -->
       <button
         v-if="!isOrganizationIntegrated"
         class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300"
-        @click="changeShowIntegrationState(true)"
       >
         Интеграция
       </button>
@@ -129,7 +122,7 @@
   </div>
 </template>
 <script>
-import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
 
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
@@ -144,20 +137,13 @@ export default {
   data () {
     return {
       showIntegration: false,
-      currentScreen: 'corpo',
       removeIntegrationModal: false
     }
   },
   computed: {
     user () {
       return this.$store.state.user.user
-    },
-    isOrganizationIntegrated () {
-      return this.$store.state.yandexIntegration.isIntegrated
     }
-  },
-  mounted () {
-    this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
   },
   methods: {
     changeShowIntegrationState (value) {

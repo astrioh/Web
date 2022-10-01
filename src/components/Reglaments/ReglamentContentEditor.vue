@@ -243,7 +243,6 @@
         >
           <ReglamentQuestion
             :ref="question.uid"
-            :is-editing="true"
             :question="question"
             :reglament="reglament"
             @deleteQuestion="onDeleteQuestion"
@@ -252,7 +251,6 @@
             @updateQuestionName="updateQuestionName"
             @updateAnswerName="updateAnswerName"
             @pushAnswer="pushAnswer"
-            @selectAnswer="selectAnswer"
             @setRightAnswer="setRightAnswer"
           />
         </template>
@@ -384,8 +382,7 @@ export default {
       const employees = this.$store.state.employees.employees
       const user = this.$store.state.user.user
       const userType = employees[user.current_user_uid].type
-      const userAdmin = userType === 1 || userType === 2
-      return userAdmin
+      return userType === 1 || userType === 2
     },
     user () {
       return this.$store.state.user.user
@@ -469,6 +466,9 @@ export default {
     }
   },
   mounted () {
+    if (!this.canEdit) {
+      this.$router.push(`/reglaments/${this.currReglament.uid}`)
+    }
     this.currName = this.reglamentTitle
     this.currEditors = [...this.reglamentEditors]
     this.currDep = this.reglamentDep
@@ -487,9 +487,6 @@ export default {
     },
     updateAnswerName (data) {
       this.$store.commit(REGLAMENTS.REGLAMENT_UPDATE_ANSWER_NAME, data)
-    },
-    selectAnswer (data) {
-      this.$store.commit(REGLAMENTS.REGLAMENT_SELECT_ANSWER, data)
     },
     setRightAnswer (data) {
       this.$store.commit(REGLAMENTS.REGLAMENT_SET_RIGHT_ANSWER, data)
@@ -668,10 +665,7 @@ export default {
         question.invalid = question.name === ''
 
         const checkOnEmptyRightAnswers = question.answers.find((answer) => {
-          if (answer.is_right === true || answer.is_right === 1) {
-            return true
-          }
-          return false
+          return answer.is_right === true || answer.is_right === 1
         })
 
         if (!checkOnEmptyRightAnswers) {

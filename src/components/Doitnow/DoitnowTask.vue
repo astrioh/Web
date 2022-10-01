@@ -475,7 +475,7 @@ export default {
       this.$store.state.tasks.taskFromQueue = uid
     },
     postponeTask (begin, end, item) {
-      const dateEnd = new Date(end)
+      const dateEnd = new Date()
       switch (item.name) {
         case '10 минут':
           dateEnd.setMinutes(dateEnd.getMinutes() + item.value)
@@ -499,8 +499,8 @@ export default {
 
       const data = {
         uid_task: this.task.uid,
-        str_date_begin: begin,
-        str_date_end: newDateEnd,
+        str_date_begin: newDateEnd,
+        str_date_end: end,
         reset: 0
       }
       this.$store.dispatch(TASK.CHANGE_TASK_DATE, data)

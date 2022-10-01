@@ -391,12 +391,15 @@ export default {
     },
     postponeTask (end, item) {
       const dateEnd = end ? new Date(end) : new Date()
+      console.log(item)
       if (item) {
         switch (item.name) {
           case '10 минут':
             dateEnd.setMinutes(dateEnd.getMinutes() + item.value)
             break
           case '1 час':
+            dateEnd.setHours(dateEnd.getHours() + item.value)
+            break
           case '3 часа':
             dateEnd.setHours(dateEnd.getHours() + item.value)
             break
@@ -406,13 +409,13 @@ export default {
         }
       }
 
-      const month = this.pad2(dateEnd.getUTCMonth() + 1)
-      const day = this.pad2(dateEnd.getUTCDate())
-      const year = dateEnd.getUTCFullYear()
-      const hours = this.pad2(dateEnd.getUTCHours())
-      const minutes = this.pad2(dateEnd.getUTCMinutes())
-      const seconds = this.pad2(dateEnd.getUTCSeconds())
-      const newDateEnd = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`
+      const month = this.pad2(dateEnd.getMonth() + 1)
+      const day = this.pad2(dateEnd.getDate())
+      const year = String(dateEnd.getFullYear()).padStart(4, '0')
+      const hours = this.pad2(dateEnd.getHours())
+      const minutes = this.pad2(dateEnd.getMinutes())
+      const seconds = this.pad2(dateEnd.getSeconds())
+      const newDateEnd = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
 
       if (this.isReglament) {
         const reglamentReminder = {

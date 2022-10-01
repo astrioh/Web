@@ -329,6 +329,7 @@ export default {
         .then((resp) => {
           this.$store.dispatch('asidePropertiesToggle', false)
           this.$store.commit(NAVIGATOR_REMOVE_BOARD, this.selectedBoard)
+          this.$store.commit(BOARD.REMOVE_BOARD_REQUEST, this.selectedBoard.uid)
           // выходим выше на один уровень навигации (надеемся что эта доска последняя в стеке)
           this.$router.push('/board')
         })

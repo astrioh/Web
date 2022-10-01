@@ -1,4 +1,3 @@
-
 <template>
   <BoardModalBoxDelete
     v-if="showDeleteQuestion"
@@ -9,7 +8,6 @@
   />
   <div class="flex justify-center">
     <div
-      v-if="isEditing ? true: rightAnswersAmount(question)"
       class="bg-white p-3 rounded-[10px] mb-2 w-[580px]"
     >
       <div
@@ -24,12 +22,12 @@
       <div class="flex justify-between items-center group">
         <div class="rounded-[8px] grow border border-[rgba(0,0,0,.12)]">
           <div
-            :id="question.uid + 'input'"
             :ref="question.uid + 'input'"
             placeholder="Текст вопроса"
             spellcheck="false"
             class="font-[500] text-[14px] text-[#4C4C4D] mx-4 mt-4 leading-6 min-h-[81px] break-words"
-            :contenteditable="isEditing && canEdit"
+            style="word-break: break-word"
+            contenteditable="true"
             @blur="changeQuestionName($event)"
             @keydown.enter.exact.prevent="$emit('addQuestion')"
             @input="maxQuestionLength"
@@ -37,7 +35,6 @@
           />
         </div>
         <div
-          v-if="isEditing && canEdit"
           class="cursor-pointer mr-1 hover:transition hover:opacity-[0.8] ml-[20px]"
           @click="showDeleteQuestion = true"
         >
@@ -57,22 +54,9 @@
       </div>
       <div class="mt-4 mb-2">
         <span
-          v-if="rightAnswersAmount(question) === 1"
           class="text-[#424242] font-[700] text-[15px]"
         >
-          В данном вопросе один правильный ответ.
-        </span>
-        <span
-          v-if="rightAnswersAmount(question) > 1"
-          class="text-[#424242] font-[700] text-[15px]"
-        >
-          В данном вопросе более одного правильного ответа.
-        </span>
-        <span
-          v-if="rightAnswersAmount(question) === 0"
-          class="text-[#424242] font-[700] text-[15px]"
-        >
-          Добавьте вариант ответа
+          {{ rightAnswersAmountText }}
         </span>
       </div>
       <template
@@ -82,17 +66,14 @@
         <ReglamentAnswer
           :ref="answer.uid"
           class="mb-1"
-          :is-editing="isEditing"
           :answer="answer"
           @set-right-answer="setRightAnswer"
-          @onSelectAnswer="onSelectAnswer"
           @addAnswer="onAddAnswer"
           @deleteAnswer="onDeleteAnswer"
           @update-answer-name="updateAnswerName"
         />
       </template>
       <button
-        v-if="canEdit && isEditing"
         class="flex grow-0 border border-[rgba(0,0,0,.1)] px-[15px] py-[9px] items-center justify-center mt-2 font-[400] text-[13px] rounded-[6px] hover:cursor-pointer transition hover:opacity-[0.8]"
         @click.stop="onAddAnswer"
       >
@@ -128,16 +109,12 @@ export default {
       type: Object,
       default: () => ({})
     },
-    isEditing: {
-      type: Boolean,
-      default: false
-    },
     reglament: {
       type: Object,
       default: () => ({})
     }
   },
-  emits: ['deleteQuestion', 'deleteAnswer', 'setRightAnswer', 'addQuestion', 'pushAnswer', 'selectAnswer', 'updateAnswerName', 'updateQuestionName'],
+  emits: ['deleteQuestion', 'deleteAnswer', 'setRightAnswer', 'addQuestion', 'pushAnswer', 'updateAnswerName', 'updateQuestionName'],
   expose: ['onFocus'],
   data () {
     return {
@@ -147,12 +124,22 @@ export default {
     }
   },
   computed: {
-    canEdit () {
-      const userType = this.$store.state.employees.employees[this.$store.state.user.user.current_user_uid].type
-      return (this.reglament.email_creator === this.$store.state.user.user.current_user_email) || (this.editorsCanEdit) || (userType === 2 || userType === 1)
-    },
     editorsCanEdit () {
       return this.reglament.editors?.includes(this.$store.state.user.user.current_user_email)
+    },
+    rightAnswersAmountText () {
+      let count = 0
+      for (let i = 0; i < this.question.answers.length; i++) {
+        if (this.question.answers[i].is_right) {
+          count++
+        }
+      }
+      if (count === 1) {
+        return 'В данном вопросе один правильный ответ.'
+      } else if (count > 1) {
+        return 'В данном вопросе более одного правильного ответа.'
+      }
+      return 'Добавьте вариант ответа'
     }
   },
   methods: {
@@ -161,26 +148,11 @@ export default {
     },
     maxQuestionLength () {
       const maxLength = 280
-      const questionInput = document.getElementById(this.question.uid + 'input')
+      const questionInput = this.$refs[this.question.uid + 'input']
       if (questionInput.innerHTML.length > maxLength) {
         questionInput.innerHTML = questionInput.innerHTML.substr(0, maxLength)
         questionInput.blur()
       }
-    },
-    questionPlaceholder (question) {
-      if (question.name === '' && question.invalid) {
-        return 'Поле вопроса не должно быть пустым'
-      }
-      return this.isEditing && this.canEdit ? 'Текст вопроса' : ''
-    },
-    rightAnswersAmount (question) {
-      let count = 0
-      for (let i = 0; i < question.answers.length; i++) {
-        if (question.answers[i].is_right) {
-          count++
-        }
-      }
-      return count
     },
     onAddAnswer () {
       const data = {
@@ -198,7 +170,6 @@ export default {
     },
     setRightAnswer (answerParams) {
       const [answer, isRight] = answerParams
-      console.log(answer)
       const data = {
         uid: answer.uid,
         uid_question: this.question.uid,
@@ -210,25 +181,11 @@ export default {
 
       this.$emit('setRightAnswer', data)
     },
-    onSelectAnswer (uid) {
-      for (let i = 0; i < this.question.answers.length; i++) {
-        if (this.question.answers[i].uid === uid) {
-          if (this.question.answers[i].selected) {
-            this.$emit('selectAnswer', [this.question.answers[i], false])
-            return
-          }
-          console.log(this.question)
-          this.$emit('selectAnswer', [this.question.answers[i], true])
-          return
-        }
-      }
-    },
     onDeleteAnswer (uid) {
       this.$emit('deleteAnswer', uid)
     },
     updateAnswerName (resp) {
       const [name, answer] = resp
-      console.log(name, answer)
       const data = {
         uid: answer.uid,
         uid_question: this.question.uid,

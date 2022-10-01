@@ -1,7 +1,7 @@
 import { uuidv4 } from '@/helpers/functions'
 
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
-import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
 
 import axios from 'axios'
 import store from '@/store/index.js'
@@ -107,8 +107,8 @@ const actions = {
     const promises = [messages, files]
 
     if (data.yandexInt) {
-      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, data)
-      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, data)
+      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US, data)
+      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US, data)
       promises.push(yandexMsgsSentFromUs)
       promises.push(yandexMsgsSentToUs)
     }
