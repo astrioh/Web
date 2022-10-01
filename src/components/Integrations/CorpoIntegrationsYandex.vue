@@ -122,7 +122,7 @@
   </div>
 </template>
 <script>
-import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
 
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'

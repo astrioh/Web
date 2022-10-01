@@ -1,5 +1,5 @@
 import axios from 'axios'
-import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
 
 const state = {
   login: '',

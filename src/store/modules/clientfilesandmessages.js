@@ -1,7 +1,7 @@
 import { uuidv4 } from '@/helpers/functions'
 
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
-import * as YANDEX from '@/store/actions/integrations/yandexInt.js'
+import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
 
 import axios from 'axios'
 import store from '@/store/index.js'
