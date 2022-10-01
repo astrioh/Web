@@ -115,7 +115,7 @@ export default {
         hasQuote: message.uid_quote && message.uid_quote !== '00000000-0000-0000-0000-000000000000' && message.deleted !== 1,
         quoteMessage: this.getMessageByUid(message?.uid_quote),
         isInspectorMessage: message.uid_creator === 'inspector',
-        isMyMessage: (message.uid_creator === this.currentUserUid) || message.emailSender.includes(this.yandexIntegrations.login)
+        isMyMessage: (message?.uid_creator === this.currentUserUid) || message?.emailSender ? message.emailSender.includes(this.yandexIntegrations.login) : false
       }))
     },
     user () {
