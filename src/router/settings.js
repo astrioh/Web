@@ -23,7 +23,7 @@ export default [
         path: ':integrations_name',
         children: [
           {
-            path: 'yandex',
+            path: 'corporationYandexMail',
             name: 'yandex',
             component: () => import('@/components/Integrations/IntegrationsYandex.vue')
           }

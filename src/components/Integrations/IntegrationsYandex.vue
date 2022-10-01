@@ -19,13 +19,6 @@
     :breadcrumbs="[{ name: 'Яндекс.Почта', selected: true }]"
   />
   <div class="w-full px-10 py-5 h-auto bg-white rounded-[8px]">
-    <div class="py-3">
-      <button
-        class="p-2 px-4 rounded-[5px] bg-[#FFFAFA] border-[1px] border-black"
-      >
-        Корпоративная
-      </button>
-    </div>
     <div
       class="flex w-[450px] justify-center flex-col"
     >
