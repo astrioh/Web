@@ -159,7 +159,7 @@ export default {
       this.removeIntegrationModal = value
     },
     emailIntegrate (login, password) {
-      this.$store.dispatch(YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION, {
+      this.$store.dispatch(YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION, {
         ya_login: login,
         ya_password: password,
         organization_email: this.user.owner_email
@@ -168,7 +168,7 @@ export default {
       })
     },
     removeIntegration () {
-      this.$store.dispatch(YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION, this.user.owner_email)
+      this.$store.dispatch(YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION, this.user.owner_email)
         .then(() => {
           this.showRemoveIntegration(false)
         })
