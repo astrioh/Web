@@ -1,16 +1,8 @@
 <template>
-  <BoardModalBoxDelete
-    v-if="showDeleteAnswer"
-    title="Удалить ответ"
-    text="Вы действительно хотите удалить ответ?"
-    @cancel="showDeleteAnswer = false"
-    @yes="deleteAnswer"
-  />
   <div class="flex mb-[15px]">
     <div
       class="border border-transparent bg-[#F4F5F7] rounded-[8px] min-h-[51px] grow flex items-center p-[15px]"
       :class="{'!bg-white border-[#e0e0e0]': inFocus && !(rightAnswer || answer.is_right), '!bg-[#f1f9f4] !border-[#c6e8d1]': rightAnswer || answer.is_right}"
-      @click="onSelectAnswer"
     >
       <div
         class="h-[20px] w-[20px] shrink-0 mr-[12px] flex items-center justify-center rounded-[5px]"
@@ -32,17 +24,15 @@
         </svg>
       </div>
       <div
-        :id="answer.uid + 'input'"
         :ref="answer.uid + 'input'"
         :placeholder="answerPlaceholder(answer)"
         spellcheck="false"
-        class="font-[500] text-[14px] text-[#4C4C4D] leading-[25px] font-['Roboto'] break-words"
-        :class="{'cursor-editing': isEditing, 'invalid': answer.invalid, 'text-[#7E7E80]': !((rightAnswer || answer.is_right) && isEditing)}"
-        :contenteditable="isEditing"
+        class="font-[500] text-[14px] text-[#4C4C4D] leading-[25px] font-['Roboto'] break-words cursor-editing"
+        :class="{'invalid': answer.invalid, 'text-[#7E7E80]': !(rightAnswer || answer.is_right)}"
+        contenteditable="true"
         @focus="inFocus = true"
         @blur="inFocus = false"
         @input="maxAnswerLength"
-        @keyup="false"
         @keydown.enter.exact.prevent="$emit('addAnswer')"
         @focusout="updateAnswerName"
         v-text="answer.name"
@@ -50,7 +40,7 @@
     </div>
     <div
       class="flex flex-row items-center cursor-pointer mr-1 mt-2 hover:transition hover:opacity-[0.8] ml-[20px]"
-      @click="deleteAnswer()"
+      @click="deleteAnswer"
     >
       <svg
         width="14"
@@ -69,27 +59,18 @@
 </template>
 
 <script>
-import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
 export default {
-  components: {
-    BoardModalBoxDelete
-  },
   props: {
     answer: {
       type: Object,
       default: () => ({})
-    },
-    isEditing: {
-      type: Boolean,
-      default: false
     }
   },
-  emits: ['addAnswer', 'deleteAnswer', 'setRightAnswer', 'onSelectAnswer', 'resetRightAnswer', 'updateAnswerName'],
+  emits: ['addAnswer', 'deleteAnswer', 'setRightAnswer', 'updateAnswerName'],
   expose: ['onFocus'],
   data () {
     return {
       name: '',
-      showDeleteAnswer: false,
       rightAnswer: false,
       inFocus: false
     }
@@ -99,30 +80,22 @@ export default {
       if (answer.name === '' && answer.invalid) {
         return 'Поле ответа не должно быть пустым'
       }
-      return this.isEditing ? 'Текст ответа' : ''
+      return 'Текст ответа'
     },
     maxAnswerLength () {
       const maxLength = 280
-      const answerInput = document.getElementById(this.answer.uid + 'input')
+      const answerInput = this.$refs[this.answer.uid + 'input']
       if (answerInput.innerHTML.length > maxLength) {
         answerInput.innerHTML = answerInput.innerHTML.substr(0, maxLength)
         answerInput.blur()
       }
     },
     deleteAnswer () {
-      this.showDeleteAnswer = false
       this.$emit('deleteAnswer', this.answer.uid)
-    },
-    onSelectAnswer () {
-      if (this.isEditing) return
-      this.$emit('onSelectAnswer', this.answer.uid)
     },
     setRightAnswer (val) {
       this.rightAnswer = val
       this.$emit('setRightAnswer', [this.answer, val])
-    },
-    resetRightAnswer () {
-      this.rightAnswer = false
     },
     updateAnswerName (event) {
       this.$emit('updateAnswerName', [event.target.innerText, this.answer])
