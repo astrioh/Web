@@ -13,7 +13,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexIntegrateOrganization'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
-          commit(YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION, resp.data)
+          commit(YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -41,7 +41,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemoveIntegration?organization=' + organization
       axios({ url: url, method: 'DELETE' })
         .then((resp) => {
-          commit(YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION)
+          commit(YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION)
           resolve(resp)
         })
         .catch((err) => {
