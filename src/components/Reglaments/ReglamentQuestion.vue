@@ -26,6 +26,7 @@
             placeholder="Текст вопроса"
             spellcheck="false"
             class="font-[500] text-[14px] text-[#4C4C4D] mx-4 mt-4 leading-6 min-h-[81px] break-words"
+            style="word-break: break-word"
             contenteditable="true"
             @blur="changeQuestionName($event)"
             @keydown.enter.exact.prevent="$emit('addQuestion')"

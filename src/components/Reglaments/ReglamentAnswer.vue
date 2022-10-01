@@ -29,6 +29,7 @@
         spellcheck="false"
         class="font-[500] text-[14px] text-[#4C4C4D] leading-[25px] font-['Roboto'] break-words cursor-editing"
         :class="{'invalid': answer.invalid, 'text-[#7E7E80]': !(rightAnswer || answer.is_right)}"
+        style="word-break: break-word"
         contenteditable="true"
         @focus="inFocus = true"
         @blur="inFocus = false"
