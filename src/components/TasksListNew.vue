@@ -1030,6 +1030,7 @@ export default {
         }
       ).then(() => {
         this.$store.commit(TASK.REMOVE_TASK_FROM_LEAVES, parentUid)
+        this.$store.commit(TASK.REMOVE_TASK, node.dragged.node.id)
       })
     },
     changeFocus (task) {
