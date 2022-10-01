@@ -107,8 +107,8 @@ const actions = {
     const promises = [messages, files]
 
     if (data.yandexInt) {
-      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US, data)
-      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US, data)
+      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US, data)
+      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US, data)
       promises.push(yandexMsgsSentFromUs)
       promises.push(yandexMsgsSentToUs)
     }

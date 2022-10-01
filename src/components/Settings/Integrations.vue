@@ -116,12 +116,20 @@ export default {
     integrations () {
       return [
         {
+          title: 'Мои интеграции',
+          items: [
+            {
+              path: 'personalYandexMail',
+              name: 'Яндекс.Почта'
+            }
+          ]
+        },
+        {
           title: 'Корпоративные интеграции',
           items: [
             {
               path: 'corporationYandexMail',
-              name: 'Яндекс.Почта',
-              type: 'yandex'
+              name: 'Яндекс.Почта'
             }
           ]
         }

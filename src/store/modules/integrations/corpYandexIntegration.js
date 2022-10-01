@@ -8,7 +8,7 @@ const state = {
 }
 
 const actions = {
-  [YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION]: ({ commit, dispatch }, data) => {
+  [YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexIntegrateOrganization'
       axios({ url: url, method: 'POST', data: data })
@@ -36,7 +36,7 @@ const actions = {
         })
     })
   },
-  [YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION]: ({ commit, dispatch }, organization) => {
+  [YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, organization) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemoveIntegration?organization=' + organization
       axios({ url: url, method: 'DELETE' })
@@ -49,7 +49,7 @@ const actions = {
         })
     })
   },
-  [YANDEX.YANDEX_GET_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
+  [YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
@@ -69,7 +69,7 @@ const actions = {
         })
     })
   },
-  [YANDEX.YANDEX_GET_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
+  [YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
@@ -92,7 +92,7 @@ const actions = {
 }
 
 const mutations = {
-  [YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION]: (state, data) => {
+  [YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION]: (state, data) => {
     state.isIntegrated = data
   },
   [YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: (state, data) => {
@@ -102,7 +102,7 @@ const mutations = {
       state.isIntegrated = true
     }
   },
-  [YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION]: (state) => {
+  [YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: (state) => {
     state.isIntegrated = false
   }
 }

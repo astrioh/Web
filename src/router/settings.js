@@ -24,8 +24,13 @@ export default [
         children: [
           {
             path: 'corporationYandexMail',
-            name: 'yandex',
+            name: 'corporationYandexMail',
             component: () => import('@/components/Integrations/CorpoIntegrationsYandex.vue')
+          },
+          {
+            path: 'personalYandexMail',
+            name: 'personalYandexMail',
+            component: () => import('@/components/Integrations/PersonalIntegrationsYandex.vue')
           }
         ]
       },

@@ -27,7 +27,7 @@
           class="h-[30px] w-[30px]"
           src="@/assets/images/yPochta.png"
         >
-        <span class="ml-[10px] font-[500]">Корпоративная интеграция через Яндекс.Почта</span>
+        <span class="ml-[10px] font-[500]">Персональная интеграция через Яндекс.Почта</span>
       </div>
       <button
         v-if="!isOrganizationIntegrated"
@@ -143,13 +143,7 @@ export default {
   computed: {
     user () {
       return this.$store.state.user.user
-    },
-    isOrganizationIntegrated () {
-      return this.$store.state.corpYandexIntegration.isIntegrated
     }
-  },
-  mounted () {
-    this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
   },
   methods: {
     changeShowIntegrationState (value) {
