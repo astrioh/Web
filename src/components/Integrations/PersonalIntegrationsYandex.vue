@@ -29,10 +29,10 @@
         >
         <span class="ml-[10px] font-[500]">Персональная интеграция через Яндекс.Почта</span>
       </div>
+      <!-- @click="changeShowIntegrationState(true)" -->
       <button
         v-if="!isOrganizationIntegrated"
         class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300"
-        @click="changeShowIntegrationState(true)"
       >
         Интеграция
       </button>

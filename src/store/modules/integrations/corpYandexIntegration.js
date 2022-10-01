@@ -38,7 +38,7 @@ const actions = {
   },
   [YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, organization) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemoveIntegration?organization=' + organization
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemoveCorpIntegration?organization=' + organization
       axios({ url: url, method: 'DELETE' })
         .then((resp) => {
           commit(YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION)
@@ -57,7 +57,7 @@ const actions = {
         reciever_email: emails.clientEmail,
         organization_email: emails.organizationEmail
       }
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexMsgsSentFromUs'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexCorpMsgsSentFromUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
@@ -77,7 +77,7 @@ const actions = {
         sender_email: emails.clientEmail,
         organization_email: emails.organizationEmail
       }
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexMsgsSentToUs'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexCorpMsgsSentToUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
