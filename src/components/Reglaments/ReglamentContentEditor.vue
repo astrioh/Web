@@ -469,6 +469,9 @@ export default {
     }
   },
   mounted () {
+    if (!this.canEdit) {
+      this.$router.push(`/reglaments/${this.currReglament.uid}`)
+    }
     this.currName = this.reglamentTitle
     this.currEditors = [...this.reglamentEditors]
     this.currDep = this.reglamentDep
