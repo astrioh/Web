@@ -25,7 +25,7 @@ export default [
           {
             path: 'corporationYandexMail',
             name: 'yandex',
-            component: () => import('@/components/Integrations/IntegrationsYandex.vue')
+            component: () => import('@/components/Integrations/CorpoIntegrationsYandex.vue')
           }
         ]
       },
