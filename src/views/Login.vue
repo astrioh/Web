@@ -70,132 +70,122 @@
             label="Войти через Google"
           />
         </GoogleLogin>
-        <!-- на время закомментил, чтобы вход работал -->
-        <!-- <div
-        class="mt-2 w-full flex justify-center"
-      >
-        <GoogleLogin
-          v-if="form.showCheckButton"
-          :callback="googleCallback"
-          prompt
-        />
-      </div> -->
-        <transition-group name="slide-fade">
-          <div v-if="showValues.showLoginInputsValue">
-            <field>
-              <control
-                v-model="form.password"
-                name="password"
-                autocomplete="current-password"
-                placeholder="Пароль"
-                icon-class="cursor-pointer"
-                :show="showValues.showLoginInputsValue"
-                :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
-                :type="form.showPassword ? 'text' : 'password'"
-                :valid="form.password.trim().length > 7"
-                @icon-click="togglePasswordVisibility"
-              />
-            </field>
-            <p
-              v-if="form.showError"
-              class="text-red-500 text-xs pb-3"
-            >
-              {{ form.errorMessage }}
-            </p>
-            <jb-button
-              type="submit"
-              class="w-full rounded-lg text-sm"
-              color="login"
-              :icon="mdiArrowRight"
-              label="Войти"
-            />
-            <a
-              href="https://www.leadertask.ru/user?t=passrecovery"
-              class="text-xs mt-5 text-blue-500 underline decoration-1"
-              target="_blank"
-            >
-              Забыли пароль?
-            </a>
-          </div>
-        </transition-group>
-
-        <transition-group name="slide-fade">
-          <div v-if="showValues.showRegisterInputsValue">
-            <field
-              help="Пароль (не менее 8 символов)"
-              :max-count="8"
-              :actual-count="form.password.length"
-            >
-              <control
-                v-model="form.password"
-                name="password"
-                placeholder="Пароль"
-                autocomplete="current-password"
-                icon-class="cursor-pointer"
-                :show="showValues.showRegisterInputsValue"
-                :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
-                :type="form.showPassword ? 'text' : 'password'"
-                :valid="validatePassword"
-                @icon-click="togglePasswordVisibility"
-                @click="form.passwordTouched = true"
-                @blur="validateAndShowMessage"
-              />
-            </field>
-
-            <field
-              help="Введите ваше имя"
-              :max-count="3"
-              :actual-count="form.username.length"
-            >
-              <control
-                v-model="form.username"
-                type="text"
-                :maxlength="'50'"
-                :icon="mdiAccountOutline"
-                name="username"
-                autocomplete="username"
-                placeholder="Имя пользователя"
-                :valid="validateName"
-                @click="form.usernameTouched = true"
-                @blur="validateAndShowMessage"
-              />
-            </field>
-
-            <field
-              help="Введите ваш номер телефона"
-            >
-              <control
-                v-model="form.phone"
-                v-maska="'+7 (###) ###-##-##'"
-                type="text"
-                :icon="mdiPhoneOutline"
-                :valid="validatePhone"
-                name="phone"
-                autocomplete="phone"
-                placeholder="Номер телефона"
-                @click="form.phoneTouched = true"
-                @blur="validateAndShowMessage"
-              />
-            </field>
-
-            <p
-              v-if="form.showError"
-              class="text-red-500 text-xs pb-3"
-            >
-              {{ form.errorMessage }}
-            </p>
-
-            <jb-button
-              type="submit"
-              color="login"
-              class="w-full rounded-lg text-sm"
-              :icon="mdiArrowRight"
-              label="Создать аккаунт"
-              :disabled="!allFieldsAreValid"
-            />
-          </div>
-        </transition-group>
       </div>
+      <transition-group name="slide-fade">
+        <div v-if="showValues.showLoginInputsValue">
+          <field>
+            <control
+              v-model="form.password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="Пароль"
+              icon-class="cursor-pointer"
+              :show="showValues.showLoginInputsValue"
+              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+              :type="form.showPassword ? 'text' : 'password'"
+              :valid="form.password.trim().length > 7"
+              @icon-click="togglePasswordVisibility"
+            />
+          </field>
+          <p
+            v-if="form.showError"
+            class="text-red-500 text-xs pb-3"
+          >
+            {{ form.errorMessage }}
+          </p>
+          <jb-button
+            type="submit"
+            class="w-full rounded-lg text-sm"
+            color="login"
+            :icon="mdiArrowRight"
+            label="Войти"
+          />
+          <a
+            href="https://www.leadertask.ru/user?t=passrecovery"
+            class="text-xs mt-5 text-blue-500 underline decoration-1"
+            target="_blank"
+          >
+            Забыли пароль?
+          </a>
+        </div>
+      </transition-group>
+
+      <transition-group name="slide-fade">
+        <div v-if="showValues.showRegisterInputsValue">
+          <field
+            help="Пароль (не менее 8 символов)"
+            :max-count="8"
+            :actual-count="form.password.length"
+          >
+            <control
+              v-model="form.password"
+              name="password"
+              placeholder="Пароль"
+              autocomplete="current-password"
+              icon-class="cursor-pointer"
+              :show="showValues.showRegisterInputsValue"
+              :icon="form.showPassword ? mdiEyeOutline : mdiEyeOffOutline"
+              :type="form.showPassword ? 'text' : 'password'"
+              :valid="validatePassword"
+              @icon-click="togglePasswordVisibility"
+              @click="form.passwordTouched = true"
+              @blur="validateAndShowMessage"
+            />
+          </field>
+
+          <field
+            help="Введите ваше имя"
+            :max-count="3"
+            :actual-count="form.username.length"
+          >
+            <control
+              v-model="form.username"
+              type="text"
+              :maxlength="'50'"
+              :icon="mdiAccountOutline"
+              name="username"
+              autocomplete="username"
+              placeholder="Имя пользователя"
+              :valid="validateName"
+              @click="form.usernameTouched = true"
+              @blur="validateAndShowMessage"
+            />
+          </field>
+
+          <field
+            help="Введите ваш номер телефона"
+          >
+            <control
+              v-model="form.phone"
+              v-maska="'+7 (###) ###-##-##'"
+              type="text"
+              :icon="mdiPhoneOutline"
+              :valid="validatePhone"
+              name="phone"
+              autocomplete="phone"
+              placeholder="Номер телефона"
+              @click="form.phoneTouched = true"
+              @blur="validateAndShowMessage"
+            />
+          </field>
+
+          <p
+            v-if="form.showError"
+            class="text-red-500 text-xs pb-3"
+          >
+            {{ form.errorMessage }}
+          </p>
+
+          <jb-button
+            type="submit"
+            color="login"
+            class="w-full rounded-lg text-sm"
+            :icon="mdiArrowRight"
+            label="Создать аккаунт"
+            :disabled="!allFieldsAreValid"
+          />
+        </div>
+      </transition-group>
     </card-component>
   </full-screen-section>
 </template>
