@@ -1,5 +1,5 @@
 import axios from 'axios'
-import * as CORP_YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import * as PERSONAL_YANDEX from '@/store/actions/integrations/personalYandexInt.js'
 
 const state = {
   login: null,
@@ -8,12 +8,12 @@ const state = {
 }
 
 const actions = {
-  [CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, data) => {
+  [PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION]: ({ commit, dispatch }, data) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexIntegrateOrganization'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexIntegratePersonal'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
-          commit(CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION, resp.data)
+          commit(PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -22,12 +22,12 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: ({ commit, dispatch }, organization) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS]: ({ commit, dispatch }, userEmail) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexOrganizationLogPass?organization=' + organization
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalLoginPassword?user=' + userEmail
       axios({ url: url, method: 'GET' })
         .then((resp) => {
-          commit(CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, resp.data)
+          commit(PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS, resp.data)
           resolve(resp)
         })
         .catch((err) => {
@@ -36,12 +36,12 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, organization) => {
+  [PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION]: ({ commit, dispatch }, userEmail) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemoveCorpIntegration?organization=' + organization
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemovePersonalIntegration?organization=' + userEmail
       axios({ url: url, method: 'DELETE' })
         .then((resp) => {
-          commit(CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION)
+          commit(PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION)
           resolve(resp)
         })
         .catch((err) => {
@@ -49,14 +49,14 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
         ya_password: state.password,
         reciever_email: emails.clientEmail
       }
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexCorpMsgsSentFromUs'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentFromUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
@@ -68,14 +68,14 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
         ya_password: state.password,
         sender_email: emails.clientEmail
       }
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexCorpMsgsSentToUs'
+      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentToUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('imap msgs get successfully')
@@ -90,17 +90,17 @@ const actions = {
 }
 
 const mutations = {
-  [CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION]: (state, data) => {
+  [PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION]: (state, data) => {
     state.isIntegrated = data
   },
-  [CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: (state, data) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS]: (state, data) => {
     if (data.length) {
       state.login = data[0].ya_login
       state.password = data[0].ya_password
       state.isIntegrated = true
     }
   },
-  [CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: (state) => {
+  [PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION]: (state) => {
     state.isIntegrated = false
   }
 }

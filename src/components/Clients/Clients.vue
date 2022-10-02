@@ -125,6 +125,9 @@ export default {
     },
     isCorpYandexIntegrated () {
       return this.$store.state.corpYandexIntegration.isIntegrated
+    },
+    isPersonalYandexIntegrated () {
+      return this.$store.state.personalYandexIntegration.isIntegrated
     }
   },
   watch: {
@@ -174,8 +177,8 @@ export default {
       const data = {
         clientUid: client.uid,
         clientEmail: client.email,
-        organizationEmail: this.user.owner_email,
-        yandexInt: this.isYandexIntegrated
+        corpYandexInt: this.isCorpYandexIntegrated,
+        personalYandexInt: this.isPersonalYandexIntegrated
       }
       this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, data)
       if (!this.isPropertiesMobileExpanded) {
