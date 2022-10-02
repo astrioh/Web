@@ -148,9 +148,6 @@ export default {
       return this.$store.state.corpYandexIntegration.isIntegrated
     }
   },
-  mounted () {
-    this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
-  },
   methods: {
     changeShowIntegrationState (value) {
       this.showIntegration = value
