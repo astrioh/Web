@@ -29,10 +29,10 @@
         >
         <span class="ml-[10px] font-[500]">Персональная интеграция через Яндекс.Почта</span>
       </div>
-      <!-- @click="changeShowIntegrationState(true)" -->
       <button
-        v-if="!isOrganizationIntegrated"
+        v-if="!isPersonalIntegrated"
         class="mt-[10px] rounded-[10px] h-[40px] text-white bg-orange-300"
+        @click="changeShowIntegrationState(true)"
       >
         Интеграция
       </button>
@@ -122,7 +122,7 @@
   </div>
 </template>
 <script>
-import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import * as PERSONAL_YANDEX from '@/store/actions/integrations/personalYandexInt.js'
 
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
@@ -143,6 +143,9 @@ export default {
   computed: {
     user () {
       return this.$store.state.user.user
+    },
+    isPersonalIntegrated () {
+      return this.$store.state.personalYandexIntegration.isIntegrated
     }
   },
   methods: {
@@ -153,16 +156,16 @@ export default {
       this.removeIntegrationModal = value
     },
     emailIntegrate (login, password) {
-      this.$store.dispatch(YANDEX.YANDEX_CREATE_EMAIL_INTEGRATION, {
+      this.$store.dispatch(PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION, {
         ya_login: login,
         ya_password: password,
-        organization_email: this.user.owner_email
+        user_email: this.user.current_user_email
       }).then(() => {
         this.changeShowIntegrationState(false)
       })
     },
     removeIntegration () {
-      this.$store.dispatch(YANDEX.YANDEX_REMOVE_EMAIL_INTEGRATION, this.user.owner_email)
+      this.$store.dispatch(PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION, this.user.current_user_email)
         .then(() => {
           this.showRemoveIntegration(false)
         })

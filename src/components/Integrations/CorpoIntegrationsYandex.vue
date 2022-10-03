@@ -122,7 +122,7 @@
   </div>
 </template>
 <script>
-import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import * as CORP_YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
 
 import IntegrationsModalBoxYandex from '@/components/Integrations/IntegrationsModalBoxYandex.vue'
 import ModalBoxDelete from '@/components/Common/ModalBoxDelete.vue'
@@ -146,20 +146,27 @@ export default {
     },
     isOrganizationIntegrated () {
       return this.$store.state.corpYandexIntegration.isIntegrated
+    },
+    employees () {
+      return this.$store.state.employees.employees
+    },
+    canEdit () {
+      return this.employees[this.user.current_user_uid].type === 1 || this.employees[this.user.current_user_uid].type === 2
     }
-  },
-  mounted () {
-    this.$store.dispatch(YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
   },
   methods: {
     changeShowIntegrationState (value) {
-      this.showIntegration = value
+      if (this.canEdit) {
+        this.showIntegration = value
+      }
     },
     showRemoveIntegration (value) {
-      this.removeIntegrationModal = value
+      if (this.canEdit) {
+        this.removeIntegrationModal = value
+      }
     },
     emailIntegrate (login, password) {
-      this.$store.dispatch(YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION, {
+      this.$store.dispatch(CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION, {
         ya_login: login,
         ya_password: password,
         organization_email: this.user.owner_email
@@ -168,7 +175,7 @@ export default {
       })
     },
     removeIntegration () {
-      this.$store.dispatch(YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION, this.user.owner_email)
+      this.$store.dispatch(CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION, this.user.owner_email)
         .then(() => {
           this.showRemoveIntegration(false)
         })

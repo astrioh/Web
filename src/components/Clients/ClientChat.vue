@@ -25,7 +25,7 @@
       <div
         v-if="message.emailSender"
         class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
-        :class="{ 'text-left': !isMyEmailIntegrated(message), 'text-right': isMyEmailIntegrated(message) }"
+        :class="{ 'text-left': !isMessageIncludesIntegrationLogin(message), 'text-right': isMessageIncludesIntegrationLogin(message) }"
       >
         <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">{{ message.emailSender }}</span>
       </div>
@@ -115,7 +115,7 @@ export default {
         hasQuote: message.uid_quote && message.uid_quote !== '00000000-0000-0000-0000-000000000000' && message.deleted !== 1,
         quoteMessage: this.getMessageByUid(message?.uid_quote),
         isInspectorMessage: message.uid_creator === 'inspector',
-        isMyMessage: (message?.uid_creator === this.currentUserUid) || message?.emailSender ? message.emailSender.includes(this.corpYandexIntegration.login) : false
+        isMyMessage: (message?.uid_creator === this.currentUserUid) || this.isMessageIncludesIntegrationLogin(message)
       }))
     },
     user () {
@@ -123,11 +123,17 @@ export default {
     },
     corpYandexIntegration () {
       return this.$store.state.corpYandexIntegration
+    },
+    personalYandexIntegration () {
+      return this.$store.state.personalYandexIntegration
     }
   },
   methods: {
     onDeleteMessage (msgUid) {
       this.$store.dispatch(CLIENTS_CHAT.DELETE_MESSAGE_REQUEST, msgUid)
+    },
+    isMessageIncludesIntegrationLogin (msg) {
+      return msg?.emailSender.includes(this.personalYandexIntegration.login) || msg?.emailSender.includes(this.corpYandexIntegration.login)
     },
     getMessageByUid (uid) {
       for (const message of this.messages) {
@@ -140,9 +146,6 @@ export default {
     },
     shouldShowOptions (msg) {
       return !msg.isYandex
-    },
-    isMyEmailIntegrated (msg) {
-      return msg.emailSender.includes(this.corpYandexIntegration.login)
     },
     isChangedDate (index) {
       if (index === 0) return true

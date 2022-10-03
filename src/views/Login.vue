@@ -55,13 +55,21 @@
         @click="checkEmailExistense"
       />
       <div
-        class="mt-2 w-full flex justify-center"
+        class="mt-2 w-full"
       >
         <GoogleLogin
           v-if="form.showCheckButton"
+          class="w-full"
           :callback="googleCallback"
-          prompt
-        />
+          popup-type="TOKEN"
+        >
+          <jb-button
+            class="w-full rounded-lg text-sm"
+            color="white"
+            :icon="'google'"
+            label="Войти через Google"
+          />
+        </GoogleLogin>
       </div>
       <transition-group name="slide-fade">
         <div v-if="showValues.showLoginInputsValue">

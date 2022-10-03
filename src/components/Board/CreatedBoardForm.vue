@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-screen h-screen"
+    class="w-full h-full"
     :class="isFrame && 'bg-white'"
   >
     <CreatedBoardFormSkeleton

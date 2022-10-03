@@ -1,7 +1,8 @@
 import { uuidv4 } from '@/helpers/functions'
 
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
-import * as YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import * as CORP_YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import * as PERSONAL_YANDEX from '@/store/actions/integrations/personalYandexInt.js'
 
 import axios from 'axios'
 import store from '@/store/index.js'
@@ -106,16 +107,29 @@ const actions = {
 
     const promises = [messages, files]
 
-    if (data.yandexInt) {
-      const yandexMsgsSentFromUs = dispatch(YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US, data)
-      const yandexMsgsSentToUs = dispatch(YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US, data)
-      promises.push(yandexMsgsSentFromUs)
-      promises.push(yandexMsgsSentToUs)
+    if (data.corpYandexInt) {
+      const yandexCorpMsgsSentFromUs = dispatch(CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US, data)
+      const yandexCorpMsgsSentToUs = dispatch(CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US, data)
+      promises.push(yandexCorpMsgsSentFromUs)
+      promises.push(yandexCorpMsgsSentToUs)
+    }
+
+    if (data.personalYandexInt) {
+      const yandexPersonalMsgsSentFromUs = dispatch(PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_FROM_US, data)
+      const yandexPersonalMsgsSentToUs = dispatch(PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_TO_US, data)
+      promises.push(yandexPersonalMsgsSentFromUs)
+      promises.push(yandexPersonalMsgsSentToUs)
     }
 
     return Promise.all(promises)
       .then((resp) => {
-        if (data.yandexInt) {
+        if (data.corpYandexInt && data.personalYandexInt) {
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[4].data)
+          commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[5].data)
+        }
+        if (!data.personalYandexInt || !data.corpYandexInt) {
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
         }

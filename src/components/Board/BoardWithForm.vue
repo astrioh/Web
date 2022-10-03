@@ -244,7 +244,7 @@ export default {
       return this.$route.params.board_id
     },
     iframeHtml () {
-      return `<iframe src="${this.currentLocation}/form/${this.currentBoardId}?frame=true" title="Контакт" width="400" height="332" scrolling="no" frameBorder="0"></iframe>`
+      return `<iframe src="${this.currentLocation}/form/${this.currentBoardId}?frame=true" title="Контакт" width="400" height="410" scrolling="no" frameBorder="0"></iframe>`
     },
     currentLocation () {
       return window.location.origin

@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import axios from 'axios'
 import { darkModeKey } from '@/config.js'
 import corpYandexIntegration from './modules/integrations/corpYandexIntegration'
+import personalYandexIntegration from './modules/integrations/personalYandexIntegration'
 import auth from './modules/auth'
 import navigator from './modules/navigator'
 import calendar from './modules/calendar'
@@ -148,6 +149,7 @@ export default createStore({
     user,
     tasks,
     slides,
+    personalYandexIntegration,
     corpYandexIntegration,
     taskfilesandmessages,
     cardfilesandmessages,

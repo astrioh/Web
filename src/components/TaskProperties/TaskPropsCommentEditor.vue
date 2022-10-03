@@ -61,6 +61,22 @@ export default {
     }
   },
   methods: {
+    scrollSelectionIntoView () {
+      const selection = window.getSelection()
+      if (!selection.rangeCount) {
+        return
+      }
+      const firstRange = selection.getRangeAt(0)
+      if (firstRange.commonAncestorContainer === document) {
+        return
+      }
+      const tempAnchorEl = document.createElement('br')
+      firstRange.insertNode(tempAnchorEl)
+      tempAnchorEl.scrollIntoView({
+        block: 'end'
+      })
+      tempAnchorEl.remove()
+    },
     onPasteComment (e) {
       if (e.originalEvent && e.originalEvent.clipboardData && e.originalEvent.clipboardData.getData) {
         e.preventDefault()
@@ -88,6 +104,7 @@ export default {
           }
         }
       }
+      this.scrollSelectionIntoView()
     },
     /**
      * @param {Element} e
