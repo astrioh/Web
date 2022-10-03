@@ -273,8 +273,8 @@ export default {
       default: ''
     },
     deletedStatus: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     status: {
       type: String,

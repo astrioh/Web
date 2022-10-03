@@ -250,7 +250,7 @@
                 :icon-box="msgs.viewBox"
                 icon-height="15"
                 class="h-[22px]"
-                :icon-class="{ 'text-blue-600': props.node.info.is_inspectable }"
+                :icon-class="props.node.info.is_inspectable ? 'text-blue-600' : '' "
               />
               <!-- Comment -->
               <TaskListIconLabel
@@ -1030,7 +1030,7 @@ export default {
         }
       ).then(() => {
         this.$store.commit(TASK.REMOVE_TASK_FROM_LEAVES, parentUid)
-        this.$store.commit(TASK.REMOVE_TASK, node.dragged.node.id)
+        this.$store.dispatch('asidePropertiesToggle', false)
       })
     },
     changeFocus (task) {

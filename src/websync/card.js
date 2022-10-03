@@ -2,8 +2,7 @@ import router from '@/router/index.js'
 import * as CARD from '@/store/actions/cards'
 import {
   CHANGE_CARD,
-  DELETE_CARD,
-  INSPECTOR_CARD_REQUEST
+  DELETE_CARD
 } from '@/store/actions/cards'
 import store from '@/store/index.js'
 import { computed } from 'vue'
@@ -36,27 +35,16 @@ export function updateCard (obj) {
     return
   }
 
-  store.dispatch(INSPECTOR_CARD_REQUEST, obj.obj.uid).then((resp) => {
-    obj.obj.uid_client = ''
-    obj.obj.client_name = ''
-    obj.obj.date_reminder = ''
-
-    if (resp.data) {
-      obj.obj.uid_client = resp.data.uid_client
-      obj.obj.client_name = resp.data.client_name
-      obj.obj.date_reminder = resp.data.date_reminder
-    }
-    // закрываем свойства карточки
-    // если переменстили в другую доску или колонку
-    if (obj.obj.uid === selectedCardUid.value) {
-      if (
-        selectedCard.value.uid_board !== obj.obj.uid_board ||
+  // закрываем свойства карточки
+  // если переменстили в другую доску или колонку
+  if (obj.obj.uid === selectedCardUid.value) {
+    if (
+      selectedCard.value.uid_board !== obj.obj.uid_board ||
         selectedCard.value.uid_stage !== obj.obj.uid_stage
-      ) {
-        store.dispatch('asidePropertiesToggle', false)
-        store.commit(CARD.SELECT_CARD, '')
-      }
+    ) {
+      store.dispatch('asidePropertiesToggle', false)
+      store.commit(CARD.SELECT_CARD, '')
     }
-    store.commit(CHANGE_CARD, obj.obj)
-  })
+  }
+  store.commit(CHANGE_CARD, obj.obj)
 }

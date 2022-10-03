@@ -91,13 +91,16 @@ export function initInspectorSocket (force = false) {
 function parseMessage (data) {
   try {
     const parsedData = { ...JSON.parse(data) }
+
     if (parsedData?.uid_json) {
       createNotificationAndInspectorMessage(parsedData)
     } else if (
       ['userOnline', 'boardOnline', 'cardOnline'].includes(parsedData.type)
     ) {
       updateOnlineMap(parsedData)
-    } else {
+    }
+
+    if (typeof parsedData?.type === 'number') {
       parseObject(parsedData)
     }
   } catch (e) {
@@ -132,6 +135,7 @@ function createNotificationAndInspectorMessage (parsedData) {
   if (!isKnownInspectorMessageType(parsedData.message)) {
     return
   }
+
   showNotify(
     {
       uid: parsedData?.uid_json,

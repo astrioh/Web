@@ -10,6 +10,7 @@
     <ReglamentModalSave
       v-if="showSaveModal"
       @onSave="setEdit"
+      @clearContributors="clearContributors"
       @close="showSaveModal = false"
     />
     <div class="w-full top-[0px] sticky left-0 right-0 z-[5]">

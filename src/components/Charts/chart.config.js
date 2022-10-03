@@ -33,27 +33,26 @@ export const fillDaysDataSet = (arr) => {
   return { labels, values }
 }
 
-const datasetObject = (color, points) => {
+const datasetObject = (color, aboveColor, points) => {
   return {
-    fill: true,
+    fill: {
+      target: 'origin',
+      above: aboveColor
+    },
+    backgroundColor: chartColors.default[color],
     borderColor: chartColors.default[color],
-    borderWidth: 1,
+    borderWidth: 3,
     borderDash: [],
     borderDashOffset: 0.0,
-    pointBackgroundColor: chartColors.default[color],
-    pointBorderColor: 'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: chartColors.default[color],
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 3,
+    hoverBackgroundColor: 'black',
+    pointRadius: 0,
     data: points,
     tension: 0.2,
     cubicInterpolationMode: 'default'
   }
 }
 
-export const karmaChartData = (arr, color) => {
+export const karmaChartData = (arr, color, aboveLineColor) => {
   const data = fillDaysDataSet(arr)
 
   for (let i = 0; i < data.labels.length; i++) {
@@ -62,7 +61,7 @@ export const karmaChartData = (arr, color) => {
 
   return {
     labels: data.labels,
-    datasets: [datasetObject(color, data.values)]
+    datasets: [datasetObject(color, aboveLineColor, data.values)]
   }
 }
 

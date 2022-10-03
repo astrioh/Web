@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full overflow-hidden"
+    class="w-full h-screen overflow-auto"
     :class="isFrame && 'bg-white'"
   >
     <CreatedBoardFormSkeleton
@@ -9,7 +9,7 @@
     />
     <div
       v-if="!showFormSended && formIsLoaded"
-      class="h-full flex justify-center max-w-[400px] mx-auto"
+      class="flex justify-center max-w-[400px] mx-auto"
       :class="!isFrame && 'items-center'"
     >
       <div
@@ -18,7 +18,8 @@
       >
         <h1
           :title="item.title"
-          class="mb-[15px] text-[30px] text-center text-[#777] shrink-0"
+          class="mb-[15px] text-[30px] text-center text-[#777] shrink-0 w-[350px] min-h-[30px]"
+          style="word-break: break-word"
           :class="{'truncate': isFrame}"
         >
           {{ item.title }}
