@@ -16,7 +16,7 @@
     <KarmaSkeleton v-if="showSkeleton" />
     <div
       v-else
-      class="rounded-xl bg-white min-h-[300px]"
+      class="rounded-xl bg-white min-h-[300px] mb-[22px]"
     >
       <div class="mx-7">
         <div class="flex font-roboto font-normal justify-between">

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-5">
+  <div class="mt-10">
     <p class="text-[18px] font-roboto font-[700] text-[#424242]">
       История кармы
     </p>

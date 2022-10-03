@@ -61,7 +61,7 @@
     </div>
   </div>
   <div class="whitespace-nowrap flex items-center">
-    <div class="pr-3 mr-4">
+    <div class="pr-2">
       <span class="inline-flex justify-center items-center h-[30px] ">
         <span>
           <svg
@@ -161,11 +161,11 @@
           </svg>
 
         </span>
-        <span class="cursor-default pl-1 text-xs text-black-600">
+        <span class="cursor-default pl-1 font-roboto font-[400] text-[11px] text-[#4C4C4D]">
           {{ dateToLabelFormat(new Date(karma.creation_date)) }}</span>
       </span>
     </div>
-    <div class="tag-label cursor-default p-1 py-1.5 px-2 text-xs whitespace-nowrap rounded-[4px] flex items-center max-w-full text-white border-red-500 bg-opacity-50 bg-red-500 h-[30px]">
+    <div class="tag-label cursor-default p-1 py-1.5 font-roboto font-[400] text-[11px] text-[#4C4C4D] px-2 whitespace-nowrap flex items-center max-w-full">
       <div
         v-if="employees[karma.taskJson.uid_customer]"
         class="flex items-center "
@@ -177,7 +177,7 @@
           class="w-[22px] h-[22px] rounded-[5px] border border-black/10"
         >
         <p
-          class="ml-1 text-[12px] leading-[14px] text-[#ffffff] whitespace-nowrap"
+          class="ml-1 text-[11px] leading-[14px] whitespace-nowrap"
         >
           {{ employees[karma.taskJson.uid_customer].name }}
         </p>
@@ -217,7 +217,7 @@ export default {
     },
     dateToLabelFormat (calendarDate) {
       const day = calendarDate.getDate()
-      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      const month = calendarDate.toLocaleString('default', { month: 'long' })
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
     }

@@ -10,7 +10,7 @@ export function createReglament (obj) {
 
 export function deleteReglament (obj) {
   store.commit(NAVIGATOR.NAVIGATOR_REMOVE_REGLAMENT, obj.obj)
-  if (router?.currentRoute?.value?.name === 'currentReglament') {
+  if (router?.currentRoute?.value?.name === 'currentReglament' || router?.currentRoute?.value?.name === 'reglamentEditing' || router?.currentRoute?.value?.name === 'reglamentHistory') {
     router.push('/reglaments')
   }
   store.commit('RemoveReglamentByUid', obj.obj)
