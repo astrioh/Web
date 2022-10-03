@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex flex-col py-6 px-[20px] bg-white rounded-[8px]">
+  <DoitnowContent>
     <div class="font-roboto text-center text-[#424242] text-[25px] font-bold">
       Пройти регламент "{{ name }}"
     </div>
@@ -18,18 +18,23 @@
       </div>
     </div>
     <button
-      class="place-self-center mt-[35px] w-[238px] h-[40px] cursor-pointer px-[40px] rounded-[6px] bg-[#F2B679] hover:bg-slate-200"
+      class="block mx-auto mt-[35px] w-[238px] h-[40px] cursor-pointer px-[40px] rounded-[6px] bg-[#F2B679] hover:bg-slate-200"
       @click="gotoReglamentContent"
     >
       <div class="font-roboto text-[#2E2E2E] text-[14px] font-medium">
         Пройти регламент
       </div>
     </button>
-  </div>
+  </DoitnowContent>
 </template>
 
 <script>
+import DoitnowContent from '@/components/Doitnow/DoitnowContent.vue'
+
 export default {
+  components: {
+    DoitnowContent
+  },
   props: {
     uid: {
       type: String,
