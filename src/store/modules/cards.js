@@ -1,3 +1,4 @@
+import { CARD_STAGE } from '@/constants'
 import { sendInspectorMessage } from '@/inspector'
 import store from '@/store/index.js'
 import axios from 'axios'
@@ -26,6 +27,45 @@ const getters = {
 }
 
 const actions = {
+  [CARD.DOITNOW_CARDS_REQUEST]: ({ commit, rootState }) => {
+    commit('abortCardsAbortController')
+    const cardsAbortController = new AbortController()
+    commit('InitCardsAbortController', cardsAbortController)
+    const currentUserEmail =
+      rootState.user.user.current_user_email.toLowerCase()
+    const currDate = new Date()
+    const boards = Object.values(rootState.boards.boards)
+    const url = process.env.VUE_APP_INSPECTOR_API + 'cards?uid='
+    const promises = boards.map((board) =>
+      axios({
+        url: url + board.uid,
+        method: 'GET',
+        signal: cardsAbortController.signal
+      })
+    )
+    return new Promise((resolve, reject) => {
+      if (!promises.length) {
+        resolve([])
+      } else {
+        Promise.all(promises).then((respAll) => {
+          const cards = respAll.reduce((acc, resp) => {
+            const userCards =
+              resp.data?.cards?.filter(
+                (card) =>
+                  card.user.toLowerCase() === currentUserEmail &&
+                  card.uid_stage !== CARD_STAGE.ARCHIVE_SUCCESS &&
+                  card.uid_stage !== CARD_STAGE.ARCHIVE_REJECT &&
+                  (!card.date_reminder ||
+                    new Date(card.date_reminder) <= currDate)
+              ) || []
+            acc.push(...userCards)
+            return acc
+          }, [])
+          resolve(cards)
+        })
+      }
+    })
+  },
   [CARD.BOARD_CARDS_REQUEST]: ({ commit, rootState }, boardUid) => {
     commit('abortCardsAbortController')
     const cardsAbortController = new AbortController()

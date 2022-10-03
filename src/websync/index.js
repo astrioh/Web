@@ -6,6 +6,8 @@ import processCreate from '@/websync/create.js'
 import processRemove from '@/websync/remove.js'
 import processUpdate from '@/websync/update.js'
 
+import { sendInspectorMessage } from '@/inspector'
+
 const storeNavigator = computed(() => store.state.navigator.navigator)
 
 function parseObject (obj) {
@@ -73,8 +75,11 @@ export function initWebSync () {
         const obj = { ...JSON.parse(str) }
         if (process.env.VUE_APP_EXTENDED_LOGS) console.log('websync obj', obj)
 
-        // TODO: если это карточка - проксировать инспектору, инспектор должен добавить дополнительные поля. Пихать в parseObject не нужно
-        parseObject(obj)
+        if (obj.type === TYPES.TYPE_OBJECT_CARD && obj.operation === TYPES.TYPE_OPERATION_UPDATE) {
+          sendInspectorMessage(obj)
+        } else {
+          parseObject(obj)
+        }
       } catch (e) {
         console.log('websync onReceive catch error', e)
       }
