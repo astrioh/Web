@@ -61,7 +61,7 @@
     </div>
   </div>
   <div class="whitespace-nowrap flex items-center">
-    <div class="pr-2">
+    <div class="pr-2 w-[100px]">
       <span class="inline-flex justify-center items-center h-[30px] ">
         <span>
           <svg

@@ -39,17 +39,13 @@ const datasetObject = (color, aboveColor, points) => {
       target: 'origin',
       above: aboveColor
     },
+    backgroundColor: chartColors.default[color],
     borderColor: chartColors.default[color],
-    borderWidth: 1,
+    borderWidth: 3,
     borderDash: [],
     borderDashOffset: 0.0,
-    pointBackgroundColor: chartColors.default[color],
-    pointBorderColor: 'rgba(255,255,255,0)',
-    pointHoverBackgroundColor: chartColors.default[color],
-    pointBorderWidth: 20,
-    pointHoverRadius: 4,
-    pointHoverBorderWidth: 15,
-    pointRadius: 3,
+    hoverBackgroundColor: 'black',
+    pointRadius: 0,
     data: points,
     tension: 0.2,
     cubicInterpolationMode: 'default'
@@ -70,7 +66,11 @@ export const karmaChartData = (arr, color, aboveLineColor) => {
 }
 
 export const sampleChartData = (points = 7) => {
-  const labels = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+  const labels = []
+
+  for (let i = 1; i <= points; i++) {
+    labels.push(`0${i}`)
+  }
 
   return {
     labels,
