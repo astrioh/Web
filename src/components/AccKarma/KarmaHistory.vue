@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <p class="text-center text-2xl mt-2 font-bold text-[#424242]">
+  <div class="mt-5">
+    <p class="text-[18px] font-roboto font-[700] text-[#424242]">
       История кармы
     </p>
     <div v-if="!sortedKarmaListByDate.length">
@@ -12,7 +12,7 @@
       <div
         v-for="karma in sortedKarmaListByDate"
         :key="karma"
-        class="mb-1 rounded-[11px] border-[1px]"
+        class="mb-2"
       >
         <KarmaTask
           :karma="karma"

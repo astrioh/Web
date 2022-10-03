@@ -16,41 +16,48 @@
     <KarmaSkeleton v-if="showSkeleton" />
     <div
       v-else
-      class="rounded-xl bg-white"
+      class="rounded-xl bg-white min-h-[300px]"
     >
-      <p class="text-center p-2">
-        <span
-          class="text-6xl tracking-tighter"
-          :class="{'text-green-500': karmaQuantity, 'text-red-500': !karmaQuantity, 'text-[#4C4C4D]': karmaQuantity === 0 }"
-        >
-          <span v-if="karmaQuantity > 0">+</span>
-          {{ karmaQuantity }}
-        </span>
-      </p>
-      <p class="text-center mt-2 p-2">
-        <span class="text-sm text-[#4C4C4D]">В срок:</span> <span class="text-xl mr-6 text-green-500"> {{ successQuantity }}</span>
-        <span class="text-sm text-[#4C4C4D]">Просроченныx:</span> <span class="text-xl text-red-500">{{ overdueQuantity }}</span>
-      </p>
-      <br>
-      <div class="grid grid-cols-1 gap-4 p-5">
-        <div class="grid grid-cols-1 ">
-          <p class="text-center text-2xl font-bold text-[#424242]">
-            Графики
-          </p>
-          <p class="text-left text-sm font-semibold px-2.5 text-[#4C4C4D]">
-            В срок
-          </p>
-          <line-chart
-            :data="successChartData"
-            class="max-h-[120px]"
-          />
-          <p class="text-left text-sm font-semibold mt-4 px-2.5 text-[#4C4C4D]">
-            Просрочено
-          </p>
-          <line-chart
-            :data="overdueChartData"
-            class="max-h-[120px]"
-          />
+      <div class="mx-7">
+        <div class="flex font-roboto font-normal justify-between">
+          <div class="border my-7 w-full h-[129px] border-gray-200 rounded-[12px] p-[24px] flex flex-col items-center justify-center]">
+            <span class="font-[500] text-[15px] leading-[18px] text-[#424242]">Общий показатель</span>
+            <span
+              class="font-[700] text-[40px] text-[#2E2E2F] leading-[47px] mt-3"
+            >
+              {{ karmaQuantity }}
+            </span>
+          </div>
+          <div class="border mx-4 my-7 w-full h-[129px] border-gray-200 rounded-[12px] p-[24px] flex flex-col items-center justify-center]">
+            <span class="font-[500] text-[15px] leading-[18px] text-[#424242]">Сделано в срок</span>
+            <span
+              class="font-[700] text-[40px] text-[#2E2E2F] leading-[47px] mt-3"
+            >
+              {{ successQuantity }}
+            </span>
+          </div>
+          <div class="border my-7 w-full h-[129px] border-gray-200 rounded-[12px] p-[24px] flex flex-col items-center justify-center]">
+            <span class="font-[500] text-[15px] leading-[18px] text-[#424242]">Просроченных</span>
+            <span
+              class="font-[700] text-[40px] text-[#2E2E2F] leading-[47px] mt-3"
+            >
+              {{ overdueQuantity }}
+            </span>
+          </div>
+        </div>
+        <div class="flex justify-between">
+          <div class="border border-gray-200 rounded-[12px] flex flex-col w-full h-[332px] p-[24px] mr-5">
+            <span class="font-[500] text-[16px] leading-[18px] text-[#4C4C4D]">В срок</span>
+            <line-chart
+              :data="successChartData"
+            />
+          </div>
+          <div class="border border-gray-200 rounded-[12px] flex flex-col w-full h-[332px] p-[24px]">
+            <span class="font-[500] text-[16px] leading-[18px] text-[#4C4C4D]">Просрочено</span>
+            <line-chart
+              :data="overdueChartData"
+            />
+          </div>
         </div>
         <KarmaHistory />
       </div>
