@@ -48,13 +48,13 @@
         <div class="flex justify-between">
           <div class="border border-gray-200 rounded-[12px] flex flex-col w-full h-[332px] p-[24px] mr-5">
             <span class="font-[500] text-[16px] leading-[18px] text-[#4C4C4D]">В срок</span>
-            <line-chart
+            <LineChart
               :data="successChartData"
             />
           </div>
           <div class="border border-gray-200 rounded-[12px] flex flex-col w-full h-[332px] p-[24px]">
             <span class="font-[500] text-[16px] leading-[18px] text-[#4C4C4D]">Просрочено</span>
-            <line-chart
+            <LineChart
               :data="overdueChartData"
             />
           </div>
@@ -133,8 +133,8 @@ export default {
         if (karma.points > 0) success.push(karma)
         else if (karma.points < 0) overdue.push(karma)
       }
-      this.successChartData = chartConfig.karmaChartData(success, 'success', 'rgba(28, 163, 69, 0.08)')
-      this.overdueChartData = chartConfig.karmaChartData(overdue, 'danger', 'rgba(241, 72, 33, 0.08)')
+      this.successChartData = chartConfig.karmaChartData(success, 'success')
+      this.overdueChartData = chartConfig.karmaChartData(overdue, 'danger')
       this.showSkeleton = false
     })
   }

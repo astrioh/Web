@@ -1,9 +1,16 @@
+import { Chart, Filler } from 'chart.js'
+Chart.register(Filler)
+
 export const chartColors = {
   default: {
     primary: '#00D1B2',
     info: '#209CEE',
     danger: '#FF3860',
     success: '#198754'
+  },
+  aboveLine: {
+    success: '#1CA34514',
+    danger: '#F1482114'
   }
 }
 
@@ -33,11 +40,11 @@ export const fillDaysDataSet = (arr) => {
   return { labels, values }
 }
 
-const datasetObject = (color, aboveColor, points) => {
+const datasetObject = (color, points) => {
   return {
     fill: {
       target: 'origin',
-      above: aboveColor
+      above: chartColors.aboveLine[color]
     },
     backgroundColor: chartColors.default[color],
     borderColor: chartColors.default[color],
@@ -61,7 +68,7 @@ export const karmaChartData = (arr, color, aboveLineColor) => {
 
   return {
     labels: data.labels,
-    datasets: [datasetObject(color, aboveLineColor, data.values)]
+    datasets: [datasetObject(color, data.values)]
   }
 }
 
