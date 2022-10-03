@@ -180,7 +180,7 @@
       :key="user.email"
       :user-email="user.email"
       :status="user.status"
-      :disabled="!isCanEdit"
+      :disabled="!isCanEdit || user.email === currentUser.current_user_email"
       @delete="deleteMember(user.uid)"
       @admin="setMemberStatus(user.uid, 1)"
       @reader="setMemberStatus(user.uid, 0)"
@@ -295,6 +295,9 @@ export default {
     },
     selectedBoardCreatorEmail () {
       return this.selectedBoard?.email_creator || ''
+    },
+    currentUser () {
+      return this.$store.state.user.user
     },
     selectedBoardColor () {
       const backColor = this.selectedBoard?.color

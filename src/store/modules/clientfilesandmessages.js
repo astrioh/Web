@@ -123,6 +123,8 @@ const actions = {
 
     return Promise.all(promises)
       .then((resp) => {
+        console.log('msgs resp', resp)
+        console.log('int data', data)
         if (data.corpYandexInt && data.personalYandexInt) {
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
@@ -130,6 +132,7 @@ const actions = {
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[5].data)
         }
         if (!data.personalYandexInt || !data.corpYandexInt) {
+          console.log('here')
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
         }
@@ -192,6 +195,7 @@ const mutations = {
     state.messages = []
   },
   [CLIENT_FILES_AND_MESSAGES.MERGE_FILES_AND_MESSAGES]: (state) => {
+    console.log('there')
     state.messages = state.messages.concat(state.files)
     state.messages.sort((a, b) => {
       if (!a.file_name && !a.date_create.includes('Z')) {

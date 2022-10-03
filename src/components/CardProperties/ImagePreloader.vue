@@ -71,6 +71,7 @@ import { writeCache } from '@/store/helpers/functions'
 
 import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
 import * as CARDS from '@/store/actions/cards'
+import * as CARDSFILESANDMESSAGES from '@/store/actions/cardfilesandmessages'
 
 export default {
   components: {
@@ -158,6 +159,12 @@ export default {
           this.selectedCard.cover_link = resp.data.card.cover_link
           this.selectedCard.cover_color = resp.data.card.cover_color
         }
+        let messageBlob
+        for (const message of resp.data.newfiles) {
+          messageBlob = message
+        }
+        console.log(messageBlob)
+        this.$store.dispatch(CARDSFILESANDMESSAGES.DELETE_FILE_REQUEST, messageBlob.uid)
       })
     },
 

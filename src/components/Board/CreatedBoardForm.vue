@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full"
+    class="w-full h-full overflow-hidden"
     :class="isFrame && 'bg-white'"
   >
     <CreatedBoardFormSkeleton
@@ -16,7 +16,11 @@
         class="flex flex-col w-full p-[25px]"
         :class="!isFrame && 'bg-[#F9F9F9] shadow-2xl'"
       >
-        <h1 class="mb-[15px] text-[30px] text-center text-[#777]">
+        <h1
+          :title="item.title"
+          class="mb-[15px] text-[30px] text-center text-[#777] shrink-0"
+          :class="{'truncate': isFrame}"
+        >
           {{ item.title }}
         </h1>
         <input

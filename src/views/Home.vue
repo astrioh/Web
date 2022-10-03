@@ -215,6 +215,9 @@ export default {
     },
     getIntegrations () {
       this.$store.dispatch(CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, this.user.owner_email)
+        .then((resp) => {
+          console.log(resp)
+        })
       this.$store.dispatch(PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS, this.user.current_user_email)
     },
     setShouldShowModalValue (value) {

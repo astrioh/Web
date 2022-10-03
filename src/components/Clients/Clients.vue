@@ -171,6 +171,10 @@ export default {
       }
     },
     showClientProperties (client) {
+      if (client.uid === this.selectedClient?.uid) {
+        return
+      }
+
       this.$store.commit(CLIENTS_CHAT.REFRESH_MESSAGES)
       this.$store.commit(CLIENTS_CHAT.REFRESH_FILES)
 
@@ -203,7 +207,7 @@ export default {
       }
       await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
       this.showAddClient = false
-      if (Number(this.$route.query.page) === 1) await this.requestClients()
+      await this.requestClients()
     },
     changePage () {
       this.$router.push({ path: '/clients', query: { page: this.currentPage } })
