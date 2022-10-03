@@ -162,8 +162,10 @@
 <script>
 import { GET_FILE } from '@/store/actions/taskfiles'
 import { writeCache } from '@/store/helpers/functions'
+import ChatLoader from '../CardProperties/ChatLoader.vue'
 
 export default {
+  components: { ChatLoader },
   props: {
     file: {
       type: Object,
@@ -218,13 +220,12 @@ export default {
         const urlCreator = window.URL || window.webkitURL
         const imageURL = urlCreator.createObjectURL(imageBlob)
         this.imageSrc = imageURL
-        this.imageLoaded = true
+        this.isImageLoaded = true
       })
     },
     isFileInCache () {
       return !!localStorage.getItem(this.file.uid)
     },
-
     b64toBlob (base64) {
       return fetch(base64).then(res => res.blob())
     },
@@ -234,7 +235,7 @@ export default {
         const urlCreator = window.URL || window.webkitURL
         const imageURL = urlCreator.createObjectURL(imageBlob)
         this.imageSrc = imageURL
-        this.imageLoaded = true
+        this.isImageLoaded = true
       })
     },
     getAnyUrl (uid, extension, filename) {
@@ -248,9 +249,7 @@ export default {
     },
     getAudioUrl (uid, extension, filename) {
       this.$store.dispatch(GET_FILE, uid).then((resp) => {
-        const fileURL = window.URL.createObjectURL(
-          new Blob([resp.data], { type: 'audio/' + extension })
-        )
+        const fileURL = window.URL.createObjectURL(new Blob([resp.data], { type: 'audio/' + extension }))
         this.$emit('setLink', [fileURL, true])
         this.isAudioLoaded = true
         this.audioSrc = fileURL
@@ -261,9 +260,7 @@ export default {
     },
     getDocUrl (uid, extension, filename) {
       this.$store.dispatch(GET_FILE, uid).then((resp) => {
-        const fileURL = window.URL.createObjectURL(
-          new Blob([resp.data], { type: 'text/plain' })
-        )
+        const fileURL = window.URL.createObjectURL(new Blob([resp.data], { type: 'text/plain' }))
         this.$emit('setLink', [fileURL, false])
         document.getElementById('doc_' + uid).setAttribute('href', fileURL)
         document.getElementById('doc_' + uid).setAttribute('download', filename)

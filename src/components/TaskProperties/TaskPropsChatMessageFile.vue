@@ -349,8 +349,8 @@ export default {
       default: ''
     },
     quote: {
-      type: Object,
-      default: () => ({})
+      type: String,
+      default: ''
     },
     time: {
       type: String,

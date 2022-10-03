@@ -1,5 +1,5 @@
 <template>
-  <full-screen-section
+  <FullScreenSection
     v-slot="{ cardClass, cardRounded }"
     bg="leadertask"
   >
@@ -7,13 +7,13 @@
       src="https://www.leadertask.ru/templates/default/img/logo.svg"
       class="mb-10"
     >
-    <card-component
+    <CardComponent
       :class="cardClass"
       :rounded="cardRounded"
       form
       @submit.prevent="submit"
     >
-      <icon
+      <Icon
         v-if="form.showBackButton"
         :path="mdiChevronLeft"
         class="cursor-pointer"
@@ -24,8 +24,8 @@
       <p class="pb-4 pt-5 text-center text-2xl font-bold dark:text-white">
         {{ form.startScreenText }}
       </p>
-      <field>
-        <control
+      <Field>
+        <Control
           v-model="form.email"
           :icon="form.emailMdi"
           name="email"
@@ -39,7 +39,7 @@
           @blur="checkEmailExistense"
           @keyup.enter="checkEmailExistense"
         />
-      </field>
+      </Field>
       <p
         v-if="form.emailShowError"
         class="text-red-500 text-xs pb-3"
@@ -73,8 +73,8 @@
       </div>
       <transition-group name="slide-fade">
         <div v-if="showValues.showLoginInputsValue">
-          <field>
-            <control
+          <Field>
+            <Control
               v-model="form.password"
               name="password"
               autocomplete="current-password"
@@ -86,7 +86,7 @@
               :valid="form.password.trim().length > 7"
               @icon-click="togglePasswordVisibility"
             />
-          </field>
+          </Field>
           <p
             v-if="form.showError"
             class="text-red-500 text-xs pb-3"
@@ -112,12 +112,12 @@
 
       <transition-group name="slide-fade">
         <div v-if="showValues.showRegisterInputsValue">
-          <field
+          <Field
             help="Пароль (не менее 8 символов)"
             :max-count="8"
             :actual-count="form.password.length"
           >
-            <control
+            <Control
               v-model="form.password"
               name="password"
               placeholder="Пароль"
@@ -131,14 +131,14 @@
               @click="form.passwordTouched = true"
               @blur="validateAndShowMessage"
             />
-          </field>
+          </Field>
 
-          <field
+          <Field
             help="Введите ваше имя"
             :max-count="3"
             :actual-count="form.username.length"
           >
-            <control
+            <Control
               v-model="form.username"
               type="text"
               :maxlength="'50'"
@@ -150,12 +150,12 @@
               @click="form.usernameTouched = true"
               @blur="validateAndShowMessage"
             />
-          </field>
+          </Field>
 
-          <field
+          <Field
             help="Введите ваш номер телефона"
           >
-            <control
+            <Control
               v-model="form.phone"
               v-maska="'+7 (###) ###-##-##'"
               type="text"
@@ -167,7 +167,7 @@
               @click="form.phoneTouched = true"
               @blur="validateAndShowMessage"
             />
-          </field>
+          </Field>
 
           <p
             v-if="form.showError"
@@ -176,7 +176,7 @@
             {{ form.errorMessage }}
           </p>
 
-          <jb-button
+          <JbButton
             type="submit"
             color="login"
             class="w-full rounded-lg text-sm"
@@ -186,8 +186,8 @@
           />
         </div>
       </transition-group>
-    </card-component>
-  </full-screen-section>
+    </CardComponent>
+  </FullScreenSection>
 </template>
 
 <script>

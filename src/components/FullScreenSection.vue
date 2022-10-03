@@ -21,7 +21,8 @@ export default {
     bg: {
       type: String,
       required: true,
-      validator: value => ['login', 'error'].includes(value)
+      default: '',
+      validator: value => ['login', 'error', 'leadertask'].includes(value)
     }
   },
   computed: {
