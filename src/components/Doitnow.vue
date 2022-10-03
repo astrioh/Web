@@ -37,9 +37,13 @@
             :date="firstTask.lastDate"
             :last-change="firstTask.lastComment"
           />
+          <DoitnowCard
+            v-else-if="isCard"
+            :card="firstTask"
+            @next="nextTask"
+          />
           <DoitnowTask
             v-else
-            :key="firstTask.uid"
             :task="firstTask"
             :childrens="childrens"
             :sub-tasks="subTasks"
@@ -117,9 +121,11 @@
 import * as FILES from '@/store/actions/taskfiles.js'
 import * as MSG from '@/store/actions/taskmessages.js'
 import * as TASK from '@/store/actions/tasks.js'
+import * as CARD from '@/store/actions/cards.js'
 import * as SLIDES from '@/store/actions/slides.js'
 import * as REGLAMENTS from '@/store/actions/reglaments.js'
 
+import DoitnowCard from '@/components/Doitnow/DoitnowCard.vue'
 import DoitnowSlide from '@/components/Doitnow/DoitnowSlide.vue'
 import DoitnowEmpty from '@/components/Doitnow/DoitnowEmpty.vue'
 import DoitnowTask from '@/components/Doitnow/DoitnowTask.vue'
@@ -139,6 +145,7 @@ import DoitnowOnboarding from './Doitnow/DoitnowOnboarding.vue'
 
 export default {
   components: {
+    DoitnowCard,
     DoitnowSlide,
     DoitnowLimit,
     DoitnowEmpty,
@@ -153,6 +160,7 @@ export default {
   },
   data () {
     return {
+      cards: [],
       unreadTasks: [],
       todayTasks: [],
       readyTasks: [],
@@ -179,7 +187,8 @@ export default {
         this.unreadTasks.length +
         this.readyTasks.length +
         this.todayTasks.length +
-        this.notifiesCopy.length
+        this.notifiesCopy.length +
+        this.cards.length
       )
     },
     timeArr () {
@@ -204,6 +213,9 @@ export default {
       }
       if (this.notifiesCopy.length) {
         return this.notifiesCopy[0]
+      }
+      if (this.cards.length) {
+        return this.cards[0]
       }
       if (this.unreadTasks.length) {
         return this.unreadTasks[0]
@@ -259,6 +271,9 @@ export default {
     isReglament () {
       return !!this.firstTask?.notify
     },
+    isCard () {
+      return !!this.firstTask?.uid_board
+    },
     justRegistered () {
       return this.$store.state.onboarding.justRegistered
     },
@@ -312,6 +327,7 @@ export default {
       this.setSlidesCopy()
     }
     if (!this.displayModal) {
+      this.loadAllCard()
       this.loadAllTasks()
     }
     this.$store.dispatch('fullScreenToggle', 'add')
@@ -320,7 +336,13 @@ export default {
     this.$store.dispatch('NOTIFICATION_TASKS_CLEAR')
   },
   methods: {
-    loadAllTasks: function () {
+    loadAllCard () {
+      this.$store.dispatch(CARD.DOITNOW_CARDS_REQUEST)
+        .then((result) => {
+          this.cards = result
+        })
+    },
+    loadAllTasks () {
       this.$store.dispatch(TASK.DOITNOW_TASKS_REQUEST)
         .then((result) => {
           // сортировка непрочитанных
@@ -450,10 +472,10 @@ export default {
       this.$store.commit(USER_VIEWED_MODAL, 'doitnow')
       this.loadAllTasks()
     },
-    readTask: function () {
+    readTask () {
       this.$store.dispatch(TASK.CHANGE_TASK_READ, this.firstTask.uid)
     },
-    nextTask: function () {
+    nextTask () {
       // Удаляем поппер 'Отложить', т.к из-за него ломается анимация
       document.querySelectorAll('.popper').forEach(popper => popper.remove())
 
@@ -463,6 +485,10 @@ export default {
       }
       if (this.notifiesCopy.length) {
         this.notifiesCopy.shift()
+        return
+      }
+      if (this.cards.length) {
+        this.cards.shift()
         return
       }
       this.readTask()
@@ -482,12 +508,12 @@ export default {
         this.openedTasks.shift()
       }
     },
-    changeValue: function (objWithValues) {
+    changeValue (objWithValues) {
       for (const elem in objWithValues) {
         this.firstTask[elem] = objWithValues[elem]
       }
     },
-    onClickTask: function (task) {
+    onClickTask (task) {
       this.$store.commit('basic', { key: 'propertiesState', value: 'task' })
       this.$store.dispatch(TASK.SELECT_TASK, task)
       this.$store.dispatch('asidePropertiesToggle', true)
