@@ -233,7 +233,8 @@ export default {
       errors: {
         inputs: [],
         messages: []
-      }
+      },
+      totalIframeHeight: 390
     }
   },
   computed: {
@@ -244,7 +245,7 @@ export default {
       return this.$route.params.board_id
     },
     iframeHtml () {
-      return `<iframe src="${this.currentLocation}/form/${this.currentBoardId}?frame=true" title="Контакт" width="400" height="410" scrolling="no" frameBorder="0"></iframe>`
+      return `<iframe src="${this.currentLocation}/form/${this.currentBoardId}?frame=true" title="Контакт" width="400" height="${this.totalIframeHeight}" scrolling="no" frameBorder="0"></iframe>`
     },
     currentLocation () {
       return window.location.origin
@@ -259,6 +260,7 @@ export default {
       this.$store.state.boardforms.boardForm = data
       if (data.info) {
         this.form = data.info
+        this.findIframeHeight()
         this.showParams = true
       }
       this.formIsLoaded = true
@@ -306,6 +308,7 @@ export default {
       this.$store.dispatch(BOARD_FORMS.CREATE_OR_UPDATE_BOARD_FORM_REQUEST, data)
       this.$store.state.boardforms.boardForm = data
       console.log(this.$store.state.boardforms.boardForm)
+      this.findIframeHeight()
       this.showParams = true
     },
     copyIframeHtml () {
@@ -316,6 +319,16 @@ export default {
     },
     copyJson () {
       navigator.clipboard.writeText('https://web.leadertask.com/api/boardsforms/addboardleadbyjson?uid_board=' + this.currentBoardId)
+    },
+    findIframeHeight () {
+      const inputs = ['name', 'phone', 'email', 'comment']
+      let totalHeight = 420
+      inputs.forEach(input => {
+        if (!this.form[input].visible) {
+          totalHeight -= 45
+        }
+      })
+      this.totalIframeHeight = totalHeight
     }
   }
 }
