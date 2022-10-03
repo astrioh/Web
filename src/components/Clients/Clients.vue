@@ -171,6 +171,10 @@ export default {
       }
     },
     showClientProperties (client) {
+      if (client.uid === this.selectedClient?.uid) {
+        return
+      }
+
       this.$store.commit(CLIENTS_CHAT.REFRESH_MESSAGES)
       this.$store.commit(CLIENTS_CHAT.REFRESH_FILES)
 
