@@ -2,7 +2,6 @@
   <!-- TODO: Перенести MainMenu в Home.vue, здесь оставить чистую страницу для компонентов вроде TaskFile.vue, CardFile.vue, которым нужен чистый экран -->
   <component
     :is="$route.meta.layout || 'div'"
-    class="h-screen overflow-auto"
   >
     <router-view />
   </component>

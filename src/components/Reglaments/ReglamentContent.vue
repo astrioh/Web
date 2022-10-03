@@ -328,6 +328,14 @@ export default {
           this.setEdit()
         }
       }
+    },
+    isTesting (isTesting) {
+      if (!isTesting) {
+        // Удаляем quill tollbar который появляется при завершении теста регламента
+        this.$nextTick(() => {
+          document.querySelector('.ql-toolbar')?.remove()
+        })
+      }
     }
   },
   mounted () {
