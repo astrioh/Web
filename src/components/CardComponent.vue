@@ -361,9 +361,6 @@ export default {
 .follow-us .social li {
   margin: 0 0px 0 10px;
 }
-.follow-us {
-}
-
 .follow-us .title {
   margin: 0 0 10px;
   background: none;
@@ -386,10 +383,6 @@ export default {
   height: 40px;
   text-align: center;
   line-height: 46px;
-}
-
-.follow-us .social li:hover {
-
 }
 
 .follow-us .social a {
@@ -433,9 +426,5 @@ export default {
   background: url('https://www.leadertask.ru/local/media/icons/windows-platform.svg') no-repeat;
   background-size: 35px;
   width: 35px;
-}
-.follow-us .social li
-{
-
 }
 </style>
