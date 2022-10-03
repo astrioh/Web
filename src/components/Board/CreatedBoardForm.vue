@@ -9,7 +9,7 @@
     />
     <div
       v-if="!showFormSended && formIsLoaded"
-      class="h-full flex justify-center max-w-[400px] mx-auto"
+      class="flex justify-center max-w-[400px] mx-auto"
       :class="!isFrame && 'items-center'"
     >
       <div
