@@ -133,7 +133,10 @@ export default {
       this.$store.dispatch(CLIENTS_CHAT.DELETE_MESSAGE_REQUEST, msgUid)
     },
     isMessageIncludesIntegrationLogin (msg) {
-      return msg?.emailSender?.includes(this.personalYandexIntegration.login) || msg?.emailSender?.includes(this.corpYandexIntegration.login)
+      if (msg?.emailSender) {
+        return msg.emailSender === this.corpYandexIntegration?.login || msg.emailSender === this.personalYandexIntegration?.login
+      }
+      return false
     },
     getMessageByUid (uid) {
       for (const message of this.messages) {
