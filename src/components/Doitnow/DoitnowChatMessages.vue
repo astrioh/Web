@@ -60,7 +60,7 @@
         class="mt-3"
         :task="task"
         :task-messages="taskMessages"
-        :current-user-uid="user?.current_user_uid"
+        :current-user-uid="currentUserUid"
         :show-all-messages="true"
         :show-only-files="showOnlyFiles"
         @answerMessage="answerMessage"
@@ -109,9 +109,9 @@ export default {
       type: String,
       default: ''
     },
-    user: {
-      type: Object,
-      default: () => ({})
+    currentUserUid: {
+      type: String,
+      default: ''
     },
     showOnlyFiles: {
       type: Boolean,
