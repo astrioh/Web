@@ -3,7 +3,7 @@
     <div class="grow py-[30px] px-[25px] bg-white rounded-[12px] overflow-x-hidden">
       <slot />
     </div>
-    <div class="flex-none flex-col min-w-[200px] gap-[6px] empty:hidden">
+    <div class="flex-none flex flex-col min-w-[200px] gap-[6px] empty:hidden">
       <slot name="buttons" />
     </div>
   </div>

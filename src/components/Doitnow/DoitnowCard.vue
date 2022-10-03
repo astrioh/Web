@@ -33,8 +33,11 @@
       />
     </div>
     <template #buttons>
+      <DoitnowRightButtonPostpone
+        @postpone="onPostpone"
+      />
       <DoitnowRightButton
-        title="Далее"
+        title="Пропустить"
         icon="next"
         @click="onNext"
       />
@@ -43,9 +46,12 @@
 </template>
 
 <script>
+import * as CARD from '@/store/actions/cards'
+
 import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsCommentEditor.vue'
 import DoitnowContent from '@/components/Doitnow/DoitnowContent.vue'
 import DoitnowRightButton from '@/components/Doitnow/DoitnowRightButton.vue'
+import DoitnowRightButtonPostpone from '@/components/Doitnow/DoitnowRightButtonPostpone.vue'
 import DoitnowPropsColumn from '@/components/Doitnow/DoitnowPropsColumn.vue'
 import DoitnowPropsColumnItem from '@/components/Doitnow/DoitnowPropsColumnItem.vue'
 import DoitnowPropsColumnUser from '@/components/Doitnow/DoitnowPropsColumnUser.vue'
@@ -54,6 +60,7 @@ import linkify from 'vue-linkify'
 
 export default {
   components: {
+    DoitnowRightButtonPostpone,
     TaskPropsCommentEditor,
     DoitnowRightButton,
     DoitnowPropsColumn,
@@ -96,6 +103,18 @@ export default {
   },
   methods: {
     onNext () {
+      this.$emit('next')
+    },
+    onPostpone (date) {
+      const day = String(date.getDate()).padStart(2, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const year = String(date.getFullYear()).padStart(4, '0')
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+      const seconds = String(date.getSeconds()).padStart(2, '0')
+      const selectedCard = { ...this.card }
+      selectedCard.date_reminder = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+      this.$store.dispatch(CARD.CHANGE_CARD_DATE_REMINDER, selectedCard)
       this.$emit('next')
     }
   }
