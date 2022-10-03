@@ -133,8 +133,8 @@ export default {
         if (karma.points > 0) success.push(karma)
         else if (karma.points < 0) overdue.push(karma)
       }
-      this.successChartData = chartConfig.karmaChartData(success, 'success')
-      this.overdueChartData = chartConfig.karmaChartData(overdue, 'danger')
+      this.successChartData = chartConfig.karmaChartData(success, 'success', 'rgba(28, 163, 69, 0.08)')
+      this.overdueChartData = chartConfig.karmaChartData(overdue, 'danger', 'rgba(241, 72, 33, 0.08)')
       this.showSkeleton = false
     })
   }
