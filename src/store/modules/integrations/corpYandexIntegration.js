@@ -59,7 +59,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexCorpMsgsSentFromUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
-          console.log('imap msgs get successfully')
+          console.log('corp sent from us success')
           resolve(resp)
         })
         .catch((err) => {
@@ -78,7 +78,7 @@ const actions = {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexCorpMsgsSentToUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
-          console.log('imap msgs get successfully')
+          console.log('corp sent to us success')
           resolve(resp)
         })
         .catch((err) => {
