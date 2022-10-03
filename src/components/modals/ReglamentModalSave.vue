@@ -1,4 +1,3 @@
-@@ -1,123 +0,0 @@
 <template>
   <ModalBox
     ok="Сохранить"
@@ -84,7 +83,7 @@ export default {
   components: {
     ModalBox
   },
-  emits: ['onSave', 'close'],
+  emits: ['onSave', 'close', 'clearContributors'],
   data () {
     return {
       note: '',
@@ -112,6 +111,9 @@ export default {
     onSave () {
       if (this.reglamentComment.trim()) {
         this.$emit('onSave')
+        if (this.isClear) {
+          this.$emit('clearContributors')
+        }
         const data = {
           uid_employee: this.user.current_user_uid,
           uid_reglament: this.$route.params.id,
