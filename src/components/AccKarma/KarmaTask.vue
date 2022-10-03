@@ -198,8 +198,8 @@
 export default {
   props: {
     karma: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     }
   },
   computed: {
