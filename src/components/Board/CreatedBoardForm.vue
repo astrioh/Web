@@ -18,7 +18,8 @@
       >
         <h1
           :title="item.title"
-          class="mb-[15px] text-[30px] text-center text-[#777] truncate shrink-0"
+          class="mb-[15px] text-[30px] text-center text-[#777] shrink-0"
+          :class="{'truncate': isFrame}"
         >
           {{ item.title }}
         </h1>
