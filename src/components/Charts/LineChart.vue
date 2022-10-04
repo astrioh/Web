@@ -47,6 +47,9 @@ export default {
         type: 'line',
         data: this.data,
         options: {
+          layout: {
+            padding: 3
+          },
           responsive: true,
           maintainAspectRatio: false,
           scales: {
