@@ -205,9 +205,6 @@ export default {
       const user = this.$store.state.user.user
       return this.board?.email_creator === user.current_user_email
     },
-    showArchive () {
-      return this.$store.state.boards.showArchive
-    },
     showOnlyCardsWhereIAmResponsible () {
       return this.$store.state.boards.showOnlyCardsWhereIAmResponsible
     },
@@ -224,7 +221,7 @@ export default {
       return this.selectedBoard?.uid || ''
     },
     isFilterSet () {
-      return this.showOnlyMyCreatedCards || this.showOnlyCardsWhereIAmResponsible || this.showArchive || this.showOnlyCardsWithNoResponsible
+      return this.showOnlyMyCreatedCards || this.showOnlyCardsWhereIAmResponsible || this.showOnlyCardsWithNoResponsible
     }
   },
   methods: {
@@ -308,12 +305,16 @@ export default {
     clickBoardMyCards () {
       this.$store.commit(BOARD.SHOW_BOARD_MY_CARDS_WHERE_IAM_RESPONSIBLE, !this.showOnlyCardsWhereIAmResponsible)
       this.$store.commit(BOARD.SHOW_BOARD_CARDS_WITH_NO_RESPONSIBLE, false)
+      this.$store.commit(BOARD.SHOW_BOARD_MY_CREATED_CARDS, false)
     },
     clickBoardNoResponsibleCards () {
       this.$store.commit(BOARD.SHOW_BOARD_MY_CARDS_WHERE_IAM_RESPONSIBLE, false)
       this.$store.commit(BOARD.SHOW_BOARD_CARDS_WITH_NO_RESPONSIBLE, !this.showOnlyCardsWithNoResponsible)
+      this.$store.commit(BOARD.SHOW_BOARD_MY_CREATED_CARDS, false)
     },
     clickBoardMyCardsCreated () {
+      this.$store.commit(BOARD.SHOW_BOARD_MY_CARDS_WHERE_IAM_RESPONSIBLE, false)
+      this.$store.commit(BOARD.SHOW_BOARD_CARDS_WITH_NO_RESPONSIBLE, false)
       this.$store.commit(BOARD.SHOW_BOARD_MY_CREATED_CARDS, !this.showOnlyMyCreatedCards)
     },
     clickBoardFilterClear () {
