@@ -54,7 +54,7 @@ const actions = {
       const data = {
         ya_login: state.login,
         ya_password: state.password,
-        reciever_email: emails.clientEmail
+        email: emails.clientEmail
       }
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentFromUs'
       axios({ url: url, method: 'POST', data: data })
@@ -73,7 +73,7 @@ const actions = {
       const data = {
         ya_login: state.login,
         ya_password: state.password,
-        sender_email: emails.clientEmail
+        email: emails.clientEmail
       }
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentToUs'
       axios({ url: url, method: 'POST', data: data })

@@ -2,9 +2,14 @@
 <template>
   <div
     v-if="!imageLoaded"
-    class="rounded-[6px] w-[250px] h-[230px] animate-pulse"
-    :style="{ 'background': preloaderColor }"
-  />
+    class="rounded-[6px] animate-pulse"
+  >
+    <ChatLoader
+      width="250px"
+      height="150px"
+      align="center"
+    />
+  </div>
   <a
     :href="imageSrc"
     target="_blank"
@@ -72,10 +77,12 @@ import { writeCache } from '@/store/helpers/functions'
 import CardChatMessageOptionsPopMenu from '@/components/CardProperties/CardChatMessageOptionsPopMenu.vue'
 import * as CARDS from '@/store/actions/cards'
 import * as CARDSFILESANDMESSAGES from '@/store/actions/cardfilesandmessages'
+import ChatLoader from './ChatLoader.vue'
 
 export default {
   components: {
-    CardChatMessageOptionsPopMenu
+    CardChatMessageOptionsPopMenu,
+    ChatLoader
   },
   props: {
     fileUid: {

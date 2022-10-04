@@ -70,7 +70,7 @@
           {{ fileDateCreate }}
         </p>
         <div class="group-hover:flex hidden justify-end">
-          <card-chat-message-options-pop-menu
+          <CardChatMessageOptionsPopMenu
             :can-delete="canDelete"
             @onQuoteMessage="$emit('onQuoteMessage')"
             @onDeleteMessage="$emit('onDeleteMessage')"
@@ -98,7 +98,7 @@
                 />
               </svg>
             </div>
-          </card-chat-message-options-pop-menu>
+          </CardChatMessageOptionsPopMenu>
         </div>
       </div>
     </div>

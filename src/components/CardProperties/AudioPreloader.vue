@@ -31,7 +31,7 @@
       </audio>
     </figure>
   </div>
-  <p class="text-[#7E7E80] font-[500] leading-[15px] text-[13px] text-right mt-[8px]">
+  <p class="text-[#7E7E80] font-[500] leading-[15px] text-[13px] text-right mt-[8px] truncate">
     {{ fileName }}
   </p>
   <p

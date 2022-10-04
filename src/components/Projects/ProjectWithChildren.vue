@@ -7,24 +7,35 @@
       :project-uid="projectUid"
     />
     <div
-      v-if="currentProject?.children?.length"
-      class="grid gap-[8px] mb-[8px] grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
+      v-if="currentProject"
     >
-      <template
-        v-for="project in currentProject?.children"
-        :key="project.uid"
+      <div
+        v-if="currentProject?.children?.length"
+        class="grid gap-[8px] mb-[8px] grid-cols-1 md:grid-cols-2 lg:grid-cols-4"
       >
-        <router-link :to="'/project/' + project.uid">
-          <ProjectBlocItem
-            :project="project"
-          />
-        </router-link>
-      </template>
+        <template
+          v-for="project in currentProject?.children"
+          :key="project.uid"
+        >
+          <router-link :to="'/project/' + project.uid">
+            <ProjectBlocItem
+              :project="project"
+            />
+          </router-link>
+        </template>
+      </div>
+      <TasksListNew
+        class="pt-[8px]"
+        :new-task-props="newTaskProps"
+      />
     </div>
-    <TasksListNew
-      class="pt-[8px]"
-      :new-task-props="newTaskProps"
-    />
+    <div
+      v-else
+    >
+      <h1 class="text-3xl text-gray-600 font-bold mb-5">
+        Нет доступа к проекту
+      </h1>
+    </div>
   </div>
 </template>
 
@@ -54,6 +65,9 @@ export default {
         })
       }
       return ({})
+    },
+    hsntProjectAccess () {
+      return !Object.keys(this.$store.state.projects.projects).includes(this.$route.params.project_id)
     }
   },
   watch: {
@@ -69,8 +83,7 @@ export default {
   methods: {
     loadProject () {
       // если нет такого проекта у нас - перекидываем в корень проектов
-      if (!Object.keys(this.$store.state.projects.projects).includes(this.$route.params.project_id)) {
-        this.$router.push('/project')
+      if (this.hsntProjectAccess) {
         return
       }
       this.$store.dispatch(TASK.PROJECT_TASKS_REQUEST, this.currentProject.uid)

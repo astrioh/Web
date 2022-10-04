@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col pb-[100px]">
+  <div
+    class="flex flex-col"
+    :class="{'pb-[100px]': !inDoitnow}"
+  >
     <div
       v-for="(message, index) in cardMessages"
       :key="message"
@@ -93,6 +96,10 @@ export default {
       default: () => {}
     },
     showFilesOnly: {
+      type: Boolean,
+      default: false
+    },
+    inDoitnow: {
       type: Boolean,
       default: false
     }

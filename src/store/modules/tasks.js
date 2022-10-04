@@ -1,3 +1,4 @@
+import { TASK_STATUS } from '@/constants'
 import { REFRESH_FILES } from '@/store/actions/taskfiles'
 import {
   REFRESH_CHAT_MESSAGES,
@@ -317,6 +318,7 @@ const actions = {
         process.env.VUE_APP_LEADERTASK_API + 'api/v1/tasks/unread'
       const urlOverdue =
         process.env.VUE_APP_LEADERTASK_API + 'api/v1/tasks/overdue'
+      const urlReady = process.env.VUE_APP_LEADERTASK_API + 'api/v1/tasks/ready'
       const month = pad2(new Date().getMonth() + 1)
       const day = pad2(new Date().getDate())
       const year = new Date().getFullYear()
@@ -340,12 +342,24 @@ const actions = {
           url: urlToday,
           method: 'GET',
           signal: doitnowAbortController.signal
+        }),
+        axios({
+          url: urlReady,
+          method: 'GET',
+          signal: doitnowAbortController.signal
         })
       ])
         .then((respAll) => {
-          const unreadTasks = [...respAll[0].data.tasks]
+          const unreadTasks = [...respAll[0].data.tasks].filter(
+            (task) =>
+              task.status !== TASK_STATUS.TASK_COMPLETED &&
+              task.status !== TASK_STATUS.TASK_REJECTED
+          )
           const overdueTasks = [...respAll[1].data.tasks].filter(
-            (task) => unreadTasks.findIndex((t) => t.uid === task.uid) === -1
+            (task) =>
+              unreadTasks.findIndex((t) => t.uid === task.uid) === -1 &&
+              task.status !== TASK_STATUS.TASK_COMPLETED &&
+              task.status !== TASK_STATUS.TASK_REJECTED
           )
           const pad2 = function (n) {
             return (n < 10 ? '0' : '') + n
@@ -362,15 +376,31 @@ const actions = {
             (task) =>
               unreadTasks.findIndex((t) => t.uid === task.uid) === -1 &&
               overdueTasks.findIndex((t) => t.uid === task.uid) === -1 &&
-              task.date_begin < dateNowStr
+              task.date_begin < dateNowStr &&
+              task.status !== TASK_STATUS.TASK_COMPLETED &&
+              task.status !== TASK_STATUS.TASK_REJECTED
           )
-          const tasks = [...unreadTasks, ...overdueTasks, ...todayTasks]
+          const readyTasks = [...respAll[3].data.tasks].filter(
+            (task) =>
+              unreadTasks.findIndex((t) => t.uid === task.uid) === -1 &&
+              overdueTasks.findIndex((t) => t.uid === task.uid) === -1 &&
+              todayTasks.findIndex((t) => t.uid === task.uid) === -1 &&
+              task.status !== TASK_STATUS.TASK_COMPLETED &&
+              task.status !== TASK_STATUS.TASK_REJECTED
+          )
+          const tasks = [
+            ...unreadTasks,
+            ...overdueTasks,
+            ...todayTasks,
+            ...readyTasks
+          ]
           commit(TASK.TASKS_SUCCESS, { data: { tasks } })
           commit(TASK.CLEAN_UP_LOADED_TASKS)
           const anothersTags = [
             ...respAll[0].data.anothers_tags,
             ...respAll[1].data.anothers_tags,
-            ...respAll[2].data.anothers_tags
+            ...respAll[2].data.anothers_tags,
+            ...respAll[3].data.anothers_tags
           ]
           if (anothersTags.length) {
             commit(TASK.ADD_TASK_TAGS, anothersTags)
@@ -378,12 +408,13 @@ const actions = {
           const anothersMarkers = [
             ...respAll[0].data.anothers_markers,
             ...respAll[1].data.anothers_markers,
-            ...respAll[2].data.anothers_markers
+            ...respAll[2].data.anothers_markers,
+            ...respAll[3].data.anothers_markers
           ]
           if (anothersMarkers.length) {
             commit(PUSH_COLOR, anothersMarkers)
           }
-          resolve([unreadTasks, overdueTasks, todayTasks])
+          resolve([unreadTasks, overdueTasks, todayTasks, readyTasks])
         })
         .catch((err) => {
           commit(TASK.TASKS_ERROR, err)
@@ -1243,16 +1274,18 @@ const mutations = {
         uid_parent: state.newtasks[taskUid].info.uid_parent
       }))
       state.newConfig.roots = uidToOrder
-        .sort(
-          (a, b) => {
-            if (
-              a.uid_parent !== '00000000-0000-0000-0000-000000000000' &&
-              b.uid_parent === '00000000-0000-0000-0000-000000000000'
-            ) return -1
-            if (a.customer !== a.performer && b.customer === b.performer) return -1
-            return 0
+        .sort((a, b) => {
+          if (
+            a.uid_parent !== '00000000-0000-0000-0000-000000000000' &&
+            b.uid_parent === '00000000-0000-0000-0000-000000000000'
+          ) {
+            return -1
           }
-        )
+          if (a.customer !== a.performer && b.customer === b.performer) {
+            return -1
+          }
+          return 0
+        })
         .map((x) => x.uid)
     }
     if (state.selectedTask?.uid === task.uid) {
