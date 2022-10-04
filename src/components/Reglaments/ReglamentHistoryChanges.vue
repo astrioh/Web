@@ -28,7 +28,9 @@
     <span
       v-if="reglamentComments.length < 1"
       class="w-full text-center text-gray-500 text-[16px]"
-    >История изменений пуста</span>
+    >
+      История изменений пуста
+    </span>
     <template
       v-for="(comment, index) in reglamentComments"
       :key="index"
