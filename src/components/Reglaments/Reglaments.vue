@@ -279,7 +279,7 @@ export default {
           reglament.needStartEdit = true
           this.$store.commit(SLIDES.CHANGE_VISIBLE, { name: 'addReglaments', visible: false })
           this.$store.commit(NAVIGATOR.NAVIGATOR_PUSH_REGLAMENT, reglament)
-          this.$router.push('/reglaments/' + reglament.uid)
+          this.$router.push('/reglaments/' + reglament.uid + '/edit')
         })
       }
     },
