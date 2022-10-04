@@ -50,7 +50,6 @@
         :task="task"
         :answer="currentAnswerMessageUid"
         @readTask="readTask"
-        @removeAnswerHint="removeAnswerHint"
       />
       <MessageSkeleton v-if="isTaskMessagesLoading" />
       <!-- chat -->

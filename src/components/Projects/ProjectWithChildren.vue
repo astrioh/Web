@@ -25,7 +25,6 @@
         </template>
       </div>
       <TasksListNew
-        class="pt-[8px]"
         :new-task-props="newTaskProps"
       />
     </div>

@@ -76,8 +76,8 @@ export default {
       default: 0
     },
     postponeDate: {
-      type: String,
-      default: ''
+      type: Object,
+      default: () => {}
     }
   },
   emits: ['postponeTask', 'changeDateEditingStatus', 'changeDates', 'changePostponeIndex', 'changePostponeDate'],

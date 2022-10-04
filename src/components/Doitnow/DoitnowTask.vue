@@ -108,7 +108,7 @@
         :task-messages="taskMessages"
         :current-user-uid="user?.current_user_uid"
         :message-quote-user="messageQuoteUser"
-        :message-quoute-string="messageQuouteString"
+        :message-quoute-string="messageQuoteString"
         :show-all-messages="true"
         :show-only-files="showOnlyFiles"
         @answerMessage="onAnswerMessage"

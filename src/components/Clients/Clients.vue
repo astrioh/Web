@@ -1,8 +1,4 @@
 <template>
-  <NavbarSearchLimit
-    v-if="showFreeModal"
-    @cancel="showFreeModal = false"
-  />
   <ModalBoxAddClient
     v-if="showAddClient"
     title="Добавить контакт"
@@ -156,7 +152,7 @@ export default {
         this.$router.push('/clients?page=1')
         this.$route.query.page = 1
       }
-      this.currentPage = this.$route.query.page || 1
+      this.currentPage = +this.$route.query.page || 1
       const data = {
         organization: this.user?.owner_email,
         page: this.currentPage
