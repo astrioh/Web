@@ -25,6 +25,7 @@
       @change="onSearch"
     />
     <NavBarButtonsBoard
+      v-if="boardUid"
       :board-uid="boardUid"
       @popNavBar="popNavBar"
     />
@@ -48,6 +49,10 @@ export default {
     boardUid: {
       type: String,
       default: ''
+    },
+    boardTitle: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -65,7 +70,7 @@ export default {
     },
     breadcrumbs () {
       let board = this.boards[this.boardUid]
-      if (!board) return [{ name: '???', selected: true }]
+      if (!board) return [{ name: 'Доска не найдена', selected: true }]
 
       const arrResult = [
         { name: board.name, selected: true } // на самого себя нажать нельзя по этому не добавляем to

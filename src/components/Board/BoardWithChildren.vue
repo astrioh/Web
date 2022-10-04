@@ -4,7 +4,10 @@
       class="pt-[8px]"
       :board-uid="boardUid"
     />
-    <div class="w-full h-[calc(100%-56px)] flex flex-col">
+    <div
+      v-if="currentBoard"
+      class="w-full h-[calc(100%-56px)] flex flex-col"
+    >
       <BoardModalBoxBoardsLimit
         v-if="showBoardsLimit"
         @cancel="showBoardsLimit = false"
@@ -31,6 +34,13 @@
           :show-archive="showArchive"
         />
       </div>
+    </div>
+    <div
+      v-else
+    >
+      <h1 class="text-3xl text-gray-600 font-bold mb-5">
+        Нет доступа к доске
+      </h1>
     </div>
   </div>
 </template>
@@ -77,6 +87,11 @@ export default {
     },
     currentBoard () {
       return this.$store.state.boards.boards[this.boardUid]
+    },
+    hsntBoardAccess () {
+      return !this.currentBoard ||
+        !Object.keys(this.$store.state.boards.boards).includes(
+          this.$route.params.board_id)
     }
   },
   watch: {
@@ -102,13 +117,7 @@ export default {
       return this.currentBoard?.email_creator === user.current_user_email
     },
     loadBoard () {
-      if (
-        !this.currentBoard ||
-        !Object.keys(this.$store.state.boards.boards).includes(
-          this.$route.params.board_id
-        )
-      ) {
-        this.$router.push('/board')
+      if (this.hsntBoardAccess) {
         return
       }
       this.$store.dispatch(CARD.BOARD_CARDS_REQUEST, this.currentBoard.uid)

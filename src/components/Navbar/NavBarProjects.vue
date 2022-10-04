@@ -44,7 +44,7 @@ export default {
     },
     breadcrumbs () {
       let project = this.projects[this.projectUid]
-      if (!project) return [{ name: '???', selected: true }]
+      if (!project) return [{ name: 'Проект не найден', selected: true }]
 
       const arrResult = [
         { name: project.name, selected: true } // на самого себя нажать нельзя по этому не добавляем to
