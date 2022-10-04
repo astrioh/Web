@@ -22,9 +22,9 @@
         />
       </svg>
     </router-link>
-    <div class="flex flex-col space-y-[2px]">
+    <div class="flex flex-col space-y-[2px] max-w-[240px]">
       <router-link
-        class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700]"
+        class="text-[#4C4C4D] text-[13px] leading-[15px] font-[700] truncate"
         :to="{ name: routeFileName, params: { id: fileUid }, query: { type: 'video', format: fileExtension } }"
         target="_blank"
       >
