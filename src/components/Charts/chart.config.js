@@ -81,16 +81,3 @@ export const karmaChartData = (arr, color, aboveLineColor) => {
     datasets: [datasetObject(color, data.values)]
   }
 }
-
-export const sampleChartData = (points = 7) => {
-  const labels = []
-
-  for (let i = 1; i <= points; i++) {
-    labels.push(`0${i}`)
-  }
-
-  return {
-    labels,
-    datasets: [datasetObject('danger', points)]
-  }
-}
