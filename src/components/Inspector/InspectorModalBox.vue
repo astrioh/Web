@@ -161,6 +161,7 @@ export default {
   methods: {
     confirmCancel (mode) {
       this.value = false
+      this.inputMessage = ''
       this.$emit(mode)
     },
     cancel () {
