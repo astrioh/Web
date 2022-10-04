@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-screen overflow-auto"
+    class="w-full h-screen overflow-auto flex items-center justify-center"
     :class="isFrame && 'bg-white'"
   >
     <CreatedBoardFormSkeleton
