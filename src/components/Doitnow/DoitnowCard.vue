@@ -23,14 +23,81 @@
           key-title="Дата:"
           :value-text="remind"
         />
+        <DoitnowPropsColumnItem
+          v-if="cardBudget"
+          key-title="Бюджет:"
+        >
+          <svg
+            width="17"
+            height="12"
+            viewBox="0 0 17 12"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.57405 1.55572C2.37759 1.55572 2.18918 1.63376 2.05027 1.77268C1.91135 1.9116 1.83331 2.10001 1.83331 2.29646V9.70387C1.83331 9.90033 1.91135 10.0887 2.05027 10.2277C2.18918 10.3666 2.37759 10.4446 2.57405 10.4446H14.4259C14.6224 10.4446 14.8108 10.3666 14.9497 10.2277C15.0886 10.0887 15.1666 9.90033 15.1666 9.70387V2.29646C15.1666 2.10001 15.0886 1.9116 14.9497 1.77268C14.8108 1.63376 14.6224 1.55572 14.4259 1.55572H2.57405ZM1.0027 0.725114C1.41945 0.308366 1.98468 0.0742402 2.57405 0.0742402H14.4259C15.0153 0.0742402 15.5805 0.308367 15.9973 0.725114C16.414 1.14186 16.6481 1.70709 16.6481 2.29646V9.70387C16.6481 10.2932 16.414 10.8585 15.9973 11.2752C15.5805 11.692 15.0153 11.9261 14.4259 11.9261H2.57405C1.98468 11.9261 1.41945 11.692 1.0027 11.2752C0.585955 10.8585 0.351828 10.2932 0.351828 9.70387V2.29646C0.351828 1.70709 0.585954 1.14186 1.0027 0.725114Z"
+              fill="black"
+              fill-opacity="0.5"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M8.49998 4.51869C7.68178 4.51869 7.0185 5.18197 7.0185 6.00017C7.0185 6.81837 7.68178 7.48165 8.49998 7.48165C9.31818 7.48165 9.98146 6.81837 9.98146 6.00017C9.98146 5.18197 9.31818 4.51869 8.49998 4.51869ZM5.53701 6.00017C5.53701 4.36377 6.86358 3.0372 8.49998 3.0372C10.1364 3.0372 11.4629 4.36377 11.4629 6.00017C11.4629 7.63657 10.1364 8.96313 8.49998 8.96313C6.86358 8.96313 5.53701 7.63657 5.53701 6.00017Z"
+              fill="black"
+              fill-opacity="0.5"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M4.339 0.130626C4.6158 0.245279 4.79627 0.515379 4.79627 0.814981C4.79627 1.79726 4.40606 2.73932 3.71148 3.4339C3.0169 4.12847 2.07485 4.51868 1.09257 4.51868C0.792967 4.51868 0.522866 4.33821 0.408214 4.06141C0.293561 3.78462 0.356936 3.46601 0.568786 3.25416L3.53175 0.291198C3.7436 0.079348 4.06221 0.0159733 4.339 0.130626ZM15.9074 8.96313C15.318 8.96313 14.7528 9.19726 14.336 9.614C13.9193 10.0308 13.6852 10.596 13.6852 11.1854C13.6852 11.5945 13.3535 11.9261 12.9444 11.9261C12.5353 11.9261 12.2037 11.5945 12.2037 11.1854C12.2037 10.2031 12.5939 9.26102 13.2885 8.56644C13.9831 7.87186 14.9251 7.48165 15.9074 7.48165C16.3165 7.48165 16.6481 7.81329 16.6481 8.22239C16.6481 8.63149 16.3165 8.96313 15.9074 8.96313Z"
+              fill="black"
+              fill-opacity="0.5"
+            />
+          </svg>
+          <span class="font-roboto text-[13px] leading-[15px] font-medium">{{ cardBudget }}</span>
+        </DoitnowPropsColumnItem>
+        <DoitnowPropsColumnItem
+          v-if="currentBoard"
+          key-title="Доска:"
+          :value-text="currentBoard.name"
+        />
+        <DoitnowPropsColumnItem
+          v-if="currentStageName"
+          key-title="Колонка:"
+          :value-text="currentStageName"
+        />
+        <DoitnowPropsColumnItem
+          key-title="Контакт:"
+        >
+          <CardClient
+            :can-edit="canEdit"
+            :client-uid="clientUid"
+            :client-name="clientName"
+            :card-name="name"
+            :card-comment="comment"
+            @changeClient="onChangeClient"
+          />
+        </DoitnowPropsColumnItem>
       </DoitnowPropsColumn>
       <TaskPropsCommentEditor
-        v-if="card?.comment"
         text-style="!text-[16px] leading-[155%]"
         style="word-break: break-word"
-        :comment="card?.comment || ''"
-        :can-edit="false"
+        :comment="comment"
+        :can-edit="canEdit"
+        @changeComment="changeComment"
+        @onPasteFile="onPasteEvent"
       />
+    </div>
+    <div class="border-t mt-4">
+      <div class="max-w-[540px] mx-auto pt-[20px]">
+        <DoitnowCardChat
+          :card-messages="cardMessages"
+          :user-uid="user.uid"
+          :card-uid="card.uid"
+        />
+      </div>
     </div>
     <template #buttons>
       <DoitnowRightButtonPostpone
@@ -55,11 +122,19 @@ import DoitnowRightButtonPostpone from '@/components/Doitnow/DoitnowRightButtonP
 import DoitnowPropsColumn from '@/components/Doitnow/DoitnowPropsColumn.vue'
 import DoitnowPropsColumnItem from '@/components/Doitnow/DoitnowPropsColumnItem.vue'
 import DoitnowPropsColumnUser from '@/components/Doitnow/DoitnowPropsColumnUser.vue'
+import DoitnowCardChat from '@/components/Doitnow/DoitnowCardChat'
+import CardClient from '@/components/CardProperties/CardClient'
 import contenteditable from 'vue-contenteditable'
 import linkify from 'vue-linkify'
+import { CREATE_FILES_REQUEST, FETCH_FILES_AND_MESSAGES } from '@/store/actions/cardfilesandmessages'
+import { CHANGE_CARD_COMMENT, CHANGE_CARD_UID_CLIENT } from '@/store/actions/cards'
+import { REFRESH_MESSAGES } from '@/store/actions/taskmessages'
+import { REFRESH_FILES } from '@/store/actions/taskfiles'
 
 export default {
   components: {
+    CardClient,
+    DoitnowCardChat,
     DoitnowRightButtonPostpone,
     TaskPropsCommentEditor,
     DoitnowRightButton,
@@ -81,7 +156,10 @@ export default {
   emits: ['next'],
   data () {
     return {
-      title: this.card.name || ''
+      title: this.card.name || '',
+      comment: this.card.comment || '',
+      clientUid: this.card.uid_client || '',
+      clientName: this.card.client_name || ''
     }
   },
   computed: {
@@ -99,7 +177,36 @@ export default {
       const minutes = String(calendarDate.getMinutes()).padStart(2, '0')
       const time = hours === '00' && minutes === '00' ? '' : `${hours}:${minutes}`
       return `${day} ${month} ${time}`
+    },
+    currentBoard () {
+      return this.$store.state.boards.boards[this.card.uid_board]
+    },
+    currentStageName () {
+      let currentStage = null
+      this.currentBoard.stages.forEach(stage => {
+        if (stage.UID === this.card.uid_stage) {
+          currentStage = stage
+        }
+      })
+      return currentStage.Name
+    },
+    cardBudget () {
+      return this.card?.cost / 100
+    },
+    cardMessages () {
+      if (this.card.uid_client !== '00000000-0000-0000-0000-000000000000' && this.card.uid_client) {
+        return this.$store.state.clientfilesandmessages.messages.slice().reverse()
+      }
+      return this.$store.state.cardfilesandmessages.messages.slice().reverse()
+    },
+    canEdit () {
+      return this.currentBoard.type_access !== 0
     }
+  },
+  mounted () {
+    this.$store.commit(REFRESH_MESSAGES)
+    this.$store.commit(REFRESH_FILES)
+    this.$store.dispatch(FETCH_FILES_AND_MESSAGES, this.card.uid)
   },
   methods: {
     onNext () {
@@ -116,6 +223,33 @@ export default {
       selectedCard.date_reminder = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
       this.$store.dispatch(CARD.CHANGE_CARD_DATE_REMINDER, selectedCard)
       this.$emit('next')
+    },
+    changeComment (text) {
+      const data = { cardUid: this.card.uid, comment: text }
+      this.$store.dispatch(CHANGE_CARD_COMMENT, data)
+      this.comment = text
+    },
+    onPasteEvent (e) {
+      const items = (e.clipboardData || e.originalEvent.clipboardData).items
+      for (const index in items) {
+        const item = items[index]
+        if (item.kind === 'file') {
+          const blob = item.getAsFile()
+          const formData = new FormData()
+          formData.append('files', blob)
+          const data = {
+            uid_card: this.card.uid,
+            name: formData
+          }
+          this.$store.dispatch(CREATE_FILES_REQUEST, data)
+        }
+      }
+    },
+    onChangeClient (payload) {
+      const [uid, name] = payload
+      this.clientUid = uid
+      this.clientName = name
+      this.$store.dispatch(CHANGE_CARD_UID_CLIENT, { ...this.card, uid_client: this.clientUid, client_name: this.clientName })
     }
   }
 }
