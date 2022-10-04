@@ -56,7 +56,7 @@
               fill-opacity="0.5"
             />
           </svg>
-          <span class="font-roboto text-[13px] leading-[15px] font-medium">{{ cardBudget }}</span>
+          <span class="font-roboto text-[13px] leading-[15px] font-medium text-[rgb(76,76,77)]">{{ cardBudget }}</span>
         </DoitnowPropsColumnItem>
         <DoitnowPropsColumnItem
           v-if="currentBoard"
