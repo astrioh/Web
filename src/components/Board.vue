@@ -625,26 +625,49 @@ export default {
     },
     getColumnCards (column) {
       if (!column?.cards?.length) return []
+      const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
 
       if (this.showOnlyCardsWhereIAmResponsible && this.showOnlyMyCreatedCards) {
-        const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
-        return column.cards.filter(card => card.user.toLowerCase() === currentUserEmail && card.email_creator.toLowerCase() === currentUserEmail)
+        const cards = column.cards.filter(card => card.user.toLowerCase() === currentUserEmail && card.email_creator.toLowerCase() === currentUserEmail)
+
+        if (this.showOnlySearchText) {
+          return this.searchFilteredCards(cards)
+        }
+        return cards
       } else if (this.showOnlyCardsWhereIAmResponsible) {
-        const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
-        return column.cards.filter(card => card.user.toLowerCase() === currentUserEmail)
+        const cards = column.cards.filter(card => card.user.toLowerCase() === currentUserEmail)
+
+        if (this.showOnlySearchText) {
+          return this.searchFilteredCards(cards)
+        }
+        return cards
       } else if (this.showOnlyCardsWithNoResponsible && this.showOnlyMyCreatedCards) {
-        const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
-        return column.cards.filter(card => !card.user && card.email_creator.toLowerCase() === currentUserEmail)
+        const cards = column.cards.filter(card => !card.user && card.email_creator.toLowerCase() === currentUserEmail)
+
+        if (this.showOnlySearchText) {
+          return this.searchFilteredCards(cards)
+        }
+        return cards
       } else if (this.showOnlyCardsWithNoResponsible) {
-        return column.cards.filter(card => !card.user)
+        const cards = column.cards.filter(card => !card.user)
+
+        if (this.showOnlySearchText) {
+          return this.searchFilteredCards(cards)
+        }
+        return cards
       } else if (this.showOnlyMyCreatedCards) {
-        const currentUserEmail = this.$store.state.user.user.current_user_email.toLowerCase()
-        return column.cards.filter(card => card.email_creator.toLowerCase() === currentUserEmail)
+        const cards = column.cards.filter(card => card.email_creator.toLowerCase() === currentUserEmail)
+
+        if (this.showOnlySearchText) {
+          return this.searchFilteredCards(cards)
+        }
+        return cards
       } else if (this.showOnlySearchText) {
         return column.cards.filter(
           card => (card.comment + card.name + this.employeesByEmail[card.user]?.name ?? card.user).toLowerCase().includes(this.searchText)
         )
       }
+
       return column.cards
     },
     addCard (column) {
@@ -776,6 +799,13 @@ export default {
             this.selectCard(resp.data)
           })
       }
+    },
+    searchFilteredCards (cards) {
+      return cards.filter(
+        card => {
+          return (card.comment + card.name).toLowerCase().includes(this.searchText)
+        }
+      )
     },
     selectCard (card) {
       if (this.$store.state.cards.selectedCardUid === card.uid) {
