@@ -196,9 +196,6 @@ export default {
       this.showAddClient = true
     },
     async onAddNewClient (client) {
-      if (this.clients.find(item => item.uid === client.uid)) {
-        return
-      }
       const clientToSend = {
         uid: client.uid,
         organization: this.user?.owner_email,
