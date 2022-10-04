@@ -28,6 +28,11 @@ export default [
             component: () => import('@/components/Integrations/CorpoIntegrationsYandex.vue')
           },
           {
+            path: 'corporateMegafon',
+            name: 'corporateMegafon',
+            component: () => import('@/components/Integrations/CoproIntegrationsMegafon.vue')
+          },
+          {
             path: 'personalYandexMail',
             name: 'personalYandexMail',
             component: () => import('@/components/Integrations/PersonalIntegrationsYandex.vue')
