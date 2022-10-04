@@ -137,7 +137,7 @@
           </div>
         </div>
       </form>
-      <form class="text-left">
+      <div class="text-left">
         <div class="text-base font-medium mb-2 text-[#4C4C4D]">
           Тип аккаунта
         </div>
@@ -237,17 +237,15 @@
             </form>
           </div>
           <div class="mb-2 mt-6">
-            <form>
-              <button
-                class="bg-[#F4F5F7] px-[16px] py-[12px] rounded-[6px] text-[14px] text-[#606061]"
-                @click="logout()"
-              >
-                Выйти из аккаунта
-              </button>
-            </form>
+            <button
+              class="bg-[#F4F5F7] px-[16px] py-[12px] rounded-[6px] text-[14px] text-[#606061]"
+              @click="logout"
+            >
+              Выйти из аккаунта
+            </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
