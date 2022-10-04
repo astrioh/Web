@@ -32,7 +32,7 @@ export default {
       default: ''
     }
   },
-  emits: ['readTask', 'removeAnswerHint'],
+  emits: ['readTask'],
   data: () => ({
     isloading: false,
     files: [],
@@ -131,7 +131,6 @@ export default {
           }
           this.selectedTask.msg = decodeURIComponent(this.taskMsg)
         })
-      this.$emit('removeAnswerHint')
       this.taskMsg = ''
       this.readTask()
     },

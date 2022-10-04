@@ -6,7 +6,6 @@
     :breadcrumbs="getBreadCrumbs"
   >
     <ReglamentSmallButton
-      v-if="!isTesting"
       class="flex items-center px-[10px] py-[5px]"
       @click="$emit('clickAddClient')"
     >

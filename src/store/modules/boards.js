@@ -84,6 +84,18 @@ const actions = {
         })
     })
   },
+  [BOARD.GET_BOARD_REQUEST]: ({ commit, dispatch }, uid) => {
+    return new Promise((resolve, reject) => {
+      const url = process.env.VUE_APP_LEADERTASK_API + '/api/v1/board/entity?uid=' + uid
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   [BOARD.REMOVE_BOARD_REQUEST]: ({ commit, dispatch }, uid) => {
     return new Promise((resolve, reject) => {
       const url =

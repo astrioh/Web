@@ -98,8 +98,8 @@
                   <SetDate
                     class="hover:cursor-pointer"
                     :name="'Назначить срок'"
-                    :date-begin="new Date()"
-                    :date-end="new Date()"
+                    :date-begin="firstTask.date_begin"
+                    :date-end="firstTask.date_end"
                     :date-text="'Сегодня'"
                     @changeDates="setPostponeDate"
                   />

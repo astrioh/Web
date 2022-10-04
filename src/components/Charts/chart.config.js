@@ -14,6 +14,16 @@ export const chartColors = {
   }
 }
 
+const daysRU = {
+  Sun: 'Вс',
+  Mon: 'Пн',
+  Tue: 'Вт',
+  Wed: 'Ср',
+  Thu: 'Чт',
+  Fri: 'Пт',
+  Sat: 'Сб'
+}
+
 export const generateDaysLablesNDaysAgo = (days = 7) => {
   const data = []
   const now = new Date()
@@ -63,24 +73,11 @@ export const karmaChartData = (arr, color, aboveLineColor) => {
   const data = fillDaysDataSet(arr)
 
   for (let i = 0; i < data.labels.length; i++) {
-    data.labels[i] = data.labels[i].split(' ')[0]
+    data.labels[i] = daysRU[data.labels[i].split(' ')[0]]
   }
 
   return {
     labels: data.labels,
     datasets: [datasetObject(color, data.values)]
-  }
-}
-
-export const sampleChartData = (points = 7) => {
-  const labels = []
-
-  for (let i = 1; i <= points; i++) {
-    labels.push(`0${i}`)
-  }
-
-  return {
-    labels,
-    datasets: [datasetObject('danger', points)]
   }
 }
