@@ -21,7 +21,7 @@
         </template>
       </div>
       <div class="mt-5 h-full min-h-0">
-        <Board
+        <PublicBoard
           :store-cards="storeCards"
           :board="currentBoard"
           :show-archive="showArchive"
@@ -34,14 +34,15 @@
 <script>
 import BoardModalBoxBoardsLimit from '@/components/Board/BoardModalBoxBoardsLimit.vue'
 import BoardBlocItem from '@/components/Board/BoardBlocItem.vue'
-import Board from '@/components/Board.vue'
+import PublicBoard from '@/components/PublicBoard.vue'
+import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
 
 export default {
   components: {
     BoardModalBoxBoardsLimit,
     BoardBlocItem,
-    Board
+    PublicBoard
   },
   props: {
     showArchive: {
@@ -81,7 +82,10 @@ export default {
   },
   methods: {
     loadBoard () {
-      this.$store.dispatch(CARD.PUBLIC_BOARD_CARDS_REQUEST, this.boardUid)
+      this.$store.dispatch(BOARD.GET_BOARD_REQUEST, this.boardUid).then((res) => {
+        this.$store.state.cards.currentBoard = res
+        this.$store.dispatch(CARD.PUBLIC_BOARD_CARDS_REQUEST, this.boardUid)
+      })
     },
     goToChildBoard (board) {
       this.$router.push(`/board/${board.uid}`)
