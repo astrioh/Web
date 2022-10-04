@@ -228,7 +228,6 @@ export default {
       return this.selectedEmployee?.type || -1
     },
     selectedEmployeePhoto () {
-      console.log(this.selectedEmployee?.fotolink)
       return this.selectedEmployee?.fotolink
     },
     selectedEmployeePhone () {
@@ -311,9 +310,6 @@ export default {
       handler: function (val) {
         this.currEmpName = val
       }
-    },
-    selectedEmployee (newval, oldval) {
-      console.log(newval, oldval)
     }
   },
   methods: {
