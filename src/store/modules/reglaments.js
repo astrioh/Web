@@ -39,7 +39,7 @@ const actions = {
         data.organization +
         '&user_uid=' +
         data.user_uid
-      axios({ url: url, method: 'GET' })
+      axios({ url: url, method: 'GET', timeout: 1000 * 10 })
         .then((resp) => {
           commit(REGLAMENTS.REGLAMENT_CHANGE_REGLAMENTS, resp.data)
           resolve(resp)
