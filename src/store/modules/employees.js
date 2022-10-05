@@ -169,7 +169,7 @@ const mutations = {
     state.employees[data?.uidUser].onlineBoardUid = data.onlineBoardUid
   },
   ChangeUserOnlineCard: (state, data) => {
-    state.employees[data.uidUser].onlineCardUid = data.onlineCardUid
+    state.employees[data?.uidUser].onlineCardUid = data.onlineCardUid
   }
 }
 
