@@ -51,14 +51,20 @@ axios.interceptors.response.use(
     const errorMessage =
       error?.response?.data.message ||
       error?.response?.data.error ||
-      error?.message
+      error?.message ||
+      error?.code
+    const method = error?.config?.method || ''
+    const url = (error?.config?.url || '')
+      .replace(process.env.VUE_APP_LEADERTASK_API, 'leadertask/')
+      .replace(process.env.VUE_APP_INSPECTOR_API, 'inspector/')
+    const requestUrl = `${method ? method.toUpperCase() + ' ' : ''}${url}`
+
     const avoidedErrorMessages = [
       'old_password invalid',
       "in user's org present employees",
       'the employee is the director of the organization',
       'the employee is already present in this organization',
       'limit. invalid license.',
-      'Request failed with status code 404',
       'Request aborted'
     ]
     if (typeof errorMessage === 'string') {
@@ -88,12 +94,15 @@ axios.interceptors.response.use(
         return
       }
       if (!avoidedErrorMessages.includes(errorMessage)) {
+        const text = `${
+          requestUrl ? '<' + requestUrl + '>: ' : ''
+        }${errorMessage}`
         notify(
           {
             group: 'api',
             title: 'REST API Error, please make screenshot',
             action: '',
-            text: errorMessage
+            text: text.trim()
           },
           15000
         )
