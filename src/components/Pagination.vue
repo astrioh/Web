@@ -62,6 +62,7 @@ export default {
       this.$emit('update:modelValue', 1)
     },
     onClickPage (page) {
+      this.$store.state.clients.selectedClient = null
       this.$emit('update:modelValue', page)
     },
     onClickLastPage () {

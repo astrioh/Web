@@ -7,56 +7,9 @@
     id="Board"
     class="h-full"
   >
-    <BoardModalBoxDelete
-      v-if="showDeleteCard"
-      title="Удалить карточку"
-      text="Вы действительно хотите удалить карточку?"
-      @cancel="showDeleteCard = false"
-      @yes="onDeleteCard"
-    />
-    <BoardModalBoxDelete
-      v-if="showDeleteColumn"
-      title="Удалить колонку"
-      text="Вы действительно хотите удалить колонку?"
-      @cancel="showDeleteColumn = false"
-      @yes="onDeleteColumn"
-    />
-    <!-- Изменения названия колонка -->
-    <BoardModalBoxColor
-      v-if="showColorColumn"
-      :color="selectedColumnColor"
-      @cancel="showColorColumn = false"
-      @changeColor="onChangeColumnColor"
-    />
-    <BoardModalBoxMove
-      v-if="showMoveColumn"
-      :show="showMoveColumn"
-      :position="selectedColumnOrder"
-      :names="columnsNames"
-      :count-all="usersColumnsCount"
-      @cancel="showMoveColumn = false"
-      @changePosition="onChangeColumnPosition"
-    />
-    <BoardModalBoxCardMove
-      v-if="showMoveCard"
-      :show="showMoveCard"
-      :stage-uid="currentCard.uid_stage"
-      :board-uid="currentCard.uid_board"
-      @cancel="showMoveCard = false"
-      @changePosition="onChangeCardPosition"
-    />
-    <BoardModalBoxCardMove
-      v-if="showMoveAllCards"
-      :show="showMoveAllCards"
-      title="Переместить все карточки колонки"
-      :stage-uid=" selectedColumn.UID"
-      :board-uid="board.uid"
-      @cancel="showMoveAllCards = false"
-      @changePosition="onChangeAllCardsPosition"
-    />
     <draggable
       v-dragscroll:nochilddrag
-      class="max-h-full h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
+      class="h-full flex items-start overflow-y-hidden overflow-x-auto scroll-style"
       :list="filteredColumns"
       ghost-class="ghost-column"
       item-key="UID"
@@ -64,11 +17,6 @@
       handle=".draggable-column"
       :fallback-tolerance="1"
       :force-fallback="true"
-      :animation="180"
-      :scroll-sensitivity="100"
-      :move="checkMoveDragColumn"
-      @start="startDragColumn"
-      @end="endDragColumn"
     >
       <template #item="{element: column}">
         <div
@@ -81,90 +29,15 @@
           <!--заголовок -->
           <div
             class="pl-1 pr-[12px] flex justify-between items-start"
-            :class="{ 'draggable-column cursor-move': column.CanEditStage && !showRenameColumn }"
           >
             <div
               class="w-[calc(100%-18px)] "
             >
-              <BoardInputValue
-                v-if="showRenameColumn && column.UID === selectedColumn.UID"
-                :show="showRenameColumn && column.UID === selectedColumn.UID"
-                :value="selectedColumnName"
-                maxlength="50"
-                @cancel="showRenameColumn = false"
-                @save="onRenameColumn"
-              />
               <p
-                v-else
-                class="text-[#424242] font-['Roboto'] font-bold text-[16px] leading-[19px] w-full break-words"
-                :class="{ 'cursor-default': !column.CanEditStage }"
+                class="text-[#424242] cursor-default font-['Roboto'] font-bold text-[16px] leading-[19px] w-full break-words"
               >
                 {{ column.Name }}
               </p>
-            </div>
-            <!-- Три точки -->
-            <div
-              v-if="column.CanEditStage"
-              :ref="`stage-icon-${column.UID}`"
-              class="flex-none h-[18px] w-[18px] cursor-pointer invisible stage-column-hover:visible"
-            >
-              <PopMenu
-                @openMenu="lockVisibility(column.UID)"
-                @closeMenu="unlockVisibility(column.UID)"
-              >
-                <div
-                  class="hover:-m-px hover:border hover:rounded-sm"
-                  :style="{
-                    'border-color': getContrastYIQ(column.Color) ?? '#7e7e80'
-                  }"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 18 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M9.35524 16.6055C8.37421 16.6055 7.57892 15.8102 7.57892 14.8291C7.57892 13.8481 8.37421 13.0528 9.35524 13.0528C10.3363 13.0528 11.1316 13.8481 11.1316 14.8291C11.1316 15.8102 10.3363 16.6055 9.35524 16.6055ZM9.35524 11.2765C8.37421 11.2765 7.57892 10.4812 7.57892 9.50016C7.57892 8.51912 8.37421 7.72383 9.35524 7.72383C10.3363 7.72383 11.1316 8.51912 11.1316 9.50016C11.1316 10.4812 10.3363 11.2765 9.35524 11.2765ZM7.57892 4.17118C7.57892 5.15222 8.37421 5.9475 9.35524 5.9475C10.3363 5.9475 11.1316 5.15222 11.1316 4.17118C11.1316 3.19015 10.3363 2.39486 9.35524 2.39486C8.37421 2.39486 7.57892 3.19015 7.57892 4.17118Z"
-                      :fill="getContrastYIQ(column.Color) ?? '#7e7e80'"
-                    />
-                  </svg>
-                </div>
-                <template #menu>
-                  <PopMenuItem
-                    v-if="column.CanEditStage"
-                    icon="edit"
-                    @click="clickRenameColumn(column, $event)"
-                  >
-                    Переименовать
-                  </PopMenuItem>
-                  <PopMenuItem
-                    v-if="column.CanEditStage"
-                    icon="color"
-                    @click="clickColorColumn(column, $event)"
-                  >
-                    Выбрать цвет
-                  </PopMenuItem>
-                  <PopMenuItem
-                    v-if="column.CanEditStage"
-                    icon="move"
-                    @click="clickMoveColumn(column, $event)"
-                  >
-                    Переместить
-                  </PopMenuItem>
-                  <PopMenuItem
-                    v-if="column.CanEditStage"
-                    icon="delete"
-                    type="delete"
-                    @click="clickDeleteColumn(column, $event)"
-                  >
-                    Удалить
-                  </PopMenuItem>
-                </template>
-              </PopMenu>
             </div>
           </div>
           <!--под заголовок стат-колонки -->
@@ -181,9 +54,8 @@
                 :disabled="isReadOnlyBoard"
               >
                 <p
-                  class="text-[12px] leading-[14px]"
+                  class="text-[12px] leading-[14px] cursor-default"
                   data-dragscroll
-                  :class="{ 'hover:underline cursor-pointer': !isReadOnlyBoard}"
                 >
                   Карточек: {{ column.cards.length }}
                 </p>
@@ -244,18 +116,10 @@
               ghost-class="ghost-card"
               item-key="uid"
               group="cards"
-              :disabled="isReadOnlyBoard || isFiltered || showArchive || isSavingMoveNow"
-              :move="checkMoveDragCard"
-              :fallback-tolerance="1"
-              :force-fallback="true"
-              :animation="380"
-              :scroll-sensitivity="250"
-              @start="startDragCard"
-              @end="endDragCard"
-              @change="changeDragCard"
+              :disabled="true"
             >
               <template #item="{ element }">
-                <BoardCard
+                <PublicBoardCard
                   :id="element.uid"
                   :data-card-id="element.uid"
                   :card="element"
@@ -265,13 +129,6 @@
                   :color="colorCard(column.Color)"
                   :color-dots="colorCard(column.Color, 0.8)"
                   class="mt-2"
-                  @select="selectCard(element)"
-                  @delete="deleteCard(element)"
-                  @moveSuccess="moveSuccessCard(element)"
-                  @moveReject="moveRejectCard(element)"
-                  @moveColumn="onClickMoveCard(element)"
-                  @moveCardToTop="moveCardToTop(element)"
-                  @moveCardToBottom="moveCardToBottom(element)"
                 />
               </template>
             </draggable>
@@ -283,37 +140,21 @@
 </template>
 
 <script>
-import PopMenu from '@/components/Common/PopMenu.vue'
-import PopMenuItem from '@/components/Common/PopMenuItem.vue'
 import draggable from 'vuedraggable'
 import { dragscroll } from 'vue-dragscroll'
-import BoardCard from '@/components/Board/BoardCard.vue'
-import BoardModalBoxDelete from '@/components/Board/BoardModalBoxDelete.vue'
-import BoardModalBoxColor from '@/components/Board/BoardModalBoxColor.vue'
-import BoardModalBoxMove from '@/components/Board/BoardModalBoxMove.vue'
-import BoardModalBoxCardMove from '@/components/Board/BoardModalBoxCardMove.vue'
+import PublicBoardCard from '@/components/Board/PublicBoardCard.vue'
 import BoardSkeleton from '@/components/Board/BoardSkeleton.vue'
 import * as BOARD from '@/store/actions/boards'
 import * as CARD from '@/store/actions/cards'
-import { FETCH_FILES_AND_MESSAGES, REFRESH_MESSAGES, REFRESH_FILES } from '@/store/actions/cardfilesandmessages'
-import BoardInputValue from './Board/BoardInputValue.vue'
-import * as CLIENT_FILES_AND_MESSAGES from '@/store/actions/clientfilesandmessages'
 
 export default {
   directives: {
     dragscroll
   },
   components: {
-    PopMenu,
-    PopMenuItem,
-    BoardModalBoxDelete,
-    BoardModalBoxColor,
-    BoardModalBoxMove,
-    BoardModalBoxCardMove,
     BoardSkeleton,
-    BoardCard,
-    draggable,
-    BoardInputValue
+    PublicBoardCard,
+    draggable
   },
   props: {
     storeCards: {
@@ -421,7 +262,7 @@ export default {
     boardUid: {
       immediate: true,
       handler: function (val) {
-        this.$store.commit(CARD.SELECT_CARD, '')
+        this.$store.commit(CARD.SELECT_PUBLIC_CARD, '')
         this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
       }
     },
@@ -443,7 +284,7 @@ export default {
       immediate: true,
       handler: function (val) {
         if (!val) {
-          this.$store.commit(CARD.SELECT_CARD, '')
+          this.$store.commit(CARD.SELECT_PUBLIC_CARD, '')
         }
       }
     }
@@ -453,9 +294,6 @@ export default {
     this.$store.state.tasks.selectedTask = null
   },
   methods: {
-    print (msg, val) {
-      console.log(msg, val)
-    },
     handleCardsScroll (event, columnUid, cardsLength) {
       const { scrollTop, offsetHeight, scrollHeight } = event.target
 
@@ -555,43 +393,6 @@ export default {
           return (card.comment + card.name).toLowerCase().includes(this.searchText)
         }
       )
-    },
-    selectCard (card) {
-      if (this.$store.state.cards.selectedCardUid === card.uid) {
-        return
-      }
-
-      this.$store.commit(REFRESH_MESSAGES)
-      this.$store.commit(REFRESH_FILES)
-      this.$store.commit(CARD.SELECT_CARD, card.uid)
-
-      if (card?.uid_client !== '00000000-0000-0000-0000-000000000000' && card?.uid_client) {
-        this.$store.dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, card.uid_client)
-      } else {
-        this.$store.dispatch(FETCH_FILES_AND_MESSAGES, card.uid)
-      }
-
-      this.$store.commit('basic', { key: 'propertiesState', value: 'card' })
-      this.$store.dispatch('asidePropertiesToggle', true)
-    },
-    closeProperties () {
-      this.$store.dispatch('asidePropertiesToggle', false)
-      this.$store.commit(CARD.SELECT_CARD, '')
-    },
-    deleteCard (card) {
-      this.showDeleteCard = true
-      this.currentCard = card
-    },
-    moveCard (cardUid, stageUid, newOrder) {
-      this.closeProperties()
-      this.isSavingMoveNow = true
-      this.$store
-        .dispatch(CARD.MOVE_CARD, { uid: cardUid, stageUid, newOrder })
-        .then((resp) => {
-          console.log('Card is moved')
-        }).finally(() => {
-          this.isSavingMoveNow = false
-        })
     },
     getNewMinCardsOrderAtColumn (columnUid) {
       const column = this.storeCards.find((stage) => stage.UID === columnUid)

@@ -4,6 +4,10 @@ import * as NAVIGATOR from '@/store/actions/navigator'
 import * as PROJECT from '@/store/actions/projects'
 
 export function createProject (obj) {
+  const projects = store.state.navigator.navigator.new_private_projects[1].items
+  for (let i = 0; i < projects.length; i++) {
+    if (projects[i].uid === obj.obj.uid) return
+  }
   store.commit(PROJECT.PUSH_PROJECT, [obj.obj])
   store.commit(NAVIGATOR.NAVIGATOR_PUSH_COMMON_PROJECT, [obj.obj])
 }

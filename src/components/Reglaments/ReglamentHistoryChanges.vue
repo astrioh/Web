@@ -24,7 +24,12 @@
       </router-link>
     </div>
   </div>
-  <div class="mt-5 p-7 bg-white rounded-[28px] flex flex-col">
+  <ReglamentHistorySkeleton v-if="isLoading" />
+
+  <div
+    v-if="!isLoading"
+    class="mt-5 p-7 bg-white rounded-[28px] flex flex-col"
+  >
     <span
       v-if="reglamentComments.length < 1"
       class="w-full text-center text-gray-500 text-[16px]"
@@ -48,19 +53,23 @@
 import ReglamentSmallButton from '@/components/Reglaments/ReglamentSmallButton.vue'
 import ReglamentHistoryElement from '@/components/Reglaments/ReglamentHistoryElement.vue'
 import * as REGLAMENTS from '@/store/actions/reglaments.js'
+import ReglamentHistorySkeleton from './ReglamentHistorySkeleton.vue'
 export default {
   components: {
     ReglamentSmallButton,
-    ReglamentHistoryElement
+    ReglamentHistoryElement,
+    ReglamentHistorySkeleton
   },
   data () {
     return {
-      reglamentComments: []
+      reglamentComments: [],
+      isLoading: true
     }
   },
   mounted () {
     this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
       this.reglamentComments = res.data
+      this.isLoading = false
     })
   }
 }

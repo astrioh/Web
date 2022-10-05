@@ -96,16 +96,22 @@
           </PopMenuItem>
         </router-link>
         <PopMenuItem
-          v-if="isBoardPublic === false"
+          v-if="$store.state.boards.publicBoard === 0 && canEditBoard"
           @click="setPublicBoard"
         >
           Сделать доску публичной
         </PopMenuItem>
         <PopMenuItem
-          v-if="isBoardPublic === true"
+          v-if="$store.state.boards.publicBoard === 1 && canEditBoard"
           @click="removePublicBoard"
         >
           Сделать доску приватной
+        </PopMenuItem>
+        <PopMenuItem
+          v-if="$store.state.boards.publicBoard === 1"
+          @click="copyPublicBoardLink"
+        >
+          Копировать ссылку на доску
         </PopMenuItem>
         <div
           v-if="canEditBoard"
@@ -167,8 +173,7 @@ export default {
       showDeleteBoard: false,
       showBoardsLimit: false,
       showConfirmQuit: false,
-      showAddBoard: false,
-      isBoardPublic: false
+      showAddBoard: false
     }
   },
   computed: {
@@ -217,12 +222,18 @@ export default {
     selectedBoard () {
       return this.$store.state.boards.selectedBoard
     },
+    currentLocation () {
+      return window.location.origin
+    },
     selectedBoardUid () {
       return this.selectedBoard?.uid || ''
     },
     isFilterSet () {
       return this.showOnlyMyCreatedCards || this.showOnlyCardsWhereIAmResponsible || this.showOnlyCardsWithNoResponsible
     }
+  },
+  mounted () {
+    this.$store.state.boards.publicBoard = this.$store.state.boards.boards[this.boardUid].public_link_status
   },
   methods: {
     clickEditBoard () {
@@ -252,18 +263,14 @@ export default {
         uid: this.board.uid,
         public_link_status: 1
       }
-      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
-        this.isBoardPublic = true
-      })
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
     },
     removePublicBoard () {
       const data = {
         uid: this.board.uid,
         public_link_status: 0
       }
-      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data).then(() => {
-        this.isBoardPublic = false
-      })
+      this.$store.dispatch(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
     },
     onAddNewBoard (name) {
       this.showAddBoard = false
@@ -319,6 +326,9 @@ export default {
     },
     clickBoardFilterClear () {
       this.$store.commit(BOARD.BOARD_CLEAR_FILTER)
+    },
+    copyPublicBoardLink () {
+      navigator.clipboard.writeText(this.currentLocation + '/board/' + this.$route.params.board_id + '/public')
     },
     quitBoard () {
       this.showConfirmQuit = false
