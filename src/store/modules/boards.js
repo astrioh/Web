@@ -10,7 +10,8 @@ const state = {
   showOnlyCardsWhereIAmResponsible: false,
   showOnlyCardsWithNoResponsible: false,
   showOnlyMyCreatedCards: false,
-  searchText: undefined
+  searchText: undefined,
+  publicBoard: 0
 }
 
 const getters = {}
@@ -114,6 +115,8 @@ const actions = {
       const url = process.env.VUE_APP_LEADERTASK_API + '/api/v1/board/publiclinkstatus?uid=' + data.uid
       axios({ url: url, method: 'PATCH', data: data })
         .then((resp) => {
+          commit(BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST, data)
+          console.log(state.publicBoard)
           resolve(resp)
         })
         .catch((err) => {
@@ -319,6 +322,9 @@ const mutations = {
       (value) => delete state.boards[value.uid]
     )
     delete state.boards[uid]
+  },
+  [BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST]: (state, data) => {
+    state.publicBoard = data.public_link_status
   },
   [BOARD.PUSH_BOARD]: (state, boards) => {
     for (const board of boards) {
