@@ -53,24 +53,30 @@
       id="generalscroll"
       class="column-resize relative overflow-hidden"
     >
-      <div
-        class="user_child_customer_custom"
-      >
-        <strong>
-          <div
-            ref="TaskName"
-            class="form-control taskName-custom dark:bg-gray-900 dark:text-gray-100 dark:border-gray-900"
-            data-placeholder="Task Name"
-            style="font-weight: bold; font-size: 18px"
-            spellcheck="false"
-            :contenteditable="selectedTask?.uid_customer === user?.current_user_uid"
-            @blur="changeName($event)"
-            @focus="$refs.TaskName.focus()"
-            @focusout="removeEditTaskName($event)"
-            @keydown.enter.exact.prevent
-            v-html="getFixedCommentName()"
-          />
-        </strong>
+      <div class="flex items-center">
+        <TaskStatus
+          :task="selectedTask"
+          @changeStatus="onChangeStatus($event, selectedTask)"
+        />
+        <div
+          class="ml-[5px] user_child_customer_custom"
+        >
+          <strong>
+            <div
+              ref="TaskName"
+              class="form-control taskName-custom dark:bg-gray-900 dark:text-gray-100 dark:border-gray-900"
+              data-placeholder="Task Name"
+              style="font-weight: bold; font-size: 18px"
+              spellcheck="false"
+              :contenteditable="selectedTask?.uid_customer === user?.current_user_uid"
+              @blur="changeName($event)"
+              @focus="$refs.TaskName.focus()"
+              @focusout="removeEditTaskName($event)"
+              @keydown.enter.exact.prevent
+              v-html="getFixedCommentName()"
+            />
+          </strong>
+        </div>
       </div>
       <div
         class="my-[25px] custom-list-tags"
@@ -307,6 +313,7 @@ import CardMessageInput from '@/components/CardProperties/CardMessageInput'
 import TaskRepeat from '@/components/TaskProperties/TaskRepeat'
 import TaskPropertiesModalBoxFileSizeLimit from '@/components/TaskProperties/TaskPropertiesModalBoxFileSizeLimit.vue'
 import TaskPropsButtonParentTask from '../TaskProperties/TaskPropsButtonParentTask.vue'
+import TaskStatus from '@/components/TasksList/TaskStatus.vue'
 
 export default {
   components: {
@@ -330,7 +337,8 @@ export default {
     TaskPropsChecklist,
     TaskRepeat,
     TaskPropertiesModalBoxFileSizeLimit,
-    TaskPropsButtonParentTask
+    TaskPropsButtonParentTask,
+    TaskStatus
   },
   directives: {
     linkify,
@@ -417,6 +425,9 @@ export default {
       msg = msg.replaceAll('&lt;', '<')
       msg = msg.replaceAll('&gt;', '>')
       return msg
+    },
+    newConfig () {
+      return this.$store.state.tasks.newConfig
     }
   },
   watch: {
@@ -865,6 +876,43 @@ export default {
     },
     onAddChecklistComplete () {
       this.checklistshow = false
+    },
+    sortTasks (task, restoredTasksArray) {
+      restoredTasksArray[task.id] = task
+      if (task.state.opened) {
+        task.children.forEach((item) => {
+          const child = this.storeTasks[item]
+          if (child?.children?.length !== 0) {
+            this.sortTasks(child, restoredTasksArray)
+          }
+          restoredTasksArray[item] = this.storeTasks[item]
+        })
+      }
+    },
+    onChangeStatus (status, task) {
+      this.$store.dispatch(TASK.CHANGE_TASK_STATUS, { uid: task.uid, value: status }).then(() => {
+        task.status = status
+        if (!shouldAddTaskIntoList(task)) {
+          const prevTasksArray = JSON.parse(JSON.stringify(this.storeTasks))
+          const restoredTasksArray = []
+          Object.values(prevTasksArray).forEach((item) => {
+            if (item.children.length !== 0) {
+              this.sortTasks(item, restoredTasksArray)
+            } else if (this.newConfig.roots.includes(item.id)) {
+              restoredTasksArray[item.id] = item
+            }
+          })
+          this.$store.commit(TASK.REMOVE_TASK, task.uid)
+          this.$store.dispatch(TASK.SELECT_NEXT_TASK, { prevTaskUid: task.uid, tasks: restoredTasksArray }).then(data => {
+            if (!data) {
+              this.$store.dispatch('asidePropertiesToggle', false)
+              return
+            }
+            // фокусим следующий итем и открываем его свойства
+            document.getElementById(data.id).focus({ preventScroll: false })
+          })
+        }
+      })
     }
   }
 }
