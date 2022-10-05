@@ -93,7 +93,6 @@
         v-model:content="reglamentContent"
         content-type="html"
         :read-only="true"
-        :toolbar="['']"
         class="h-auto mx-auto mb-5 border-none 2xl:px-[145px] mt-[35px]"
       />
 
