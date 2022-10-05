@@ -96,13 +96,13 @@
           </PopMenuItem>
         </router-link>
         <PopMenuItem
-          v-if="$store.state.boards.publicBoard === 0"
+          v-if="$store.state.boards.publicBoard === 0 && canEditBoard"
           @click="setPublicBoard"
         >
           Сделать доску публичной
         </PopMenuItem>
         <PopMenuItem
-          v-if="$store.state.boards.publicBoard === 1"
+          v-if="$store.state.boards.publicBoard === 1 && canEditBoard"
           @click="removePublicBoard"
         >
           Сделать доску приватной
