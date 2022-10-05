@@ -1,5 +1,5 @@
-import axios from 'axios'
 import * as CORP_YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import axios from 'axios'
 
 const state = {
   login: null,
@@ -8,9 +8,13 @@ const state = {
 }
 
 const actions = {
-  [CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, data) => {
+  [CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION]: (
+    { commit, dispatch },
+    data
+  ) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexIntegrateOrganization'
+      const url =
+        process.env.VUE_APP_INSPECTOR_API + 'yandexIntegrateOrganization'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           commit(CORP_YANDEX.YANDEX_CREATE_CORP_EMAIL_INTEGRATION, resp.data)
@@ -22,10 +26,16 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: ({ commit, dispatch }, organization) => {
+  [CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS]: (
+    { commit, dispatch },
+    organization
+  ) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexOrganizationLogPass?organization=' + organization
-      axios({ url: url, method: 'GET' })
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'yandexOrganizationLogPass?organization=' +
+        organization
+      axios({ url: url, method: 'GET', timeout: 1000 * 10 })
         .then((resp) => {
           commit(CORP_YANDEX.YANDEX_GET_ORGANIZATION_LOGIN_AND_PASS, resp.data)
           resolve(resp)
@@ -36,9 +46,15 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: ({ commit, dispatch }, organization) => {
+  [CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION]: (
+    { commit, dispatch },
+    organization
+  ) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemoveCorpIntegration?organization=' + organization
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'yandexRemoveCorpIntegration?organization=' +
+        organization
       axios({ url: url, method: 'DELETE' })
         .then((resp) => {
           commit(CORP_YANDEX.YANDEX_REMOVE_CORP_EMAIL_INTEGRATION)
@@ -49,7 +65,10 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
+  [CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_FROM_US]: (
+    { commit, dispatch },
+    emails
+  ) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
@@ -68,7 +87,10 @@ const actions = {
         })
     })
   },
-  [CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
+  [CORP_YANDEX.YANDEX_GET_CORP_MESSAGES_SENT_TO_US]: (
+    { commit, dispatch },
+    emails
+  ) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
