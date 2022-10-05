@@ -2,6 +2,11 @@
   <div
     class="flex justify-between items-center h-[40px] w-[221px]"
   >
+    <DoitnowModalBoxSetDate
+      v-if="showSetDate"
+      @save="onSetDate"
+      @cancel="showSetDate = false"
+    />
     <div
       class="flex-none flex items-center cursor-pointer bg-white hover:bg-[#0000000a] h-[40px] w-[200px] rounded-[8px] px-[20px] overflow-hidden"
       @click="onPostpone"
@@ -41,11 +46,11 @@
           >
             Завтра
           </PopMenuItem>
-          <!-- <PopMenuItem
+          <PopMenuItem
             @click="onSelectPostpone"
           >
             Выбрать дату
-          </PopMenuItem> -->
+          </PopMenuItem>
         </div>
       </template>
     </PopMenu>
@@ -55,9 +60,11 @@
 <script>
 import PopMenu from '@/components/Common/PopMenu.vue'
 import PopMenuItem from '@/components/Common/PopMenuItem.vue'
+import DoitnowModalBoxSetDate from '@/components/Doitnow/DoitnowModalBoxSetDate.vue'
 
 export default {
   components: {
+    DoitnowModalBoxSetDate,
     PopMenu,
     PopMenuItem
   },
@@ -77,7 +84,8 @@ export default {
       postponeValue: {
         minutes: 10,
         days: 0
-      }
+      },
+      showSetDate: false
     }
   },
   computed: {
@@ -117,6 +125,11 @@ export default {
     },
     onSelectPostpone () {
       // выбрать дату - через диалог
+      this.showSetDate = true
+    },
+    onSetDate (date) {
+      this.showSetDate = false
+      this.$emit('postpone', date)
     }
   }
 }

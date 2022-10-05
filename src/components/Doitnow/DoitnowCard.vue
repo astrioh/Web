@@ -26,6 +26,7 @@
         <DoitnowPropsColumnItem
           v-if="cardBudget"
           key-title="Бюджет:"
+          :value-text="cardBudget"
         >
           <svg
             width="17"
@@ -56,7 +57,6 @@
               fill-opacity="0.5"
             />
           </svg>
-          <span class="font-roboto text-[13px] leading-[15px] font-medium text-[rgb(76,76,77)]">{{ cardBudget }}</span>
         </DoitnowPropsColumnItem>
         <DoitnowPropsColumnItem
           v-if="currentBoard"
@@ -68,18 +68,6 @@
           key-title="Колонка:"
           :value-text="currentStageName"
         />
-        <DoitnowPropsColumnItem
-          key-title="Контакт:"
-        >
-          <CardClient
-            :can-edit="canEdit"
-            :client-uid="clientUid"
-            :client-name="clientName"
-            :card-name="name"
-            :card-comment="comment"
-            @changeClient="onChangeClient"
-          />
-        </DoitnowPropsColumnItem>
       </DoitnowPropsColumn>
       <TaskPropsCommentEditor
         text-style="!text-[16px] leading-[155%]"
@@ -107,6 +95,15 @@
         title="Пропустить"
         icon="next"
         @click="onNext"
+      />
+      <CardClient
+        :can-edit="canEdit"
+        :client-uid="clientUid"
+        :client-name="clientName"
+        :card-name="name"
+        :card-comment="comment"
+        :is-queue="true"
+        @changeClient="onChangeClient"
       />
     </template>
   </DoitnowContent>
