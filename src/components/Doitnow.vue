@@ -13,7 +13,6 @@
     />
     <DoitnowSkeleton
       v-else-if="isLoadingDoits"
-      class="ml-0 pt-[15px] z-[2] grow"
     />
     <DoitnowLimit
       v-else-if="showLimitMessage"
