@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full relative overflow-x-hidden">
+  <div class="wrapper w-full relative overflow-x-hidden">
     <NavBar
       class="pt-[8px]"
       title="Очередь"
@@ -486,5 +486,9 @@ export default {
 .slide-in-fade-out-leave-to {
   position: absolute;
   width: 100%;
+}
+
+.wrapper:has( .slide-in-fade-out-enter-active) {
+  @apply h-full overflow-hidden
 }
 </style>
