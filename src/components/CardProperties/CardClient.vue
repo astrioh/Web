@@ -13,8 +13,8 @@
     @open:popper="onShowClients"
   >
     <div
-      class="rounded-[6px] text-[12px] px-[8px] py-[5px] font-[500] bg-[#F4F5F7] text-[#575758]"
-      :class="{ 'cursor-pointer': canEdit }"
+      class="text-[12px] py-[5px] font-[500] bg-[#F4F5F7] text-[#575758]"
+      :class="{ 'cursor-pointer': canEdit, 'flex items-center hover:bg-[#0000000a] h-[40px] px-[20px] rounded-[8px]': isQueue, 'px-[8px] rounded-[6px]': !isQueue }"
     >
       <!-- Empty label for responsible user -->
       <div
@@ -243,6 +243,10 @@ export default {
       default: ''
     },
     canEdit: {
+      type: Boolean,
+      default: false
+    },
+    isQueue: {
       type: Boolean,
       default: false
     }
