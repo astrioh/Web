@@ -1,30 +1,39 @@
 <template>
   <div
-    class="rounded-xl bg-white"
+    class="rounded-xl bg-white animate-pulse px-7"
   >
-    <div class="w-full flex justify-center p-2">
-      <div
-        class="animate-pulse bg-gray-200 rounded-[10px] h-[72px] w-[104px]"
-      />
-    </div>
-    <div class="mt-2 p-2 flex justify-center">
-      <div class="h-[30px] w-[70px] animate-pulse rounded-[10px] bg-gray-200" />
-      <div class="h-[30px] w-[120px] rounded-[10px] bg-gray-200 ml-[20px]" />
-    </div>
-    <br>
-    <div class="grid grid-cols-1 gap-4 p-5">
-      <div class="flex flex-col items-center">
-        <div class="h-[32px] w-[160px] bg-gray-200 animate-pulse rounded-[10px] mb-[5px]" />
-        <div class="w-full h-[328px] bg-gray-200 animate-pulse rounded-[10px]" />
+    <div class="flex items-center justify-between gap-x-[20px]">
+      <div class="bg-[#FBEFE2] h-[129px] rounded-[12px] my-7 grow basis-0 flex flex-col items-center pt-[20px]">
+        <div class="bg-gray-300 h-[10px] w-[150px] rounded-xl" />
+        <div class="mt-[25px] bg-gray-300 h-[40px] w-[30px] rounded-xl" />
       </div>
-      <div class="flex flex-col items-center">
-        <div class="w-[250px] h-[48px] bg-gray-200 animate-pulse rounded-[10px]" />
-        <div
-          v-for="i in 6"
-          :key="i"
-          class="w-full h-[120px] mt-[10px] rounded-[10px] bg-gray-200 animate-pulse"
-        />
+      <div class="bg-[#EDFAEB] h-[129px] rounded-[12px] my-7 grow basis-0 flex flex-col items-center pt-[20px]">
+        <div class="bg-gray-300 h-[10px] w-[150px] rounded-xl" />
+        <div class="mt-[25px] bg-gray-300 h-[40px] w-[30px] rounded-xl" />
       </div>
+      <div class="bg-[#FDEEEE] h-[129px] rounded-[12px] my-7 grow basis-0 flex flex-col items-center pt-[20px]">
+        <div class="bg-gray-300 h-[10px] w-[150px] rounded-xl" />
+        <div class="mt-[25px] bg-gray-300 h-[40px] w-[30px] rounded-xl" />
+      </div>
+    </div>
+    <div class="flex items-center justify-between gap-x-[20px]">
+      <div class="bg-gray-300 rounded-xl h-[332px] grow basis-0" />
+      <div class="bg-gray-300 rounded-xl h-[332px] grow basis-0" />
+    </div>
+    <div class="mt-10 bg-gray-300 rounded-xl h-[20px] w-[150px]" />
+    <div
+      v-for="i in 6"
+      :key="i"
+      class="mt-6 flex justify-between"
+    >
+      <div>
+        <div class="bg-gray-300 w-[300px] h-[10px] rounded-xl" />
+        <div class="flex mt-3">
+          <div class="bg-gray-300 w-[100px] h-[10px] rounded-xl mr-3" />
+          <div class="bg-gray-300 w-[120px] h-[10px] rounded-xl" />
+        </div>
+      </div>
+      <div class="w-[20px] h-[10px] bg-green-200 rounded-sm" />
     </div>
   </div>
 </template>
