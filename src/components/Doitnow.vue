@@ -1,5 +1,8 @@
 <template>
-  <div class="wrapper w-full relative overflow-x-hidden">
+  <div
+    ref="doitnow"
+    class="w-full overflow-x-hidden"
+  >
     <NavBar
       class="pt-[8px]"
       title="Очередь"
@@ -10,7 +13,6 @@
     />
     <DoitnowSkeleton
       v-else-if="isLoadingDoits"
-      class="ml-0 pt-[15px] z-[2] grow"
     />
     <DoitnowLimit
       v-else-if="showLimitMessage"
@@ -18,6 +20,8 @@
     <transition
       v-else-if="tasksCount"
       name="slide-in-fade-out"
+      @before-enter="onStartAnimation"
+      @after-leave="onEndAnimation"
     >
       <div
         :key="firstTask.uid"
@@ -458,6 +462,12 @@ export default {
     changePostponeIndex (index) {
       this.postponeDate = ''
       this.postponeIndex = index
+    },
+    onStartAnimation () {
+      this.$refs.doitnow.classList.toggle('slide-in-parent')
+    },
+    onEndAnimation () {
+      this.$refs.doitnow.classList.toggle('slide-in-parent')
     }
   }
 }
@@ -488,7 +498,9 @@ export default {
   width: 100%;
 }
 
-.wrapper:has( .slide-in-fade-out-enter-active) {
-  @apply h-full overflow-hidden
+.slide-in-parent {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
 }
 </style>
