@@ -3,7 +3,7 @@
     <div class="flex items-center min-w-[40%]">
       <div class="flex items-center break-words min-w-[40%]">
         <a
-          class="font-normal font-roboto font-[400] text-[15px] cursor-pointer text-[#424242] min-w-[40%] hover:text-[#007BE5] hover:underline"
+          class="font-normal font-roboto text-[15px] cursor-pointer text-[#424242] min-w-[40%] hover:text-[#007BE5] hover:underline"
           @click="setTaskFromQueue(karma.taskJson.uid)"
         >
           {{ karma.taskJson.name }}

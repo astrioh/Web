@@ -368,6 +368,20 @@ const mutations = {
     }
     state.selectedCardUid = cardUid
   },
+  [CARD.SELECT_PUBLIC_CARD]: (state, cardUid) => {
+    if (state.selectedCardUid !== cardUid) {
+      const cardsMap = state.cards.reduce((acc, stage) => {
+        stage.cards.forEach((card) => {
+          acc[card.uid] = card
+        })
+        return acc
+      }, {})
+      const card = cardsMap[cardUid]
+      if (cardUid) console.log('select card', card, cardUid)
+      //
+    }
+    state.selectedCardUid = cardUid
+  },
   [CARD.BOARD_CARDS_SUCCESS]: (state, resp) => {
     console.log('cards ', resp)
 

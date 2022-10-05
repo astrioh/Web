@@ -101,7 +101,6 @@ const actions = {
   },
   [CLIENT_FILES_AND_MESSAGES.FETCH_FILES_AND_MESSAGES]: ({ commit, dispatch }, data) => {
     commit(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST)
-
     const messages = dispatch(CLIENT_FILES_AND_MESSAGES.MESSAGES_REQUEST, data.clientUid)
     const files = dispatch(CLIENT_FILES_AND_MESSAGES.FILES_REQUEST, data.clientUid)
 
@@ -125,13 +124,13 @@ const actions = {
       .then((resp) => {
         console.log('msgs resp', resp)
         console.log('int data', data)
+        console.log('promises', promises)
         if (data.corpYandexInt && data.personalYandexInt) {
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[4].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[5].data)
-        }
-        if (!data.personalYandexInt || !data.corpYandexInt) {
+        } else if ((!data.personalYandexInt && data.corpYandexInt) || (data.personalYandexInt && !data.corpYandexInt)) {
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
         }

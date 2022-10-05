@@ -69,7 +69,7 @@
             <ReglamentSmallButton
               :disabled="disabledButtons"
               :class="{'cursor-default opacity-[0.5]': disabledButtons, 'bg-[FFEDED]': saveContentStatus === 2}"
-              @click="clickSaveReglament"
+              @click="saveOnClick"
             >
               <svg
                 width="20"
@@ -369,7 +369,8 @@ export default {
       isFormInvalid: false,
       showEmployees: false,
       buttonDisabled: false,
-      showSaveModal: false
+      showSaveModal: false,
+      reglamentHistoryLength: 0
     }
   },
   computed: {
@@ -475,6 +476,12 @@ export default {
     this.currDep = this.reglamentDep
     this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
+    this.buttonDisabled = true
+
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then(res => {
+      this.reglamentHistoryLength = res.data.length
+      this.buttonDisabled = false
+    })
   },
   methods: {
     onDeleteQuestion (uid) {
@@ -613,13 +620,25 @@ export default {
 
       return this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     },
-    clickSaveReglament () {
-      this.showSaveModal = true
-      this.$store.state.reglaments.hideSaveParams = true
-    },
     clickSaveAndExitReglament () {
-      this.showSaveModal = true
       this.$store.state.reglaments.hideSaveParams = false
+
+      if (this.reglamentHistoryLength > 0) {
+        this.showSaveModal = true
+      } else {
+        this.setEdit()
+        const data = {
+          uid_employee: this.user.current_user_uid,
+          uid_reglament: this.$route.params.id,
+          comment: '',
+          comment_date: this.dateToLabelFormatForComment(new Date())
+        }
+        this.$store.dispatch(REGLAMENTS.CREATE_REGLAMENT_COMMENT, data)
+      }
+    },
+    saveOnClick () {
+      this.$store.state.reglaments.hideSaveParams = true
+      this.setEdit()
     },
     setEdit () {
       const reglament = { ...this.currReglament }
@@ -660,6 +679,16 @@ export default {
       const month = calendarDate.toLocaleString('default', { month: 'short' })
       const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
       return day + ' ' + month + ', ' + weekday
+    },
+    dateToLabelFormatForComment (calendarDate) {
+      const day = calendarDate.getDate()
+      const month = calendarDate.toLocaleString('default', { month: 'short' })
+      const weekday = calendarDate.toLocaleString('default', { weekday: 'short' })
+      const hours = String(calendarDate.getHours()).padStart(2, '0')
+      const minutes = String(calendarDate.getMinutes()).padStart(2, '0')
+      const seconds = String(calendarDate.getSeconds()).padStart(2, '0')
+
+      return `${day} ${month}, ${weekday}, ${hours}:${minutes}:${seconds}`
     },
     validateReglamentQuestions () {
       for (const question of this.questions) {

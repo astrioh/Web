@@ -1,5 +1,5 @@
-import axios from 'axios'
 import * as PERSONAL_YANDEX from '@/store/actions/integrations/personalYandexInt.js'
+import axios from 'axios'
 
 const state = {
   login: null,
@@ -8,12 +8,18 @@ const state = {
 }
 
 const actions = {
-  [PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION]: ({ commit, dispatch }, data) => {
+  [PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION]: (
+    { commit, dispatch },
+    data
+  ) => {
     return new Promise((resolve, reject) => {
       const url = process.env.VUE_APP_INSPECTOR_API + 'yandexIntegratePersonal'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
-          commit(PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION, resp.data)
+          commit(
+            PERSONAL_YANDEX.YANDEX_CREATE_PERSONAL_EMAIL_INTEGRATION,
+            resp.data
+          )
           resolve(resp)
         })
         .catch((err) => {
@@ -22,10 +28,16 @@ const actions = {
         })
     })
   },
-  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS]: ({ commit, dispatch }, userEmail) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS]: (
+    { commit, dispatch },
+    userEmail
+  ) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalLoginPassword?user=' + userEmail
-      axios({ url: url, method: 'GET' })
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'yandexGetPersonalLoginPassword?user=' +
+        userEmail
+      axios({ url: url, method: 'GET', timeout: 1000 * 10 })
         .then((resp) => {
           commit(PERSONAL_YANDEX.YANDEX_GET_PERSONAL_LOGIN_AND_PASS, resp.data)
           resolve(resp)
@@ -36,9 +48,15 @@ const actions = {
         })
     })
   },
-  [PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION]: ({ commit, dispatch }, userEmail) => {
+  [PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION]: (
+    { commit, dispatch },
+    userEmail
+  ) => {
     return new Promise((resolve, reject) => {
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexRemovePersonalIntegration?organization=' + userEmail
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'yandexRemovePersonalIntegration?organization=' +
+        userEmail
       axios({ url: url, method: 'DELETE' })
         .then((resp) => {
           commit(PERSONAL_YANDEX.YANDEX_REMOVE_PERSONAL_EMAIL_INTEGRATION)
@@ -49,14 +67,19 @@ const actions = {
         })
     })
   },
-  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_FROM_US]: ({ commit, dispatch }, emails) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_FROM_US]: (
+    { commit, dispatch },
+    emails
+  ) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
         ya_password: state.password,
         email: emails.clientEmail
       }
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentFromUs'
+      const url =
+        process.env.VUE_APP_INSPECTOR_API +
+        'yandexGetPersonalMessagesSentFromUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('personal sent from us success')
@@ -68,14 +91,18 @@ const actions = {
         })
     })
   },
-  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_TO_US]: ({ commit, dispatch }, emails) => {
+  [PERSONAL_YANDEX.YANDEX_GET_PERSONAL_MESSAGES_SENT_TO_US]: (
+    { commit, dispatch },
+    emails
+  ) => {
     return new Promise((resolve, reject) => {
       const data = {
         ya_login: state.login,
         ya_password: state.password,
         email: emails.clientEmail
       }
-      const url = process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentToUs'
+      const url =
+        process.env.VUE_APP_INSPECTOR_API + 'yandexGetPersonalMessagesSentToUs'
       axios({ url: url, method: 'POST', data: data })
         .then((resp) => {
           console.log('personal sent to us success')

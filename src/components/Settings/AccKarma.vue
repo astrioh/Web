@@ -19,42 +19,22 @@
       class="rounded-xl bg-white min-h-[300px] mb-[22px]"
     >
       <div class="mx-7">
-        <div class="flex font-roboto font-normal justify-between">
-          <div class="bg-[#FBEFE2] my-7 w-full h-[129px] rounded-[12px] p-[24px] flex flex-col items-center justify-center]">
-            <span class="font-[500] text-[15px] leading-[18px] text-[#424242]">Общий показатель</span>
-            <span
-              class="font-[700] text-[40px] text-[#2E2E2F] leading-[47px] mt-3"
-            >
-              {{ karmaQuantity }}
-            </span>
-          </div>
-          <div class="bg-[#EDFAEB] mx-4 my-7 w-full h-[129px] rounded-[12px] p-[24px] flex flex-col items-center justify-center]">
-            <span class="font-[500] text-[15px] leading-[18px] text-[#424242]">Сделано в срок</span>
-            <span
-              class="font-[700] text-[40px] text-[#2E2E2F] leading-[47px] mt-3"
-            >
-              {{ successQuantity }}
-            </span>
-          </div>
-          <div class="bg-[#FDEEEE] my-7 w-full h-[129px] rounded-[12px] p-[24px] flex flex-col items-center justify-center]">
-            <span class="font-[500] text-[15px] leading-[18px] text-[#424242]">Просроченных</span>
-            <span
-              class="font-[700] text-[40px] text-[#2E2E2F] leading-[47px] mt-3"
-            >
-              {{ overdueQuantity }}
-            </span>
-          </div>
-        </div>
+        <KarmaScore
+          :karma-quantity="karmaQuantity"
+          :success-quantity="successQuantity"
+          :overdue-quantity="overdueQuantity"
+        />
+
         <div class="flex justify-between">
           <div class="border border-gray-200 rounded-[12px] flex flex-col w-full h-[332px] p-[24px] mr-5">
-            <span class="font-[500] mb-3 text-[16px] leading-[18px] text-[#4C4C4D]">В срок</span>
+            <span class="font-[500] mb-3 text-[16px] leading-[18px] ml-2 text-[#4C4C4D]">В срок</span>
             <LineChart
               class="mb-3"
               :data="successChartData"
             />
           </div>
           <div class="border border-gray-200 rounded-[12px] flex flex-col w-full h-[332px] p-[24px]">
-            <span class="font-[500] mb-3 text-[16px] leading-[18px] text-[#4C4C4D]">Просрочено</span>
+            <span class="font-[500] mb-3 text-[16px] leading-[18px] ml-2 text-[#4C4C4D]">Просрочено</span>
             <LineChart
               class="mb-3"
               :data="overdueChartData"
@@ -74,6 +54,7 @@ import LineChart from '@/components/Charts/LineChart.vue'
 import NavBar from '@/components/Navbar/NavBar.vue'
 import KarmaNoLicenceWindow from '../AccKarma/KarmaNoLicenceWindow.vue'
 import KarmaHistory from '../AccKarma/KarmaHistory.vue'
+import KarmaScore from '../AccKarma/KarmaScore.vue'
 
 export default {
   components: {
@@ -81,7 +62,8 @@ export default {
     KarmaSkeleton,
     LineChart,
     KarmaNoLicenceWindow,
-    KarmaHistory
+    KarmaHistory,
+    KarmaScore
   },
   data () {
     return {

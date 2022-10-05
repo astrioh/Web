@@ -62,7 +62,7 @@ const datasetObject = (color, points) => {
     borderDash: [],
     borderDashOffset: 0.0,
     hoverBackgroundColor: 'black',
-    pointRadius: 1,
+    pointRadius: 2,
     data: points,
     tension: 0.2,
     cubicInterpolationMode: 'default'

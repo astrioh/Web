@@ -142,6 +142,10 @@ export default {
             {
               path: 'corporationYandexMail',
               name: 'Яндекс.Почта'
+            },
+            {
+              path: 'corporateMegafon',
+              name: 'Мегафон'
             }
           ],
           typeAccess: [1, 2]
