@@ -465,11 +465,9 @@ export default {
       this.postponeIndex = index
     },
     onStartAnimation () {
-      console.log('onStartAnimation', this.$refs.doitnow)
       this.$refs.doitnow.classList.toggle('slide-in-parent')
     },
     onEndAnimation () {
-      console.log('onEndAnimation', this.$refs.doitnow)
       this.$refs.doitnow.classList.toggle('slide-in-parent')
     }
   }
