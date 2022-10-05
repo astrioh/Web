@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import axios from 'axios'
 import { darkModeKey } from '@/config.js'
+import corpMegafonIntegration from './modules/integrations/corpMegafonIntegration'
 import corpYandexIntegration from './modules/integrations/corpYandexIntegration'
 import personalYandexIntegration from './modules/integrations/personalYandexIntegration'
 import auth from './modules/auth'
@@ -149,6 +150,7 @@ export default createStore({
     user,
     tasks,
     slides,
+    corpMegafonIntegration,
     personalYandexIntegration,
     corpYandexIntegration,
     taskfilesandmessages,
