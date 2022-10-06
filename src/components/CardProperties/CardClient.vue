@@ -316,7 +316,7 @@ export default {
     showModalAddClient () {
       this.showAddClient = true
     },
-    onAddNewClient (client) {
+    async onAddNewClient (client) {
       this.showAddClient = false
       const clientToSend = {
         uid: client.uid,
@@ -324,11 +324,11 @@ export default {
         name: client.name,
         email: client.email,
         phone: client.phone,
-        comment: client.comment
+        comment: client.comment,
+        date_create: client.date_create
       }
-      this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend).then(() => {
-        this.$emit('changeClient', [clientToSend.uid, clientToSend.name])
-      })
+      await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
+      await this.$emit('changeClient', [clientToSend.uid, clientToSend.name])
     }
   }
 }

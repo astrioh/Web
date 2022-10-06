@@ -22,6 +22,7 @@ export default {
     },
     total: {
       type: Number,
+      default: 1,
       required: true
     },
     perPage: {
