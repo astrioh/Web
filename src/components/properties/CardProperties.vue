@@ -516,11 +516,11 @@ export default {
       })
     },
     changeCardClearCover () {
+      if (this.selectedCard) this.selectedCard.cover_color = '#A998B6'
       this.$store
         .dispatch(CHANGE_CARD_CLEAR_COVER, { cardUid: this.selectedCard?.uid })
         .then((resp) => {
           if (this.selectedCard) {
-            this.selectedCard.cover_color = '#A998B6'
             this.selectedCard.cover_link = ''
           }
           // Replacing old cover file with new cover file
