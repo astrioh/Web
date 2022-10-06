@@ -1,5 +1,6 @@
 <template>
   <DatePicker
+    v-model="datePicker"
     dot="true"
     class="border-none calendar-nav-custom"
     :style="{ backgroundColor: datePickerBG }"
@@ -32,7 +33,9 @@ export default {
   emits: ['dayclick'],
   data () {
     return {
-      newDayTimerID: 0
+      newDayTimerID: 0,
+      // datePicker добавлен только для того чтобы убрать ворнинг, по коду не исопльзуется
+      datePicker: null
     }
   },
   computed: {
