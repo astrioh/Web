@@ -58,7 +58,6 @@
 import { shouldAddTaskIntoList } from '@/websync/utils'
 import * as SLIDES from '@/store/actions/slides.js'
 
-// import JbButton from '@/components/JbButton.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 import InspectorContent from '@/components/Inspector/InspectorContent.vue'
