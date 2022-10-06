@@ -28,7 +28,7 @@
 
         <!-- Select employee -->
         <div
-          v-if="currentState.value === 'employeeSelection' && type === 'employeeSelection'"
+          v-if="currentState === 'employeeSelection' && type === 'employeeSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -64,7 +64,7 @@
 
         <!-- Select projects -->
         <div
-          v-if="currentState.value === 'projectSelection' && type === 'projectSelection'"
+          v-if="currentState === 'projectSelection' && type === 'projectSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -107,7 +107,7 @@
 
         <!-- Select tags -->
         <div
-          v-if="currentState.value === 'tagSelection' && type === 'tagSelection'"
+          v-if="currentState === 'tagSelection' && type === 'tagSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -151,7 +151,7 @@
 
         <!-- Select Colors -->
         <div
-          v-if="currentState.value === 'colorSelection' && type === 'colorSelection'"
+          v-if="currentState === 'colorSelection' && type === 'colorSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -196,7 +196,7 @@
 
         <!-- Select time -->
         <div
-          v-if="currentState.value === 'timeSelection' && type === 'timeSelection'"
+          v-if="currentState === 'timeSelection' && type === 'timeSelection'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -318,7 +318,7 @@
 
         <!-- Confirm adding additional params -->
         <div
-          v-if="currentState.value === 'confirmParams' && type === 'confirmParams'"
+          v-if="currentState === 'confirmParams' && type === 'confirmParams'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -339,7 +339,7 @@
 
         <!-- Confirm delegate the task -->
         <div
-          v-if="currentState.value === 'confirmDelegate' && type === 'confirmDelegate'"
+          v-if="currentState === 'confirmDelegate' && type === 'confirmDelegate'"
           class="flex flex-wrap gap-[4px] mt-[10px]"
         >
           <div
@@ -372,8 +372,6 @@ export default {
   components: {
     Icon
   },
-  inject: ['inputMessage', 'currentState'],
-
   props: {
     message: {
       type: String,
@@ -422,6 +420,14 @@ export default {
     lastSelected: {
       type: Function,
       default: () => {}
+    },
+    currentState: {
+      type: String,
+      default: ''
+    },
+    inputMessage: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -470,8 +476,8 @@ export default {
     },
 
     computedColors () {
-      if (this.currentState.value !== 'colorSelection') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'colorSelection') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const newColors = {}
       if (
         this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
@@ -495,8 +501,8 @@ export default {
     },
 
     computedTags () {
-      if (this.currentState.value !== 'tagSelection') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'tagSelection') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const newTags = {}
       if (
         this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
@@ -517,8 +523,8 @@ export default {
     },
 
     computedEmployees () {
-      if (this.currentState.value !== 'employeeSelection') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'employeeSelection') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const newEmployees = {}
       for (const empUid in this.employees) {
         if (
@@ -536,8 +542,8 @@ export default {
     },
 
     computedProjects () {
-      if (this.currentState.value !== 'projectSelection') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'projectSelection') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const newProjects = {}
       if (
         this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
@@ -558,8 +564,8 @@ export default {
     },
 
     computedСonfirmParams () {
-      if (this.currentState.value !== 'confirmParams') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'confirmParams') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const newСonfirmParams = {}
       const сonfirmParams = {
         true: { uid: 'true', name: 'Да', value: true },
@@ -578,8 +584,8 @@ export default {
     },
 
     computedСonfirmDelegate () {
-      if (this.currentState.value !== 'confirmDelegate') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'confirmDelegate') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const newСonfirmParams = {}
       const сonfirmParams = {
         true: { uid: 'true', name: 'Да', value: true },
@@ -597,8 +603,8 @@ export default {
       return newСonfirmParams
     },
     computedTimes () {
-      if (this.currentState.value !== 'timeSelection') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
+      if (this.currentState !== 'timeSelection') return {}
+      const inputLowerCase = this.inputMessage.toLowerCase()
       const re = /([0-9]){1,2} +/g
       const newTimes = {}
       const times = {
@@ -613,9 +619,9 @@ export default {
         sunday: { uid: 'sunday', name: 'Воскресенье', value: this.getNearestDay(new Date(), 7) }
       }
 
-      if (re.test(inputLowerCase) && parseInt(this.inputMessage.value.split(' ')[0]) <= 31) {
+      if (re.test(inputLowerCase) && parseInt(this.inputMessage.split(' ')[0]) <= 31) {
         for (const key in this.russianMonths) {
-          const dayNumber = this.inputMessage.value.split(' ')[0]
+          const dayNumber = this.inputMessage.split(' ')[0]
           times[key + dayNumber] = { uid: key + dayNumber, name: dayNumber + ' ' + key, value: new Date(2022, this.russianMonths[key], parseInt(dayNumber)) }
         }
       }
