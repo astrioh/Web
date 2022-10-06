@@ -211,7 +211,8 @@ export default {
       isPassed: 0,
       showCheckMark: false,
       firstInvalidQuestionUid: null,
-      showEmployees: false
+      showEmployees: false,
+      reglamentContent: ''
     }
   },
   computed: {
@@ -233,9 +234,6 @@ export default {
     },
     reglamentTitle () {
       return this.currReglament?.name ?? ''
-    },
-    reglamentContent () {
-      return this.currReglament?.content ?? ''
     },
     reglamentCreatorEmail () {
       return this.currReglament?.email_creator ?? ''
@@ -328,6 +326,10 @@ export default {
     }
 
     this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+    this.$store.dispatch(REGLAMENTS.REGLAMENT_CONTENT_REQUEST, this.currReglament?.uid).then((res) => {
+      console.log(res)
+      this.reglamentContent = res.data[0].content
+    })
     this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
 
@@ -344,10 +346,6 @@ export default {
         this.$store.state.reglaments.lastCommentDate = res.data[0].comment_date
         this.$store.state.reglaments.lastCommentText = res.data[0].comment
       }
-      const reglament = { ...this.currReglament }
-      reglament.last_comment_text = this.$store.state.reglaments.lastCommentText
-      reglament.last_comment_date = this.$store.state.reglaments.lastCommentDate
-      this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     })
   },
   methods: {
