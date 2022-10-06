@@ -49,7 +49,7 @@
     </NavBar>
     <div
       v-if="!isTesting"
-      class="p-7 bg-white rounded-[28px]"
+      class="p-7 bg-white rounded-[28px] hide-toolbar"
     >
       <div class="flex flex-row justify-between leading-[30px] text-[13px] text-[#424242]">
         <div class="flex justify-start">
@@ -305,15 +305,6 @@ export default {
     }
   },
   watch: {
-    isEditing (newval, oldval) {
-      if (!newval) {
-        setTimeout(() => {
-          try {
-            document.querySelector('div.ql-toolbar').remove()
-          } catch (e) {}
-        }, 50)
-      }
-    },
     needStartEdit: {
       immediate: true,
       handler: function (val) {
@@ -325,14 +316,6 @@ export default {
           //
           this.setEdit()
         }
-      }
-    },
-    isTesting (isTesting) {
-      if (!isTesting) {
-        // Удаляем quill tollbar который появляется при завершении теста регламента
-        this.$nextTick(() => {
-          document.querySelector('.ql-toolbar')?.remove()
-        })
       }
     }
   },
@@ -397,3 +380,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.hide-toolbar .ql-toolbar {
+  display: none;
+  background: red !important;
+}
+</style>
