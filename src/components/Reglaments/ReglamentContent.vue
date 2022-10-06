@@ -358,7 +358,12 @@ export default {
         this.$store.state.reglaments.lastCommentDate = ''
       } else {
         this.$store.state.reglaments.lastCommentDate = res.data[0].comment_date
+        this.$store.state.reglaments.lastCommentText = res.data[0].comment
       }
+      const reglament = { ...this.currReglament }
+      reglament.last_comment_text = this.$store.state.reglaments.lastCommentText
+      reglament.last_comment_date = this.$store.state.reglaments.lastCommentDate
+      this.$store.dispatch(REGLAMENTS.UPDATE_REGLAMENT_REQUEST, reglament)
     })
   },
   methods: {

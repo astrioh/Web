@@ -11,7 +11,8 @@ const state = {
   questionsToDelete: [],
   answersToDelete: [],
   hideSaveParams: false,
-  lastCommentDate: ''
+  lastCommentDate: '',
+  lastCommentText: ''
 }
 
 const actions = {
