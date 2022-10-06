@@ -59,15 +59,33 @@
           </svg>
         </DoitnowPropsColumnItem>
         <DoitnowPropsColumnItem
-          v-if="currentBoard"
+          v-if="currentBoard?.name"
           key-title="Доска:"
-          :value-text="currentBoard.name"
+          :value-text="currentBoard?.name"
         />
         <DoitnowPropsColumnItem
           v-if="currentStageName"
           key-title="Колонка:"
           :value-text="currentStageName"
         />
+        <DoitnowPropsColumnItem
+          v-if="clientName"
+          key-title="Контакт:"
+          :value-text="clientName"
+        >
+          <svg
+            width="13"
+            height="14"
+            viewBox="0 0 13 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M11.5631 7.94595C11.1349 7.56757 10.6352 7.18919 10.1356 6.96216C10.0642 6.96216 9.99287 6.88649 9.9215 6.88649C9.70737 6.88649 9.49325 7.03784 9.3505 7.26487C9.27912 7.41622 9.27912 7.64324 9.3505 7.7946C9.42187 7.94595 9.49325 8.0973 9.636 8.0973C10.0642 8.24865 10.4211 8.55135 10.778 8.85405C11.1349 9.23243 11.349 9.68649 11.349 10.2162V12.4108C11.349 12.6378 11.2062 12.7135 11.0635 12.7135H1.99887C1.78475 12.7135 1.71337 12.5622 1.71337 12.4108V10.2162C1.71337 9.68649 1.9275 9.23243 2.28437 8.85405C2.71262 8.47568 4.06875 7.49189 6.4955 7.49189C8.42262 7.49189 10.0642 5.82703 10.0642 3.78378C10.0642 1.74054 8.494 0 6.4955 0C4.56837 0 2.92675 1.66487 2.92675 3.70811C2.92675 4.76757 3.355 5.75135 4.06875 6.50811C2.64125 6.88649 1.78475 7.56757 1.42787 7.94595C0.856875 8.47568 0.5 9.30811 0.5 10.2162V12.4108C0.5 13.3189 1.21375 14 1.99887 14H10.9921C11.8486 14 12.491 13.2432 12.491 12.4108V10.2162C12.5624 9.30811 12.2055 8.47568 11.5631 7.94595ZM6.4955 6.20541C5.21075 6.20541 4.14012 5.07027 4.14012 3.70811C4.14012 2.34595 5.21075 1.21081 6.4955 1.21081C7.78025 1.21081 8.85087 2.34595 8.85087 3.70811C8.85087 5.07027 7.85162 6.20541 6.4955 6.20541Z"
+              fill="#4C4C4D"
+            />
+          </svg>
+        </DoitnowPropsColumnItem>
       </DoitnowPropsColumn>
       <TaskPropsCommentEditor
         text-style="!text-[16px] leading-[155%]"
@@ -94,16 +112,18 @@
       <DoitnowRightButton
         title="Пропустить"
         icon="next"
-        @click="onNext"
+        @click="onPostpone()"
       />
-      <CardClient
-        :can-edit="canEdit"
-        :client-uid="clientUid"
-        :client-name="clientName"
-        :card-name="name"
-        :card-comment="comment"
-        :is-queue="true"
-        @changeClient="onChangeClient"
+      <DoitnowRightButtonContact
+        title="Установить контакт"
+        @changeContact="onChangeClient"
+      />
+      <DoitnowRightButton
+        v-for="column in columnsArchive"
+        :key="column.UID"
+        :title="`Архивировать: ${column.Name}`"
+        icon="archive"
+        @click="setColumn(column.UID)"
       />
     </template>
   </DoitnowContent>
@@ -116,11 +136,11 @@ import TaskPropsCommentEditor from '@/components/TaskProperties/TaskPropsComment
 import DoitnowContent from '@/components/Doitnow/DoitnowContent.vue'
 import DoitnowRightButton from '@/components/Doitnow/DoitnowRightButton.vue'
 import DoitnowRightButtonPostpone from '@/components/Doitnow/DoitnowRightButtonPostpone.vue'
+import DoitnowRightButtonContact from '@/components/Doitnow/DoitnowRightButtonContact.vue'
 import DoitnowPropsColumn from '@/components/Doitnow/DoitnowPropsColumn.vue'
 import DoitnowPropsColumnItem from '@/components/Doitnow/DoitnowPropsColumnItem.vue'
 import DoitnowPropsColumnUser from '@/components/Doitnow/DoitnowPropsColumnUser.vue'
 import DoitnowCardChat from '@/components/Doitnow/DoitnowCardChat'
-import CardClient from '@/components/CardProperties/CardClient'
 import contenteditable from 'vue-contenteditable'
 import linkify from 'vue-linkify'
 import { CREATE_FILES_REQUEST, FETCH_FILES_AND_MESSAGES } from '@/store/actions/cardfilesandmessages'
@@ -130,9 +150,9 @@ import { REFRESH_FILES } from '@/store/actions/taskfiles'
 
 export default {
   components: {
-    CardClient,
     DoitnowCardChat,
     DoitnowRightButtonPostpone,
+    DoitnowRightButtonContact,
     TaskPropsCommentEditor,
     DoitnowRightButton,
     DoitnowPropsColumn,
@@ -197,7 +217,16 @@ export default {
       return this.$store.state.cardfilesandmessages.messages.slice().reverse()
     },
     canEdit () {
-      return this.currentBoard.type_access !== 0
+      return this.currentBoard?.type_access !== 0
+    },
+    columnsArchive () {
+      return [{
+        UID: 'f98d6979-70ad-4dd5-b3f8-8cd95cb46c67',
+        Name: 'Успех'
+      }, {
+        UID: 'e70af5e2-6108-4c02-9a7d-f4efee78d28c',
+        Name: 'Отказ'
+      }]
     }
   },
   mounted () {
@@ -206,19 +235,18 @@ export default {
     this.$store.dispatch(FETCH_FILES_AND_MESSAGES, this.card.uid)
   },
   methods: {
-    onNext () {
-      this.$emit('next')
-    },
     onPostpone (date) {
-      const day = String(date.getDate()).padStart(2, '0')
-      const month = String(date.getMonth() + 1).padStart(2, '0')
-      const year = String(date.getFullYear()).padStart(4, '0')
-      const hours = String(date.getHours()).padStart(2, '0')
-      const minutes = String(date.getMinutes()).padStart(2, '0')
-      const seconds = String(date.getSeconds()).padStart(2, '0')
-      const selectedCard = { ...this.card }
-      selectedCard.date_reminder = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
-      this.$store.dispatch(CARD.CHANGE_CARD_DATE_REMINDER, selectedCard)
+      if (date) {
+        const day = String(date.getDate()).padStart(2, '0')
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const year = String(date.getFullYear()).padStart(4, '0')
+        const hours = String(date.getHours()).padStart(2, '0')
+        const minutes = String(date.getMinutes()).padStart(2, '0')
+        const seconds = String(date.getSeconds()).padStart(2, '0')
+        const selectedCard = { ...this.card }
+        selectedCard.date_reminder = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+        this.$store.dispatch(CARD.CHANGE_CARD_DATE_REMINDER, selectedCard)
+      }
       this.$emit('next')
     },
     changeComment (text) {
@@ -247,6 +275,15 @@ export default {
       this.clientUid = uid
       this.clientName = name
       this.$store.dispatch(CHANGE_CARD_UID_CLIENT, { ...this.card, uid_client: this.clientUid, client_name: this.clientName })
+    },
+    setColumn (stageTo) {
+      this.$store
+        .dispatch(CARD.MOVE_ALL_CARDS, {
+          cards: [{ uid: this.card?.uid }], stageTo, boardTo: this.currentBoard?.uid
+        })
+        .then((resp) => {
+          this.$emit('next')
+        })
     }
   }
 }

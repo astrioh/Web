@@ -279,7 +279,7 @@
             />
           </svg>
           <span
-            class="text-[10px] leading-[12px] text-[#7e7e80] font-['Roboto'] mx-0.5"
+            class="text-[10px] leading-[12px] text-[#7e7e80] font-['Roboto'] mx-0.5 max-w-[170px] truncate"
           >
             {{ card.client_name }}
           </span>

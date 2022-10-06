@@ -516,11 +516,11 @@ export default {
       })
     },
     changeCardClearCover () {
+      if (this.selectedCard) this.selectedCard.cover_color = '#A998B6'
       this.$store
         .dispatch(CHANGE_CARD_CLEAR_COVER, { cardUid: this.selectedCard?.uid })
         .then((resp) => {
           if (this.selectedCard) {
-            this.selectedCard.cover_color = '#A998B6'
             this.selectedCard.cover_link = ''
           }
           // Replacing old cover file with new cover file
@@ -538,6 +538,7 @@ export default {
     },
     changeCardColor (color) {
       if (color) {
+        if (this.selectedCard) this.selectedCard.cover_color = color
         this.$store
           .dispatch(CHANGE_CARD_COLOR, {
             cardUid: this.selectedCard?.uid,
@@ -545,7 +546,6 @@ export default {
           })
           .then((resp) => {
             if (this.selectedCard) {
-              this.selectedCard.cover_color = color
               this.selectedCard.cover_link = ''
             }
             // Replacing old cover file with new cover file

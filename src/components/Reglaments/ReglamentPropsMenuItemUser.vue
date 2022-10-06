@@ -3,7 +3,7 @@
     style="padding-left: 8px;"
   >
     <div class="flex justify-between w-full items-center max-w-[205px]">
-      <div class="flex items-center max-w-[205px]">
+      <div class="flex items-center max-w-[185px]">
         <img
           v-if="photo"
           :src="photo"

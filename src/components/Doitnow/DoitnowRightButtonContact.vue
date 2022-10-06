@@ -2,85 +2,26 @@
   <ModalBoxAddClient
     v-if="showAddClient"
     title="Добавить клиента"
-    :card-email="cardEmail"
-    :card-phone="cardPhone"
+    :card-email="newEmail"
+    :card-phone="newPhone"
     @cancel="showAddClient = false"
     @save="onAddNewClient"
   />
   <Popper
     class="light overflow-hidden"
-    :disabled="!canEdit"
-    @open:popper="onShowClients"
+    placement="left"
+    @open:popper="onShowContactsMenu"
   >
-    <div
-      class="text-[12px] py-[5px] font-[500] bg-[#F4F5F7] text-[#575758]"
-      :class="{ 'cursor-pointer': canEdit, 'flex items-center hover:bg-[#0000000a] h-[40px] px-[20px] rounded-[8px]': isQueue, 'px-[8px] rounded-[6px]': !isQueue }"
-    >
-      <!-- Empty label for responsible user -->
-      <div
-        v-if="!isClientSet"
-        class="flex items-center"
-      >
-        <svg
-          width="13"
-          height="14"
-          viewBox="0 0 13 14"
-          fill="none"
-          class="mr-[7px]"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M11.5631 7.94595C11.1349 7.56757 10.6352 7.18919 10.1356 6.96216C10.0642 6.96216 9.99287 6.88649 9.9215 6.88649C9.70737 6.88649 9.49325 7.03784 9.3505 7.26487C9.27912 7.41622 9.27912 7.64324 9.3505 7.7946C9.42187 7.94595 9.49325 8.0973 9.636 8.0973C10.0642 8.24865 10.4211 8.55135 10.778 8.85405C11.1349 9.23243 11.349 9.68649 11.349 10.2162V12.4108C11.349 12.6378 11.2062 12.7135 11.0635 12.7135H1.99887C1.78475 12.7135 1.71337 12.5622 1.71337 12.4108V10.2162C1.71337 9.68649 1.9275 9.23243 2.28437 8.85405C2.71262 8.47568 4.06875 7.49189 6.4955 7.49189C8.42262 7.49189 10.0642 5.82703 10.0642 3.78378C10.0642 1.74054 8.494 0 6.4955 0C4.56837 0 2.92675 1.66487 2.92675 3.70811C2.92675 4.76757 3.355 5.75135 4.06875 6.50811C2.64125 6.88649 1.78475 7.56757 1.42787 7.94595C0.856875 8.47568 0.5 9.30811 0.5 10.2162V12.4108C0.5 13.3189 1.21375 14 1.99887 14H10.9921C11.8486 14 12.491 13.2432 12.491 12.4108V10.2162C12.5624 9.30811 12.2055 8.47568 11.5631 7.94595ZM6.4955 6.20541C5.21075 6.20541 4.14012 5.07027 4.14012 3.70811C4.14012 2.34595 5.21075 1.21081 6.4955 1.21081C7.78025 1.21081 8.85087 2.34595 8.85087 3.70811C8.85087 5.07027 7.85162 6.20541 6.4955 6.20541Z"
-            fill="currentColor"
-          />
-        </svg>
-        <span class="truncate">Контакт</span>
-      </div>
-      <div
-        v-else
-        class="flex items-center group"
-      >
-        <svg
-          width="17"
-          height="14"
-          viewBox="0 0 13 14"
-          :class="{'group-hover:hidden': canEdit }"
-          fill="none"
-          class="mr-[7px]"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M11.5631 7.94595C11.1349 7.56757 10.6352 7.18919 10.1356 6.96216C10.0642 6.96216 9.99287 6.88649 9.9215 6.88649C9.70737 6.88649 9.49325 7.03784 9.3505 7.26487C9.27912 7.41622 9.27912 7.64324 9.3505 7.7946C9.42187 7.94595 9.49325 8.0973 9.636 8.0973C10.0642 8.24865 10.4211 8.55135 10.778 8.85405C11.1349 9.23243 11.349 9.68649 11.349 10.2162V12.4108C11.349 12.6378 11.2062 12.7135 11.0635 12.7135H1.99887C1.78475 12.7135 1.71337 12.5622 1.71337 12.4108V10.2162C1.71337 9.68649 1.9275 9.23243 2.28437 8.85405C2.71262 8.47568 4.06875 7.49189 6.4955 7.49189C8.42262 7.49189 10.0642 5.82703 10.0642 3.78378C10.0642 1.74054 8.494 0 6.4955 0C4.56837 0 2.92675 1.66487 2.92675 3.70811C2.92675 4.76757 3.355 5.75135 4.06875 6.50811C2.64125 6.88649 1.78475 7.56757 1.42787 7.94595C0.856875 8.47568 0.5 9.30811 0.5 10.2162V12.4108C0.5 13.3189 1.21375 14 1.99887 14H10.9921C11.8486 14 12.491 13.2432 12.491 12.4108V10.2162C12.5624 9.30811 12.2055 8.47568 11.5631 7.94595ZM6.4955 6.20541C5.21075 6.20541 4.14012 5.07027 4.14012 3.70811C4.14012 2.34595 5.21075 1.21081 6.4955 1.21081C7.78025 1.21081 8.85087 2.34595 8.85087 3.70811C8.85087 5.07027 7.85162 6.20541 6.4955 6.20541Z"
-            fill="#7E7E80"
-          />
-        </svg>
-        <div
-          class="items-center justify-center p-[4.5px] mr-[4px] hidden"
-          :class="{'group-hover:flex': canEdit }"
-          @click.stop="$emit('changeClient', ['', ''])"
-        >
-          <svg
-            width="11"
-            height="11"
-            viewBox="0 0 11 11"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            class=""
-          >
-            <path
-              d="M6.17983 5.00341L9.76317 1.42841C9.92009 1.27149 10.0082 1.05866 10.0082 0.836743C10.0082 0.614825 9.92009 0.401996 9.76317 0.245076C9.60625 0.0881567 9.39342 0 9.1715 0C8.94958 0 8.73675 0.0881567 8.57983 0.245076L5.00483 3.82841L1.42983 0.245076C1.27291 0.0881567 1.06008 -1.65342e-09 0.838165 0C0.616247 1.65342e-09 0.403418 0.0881567 0.246499 0.245076C0.0895788 0.401996 0.00142217 0.614825 0.00142217 0.836743C0.00142217 1.05866 0.0895788 1.27149 0.246499 1.42841L3.82983 5.00341L0.246499 8.57841C0.168392 8.65588 0.106397 8.74805 0.0640893 8.8496C0.0217821 8.95115 0 9.06007 0 9.17008C0 9.28009 0.0217821 9.38901 0.0640893 9.49056C0.106397 9.59211 0.168392 9.68427 0.246499 9.76174C0.323968 9.83985 0.416135 9.90185 0.517685 9.94415C0.619234 9.98646 0.728156 10.0082 0.838165 10.0082C0.948175 10.0082 1.0571 9.98646 1.15865 9.94415C1.2602 9.90185 1.35236 9.83985 1.42983 9.76174L5.00483 6.17841L8.57983 9.76174C8.6573 9.83985 8.74947 9.90185 8.85102 9.94415C8.95257 9.98646 9.06149 10.0082 9.1715 10.0082C9.28151 10.0082 9.39043 9.98646 9.49198 9.94415C9.59353 9.90185 9.6857 9.83985 9.76317 9.76174C9.84127 9.68427 9.90327 9.59211 9.94558 9.49056C9.98788 9.38901 10.0097 9.28009 10.0097 9.17008C10.0097 9.06007 9.98788 8.95115 9.94558 8.8496C9.90327 8.74805 9.84127 8.65588 9.76317 8.57841L6.17983 5.00341Z"
-              fill="#7E7E80"
-            />
-          </svg>
-        </div>
-        <span class="truncate">{{ clientName }}</span>
-      </div>
-    </div>
+    <DoitnowRightButton
+      :title="title"
+      icon="contact"
+    />
     <template
       #content="{ close }"
     >
       <div class="flex items-center justify-between w-[300px]">
         <CardClientSearch
+          ref="contactSearchBar"
           @search="searchClients"
           @eraseSearch="requestClients"
         />
@@ -111,17 +52,17 @@
             v-if="!clients.length"
           >
             <div class="text-[#7e7e80] text-[13px] text-center leading-[14px] px-[36px] py-[12px] break-word">
-              {{ searchResult }}
+              {{ searchResultNone }}
             </div>
           </template>
           <template
-            v-for="(client, index) in clients"
+            v-for="contact in clients"
             v-else
-            :key="index"
+            :key="contact.uid"
           >
             <div
               class="flex items-center px-[6px] py-[4px] hover:bg-[#F4F5F7] rounded-[6px] cursor-pointer"
-              @click="$emit('changeClient', [client.uid, client.name]), close()"
+              @click="$emit('changeContact', [contact.uid, contact.name]), close()"
             >
               <svg
                 class="flex-none mr-[5px]"
@@ -146,19 +87,19 @@
               </svg>
               <div class="my-[4px]">
                 <div class="text-[#4C4C4D] text-[13px] leading-[14px] truncate">
-                  {{ client.name }}
+                  {{ contact.name }}
                 </div>
                 <div
-                  v-if="client.phone || client.email"
+                  v-if="contact.phone || contact.email"
                   class="text-[#7e7e80] text-[11px] leading-[12px] truncate"
                 >
-                  {{ `${client.phone} ${client.email ? ' <' + client.email + '>' : ''}` }}
+                  {{ formatPhoneEmail(contact.phone, contact.email) }}
                 </div>
               </div>
             </div>
           </template>
           <div
-            v-if="!searchText && (cardPhone || cardEmail)"
+            v-if="!searchText && (newPhone || newEmail)"
             class="flex items-center px-[6px] py-[4px] hover:bg-[#F4F5F7] rounded-[6px] cursor-pointer"
             @click="showModalAddClient"
           >
@@ -201,9 +142,10 @@
                 Добавить новый контакт
               </div>
               <div
+                v-if="newPhone || newEmail"
                 class="text-[#7e7e80] text-[11px] leading-[12px] truncate"
               >
-                {{ `${cardPhone} ${cardEmail ? ' <' + cardEmail + '>' : ''}` }}
+                {{ formatPhoneEmail(newPhone, newEmail) }}
               </div>
             </div>
           </div>
@@ -215,120 +157,84 @@
 
 <script>
 import * as CLIENTS from '@/store/actions/clients'
+
 import Popper from 'vue3-popper'
 import CardClientSearch from '@/components/CardProperties/CardClientSearch.vue'
 import ModalBoxAddClient from '@/components/Clients/ModalBoxAddClient.vue'
+import DoitnowRightButton from '@/components/Doitnow/DoitnowRightButton.vue'
 
 export default {
   components: {
+    DoitnowRightButton,
     CardClientSearch,
     ModalBoxAddClient,
     Popper
   },
   props: {
-    clientUid: {
+    title: {
       type: String,
       default: ''
     },
-    clientName: {
+    newEmail: {
       type: String,
       default: ''
     },
-    cardName: {
+    newPhone: {
       type: String,
       default: ''
-    },
-    cardComment: {
-      type: String,
-      default: ''
-    },
-    canEdit: {
-      type: Boolean,
-      default: false
-    },
-    isQueue: {
-      type: Boolean,
-      default: false
     }
   },
-  emits: ['changeClient'],
+  emits: ['changeContact'],
   data () {
     return {
       showAddClient: false,
-      searchResult: '',
-      searchText: ''
+      searchText: '',
+      searchResultNone: ''
     }
   },
   computed: {
-    user () {
-      return this.$store.state.user.user
-    },
     clients () {
       return this.$store.state.clients.clients
     },
     clientsStatus () {
       return this.$store.state.clients.status
     },
-    isClientSet () {
-      return this.clientUid && this.clientUid !== '00000000-0000-0000-0000-000000000000'
-    },
-    cardEmail () {
-      return this.checkIfEmailInString(this.cardName) || this.checkIfEmailInString(this.cardComment)
-    },
-    cardPhone () {
-      return this.checkIfPhoneInString(this.cardName) || this.checkIfPhoneInString(this.cardComment)
+    orgOwnerEmail () {
+      return this.$store.state.user?.user?.owner_email
     }
   },
   methods: {
-    onShowClients () {
-      this.requestClients()
+    onShowContactsMenu () {
+      // закрыть поиск если открыт, также
+      // он вызовет эммит eraseSearch которы вызовет requestClients
+      this.$refs.contactSearchBar.closeSearch()
+    },
+    formatPhoneEmail (phone, email) {
+      return `${phone} ${email ? ' <' + email + '>' : ''}`.trim()
+    },
+    showModalAddClient () {
+      this.showAddClient = true
     },
     requestClients () {
-      if (this.cardEmail) {
-        this.searchClients(this.cardEmail)
-      } else if (this.cardPhone) {
-        this.searchClients(this.cardPhone)
+      if (this.newEmail) {
+        this.searchClients(this.newEmail)
+      } else if (this.newPhone) {
+        this.searchClients(this.newPhone)
       } else {
         this.$store.commit(CLIENTS.SET_CLIENTS, [])
       }
       this.searchText = ''
-      this.searchResult = 'Найдите контакт по имени, email или номеру телефона'
+      this.searchResultNone = 'Найдите контакт по имени, email или номеру телефона'
     },
     searchClients (text) {
       const data = {
-        organization: this.user?.owner_email,
+        organization: this.orgOwnerEmail,
         page: 1,
         search: text
       }
       this.$store.dispatch(CLIENTS.GET_CLIENTS, data)
       this.searchText = text
-      this.searchResult = 'Контакт не найден'
-    },
-    checkIfEmailInString (text) {
-      const regex = /(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/
-      return regex.exec(text) ? regex.exec(text)[0] : ''
-    },
-    checkIfPhoneInString (text) {
-      const regex = /(\+7|8)[- _]*\(?[- _]*(\d{3}[- _]*\)?([- _]*\d){7}|\d\d[- _]*\d\d[- _]*\)?([- _]*\d){6})/g
-      const exected = regex.exec(text)
-      return exected ? exected[0] : ''
-    },
-    showModalAddClient () {
-      this.showAddClient = true
-    },
-    async onAddNewClient (client) {
-      this.showAddClient = false
-      const clientToSend = {
-        uid: client.uid,
-        organization: this.user?.owner_email,
-        name: client.name,
-        email: client.email,
-        phone: client.phone,
-        comment: client.comment,
-        date_create: client.date_create
-      }
-      await this.$store.dispatch(CLIENTS.ADD_NEW_CLIENT, clientToSend)
-      await this.$emit('changeClient', [clientToSend.uid, clientToSend.name])
+      this.searchResultNone = 'Контакт не найден'
     }
   }
 }

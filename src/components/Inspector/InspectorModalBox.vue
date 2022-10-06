@@ -18,11 +18,12 @@
           :select-project="selectProject"
           :select-tag="selectTag"
           :select-color="selectColor"
-          :select-access="selectAccess"
           :select-time="selectTime"
           :action-confirm-new-params="actionConfirmNewParams"
           :action-confirm-delegate="actionConfirmDelegate"
           :last-selected="lastSelected"
+          :current-state="currentState"
+          :input-message="inputMessage"
           class="max-h-[40vh] h-[40vh] overflow-auto scroll-style pr-1"
         />
         <slot />
@@ -59,11 +60,9 @@
 import { shouldAddTaskIntoList } from '@/websync/utils'
 import * as SLIDES from '@/store/actions/slides.js'
 
-// import JbButton from '@/components/JbButton.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import Overlay from '@/components/modals/Overlay.vue'
 import InspectorContent from '@/components/Inspector/InspectorContent.vue'
-import { computed } from '@vue/reactivity'
 import { uuidv4 } from '@/helpers/functions'
 import { TASK_STATUS } from '@/constants'
 
@@ -72,12 +71,6 @@ export default {
     CardComponent,
     Overlay,
     InspectorContent
-  },
-  provide () {
-    return {
-      inputMessage: computed(() => this.inputMessage),
-      currentState: computed(() => this.currentState)
-    }
   },
   props: {
     title: {

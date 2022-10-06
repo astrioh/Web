@@ -30,8 +30,8 @@
 export default {
   props: {
     question: {
-      type: String,
-      default: ''
+      type: Object,
+      default: () => ({})
     }
   },
   data () {

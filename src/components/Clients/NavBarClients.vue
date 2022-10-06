@@ -7,7 +7,7 @@
   >
     <ReglamentSmallButton
       class="flex items-center px-[10px] py-[5px]"
-      @click="$emit('clickAddClient')"
+      @click="clickAddClient"
     >
       <svg
         class="flex-none ml-[3px] mt-[5px] "
@@ -66,6 +66,9 @@ export default {
       this.$router.push({ path: '/clients' })
       this.$route.query.search = ''
       this.$emit('search')
+    },
+    clickAddClient () {
+      this.$emit('clickAddClient')
     }
   }
 }

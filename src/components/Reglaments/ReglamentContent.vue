@@ -49,7 +49,7 @@
     </NavBar>
     <div
       v-if="!isTesting"
-      class="p-7 bg-white rounded-[28px]"
+      class="p-7 bg-white rounded-[28px] hide-toolbar"
     >
       <div class="flex flex-row justify-between leading-[30px] text-[13px] text-[#424242]">
         <div class="flex justify-start">
@@ -93,6 +93,7 @@
         v-model:content="reglamentContent"
         content-type="html"
         :read-only="true"
+        :toolbar="['']"
         class="h-auto mx-auto mb-5 border-none 2xl:px-[145px] mt-[35px]"
       />
 
@@ -210,7 +211,8 @@ export default {
       isPassed: 0,
       showCheckMark: false,
       firstInvalidQuestionUid: null,
-      showEmployees: false
+      showEmployees: false,
+      reglamentContent: ''
     }
   },
   computed: {
@@ -232,9 +234,6 @@ export default {
     },
     reglamentTitle () {
       return this.currReglament?.name ?? ''
-    },
-    reglamentContent () {
-      return this.currReglament?.content ?? ''
     },
     reglamentCreatorEmail () {
       return this.currReglament?.email_creator ?? ''
@@ -306,15 +305,6 @@ export default {
     }
   },
   watch: {
-    isEditing (newval, oldval) {
-      if (!newval) {
-        setTimeout(() => {
-          try {
-            document.querySelector('div.ql-toolbar').remove()
-          } catch (e) {}
-        }, 50)
-      }
-    },
     needStartEdit: {
       immediate: true,
       handler: function (val) {
@@ -327,14 +317,6 @@ export default {
           this.setEdit()
         }
       }
-    },
-    isTesting (isTesting) {
-      if (!isTesting) {
-        // Удаляем quill tollbar который появляется при завершении теста регламента
-        this.$nextTick(() => {
-          document.querySelector('.ql-toolbar')?.remove()
-        })
-      }
     }
   },
   mounted () {
@@ -344,6 +326,10 @@ export default {
     }
 
     this.$store.commit(TASK.CLEAN_UP_LOADED_TASKS)
+    this.$store.dispatch(REGLAMENTS.REGLAMENT_CONTENT_REQUEST, this.currReglament?.uid).then((res) => {
+      console.log(res)
+      this.reglamentContent = res.data[0].content
+    })
     this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
 
@@ -358,6 +344,7 @@ export default {
         this.$store.state.reglaments.lastCommentDate = ''
       } else {
         this.$store.state.reglaments.lastCommentDate = res.data[0].comment_date
+        this.$store.state.reglaments.lastCommentText = res.data[0].comment
       }
     })
   },
@@ -393,3 +380,10 @@ export default {
   }
 }
 </script>
+
+<style>
+.hide-toolbar .ql-toolbar {
+  display: none;
+  background: red !important;
+}
+</style>

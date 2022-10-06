@@ -146,6 +146,10 @@ export default {
   mounted () {
     this.requestClients()
   },
+  unmounted () {
+    this.$store.commit(CLIENTS.SELECT_CLIENT, null)
+    this.$store.dispatch('asidePropertiesToggle', false)
+  },
   methods: {
     async requestClients () {
       if (this.$route.query.page < 1) {

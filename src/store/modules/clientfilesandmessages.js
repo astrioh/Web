@@ -166,6 +166,7 @@ const mutations = {
     state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.CREATE_FILES_REQUEST]: (state, data) => {
+    state.messages = state.messages.filter((message) => !message.is_uploading)
     state.messages.push(data)
   },
   [CLIENT_FILES_AND_MESSAGES.FILES_REQUEST]: state => {

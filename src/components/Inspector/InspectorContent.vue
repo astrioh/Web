@@ -17,11 +17,12 @@
         :select-project="selectProject"
         :select-tag="selectTag"
         :select-color="selectColor"
-        :select-access="selectAccess"
         :select-time="selectTime"
         :action-confirm-new-params="actionConfirmNewParams"
         :action-confirm-delegate="actionConfirmDelegate"
         :last-selected="lastSelected"
+        :current-state="currentState"
+        :input-message="inputMessage"
       />
       <CustomerMessage
         v-else
@@ -62,10 +63,6 @@ export default {
       type: Function,
       default: () => 1
     },
-    selectAccess: {
-      type: Function,
-      default: () => 1
-    },
     selectTime: {
       type: Function,
       default: () => 1
@@ -81,6 +78,14 @@ export default {
     lastSelected: {
       type: Function,
       default: () => 1
+    },
+    currentState: {
+      type: String,
+      default: ''
+    },
+    inputMessage: {
+      type: String,
+      default: ''
     }
   },
   watch: {

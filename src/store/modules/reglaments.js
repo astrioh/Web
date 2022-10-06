@@ -11,7 +11,8 @@ const state = {
   questionsToDelete: [],
   answersToDelete: [],
   hideSaveParams: false,
-  lastCommentDate: ''
+  lastCommentDate: '',
+  lastCommentText: ''
 }
 
 const actions = {
@@ -23,6 +24,19 @@ const actions = {
       axios({ url: url, method: 'GET' })
         .then((resp) => {
           commit(REGLAMENTS.REGLAMENT_SUCCESS, resp.data)
+          resolve(resp)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
+  [REGLAMENTS.REGLAMENT_CONTENT_REQUEST]: ({ commit, dispatch }, uidReglament) => {
+    return new Promise((resolve, reject) => {
+      const url =
+        process.env.VUE_APP_INSPECTOR_API + 'reglaments/' + uidReglament
+      axios({ url: url, method: 'GET' })
+        .then((resp) => {
           resolve(resp)
         })
         .catch((err) => {
