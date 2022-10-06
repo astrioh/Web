@@ -2,7 +2,7 @@
   <div class="flex flex-row mt-3 justify-between">
     <span class="bg-[#f4f5f7] p-0 font-roboto font-bold font-[18px] leading-[21px] text-[#424242] w-full border-none">История изменений</span>
     <div class="flex justify-end">
-      <router-link :to="'/reglaments/' + $route.params.id">
+      <router-link :to="'/reglaments/' + reglamentUid">
         <ReglamentSmallButton
           class="flex items-center px-[10px] py-[5px]"
         >
@@ -31,7 +31,7 @@
     class="mt-5 p-7 bg-white rounded-[28px] flex flex-col"
   >
     <span
-      v-if="reglamentComments.length < 1"
+      v-if="!reglamentComments.length"
       class="w-full text-center text-gray-500 text-[16px]"
     >
       История изменений пуста
@@ -66,9 +66,18 @@ export default {
       isLoading: true
     }
   },
+  computed: {
+    reglamentUid () { return this.$route.params.id }
+  },
   mounted () {
-    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then((res) => {
+    this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.reglamentUid).then((res) => {
       this.reglamentComments = res.data
+      // заменяем первую пустую запись в комментариях
+      // на текст "Регламент создан"
+      if (this.reglamentComments?.length) {
+        const firstComment = this.reglamentComments[this.reglamentComments.length - 1]
+        if (!firstComment.comment) firstComment.comment = 'Регламент создан'
+      }
       this.isLoading = false
     })
   }
