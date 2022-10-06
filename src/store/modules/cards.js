@@ -67,6 +67,33 @@ const actions = {
       }
     })
   },
+  [CARD.DOITNOW_CARDS_REQUEST_NEW]: ({ commit, rootState }) => {
+    commit('abortCardsAbortController')
+    const cardsAbortController = new AbortController()
+    commit('InitCardsAbortController', cardsAbortController)
+    const currentUserEmail =
+      rootState.user.user.current_user_email.toLowerCase()
+    const currDate = new Date()
+    const url = process.env.VUE_APP_INSPECTOR_API + 'cards?user='
+    return new Promise((resolve, reject) => {
+      axios({
+        url: url + currentUserEmail,
+        method: 'GET',
+        signal: cardsAbortController.signal
+      })
+        .then((resp) => {
+          const cards =
+            resp?.data?.cards?.filter(
+              (card) =>
+                !card.date_reminder || new Date(card.date_reminder) <= currDate
+            ) || []
+          resolve(cards)
+        })
+        .catch((err) => {
+          reject(err)
+        })
+    })
+  },
   [CARD.BOARD_CARDS_REQUEST]: ({ commit, rootState }, boardUid) => {
     commit('abortCardsAbortController')
     const cardsAbortController = new AbortController()
