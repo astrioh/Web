@@ -62,41 +62,6 @@
           </p>
         </div>
 
-        <!-- Select access employee -->
-        <div
-          v-if="currentState.value === 'accessSelection' && type === 'accessSelection'"
-          class="flex flex-wrap gap-[4px] mt-[10px]"
-        >
-          <div
-            v-for="(employee, _, index) in computedAccessEmployees"
-            :key="index"
-            class="cursor-pointer"
-          >
-            <div
-              v-if="index < 4"
-              class="flex items-center bg-[#F4F5F7] rounded-[4px] min-h-[28px]"
-              :class="[`inspector-option-item${index + 1}`]"
-              style="padding: 4px 7px 4px 6px;"
-              @click="selectAccess(employee)"
-            >
-              <img
-                v-if="employee.uid !== 'no_set'"
-                :src="employee.fotolink"
-                width="20"
-                height="20"
-                class="mr-1 rounded-[8px]"
-              >
-              <span class="text-[#4C4C4D] font-[400] text-[13px] leading-[15px]">{{ employee.name }}</span>
-            </div>
-          </div>
-          <p
-            v-if="Object.keys(computedAccessEmployees).length === 0"
-            class="text-[#4C4C4D] font-[400] text-[13px] leading-[15px]"
-          >
-            Сотрудник {{ inputMessage }} не найден
-          </p>
-        </div>
-
         <!-- Select projects -->
         <div
           v-if="currentState.value === 'projectSelection' && type === 'projectSelection'"
@@ -559,31 +524,6 @@ export default {
         if (
           empUid !== this.currentUserUid &&
           this.includesWord(this.employees[empUid].name, inputLowerCase)
-        ) {
-          newEmployees[empUid] = this.employees[empUid]
-        }
-      }
-      //
-      const selectArr = Object.values(newEmployees)
-      this.lastSelected(selectArr.length === 1 ? selectArr[0] : null)
-      //
-      return newEmployees
-    },
-
-    computedAccessEmployees () {
-      if (this.currentState.value !== 'accessSelection') return {}
-      const inputLowerCase = this.inputMessage.value.toLowerCase()
-      const newEmployees = {}
-      if (
-        this.noSetObj.name.toLowerCase().includes(inputLowerCase) ||
-    this.noSetObj.comment.toLowerCase().includes(inputLowerCase)
-      ) {
-        newEmployees[this.noSetObj.uid] = this.noSetObj
-      }
-      for (const empUid in this.employees) {
-        if (
-          empUid !== this.currentUserUid &&
-      this.includesWord(this.employees[empUid].name, inputLowerCase)
         ) {
           newEmployees[empUid] = this.employees[empUid]
         }

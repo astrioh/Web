@@ -18,7 +18,6 @@
           :select-project="selectProject"
           :select-tag="selectTag"
           :select-color="selectColor"
-          :select-access="selectAccess"
           :select-time="selectTime"
           :action-confirm-new-params="actionConfirmNewParams"
           :action-confirm-delegate="actionConfirmDelegate"
