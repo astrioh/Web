@@ -63,9 +63,6 @@ export default {
         this.$store.state.cards.currentBoard = res
         this.$store.dispatch(CARD.PUBLIC_BOARD_CARDS_REQUEST, this.boardUid)
       })
-    },
-    goToChildBoard (board) {
-      this.$router.push(`/board/${board.uid}`)
     }
   }
 }
