@@ -1,17 +1,3 @@
-<script>
-export default {
-  props: {
-    isPassed: {
-      type: Number,
-      default: 0
-    }
-  },
-  emits: ['confirm'],
-  data () {
-  }
-}
-</script>
-
 <template>
   <div
     v-if="isPassed"
@@ -375,6 +361,18 @@ export default {
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    isPassed: {
+      type: Number,
+      default: 0
+    }
+  },
+  emits: ['confirm']
+}
+</script>
 
 <style scoped>
 
