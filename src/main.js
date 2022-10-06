@@ -97,6 +97,7 @@ axios.interceptors.response.use(
         const text = `${
           requestUrl ? '<' + requestUrl + '>: ' : ''
         }${errorMessage}`
+        console.log('REST API Error', text, { ...error })
         notify(
           {
             group: 'api',
@@ -107,6 +108,8 @@ axios.interceptors.response.use(
           15000
         )
       }
+    } else {
+      console.log('REST API Error (other)', { ...error })
     }
     return Promise.reject(error)
   }
