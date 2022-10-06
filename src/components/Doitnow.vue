@@ -362,7 +362,6 @@ export default {
     },
     postponeTask (end, item) {
       const dateEnd = end ? new Date(end) : new Date()
-      console.log(item)
       if (item) {
         switch (item.name) {
           case '10 минут':
