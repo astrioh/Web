@@ -563,27 +563,10 @@ export default {
       return `rgba(${parseInt(result[1], 16) - shift}, ${parseInt(result[2], 16) - shift}, ${parseInt(result[3], 16) - shift}, ${opacity})`
     },
     colorCard (color, opacity = 1) {
-      const allColors = {
-        '': '#ffffff',
-        '#7fc870': '#7fc870',
-        '#69c494': '#69c494',
-        '#dff2e1': '#dff2e1',
-        '#ffaf40': '#ffaf40',
-        '#ffd7a0': '#ffd7a0',
-        '#5ba4cf': '#5ba4cf',
-        '#9eedff': '#9eedff',
-        '#b381b3': '#b381b3',
-        '#e5e5e5': '#e5e5e5',
-        '#ddd1c2': '#ddd1c2',
-        '#ef7665': '#ef7665',
-        '#ffc6b5': '#ffc6b5',
-        '#ff8ed4': '#ff8ed4',
-        '#f5dbf5': '#f5dbf5',
-        '#6a7077': '#6a7077',
-        '#f6dd29': '#f6dd29',
-        '#f5f547': '#f5f547'
+      if (color === '') {
+        color = '#ffffff'
       }
-      return this.hexToRgb(allColors[color], 20, opacity)
+      return this.hexToRgb(color, 20, opacity)
     },
     isColumnVisible (column) {
       if (this.showArchive) {
