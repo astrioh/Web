@@ -201,6 +201,10 @@ export default {
   methods: {
     closeProperties () {
       this.$store.commit(CLIENTS.SELECT_CLIENT, null)
+      this.$store.commit(CLIENT_FILES_AND_MESSAGES.REFRESH_FILES)
+      this.$store.commit(CLIENT_FILES_AND_MESSAGES.REFRESH_MESSAGES)
+      this.$store.commit(CLIENT_FILES_AND_MESSAGES.REFRESH_CARDS, [])
+      this.clearCardChat()
       this.$store.dispatch('asidePropertiesToggle', false)
     },
     removeClient () {

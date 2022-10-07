@@ -77,7 +77,8 @@
 <script>
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
-import { GET_CLIENT_CARDS } from '@/store/actions/clientfilesandmessages.js'
+import { GET_CLIENT_CARDS, REFRESH_CARDS } from '@/store/actions/clientfilesandmessages.js'
+import { REFRESH_FILES, REFRESH_MESSAGES } from '@/store/actions/cardfilesandmessages'
 
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
@@ -178,6 +179,9 @@ export default {
 
       this.$store.commit(CLIENTS_CHAT.REFRESH_MESSAGES)
       this.$store.commit(CLIENTS_CHAT.REFRESH_FILES)
+      this.$store.commit(REFRESH_FILES, [])
+      this.$store.commit(REFRESH_MESSAGES, [])
+      this.$store.commit(REFRESH_CARDS, [])
 
       const data = {
         clientUid: client.uid,
