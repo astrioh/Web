@@ -324,7 +324,9 @@ const mutations = {
     delete state.boards[uid]
   },
   [BOARD.PUBLIC_LINK_STATUS_BOARD_REQUEST]: (state, data) => {
-    state.publicBoard = data.public_link_status
+    setTimeout(() => {
+      state.publicBoard = data.public_link_status
+    }, 300)
   },
   [BOARD.PUSH_BOARD]: (state, boards) => {
     for (const board of boards) {
