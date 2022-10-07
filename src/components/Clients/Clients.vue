@@ -77,6 +77,7 @@
 <script>
 import * as CLIENTS from '@/store/actions/clients'
 import * as CLIENTS_CHAT from '@/store/actions/clientfilesandmessages.js'
+import { GET_CLIENT_CARDS } from '@/store/actions/clientfilesandmessages.js'
 
 import NavBarClients from '@/components/Clients/NavBarClients.vue'
 import ModalBoxAddClient from './ModalBoxAddClient.vue'
@@ -190,6 +191,7 @@ export default {
       }
       this.$store.commit('basic', { key: 'propertiesState', value: 'client' })
       this.$store.commit(CLIENTS.SELECT_CLIENT, client)
+      this.$store.dispatch(GET_CLIENT_CARDS, client.uid)
       console.log('selected client', this.selectedClient)
     },
     clickAddClient () {
