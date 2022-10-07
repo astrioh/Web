@@ -1,7 +1,6 @@
 <template>
   <select
     ref="selectedOption"
-    v-model="selectedOption"
     class="form-control form-control-width-100 mt-[20px]"
     @change="selectOption"
   >
@@ -31,12 +30,6 @@ export default {
     }
   },
   emits: ['selectCard', 'clearCardChat'],
-  data () {
-    return {
-      timerId: 0,
-      selectedOption: ''
-    }
-  },
   computed: {
     selectOptions () {
       return this.cards.map(card => ({
@@ -47,7 +40,7 @@ export default {
   },
   methods: {
     selectOption () {
-      if (this.$refs.selectedOption.value === 'clientchat') {
+      if (this.$refs.selectedOption.value === 'clientchat' || !this.$refs.selectedOption.value) {
         this.$emit('clearCardChat')
       } else {
         this.$emit('selectCard', this.$refs.selectedOption.value)
