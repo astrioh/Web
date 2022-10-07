@@ -105,6 +105,7 @@
       />
       <DoitnowChatMessages
         :task="task"
+        :is-task-messages-loading="isTaskMessagesLoading"
         :task-messages="taskMessages"
         :current-user-uid="user?.current_user_uid"
         :message-quote-user="messageQuoteUser"
