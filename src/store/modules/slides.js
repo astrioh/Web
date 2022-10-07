@@ -78,6 +78,8 @@ const mutations = {
         let data = {}
         try {
           data = JSON.parse(localStorage.getItem('slides'))
+          data[value.name].visible = value.visible
+          data[value.name].reminder = value.reminder || dateStr
         } catch (e) {
           data = {
             welcome: {
@@ -101,9 +103,9 @@ const mutations = {
               reminder: dateStr
             }
           }
+          data[value.name].visible = value.visible
+          data[value.name].reminder = value.reminder || dateStr
         }
-        data[value.name].visible = value.visible
-        data[value.name].reminder = value.reminder || dateStr
         localStorage.setItem('slides', JSON.stringify(data))
       }
     }
