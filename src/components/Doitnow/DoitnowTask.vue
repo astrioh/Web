@@ -123,19 +123,12 @@
     <!-- accept/redo/decline -->
     <div
       v-if="!task.mode"
-      class="flex ml-[10px] flex-col min-w-[200px] items-center"
+      class="flex ml-[10px] flex-col w-[221px] items-center"
     >
-      <DoitnowPostponeButton
+      <DoitnowRightButtonPostpone
         v-if="shouldShowAcceptButton && selectedTask.status !== 5"
-        :task="task"
-        :user="user"
-        :postpone-date="postponeDate"
-        :postpone-index="postponeIndex"
-        @postponeTask="postponeTask"
-        @changeDateEditingStatus="changeDateEditingStatus"
-        @changeDates="onChangeDates"
-        @changePostponeIndex="changePostponeIndex"
-        @changePostponeDate="changePostponeDate"
+        class="mb-2"
+        @postpone="onPostpone"
       />
       <DoitnowAcceptButton
         v-if="shouldShowAcceptButton"
@@ -185,7 +178,7 @@ import PerformButton from '@/components/Doitnow/PerformButton.vue'
 import Checklist from '@/components/Doitnow/Checklist.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
 import DoitnowChatMessages from '@/components/Doitnow/DoitnowChatMessages.vue'
-import DoitnowPostponeButton from '@/components/Doitnow/DoitnowPostponeButton.vue'
+import DoitnowRightButtonPostpone from '@/components/Doitnow/DoitnowRightButtonPostpone.vue'
 import DoitnowAcceptButton from '@/components/Doitnow/DoitnowAcceptButton.vue'
 import DoitnowRedoButton from '@/components/Doitnow/DoitnowRedoButton.vue'
 import DoitnowChangeAccessButton from '@/components/Doitnow/DoitnowChangeAccessButton.vue'
@@ -215,7 +208,7 @@ export default {
     Checklist,
     DoitnowAcceptButton,
     DoitnowChangeAccessButton,
-    DoitnowPostponeButton,
+    DoitnowRightButtonPostpone,
     DoitnowRedoButton,
     DoitnowOpenTask,
     DoitnowStatusModal,
@@ -790,6 +783,16 @@ export default {
     },
     onAnswerMessage (uid) {
       this.currentAnswerMessageUid = uid
+    },
+    onPostpone (date) {
+      const year = String(date.getFullYear()).padStart(4, '0')
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      const hours = String(date.getHours()).padStart(2, '0')
+      const minutes = String(date.getMinutes()).padStart(2, '0')
+      const seconds = String(date.getSeconds()).padStart(2, '0')
+      const dateStr = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`
+      this.onChangeDates(dateStr, dateStr)
     },
     onChangeDates (begin, end) {
       const data = {
