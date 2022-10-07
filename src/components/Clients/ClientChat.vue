@@ -10,58 +10,77 @@
       >
         {{ getMessageWeekDateString(message.date_create) }}
       </div>
-
+      <span
+        v-if="message.type === 'call'"
+        class="flex justify-center rounded-md shadow-md mb-[6px] py-1 px-2 text-[#88888A] text-[13px]"
+      >
+        <a
+          :href="message.link"
+          target="_blank"
+          class="flex justify-center hover:underline"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="mr-1 w-[12px]"
+            viewBox="0 0 512 512"
+            fill="currentColor"
+          ><path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" /></svg>
+          {{ message.direction === 'in' ? 'Входящий звонок от клиента' : `Исходящий звонок от ${message.user}` }}
+        </a>
+      </span>
       <!-- New creator -->
-      <div
-        v-if="isChangedCreator(index) && employees[message.uid_creator]"
-        class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
-        :class="{ 'text-left': !isMyMessage(message), 'text-right': isMyMessage(message) }"
-      >
-        <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">
-          {{ employees[message.uid_creator].name }}
-        </span>
-      </div>
-      <div
-        v-if="message.emailSender"
-        class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
-        :class="{ 'text-left': !isMessageIncludesIntegrationLogin(message), 'text-right': isMessageIncludesIntegrationLogin(message) }"
-      >
-        <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">{{ message.emailSender }}</span>
-      </div>
+      <div v-else>
+        <div
+          v-if="isChangedCreator(index) && employees[message.uid_creator]"
+          class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
+          :class="{ 'text-left': !isMyMessage(message), 'text-right': isMyMessage(message) }"
+        >
+          <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">
+            {{ employees[message.uid_creator].name }}
+          </span>
+        </div>
+        <div
+          v-if="message.emailSender"
+          class="text-[#7E7E80] text-[13px] font-[500] leading-[15px] tracking-wide mb-[6px]"
+          :class="{ 'text-left': !isMessageIncludesIntegrationLogin(message), 'text-right': isMessageIncludesIntegrationLogin(message) }"
+        >
+          <span class="w-[300px] overflow-hidden h-[15px] inline-block text-ellipsis whitespace-nowrap">{{ message.emailSender }}</span>
+        </div>
 
-      <ClientChatQuoteMessage
-        v-if="message.hasQuote"
-        :quote-message-uid="message.uid_quote"
-      />
-      <ClientChatInterlocutorMessage
-        v-if="!message.isMyMessage && message.isMessage && !showFilesOnly"
-        :message="message"
-        :should-show-options="shouldShowOptions(message)"
-        :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
-      />
-      <ClientChatInterlocutorFileMessage
-        v-if="!message.isMyMessage && message.isFile"
-        :message="message"
-        :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
-      />
+        <ClientChatQuoteMessage
+          v-if="message.hasQuote"
+          :quote-message-uid="message.uid_quote"
+        />
+        <ClientChatInterlocutorMessage
+          v-if="!message.isMyMessage && message.isMessage && !showFilesOnly"
+          :message="message"
+          :should-show-options="shouldShowOptions(message)"
+          :employee="employees[message.uid_creator]"
+          @onQuoteMessage="setCurrentQuote"
+        />
+        <ClientChatInterlocutorFileMessage
+          v-if="!message.isMyMessage && message.isFile"
+          :message="message"
+          :employee="employees[message.uid_creator]"
+          @onQuoteMessage="setCurrentQuote"
+        />
 
-      <ClientChatSelfMessage
-        v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
-        :message="message"
-        :employee="employees[message.uid_creator]"
-        :should-show-options="shouldShowOptions(message)"
-        @onDeleteMessage="onDeleteMessage"
-        @onQuoteMessage="setCurrentQuote"
-      />
-      <ClientChatSelfFileMessage
-        v-if="message.isMyMessage && message.isFile"
-        :message="message"
-        :employee="employees[message.uid_creator]"
-        @onQuoteMessage="setCurrentQuote"
-        @onDeleteFile="deleteFile"
-      />
+        <ClientChatSelfMessage
+          v-if="message.isMyMessage && message.isMessage && !showFilesOnly"
+          :message="message"
+          :employee="employees[message.uid_creator]"
+          :should-show-options="shouldShowOptions(message)"
+          @onDeleteMessage="onDeleteMessage"
+          @onQuoteMessage="setCurrentQuote"
+        />
+        <ClientChatSelfFileMessage
+          v-if="message.isMyMessage && message.isFile"
+          :message="message"
+          :employee="employees[message.uid_creator]"
+          @onQuoteMessage="setCurrentQuote"
+          @onDeleteFile="deleteFile"
+        />
+      </div>
     </div>
   </div>
 </template>

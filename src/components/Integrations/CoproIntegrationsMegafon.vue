@@ -167,7 +167,7 @@ export default {
       return this.$store.state.employees.employees
     },
     canEdit () {
-      return this.employees[this.user.current_user_uid].type === 1 || this.employees[this.user.current_user_uid].type === 2 || true
+      return this.employees[this.user.current_user_uid].type === 1 || this.employees[this.user.current_user_uid].type === 2
     }
   },
   methods: {
@@ -192,7 +192,7 @@ export default {
         await this.$store.dispatch(action, data)
         this.changeShowIntegrationState(false)
       } catch (ex) {
-        this.error = ex
+        this.error = ex.message
       }
     },
     removeIntegration () {

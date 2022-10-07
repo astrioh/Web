@@ -30,10 +30,10 @@ const actions = {
             return
           }
           commit(CORP_MEGAFON.SET_MEGAFON_INTEGRATION, {
-            atsKey: resp.data.integration.atsKey,
-            crmKey: resp.data.integration.crmKey,
-            atsLink: resp.data.integration.atsLink,
-            megafonUsers: resp.data.users
+            atsKey: data.atsKey,
+            crmKey: data.crmKey,
+            atsLink: data.atsLink,
+            megafonUsers: data.megafonUsers
           })
           resolve(resp)
         })
@@ -52,16 +52,16 @@ const actions = {
         atsLink: data.atsLink,
         megafonUsers: JSON.stringify(data.megafonUsers)
       }
-      axios({ url: url, method: 'POST', data: body })
+      axios({ url: url, method: 'PATCH', data: body })
         .then((resp) => {
           if (!resp.data.integration) {
             return
           }
           commit(CORP_MEGAFON.SET_MEGAFON_INTEGRATION, {
-            atsKey: resp.data.integration.atsKey,
-            crmKey: resp.data.integration.crmKey,
-            atsLink: resp.data.integration.atsLink,
-            megafonUsers: resp.data.users
+            atsKey: data.atsKey,
+            crmKey: data.crmKey,
+            atsLink: data.atsLink,
+            megafonUsers: data.megafonUsers
           })
           resolve(resp)
         })

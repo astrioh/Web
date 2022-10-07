@@ -2,6 +2,7 @@ import { uuidv4 } from '@/helpers/functions'
 
 import * as CLIENT_FILES_AND_MESSAGES from '../actions/clientfilesandmessages'
 import * as CORP_YANDEX from '@/store/actions/integrations/corpoYandexInt.js'
+import * as CORP_MEGAFON from '@/store/actions/integrations/corpoMegafonInt.js'
 import * as PERSONAL_YANDEX from '@/store/actions/integrations/personalYandexInt.js'
 
 import axios from 'axios'
@@ -136,11 +137,29 @@ const actions = {
       promises.push(yandexPersonalMsgsSentToUs)
     }
 
+    if (data.megafonIntegration) {
+      let preparedClientPhone = data.clientPhone
+      if (preparedClientPhone[0] === '8') {
+        preparedClientPhone[0] = '7'
+      }
+      preparedClientPhone = data.clientPhone.replaceAll(/(\s|\(|\)|\+|-)/g, '')
+      const megafonCallHistory = dispatch(CORP_MEGAFON.GET_CALL_HISTORY, {
+        phone: preparedClientPhone,
+        crmKey: data.crmKey
+      })
+        .then(res => ({ res: res, name: 'megafonHistory' }))
+
+      promises.push(megafonCallHistory)
+    }
+
     return Promise.all(promises)
       .then((resp) => {
         console.log('msgs resp', resp)
         console.log('int data', data)
         console.log('promises', promises)
+        if (data.megafonIntegration) {
+          commit(CLIENT_FILES_AND_MESSAGES.PUSH_CALL_HISTORY, resp.find((promise) => promise.name === 'megafonHistory').res.data)
+        }
         if (data.corpYandexInt && data.personalYandexInt) {
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[2].data)
           commit(CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL, resp[3].data)
@@ -165,6 +184,18 @@ const mutations = {
         state.messages[i].deleted = 1
         return
       }
+    }
+  },
+  [CLIENT_FILES_AND_MESSAGES.PUSH_CALL_HISTORY]: (state, data) => {
+    for (let i = 0; i < data.length; i++) {
+      state.messages.push({
+        type: 'call',
+        direction: data[i].type,
+        date_create: data[i].start,
+        user: data[i].user,
+        link: data[i].link,
+        uid_message: data[i].id
+      })
     }
   },
   [CLIENT_FILES_AND_MESSAGES.PARSE_YANDEX_MAIL]: (state, data) => {

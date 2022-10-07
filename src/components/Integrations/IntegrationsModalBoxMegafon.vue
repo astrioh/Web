@@ -9,7 +9,7 @@
     >
       <span
         v-if="error"
-        class="red-500"
+        class="text-red-500 mb-2"
       >
         {{ error }}
       </span>

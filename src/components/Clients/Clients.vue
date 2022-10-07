@@ -121,6 +121,9 @@ export default {
     searchValue () {
       return this.$route.query.search || ''
     },
+    isCorpMegafonIntegrated () {
+      return this.$store.state.corpMegafonIntegration.isIntegrated
+    },
     isCorpYandexIntegrated () {
       return this.$store.state.corpYandexIntegration.isIntegrated
     },
@@ -186,8 +189,11 @@ export default {
       const data = {
         clientUid: client.uid,
         clientEmail: client.email,
+        clientPhone: client.phone,
+        crmKey: this.$store.state.corpMegafonIntegration.crmKey,
         corpYandexInt: this.isCorpYandexIntegrated,
-        personalYandexInt: this.isPersonalYandexIntegrated
+        personalYandexInt: this.isPersonalYandexIntegrated,
+        megafonIntegration: this.isCorpMegafonIntegrated
       }
       this.$store.dispatch(CLIENTS_CHAT.FETCH_FILES_AND_MESSAGES, data)
       if (!this.isPropertiesMobileExpanded) {

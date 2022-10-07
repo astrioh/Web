@@ -149,7 +149,7 @@ export default {
               name: 'Мегафон'
             }
           ],
-          typeAccess: [1, 2, 3]
+          typeAccess: [1, 2]
         }
       ]
     }
