@@ -224,7 +224,8 @@
       <!-- Пустой див для корректного поведения quill-tollbar'a-->
       <div>
         <QuillEditor
-          v-model:content="currText"
+          v-if="reglamentContent?.length"
+          v-model:content="reglamentContent"
           content-type="html"
           :toolbar="'full'"
           class="h-auto mb-5 bg-white reglament-editor"
@@ -371,7 +372,8 @@ export default {
       showEmployees: false,
       buttonDisabled: false,
       showSaveModal: false,
-      reglamentHistoryLength: 0
+      reglamentHistoryLength: 0,
+      reglamentContent: this.$store.state.reglaments?.reglaments[this.$route.params.id]?.content ?? ''
     }
   },
   computed: {
@@ -410,9 +412,6 @@ export default {
     },
     reglamentTitle () {
       return this.currReglament?.name ?? ''
-    },
-    reglamentContent () {
-      return this.currReglament?.content ?? ''
     },
     reglamentCreatorEmail () {
       return this.currReglament?.email_creator ?? ''
@@ -478,7 +477,11 @@ export default {
     this.$store.dispatch(REGLAMENTS.REGLAMENT_REQUEST, this.currReglament?.uid)
     this.$store.dispatch(REGLAMENTS.GET_USERS_REGLAMENT_ANSWERS, this.currReglament?.uid)
     this.buttonDisabled = true
-
+    this.$store.dispatch(REGLAMENTS.REGLAMENT_CONTENT_REQUEST, this.currReglament?.uid).then((res) => {
+      console.log(this.$store.state.reglaments.reglaments[this.$route.params.id])
+      this.reglamentContent = res.data[0].content
+      this.$store.state.reglaments.reglaments[this.$route.params.id].content = this.reglamentContent
+    })
     this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then(res => {
       this.reglamentHistoryLength = res.data.length
       this.buttonDisabled = false
@@ -643,7 +646,7 @@ export default {
     },
     setEdit () {
       const reglament = { ...this.currReglament }
-      reglament.content = this.currText
+      reglament.content = this.reglamentContent
       reglament.name = this.currName.trim()
       reglament.department_uid = this.currDep
       reglament.editors = [...this.currEditors]
