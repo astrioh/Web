@@ -9,6 +9,7 @@
     />
     <ReglamentModalSave
       v-if="showSaveModal"
+      :disabled-buttons="disabledButtons"
       @onSave="setEdit"
       @clearContributors="clearContributors"
       @close="showSaveModal = false"
