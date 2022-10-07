@@ -130,11 +130,12 @@
         class="mb-2"
         @postpone="onPostpone"
       />
-      <DoitnowAcceptButton
+      <DoitnowRightButton
         v-if="shouldShowAcceptButton"
-        :task="task"
-        :user="user"
-        @accept="accept"
+        :title="acceptButtonText"
+        icon="check"
+        class="mb-2"
+        @click="accept"
       />
       <DoitnowRedoButton
         v-if="shouldShowRedoButton"
@@ -179,7 +180,7 @@ import Checklist from '@/components/Doitnow/Checklist.vue'
 import DoitnowStatusModal from '@/components/Doitnow/DoitnowStatusModal.vue'
 import DoitnowChatMessages from '@/components/Doitnow/DoitnowChatMessages.vue'
 import DoitnowRightButtonPostpone from '@/components/Doitnow/DoitnowRightButtonPostpone.vue'
-import DoitnowAcceptButton from '@/components/Doitnow/DoitnowAcceptButton.vue'
+import DoitnowRightButton from '@/components/Doitnow/DoitnowRightButton.vue'
 import DoitnowRedoButton from '@/components/Doitnow/DoitnowRedoButton.vue'
 import DoitnowChangeAccessButton from '@/components/Doitnow/DoitnowChangeAccessButton.vue'
 import DoitnowOpenTask from '@/components/Doitnow/DoitnowOpenTask.vue'
@@ -206,9 +207,9 @@ export default {
     DoitnowOverdueInfo,
     DoitnowProjectInfo,
     Checklist,
-    DoitnowAcceptButton,
     DoitnowChangeAccessButton,
     DoitnowRightButtonPostpone,
+    DoitnowRightButton,
     DoitnowRedoButton,
     DoitnowOpenTask,
     DoitnowStatusModal,
@@ -279,6 +280,17 @@ export default {
     }
   },
   computed: {
+    acceptButtonText () {
+      console.log('acceptButtonText', this.isCustomer, this.isPerformer)
+      if (this.isCustomer && this.isPerformer) {
+        return 'Завершить'
+      } else if (this.isCustomer && !this.isPerformer) {
+        return 'Принять и завершить'
+      } else if (!this.isCustomer && this.isPerformer) {
+        return 'Готово к сдаче'
+      }
+      return 'Понятно'
+    },
     canEditChecklist () {
       return ((this.task?.type === 1 || this.task?.type === 2) && this.user.tarif !== 'free') || !this.$store.getters.isLicenseExpired
     },
@@ -290,6 +302,9 @@ export default {
     },
     taskMessagesAndFiles () {
       return this.$store.state.taskfilesandmessages.messages
+    },
+    isPerformer () {
+      return this.task.uid_performer === this.user?.current_user_uid
     },
     isCustomer () {
       return this.task.uid_customer === this.user?.current_user_uid
