@@ -28,9 +28,6 @@ const getters = {
 
 const actions = {
   [CARD.DOITNOW_CARDS_REQUEST]: ({ commit, rootState }) => {
-    commit('abortCardsAbortController')
-    const cardsAbortController = new AbortController()
-    commit('InitCardsAbortController', cardsAbortController)
     const currentUserEmail =
       rootState.user.user.current_user_email.toLowerCase()
     const currDate = new Date()
@@ -38,8 +35,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       axios({
         url: url + currentUserEmail,
-        method: 'GET',
-        signal: cardsAbortController.signal
+        method: 'GET'
       })
         .then((resp) => {
           const cards =
