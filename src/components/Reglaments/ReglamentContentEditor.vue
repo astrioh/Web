@@ -224,7 +224,7 @@
       <!-- Пустой див для корректного поведения quill-tollbar'a-->
       <div>
         <QuillEditor
-          v-if="reglamentContent?.length"
+          v-if="reglamentContentSuccess === true"
           v-model:content="reglamentContent"
           content-type="html"
           :toolbar="'full'"
@@ -373,7 +373,8 @@ export default {
       buttonDisabled: false,
       showSaveModal: false,
       reglamentHistoryLength: 0,
-      reglamentContent: this.$store.state.reglaments?.reglaments[this.$route.params.id]?.content ?? ''
+      reglamentContent: this.$store.state.reglaments?.reglaments[this.$route.params.id]?.content ?? '',
+      reglamentContentSuccess: false
     }
   },
   computed: {
@@ -481,6 +482,7 @@ export default {
       console.log(this.$store.state.reglaments.reglaments[this.$route.params.id])
       this.reglamentContent = res.data[0].content
       this.$store.state.reglaments.reglaments[this.$route.params.id].content = this.reglamentContent
+      this.reglamentContentSuccess = true
     })
     this.$store.dispatch(REGLAMENTS.GET_REGLAMENT_COMMENTS, this.$route.params.id).then(res => {
       this.reglamentHistoryLength = res.data.length
