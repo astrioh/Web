@@ -14,6 +14,7 @@ function getCurrDateTimeString () {
 const state = {
   slides: [
     {
+      uid: 'welcome',
       name: 'welcome',
       mode: 'slide',
       visible:
@@ -23,6 +24,7 @@ const state = {
         getCurrDateTimeString()
     },
     {
+      uid: 'addAvatar',
       name: 'addAvatar',
       mode: 'slide',
       visible:
@@ -32,6 +34,7 @@ const state = {
         getCurrDateTimeString()
     },
     {
+      uid: 'addEmployees',
       name: 'addEmployees',
       mode: 'slide',
       visible:
@@ -42,6 +45,7 @@ const state = {
         getCurrDateTimeString()
     },
     {
+      uid: 'addReglaments',
       name: 'addReglaments',
       mode: 'slide',
       visible:
@@ -52,6 +56,7 @@ const state = {
         getCurrDateTimeString()
     },
     {
+      uid: 'delegateTasks',
       name: 'delegateTasks',
       mode: 'slide',
       visible:
